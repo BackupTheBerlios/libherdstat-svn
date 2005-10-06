@@ -1,0 +1,10 @@
+This file contains a summary of changes in released versions.  Please read the
+ChangeLog file for a more detailed listing of changes/bug fixes.
+
+0.1.0_beta1:
+    Broke out libherdstat from herdstat proper into its own package.
+
+    Bug fixes:
+     - Fixed uncaught exception thrown when a projectxml file doesnt exist when
+       parsing herds.xml that caused parsing to cease before finished.  Thanks
+       to Diego (Flameeyes) for catching this one.
