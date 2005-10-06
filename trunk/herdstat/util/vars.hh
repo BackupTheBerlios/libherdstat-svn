@@ -70,7 +70,7 @@ namespace util {
              * @param k Key to look up.
              * @returns A std::string object (Value mapped to Key).
              */
-            inline std::string operator[] (const std::string &k) const;
+            inline mapped_type operator[] (const key_type& k) const;
 
             /** Dump keys/values to specified stream.
              * @param s Output stream.
@@ -94,14 +94,14 @@ namespace util {
             inline const_iterator end() const;
             inline size_type size() const;
             inline bool empty() const;
-            inline iterator find(const key_type &k);
-            inline const_iterator find(const key_type &k) const;
-            inline mapped_type& operator[] (const key_type &k);
-            inline std::pair<iterator, bool> insert(const value_type &v);
-            inline iterator insert(iterator hpos, const value_type &v);
+            inline iterator find(const key_type& k);
+            inline const_iterator find(const key_type& k) const;
+            inline mapped_type& operator[] (const key_type& k);
+            inline std::pair<iterator, bool> insert(const value_type& v);
+            inline iterator insert(iterator hpos, const value_type& v);
             template <class In> inline void insert(In begin, In end);
             inline void erase(iterator pos);
-            inline size_type erase(const key_type &k);
+            inline size_type erase(const key_type& k);
             inline void erase(iterator begin, iterator end);
             inline void clear();
 
@@ -120,7 +120,7 @@ namespace util {
             container_type _vars;
     };
 
-    inline std::string vars::operator[] (const key_type& k) const
+    inline vars::mapped_type vars::operator[] (const key_type& k) const
     {
         const_iterator i = this->find(k);
         return (i == this->end() ? "" : i->second);

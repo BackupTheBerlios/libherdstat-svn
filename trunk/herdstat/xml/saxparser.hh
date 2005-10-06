@@ -70,7 +70,6 @@ namespace xml {
         public:
             /** Constructor.
              * @param h pointer to a saxhandler object.
-             * @param validate Validate XML?
              */
             explicit saxparser(saxhandler *h);
 

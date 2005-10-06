@@ -41,16 +41,16 @@ namespace herdstat {
 namespace portage {
 
     /** Is the specified path an ebuild?
-     * @param p Path.
+     * @param path Path.
      * @returns A boolean value.
      */
-    inline bool is_ebuild(const std::string &path)
+    inline bool is_ebuild(const std::string& path)
     {
         return (fnmatch("*.ebuild", path.c_str(), 0) == 0);
     }
 
     /** Is the specified path a package directory?
-     * @param p Path.
+     * @param path Path.
      * @returns A boolean value.
      */
     inline bool
