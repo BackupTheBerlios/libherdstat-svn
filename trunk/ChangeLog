@@ -1,0 +1,10 @@
+ChangeLog for libherdstat
+
+2005-10-05 Aaron Walker <ka0ttic@gentoo.org>
+
+	* herdstat/util/functional.hh, herdstat/util/glob.hh,
+	herdstat/util/regex.hh: Move regexMatch and patternMatch functors to
+	functional.hh.
+
+	* herdstat/: broke libherdstat out from herdstat into its own package.
+	* doc/Doxyfile.in: Update so manual pages are generated.

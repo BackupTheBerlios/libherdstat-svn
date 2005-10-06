@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet href="/proj/en/devrel/roll-call/userinfo.xsl" type="text/xsl"?>
+<?xml-stylesheet href="/proj/en/devrel/roll-call/userinfo-devlist.xsl" type="text/xsl"?>
+<?xml-stylesheet href="/xsl/guide.xsl" type="text/xsl"?>
+<!DOCTYPE userlist SYSTEM "/dtd/userinfo.dtd">
+
+<!--
+  Please keep <joined/> dates in (Day) (Month) (Year) format, e.g (01) (January) (2005).
+-->
+
+<userlist>
+  <user username="ka0ttic">
+    <realname fullname="Aaron Walker">
+      <firstname>Aaron</firstname>
+      <familyname>Walker</familyname>
+    </realname>
+    <pgpkey>0xCB803470</pgpkey>
+    <email role="gentoo">ka0ttic@gentoo.org</email>
+    <joined>10 September 2004</joined>
+    <birthday>19 November 1983</birthday>
+    <roles>Gentoo/BSD, cron, commonbox, shell-tools, cvs-utils, forensics, netmon, vim, web-apps security, recruitment</roles>
+    <location>Daytona Beach, FL, USA</location>
+  </user>
+</userlist>
+
+<!--
+vim:ai:et:sw=2:nowrap
+-*- Local Variables: -*-
+-*- coding: utf-8 -*-
+-*- End: -*-
+-->

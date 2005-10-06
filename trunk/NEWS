@@ -1,0 +1,5 @@
+This file contains a summary of changes in released versions.  Please read the
+ChangeLog file for a more detailed listing of changes/bug fixes.
+
+0.1.0_alpha1:
+    Broke out libherdstat from herdstat proper into its own package.
