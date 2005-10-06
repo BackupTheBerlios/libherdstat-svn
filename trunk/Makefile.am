@@ -1,10 +1,9 @@
-# $Id: Makefile.am 584 2005-09-16 10:37:52Z ka0ttic $
+# $Id$
 
 AUTOMAKE_OPTIONS = 1.8 dist-bzip2 no-dist-gzip
 
 SUBDIRS = herdstat doc
 
-CLEANFILES = TODO
 MAINTAINERCLEANFILES = aclocal.m4 \
 		       configure \
 		       Makefile.in \
@@ -14,7 +13,9 @@ MAINTAINERCLEANFILES = aclocal.m4 \
 		       html/*/*.html \
 		       *~
 
-EXTRA_DIST = Makefile.am.common autogen.sh .todo tests libherdstat-0.1.pc.in
+DISTCLEANFILES = ChangeLog TODO
+
+EXTRA_DIST = ChangeLog Makefile.am.common autogen.sh .todo tests libherdstat-0.1.pc.in
 
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = libherdstat-0.1.pc
@@ -39,10 +40,25 @@ srchtml:
 TODO: .todo
 	@test -x $(prefix)/bin/devtodo && devtodo all --TODO
 
+clitimestamp:
+	@touch clitimestamp
+
+ChangeLog: clitimestamp
+	@if test -d $(top_srcdir)/.svn -a -x $(prefix)/bin/svn2cl ; then \
+                svn up $(top_srcdir) ; \
+                svn2cl --group-by-day --include-rev --stdout | \
+                        @SED@ -e 's|\(ka0ttic\)|Aaron Walker <\1@gentoo.org>|' \
+                        > $@; \
+        else \
+                touch ChangeLog; \
+        fi
+	@rm clitimestamp
+
+
 distcheck-hook:
 	@cp Makefile.am.common $(PACKAGE)-$(VERSION)/_build/
 
-dist-hook: TODO docs
+dist-hook: ChangeLog TODO docs
 	@rm -fr doc/$(VERSION)/man/*/_*
 	@cp -R doc/$(VERSION) $(distdir)/doc
 
