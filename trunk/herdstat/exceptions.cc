@@ -1,6 +1,6 @@
 /*
  * herdstat -- herdstat/exceptions.cc
- * $Id: exceptions.cc 650 2005-10-01 11:41:24Z ka0ttic $
+ * $Id$
  * Copyright (c) 2005 Aaron Walker <ka0ttic@gentoo.org>
  *
  * This file is part of herdstat.
@@ -85,14 +85,7 @@ Exception::operator= (const Exception& that)
     if (that._buf)
         _buf = strdup(that._buf);
 
-#if defined(va_copy)
-    va_copy(_v, that._v);
-#elif defined(__va_copy)
-    __va_copy(_v, that._v);
-#else
-    std::memcpy(_v, that._v, sizeof(va_list));
-#endif
-
+    std::memcpy(&_v, &that._v, sizeof(va_list));
     return *this;
 }
 
