@@ -62,7 +62,7 @@ namespace portage {
             typedef container_type::size_type size_type;
 
             /** Constructor.
-             * @param Path to ebuild.
+             * @param path Path to ebuild.
              */
             version_map(const std::string &path);
 
