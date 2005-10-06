@@ -1,5 +1,9 @@
 ChangeLog for libherdstat
 
+2005-10-06 Aaron Walker <ka0ttic@gentoo.org>
+
+	* configure.ac: first release, 0.1.0_beta1.
+
 2005-10-05 Aaron Walker <ka0ttic@gentoo.org>
 
 	* herdstat/util/functional.hh, herdstat/util/glob.hh,
