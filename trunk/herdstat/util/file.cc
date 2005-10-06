@@ -31,8 +31,9 @@
 #include <cstring>
 #include <cassert>
 
-#include <herdstat/util/file.hh>
 #include <herdstat/exceptions.hh>
+#include <herdstat/util/functional.hh>
+#include <herdstat/util/file.hh>
 
 namespace herdstat {
 namespace util {
