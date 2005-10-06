@@ -1,6 +1,6 @@
 /*
  * herdstat -- herdstat/util/regex.hh
- * $Id: regex.hh 655 2005-10-02 16:15:01Z ka0ttic $
+ * $Id$
  * Copyright (c) 2005 Aaron Walker <ka0ttic@gentoo.org>
  *
  * This file is part of herdstat.
@@ -123,6 +123,20 @@ namespace util {
              */
             inline bool operator!= (const std::string& cmp) const;
 
+            /** Determine if this regex is equal to that regex.  Only compares
+             * uncompiled regex strings.
+             * @param that const reference to Regex object.
+             * @returns A boolean value.
+             */
+            inline bool operator== (const Regex& that) const;
+
+            /** Determine if this regex is not equal to that regex.  Only
+             * compares uncompiled regex strings.
+             * @param that const reference to Regex object.
+             * @returns A boolean value.
+             */
+            inline bool operator!= (const Regex& that) const;
+
             /** Get regular expression std::string.
              * @returns A std::string object.
              */
@@ -173,6 +187,18 @@ namespace util {
     Regex::operator!= (const std::string& cmp) const
     {
         return not (*this == cmp);
+    }
+
+    inline bool
+    Regex::operator== (const Regex& that) const
+    {
+        return (_str == that._str);
+    }
+
+    inline bool
+    Regex::operator!= (const Regex& that) const
+    {
+        return (_str != that._str);
     }
 
     inline const std::string&
