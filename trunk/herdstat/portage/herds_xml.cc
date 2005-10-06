@@ -1,6 +1,6 @@
 /*
  * herdstat -- portage/herds_xml.cc
- * $Id: herds_xml.cc 614 2005-09-21 13:53:35Z ka0ttic $
+ * $Id$
  * Copyright (c) 2005 Aaron Walker <ka0ttic@gentoo.org>
  *
  * This file is part of herdstat.
@@ -175,9 +175,16 @@ herds_xml::text(const std::string& text)
          * container.
          */
 
-        project_xml mp(text, _cvsdir, _force_fetch);
-        const_cast<Herd&>(*_cur_herd).insert(
+        try
+        {
+            project_xml mp(text, _cvsdir, _force_fetch);
+            const_cast<Herd&>(*_cur_herd).insert(
                 mp.devs().begin(), mp.devs().end());
+        }
+        catch (const FileException& e)
+        {
+            std::cerr << e.what() << std::endl;            
+        }
     }
 
     return true;

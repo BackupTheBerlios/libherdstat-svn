@@ -1,6 +1,6 @@
 /*
  * herdstat -- portage/herds_xml.hh
- * $Id: herds_xml.hh 633 2005-09-28 12:11:58Z ka0ttic $
+ * $Id$
  * Copyright (c) 2005 Aaron Walker <ka0ttic@gentoo.org>
  *
  * This file is part of herdstat.

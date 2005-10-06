@@ -1,6 +1,6 @@
 /*
  * herdstat -- herdstat/portage/project_xml.cc
- * $Id: project_xml.cc 614 2005-09-21 13:53:35Z ka0ttic $
+ * $Id$
  * Copyright (c) 2005 Aaron Walker <ka0ttic@gentoo.org>
  *
  * This file is part of herdstat.
