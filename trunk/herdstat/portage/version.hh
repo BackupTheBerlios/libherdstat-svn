@@ -1,6 +1,6 @@
 /*
  * herdstat -- herdstat/portage/portage_version.hh
- * $Id: version.hh 661 2005-10-05 01:52:53Z ka0ttic $
+ * $Id$
  * Copyright (c) 2005 Aaron Walker <ka0ttic@gentoo.org>
  *
  * This file is part of herdstat.
@@ -61,6 +61,9 @@ namespace portage {
             typedef container_type::const_iterator const_iterator;
             typedef container_type::size_type size_type;
 
+            /** Constructor.
+             * @param Path to ebuild.
+             */
             version_map(const std::string &path);
 
             /* map subset */
@@ -80,6 +83,7 @@ namespace portage {
                 return (i == this->end() ? "" : i->second);
             }
 
+            /// Get version string.
             const std::string& version() const { return _verstr; }
 
         private:

@@ -1,6 +1,6 @@
 /*
  * herdstat -- herdstat/portage/project_xml.hh
- * $Id: project_xml.hh 614 2005-09-21 13:53:35Z ka0ttic $
+ * $Id$
  * Copyright (c) 2005 Aaron Walker <ka0ttic@gentoo.org>
  *
  * This file is part of herdstat.
@@ -40,18 +40,37 @@
 namespace herdstat {
 namespace portage {
 
+    /**
+     * Interface for Gentoo's projectxml-style XML files.
+     */
+
     class project_xml : public xmlBase,
                         public fetchable
     {
         public:
+            /** Constructor.
+             * @param path Path of projectxml file relative to
+             * $cvsdir/gentoo/xml/htdocs.  If cvsdir is empty, we look in
+             * $localstatedir and fetch it if necessary.
+             * @param cvsdir Path to Gentoo cvs checkout directory.
+             * @param force_fetch Whether or not to force fetching of the
+             * projectxml file.
+             */
             project_xml(const std::string& path,
                         const std::string& cvsdir,
                         bool force_fetch);
+
+            /// Destructor.
             virtual ~project_xml();
 
+            /** Parse projectxml file.
+             * @param path Path to projectxml file (defaults to empty).
+             */
             virtual void parse(const std::string& path = "");
+
             virtual void fill_developer(Developer& dev) const { }
 
+            /// Get Herd.
             inline const Herd& devs() const;
 
         protected:

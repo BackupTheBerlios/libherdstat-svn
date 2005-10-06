@@ -1,6 +1,6 @@
 /*
  * herdstat -- portage/userinfo_xml.hh
- * $Id: userinfo_xml.hh 605 2005-09-19 14:59:34Z ka0ttic $
+ * $Id$
  * Copyright (c) 2005 Aaron Walker <ka0ttic@gentoo.org>
  *
  * This file is part of herdstat.
@@ -45,17 +45,36 @@ namespace portage {
     class userinfo_xml : public xmlBase
     {
         public:
+            /// Default constructor.
             userinfo_xml();
+
+            /** Constructor.
+             * @param path Path to userinfo.xml.
+             */
             userinfo_xml(const std::string& path);
+
+            /// Destructor.
             virtual ~userinfo_xml();
 
+            /** Parse userinfo.xml.
+             * @param path Path to userinfo.xml (defaults to empty).
+             */
             virtual void parse(const std::string& path = "");
+
+            /** Fill a Developer object with data we contain relevant to the
+             * developer.  At the very least, the Developer's user name must
+             * have been set prior to calling this function.
+             * @param dev Reference to a Developer object.
+             */
             virtual void fill_developer(Developer& dev) const;
 
+            /// Get developers.
             inline const Developers& devs() const;
 
             /* convenience */
+            /// Get number of developers in userinfo.xml.
             inline Developers::size_type size() const;
+            /// Were no developers in userinfo.xml?
             inline bool empty() const;
 
         protected:

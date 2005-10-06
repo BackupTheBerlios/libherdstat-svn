@@ -1,6 +1,6 @@
 /*
  * herdstat -- portage/metadata.hh
- * $Id: metadata.hh 655 2005-10-02 16:15:01Z ka0ttic $
+ * $Id$
  * Copyright (c) 2005 Aaron Walker <ka0ttic@gentoo.org>
  *
  * This file is part of herdstat.
@@ -39,25 +39,47 @@
 namespace herdstat {
 namespace portage {
 
+    /**
+     * Represents the data contained in a metadata.xml file.
+     */
+
     class metadata
     {
         public:
+            /// Default constructor.
             metadata();
+
+            /** Constructor.
+             * @param pkg Package name.
+             */
             metadata(const std::string &pkg);
+
+            /// Destructor.
             ~metadata();
 
+            /// Is this metadata from a cateogry?
             inline bool is_category() const;
+            /// Get package name this metadata belongs to.
             inline const std::string& pkg() const;
+            /// Get package name this metadata belongs to.
             inline const std::string& name() const; /* synonym for pkg() */
+            /// Get long description.
             inline const std::string& longdesc() const;
 
+            /// Set whether this is a category metadata.
             inline void set_category(bool cat);
+            /// Set package name.
             inline void set_pkg(const std::string &pkg);
+            /// Set long description.
             inline void set_longdesc(const std::string &longdesc);
 
+            /// Get herds contained in this metadata.
             inline Herds& herds();
+            /// Get herds contained in this metadata.
             inline const Herds& herds() const;
+            /// Get developers contained in this metadata.
             inline Developers& devs();
+            /// Get developers contained in this metadata.
             inline const Developers& devs() const;
 
         private:

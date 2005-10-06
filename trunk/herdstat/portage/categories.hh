@@ -1,6 +1,6 @@
 /*
  * herdstat -- herdstat/portage/categories.hh
- * $Id: categories.hh 609 2005-09-20 12:55:06Z ka0ttic $
+ * $Id$
  * Copyright (c) 2005 Aaron Walker <ka0ttic@gentoo.org>
  *
  * This file is part of herdstat.
@@ -38,6 +38,10 @@
 namespace herdstat {
 namespace portage {
 
+    /**
+     * Represents a container of portage package categories.
+     */
+
     class Categories
     {
         public:
@@ -49,7 +53,15 @@ namespace portage {
             typedef container_type::iterator iterator;
             typedef container_type::const_iterator const_iterator;
 
+            /** Default constructor.
+             * @param validate Validate whether categories are valid?
+             */
             Categories(bool validate = false);
+
+            /** Constructor.
+             * @param portdir PORTDIR to look in.
+             * @param validate Validate whether categories are valid?
+             */
             Categories(const std::string& portdir, bool validate = false);
 
             inline const_iterator begin() const;

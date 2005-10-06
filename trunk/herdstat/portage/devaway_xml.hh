@@ -1,6 +1,6 @@
 /*
  * herdstat -- portage/devaway_xml.hh
- * $Id: devaway_xml.hh 605 2005-09-19 14:59:34Z ka0ttic $
+ * $Id$
  * Copyright (c) 2005 Aaron Walker <ka0ttic@gentoo.org>
  *
  * This file is part of herdstat.
@@ -45,16 +45,35 @@ namespace portage {
     class devaway_xml : public xmlBase
     {
         public:
+            /// Default constructor.
             devaway_xml();
+
+            /** Constructor.
+             * @param path Path to devaway.xml.
+             */
             devaway_xml(const std::string& path);
+            
+            /// Destructor.
             virtual ~devaway_xml();
 
+            /** Parse devaway.xml.
+             * @param path Path to devaway.xml (defaults to empty).
+             */
             virtual void parse(const std::string& path = "");
+            
+            /** Fill a Developer object with data we contain relevant to the
+             * developer.  At the very least, the Developer's user name must
+             * have been set prior to calling this function.
+             * @param dev Reference to a Developer object.
+             */
             virtual void fill_developer(Developer& dev) const;
 
+            /// Get developers.
             inline const Developers& devs() const;
+            /// Get developers.
             inline Developers& devs();
 
+            /// Get vector of all usernames as well as all email addy's.
             const std::vector<std::string> keys() const;
 
         protected:

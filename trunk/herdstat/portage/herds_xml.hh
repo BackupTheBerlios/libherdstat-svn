@@ -40,27 +40,61 @@
 namespace herdstat {
 namespace portage {
 
+    /**
+     * Interface for Gentoo's herds.xml.
+     */
+
     class herds_xml : public xmlBase
     {
         public:
+            /// Default constructor.
             herds_xml();
+
+            /** Constructor.
+             * @param path Path to herds.xml.
+             */
             herds_xml(const std::string& path);
+
+            /// Destructor.
             virtual ~herds_xml();
 
+            /** Parse herds.xml.
+             * @param path Path to herds.xml (defaults to empty).
+             */
             virtual void parse(const std::string& path = "");
+
+            /** Fill a Developer object with data we contain relevant to the
+             * developer.  At the very least, the Developer's user name must
+             * have been set prior to calling this function.
+             * @param dev Reference to a Developer object.
+             */
             virtual void fill_developer(Developer& dev) const;
 
+            /** Set Gentoo CVS checkout directory.  herds.xml as well as
+             * projectxml files will be looked for relative to this path.
+             * @param path Path.
+             */
             inline void set_cvsdir(const std::string& path);
+
+            /** Set forceful fetching of projectxml files when parsing
+             * herds.xml.
+             * @param force Boolean value.
+             */
             inline void set_force_fetch(bool force);
 
             /// Implicit conversion to Herds::container_type
             inline operator Herds::container_type() const;
 
+            /// Get herds found in herds.xml.
             inline const Herds& herds() const;
+            /// Get herds found in herds.xml.
             inline Herds& herds();
 
             /* convienence */
+
+            /// Get number of herds found in herds.xml.
             inline Herds::size_type size() const;
+            /// Were no herds found in herds.xml?
             inline bool empty() const;
 
         protected:

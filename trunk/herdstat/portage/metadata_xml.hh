@@ -1,6 +1,6 @@
 /*
  * herdstat -- portage/metadata_xml.hh
- * $Id: metadata_xml.hh 604 2005-09-19 13:05:21Z ka0ttic $
+ * $Id$
  * Copyright (c) 2005 Aaron Walker <ka0ttic@gentoo.org>
  *
  * This file is part of herdstat.
@@ -39,22 +39,42 @@
 namespace herdstat {
 namespace portage {
 
+    /**
+     * Interface to Gentoo's metadata.xml files.
+     */
+
     class metadata_xml : public parsable,
                          protected xml::saxhandler
     {
         public:
+            /// Default constructor.
             metadata_xml();
+
+            /** Constructor.
+             * @param path Path to metadata.xml.
+             * @param pkg Package name for this metadata.xml (defaults to
+             * empty).
+             */
             metadata_xml(const std::string& path,
                          const std::string& pkg = "");
+
+            /// Destructor.
             virtual ~metadata_xml();
 
+            /** Parse metadata.xml.
+             * @param path Path to metadata.xml (defaults to empty).
+             */
             virtual void parse(const std::string& path = "");
 
+            /// Get data associated with this metadata.xml.
             inline const metadata& data() const;
 
             /* for convenience */
+            /// Get long description.
             inline const std::string& longdesc() const;
+            /// Get herds.
             inline const Herds& herds() const;
+            /// Get developers.
             inline const Developers&  devs()  const;
 
         protected:
