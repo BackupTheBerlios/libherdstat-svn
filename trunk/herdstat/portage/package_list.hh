@@ -1,6 +1,6 @@
 /*
  * herdstat -- herdstat/portage/package_list.hh
- * $Id: package_list.hh 629 2005-09-26 11:54:23Z ka0ttic $
+ * $Id$
  * Copyright (c) 2005 Aaron Walker <ka0ttic@gentoo.org>
  *
  * This file is part of herdstat.
@@ -40,6 +40,10 @@
 namespace herdstat {
 namespace portage {
 
+    /**
+     * Represents a sorted package list of the portage tree.
+     */
+
     class PackageList
     {
         public:
@@ -51,14 +55,21 @@ namespace portage {
             typedef container_type::const_iterator const_iterator;
             typedef container_type::size_type size_type;
 
+            /// Default constructor.
             PackageList();
+
+            /** Constructor.
+             * @param portdir PORTDIR to search.
+             * @param overlays const reference to a vector of strings denoting
+             * overlays (defaults to empty).
+             */
             PackageList(const std::string& portdir, const std::vector<std::string>&
                 overlays = std::vector<std::string>());
 
             /// Fill container.
             void fill();
 
-            /// Implicit conversion to container_type&
+            /// Implicit conversion to const container_type&
             inline operator const container_type&() const;
 
             inline iterator begin();

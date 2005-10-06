@@ -1,6 +1,6 @@
 /*
  * herdstat -- herdstat/util/glob.hh
- * $Id: glob.hh 629 2005-09-26 11:54:23Z ka0ttic $
+ * $Id$
  * Copyright (c) 2005 Aaron Walker <ka0ttic@gentoo.org>
  *
  * This file is part of herdstat.
@@ -51,18 +51,28 @@ namespace util {
             typedef container_type::const_iterator const_iterator;
             typedef container_type::size_type size_type;
 
+            /** Constructor.
+             * @param pattern Glob pattern string.
+             */
             Glob(const char *pattern);
+
+            /// Destructor.
             ~Glob();
 
-            const_iterator begin() const { return _results.begin(); }
-            const_iterator end()   const { return _results.end(); }
-            size_type size() const { return _results.size(); }
-            bool empty() const { return _results.empty(); }
+            inline const_iterator begin() const;
+            inline const_iterator end()   const;
+            inline size_type size() const;
+            inline bool empty() const;
 
         private:
             glob_t _glob;
             container_type _results;
     };
+
+    inline Glob::const_iterator Glob::begin() const { return _results.begin(); }
+    inline Glob::const_iterator Glob::end() const { return _results.end(); }
+    inline Glob::size_type Glob::size() const { return _results.size(); }
+    inline bool Glob::empty() const { return _results.empty(); }
 
 } // namespace util
 } // namespace herdstat
