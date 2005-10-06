@@ -28,7 +28,7 @@
 #endif
 
 /**
- * @file herds_xml.hh
+ * @file herdstat/portage/herds_xml.hh
  * @brief Defines the interface to herds.xml.
  */
 

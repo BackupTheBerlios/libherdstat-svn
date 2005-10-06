@@ -28,7 +28,7 @@
 #endif
 
 /**
- * @file fetchable.hh
+ * @file herdstat/fetchable.hh
  * @brief Defines the abstract fetchable interface.
  */
 

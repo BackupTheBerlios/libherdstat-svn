@@ -28,7 +28,7 @@
 #endif
 
 /**
- * @file curlfetcher.hh
+ * @file herdstat/fetcher/curlfetcher.hh
  * @brief Defines the CurlFetcher concrete class.
  */
 

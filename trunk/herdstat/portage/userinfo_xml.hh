@@ -28,7 +28,7 @@
 #endif
 
 /**
- * @file userinfo_xml.hh
+ * @file herdstat/portage/userinfo_xml.hh
  * @brief Defines the interface to Gentoo's userinfo.xml.
  */
 

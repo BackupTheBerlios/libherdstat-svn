@@ -28,7 +28,7 @@
 #endif
 
 /**
- * @file functional.hh
+ * @file herdstat/portage/functional.hh
  * @brief portage-related function object definitions.
  */
 

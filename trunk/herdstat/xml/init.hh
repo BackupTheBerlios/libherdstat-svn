@@ -28,7 +28,7 @@
 #endif
 
 /**
- * @file init.hh
+ * @file herdstat/xml/init.hh
  * @brief Defines the Init class.
  */
 

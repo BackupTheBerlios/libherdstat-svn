@@ -28,7 +28,7 @@
 #endif
 
 /**
- * @file file.hh
+ * @file herdstat/util/file.hh
  * @brief Defines file/directory-related classes/functions.
  */
 

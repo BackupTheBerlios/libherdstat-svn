@@ -28,7 +28,7 @@
 #endif
 
 /**
- * @file find.hh
+ * @file herdstat/portage/find.hh
  * @brief Defines portage search classes/functions.
  */
 

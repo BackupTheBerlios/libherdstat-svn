@@ -28,7 +28,7 @@
 #endif
 
 /**
- * @file exceptions.hh
+ * @file herdstat/xml/exceptions.hh
  * @brief xml-related exception classes.
  */
 

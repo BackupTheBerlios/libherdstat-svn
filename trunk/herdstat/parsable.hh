@@ -28,7 +28,7 @@
 #endif
 
 /**
- * @file parsable.hh
+ * @file herdstat/parsable.hh
  * @brief Defines the parsable abstract interface.
  */
 

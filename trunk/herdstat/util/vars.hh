@@ -28,7 +28,7 @@
 #endif
 
 /**
- * @file vars.hh
+ * @file herdstat/util/vars.hh
  * @brief Defines the vars class.
  */
 

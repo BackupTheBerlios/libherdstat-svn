@@ -28,7 +28,7 @@
 #endif
 
 /**
- * @file noncopyable.hh
+ * @file herdstat/noncopyable.hh
  * @brief Defines the noncopyable base class.
  */
 

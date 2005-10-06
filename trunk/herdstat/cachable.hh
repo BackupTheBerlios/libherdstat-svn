@@ -28,7 +28,7 @@
 #endif
 
 /**
- * @file cachable.hh
+ * @file herdstat/cachable.hh
  * @brief Defines the cachable abstract class.
  */
 

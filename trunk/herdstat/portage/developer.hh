@@ -28,7 +28,7 @@
 #endif
 
 /**
- * @file developer.hh
+ * @file herdstat/portage/developer.hh
  * @brief Defines the Developer/Developers classes.
  */
 

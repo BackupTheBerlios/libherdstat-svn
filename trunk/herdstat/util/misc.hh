@@ -28,7 +28,7 @@
 #endif
 
 /**
- * @file misc.hh
+ * @file herdstat/util/misc.hh
  * @brief Defines miscellaneous classes/functions.
  */
 

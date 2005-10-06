@@ -28,7 +28,7 @@
 #endif
 
 /**
- * @file algorithm.hh
+ * @file herdstat/util/algorithm.hh
  * @brief Defines the general purpose algorithms.
  */
 

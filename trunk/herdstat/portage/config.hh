@@ -28,7 +28,7 @@
 #endif
 
 /**
- * @file config.hh
+ * @file herdstat/portage/config.hh
  * @brief Defines the config class, the interface to Portage configuration.
  */
 

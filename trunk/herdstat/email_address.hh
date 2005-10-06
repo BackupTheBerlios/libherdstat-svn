@@ -28,7 +28,7 @@
 #endif
 
 /**
- * @file email_address.hh
+ * @file herdstat/email_address.hh
  * @brief Defines the EmailAddress class.
  */
 

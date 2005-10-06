@@ -28,7 +28,7 @@
 #endif
 
 /**
- * @file metadata_xml.hh
+ * @file herdstat/portage/metadata_xml.hh
  * @brief Defines the interface for metadata.xml files.
  */
 

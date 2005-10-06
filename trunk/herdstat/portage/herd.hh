@@ -28,7 +28,7 @@
 #endif
 
 /**
- * @file herd.hh
+ * @file herdstat/portage/herd.hh
  * @brief Defines the Herd/Herds classes.
  */
 

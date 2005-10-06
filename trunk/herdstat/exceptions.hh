@@ -28,7 +28,7 @@
 #endif
 
 /**
- * @file exceptions.hh
+ * @file herdstat/exceptions.hh
  * @brief Defines exception classes used in libherdstat.
  */
 

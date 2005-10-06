@@ -28,7 +28,7 @@
 #endif
 
 /**
- * @file options.hh
+ * @file herdstat/fetcher/options.hh
  * @brief Defines the FetcherOptions class.
  */
 

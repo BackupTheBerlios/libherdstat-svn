@@ -28,7 +28,7 @@
 #endif
 
 /**
- * @file document.hh
+ * @file herdstat/xml/document.hh
  * @brief Defines the Document class template.
  */
 

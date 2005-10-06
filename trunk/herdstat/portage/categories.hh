@@ -28,7 +28,7 @@
 #endif
 
 /**
- * @file categories.hh
+ * @file herdstat/portage/categories.hh
  * @brief Defines the Categories class.
  */
 

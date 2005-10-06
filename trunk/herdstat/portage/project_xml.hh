@@ -28,7 +28,7 @@
 #endif
 
 /**
- * @file project_xml.hh
+ * @file herdstat/portage/project_xml.hh
  * @brief Defines the interface for Gentoo projectxml files.
  */
 

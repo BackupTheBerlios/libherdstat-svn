@@ -28,7 +28,7 @@
 #endif
 
 /**
- * @file string.hh
+ * @file herdstat/util/string.hh
  * @brief Defines string-related classes/functions.
  */
 

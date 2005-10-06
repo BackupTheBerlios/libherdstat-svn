@@ -28,7 +28,7 @@
 #endif
 
 /**
- * @file glob.hh
+ * @file herdstat/util/glob.hh
  * @brief Defines the Glob class.
  */
 

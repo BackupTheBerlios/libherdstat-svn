@@ -28,7 +28,7 @@
 #endif
 
 /**
- * @file version.hh
+ * @file herdstat/portage/version.hh
  * @brief Defines version-related classes (version sorting, version string
  * container, etc).
  */

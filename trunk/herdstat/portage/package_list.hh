@@ -28,7 +28,7 @@
 #endif
 
 /**
- * @file package_list.hh
+ * @file herdstat/portage/package_list.hh
  * @brief Defines the PackageList class.
  */
 

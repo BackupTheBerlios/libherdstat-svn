@@ -28,7 +28,7 @@
 #endif
 
 /**
- * @file exceptions.hh
+ * @file herdstat/portage/exceptions.hh
  * @brief Defines portage-related exception classes.
  */
 

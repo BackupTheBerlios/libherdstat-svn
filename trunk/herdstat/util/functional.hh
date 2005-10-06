@@ -28,7 +28,7 @@
 #endif
 
 /**
- * @file functional.hh
+ * @file herdstat/util/functional.hh
  * @brief General purpose utility functors.
  */
 

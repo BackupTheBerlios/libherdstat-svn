@@ -28,7 +28,7 @@
 #endif
 
 /**
- * @file xmlbase.hh
+ * @file herdstat/portage/xmlbase.hh
  * @brief Defines the xmlBase abstract base class.
  */
 

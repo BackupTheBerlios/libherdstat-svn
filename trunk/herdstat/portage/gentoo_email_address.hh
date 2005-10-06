@@ -28,7 +28,7 @@
 #endif
 
 /**
- * @file gentoo_email_address.hh
+ * @file herdstat/portage/gentoo_email_address.hh
  * @brief Defines the GentooEmailAddress class.
  */
 

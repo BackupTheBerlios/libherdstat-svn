@@ -28,7 +28,7 @@
 #endif
 
 /**
- * @file regex.hh
+ * @file herdstat/util/regex.hh
  * @brief Defines the Regex class.
  */
 

@@ -28,7 +28,7 @@
 #endif
 
 /**
- * @file fetcherimp.hh
+ * @file herdstat/fetcher/fetcherimp.hh
  * @brief Defines the FetcherImp abstract base class.
  */
 

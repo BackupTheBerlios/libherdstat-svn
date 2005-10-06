@@ -28,7 +28,7 @@
 #endif
 
 /**
- * @file progress.hh
+ * @file herdstat/util/progress.hh
  * @brief Defines the Progress class.
  */
 

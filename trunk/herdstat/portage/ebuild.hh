@@ -28,7 +28,7 @@
 #endif
 
 /**
- * @file ebuild.hh
+ * @file herdstat/portage/ebuild.hh
  * @brief Defines the ebuild class.
  */
 

@@ -28,7 +28,7 @@
 #endif
 
 /**
- * @file metadata.hh
+ * @file herdstat/portage/metadata.hh
  * @brief Defines the metadata class.
  */
 

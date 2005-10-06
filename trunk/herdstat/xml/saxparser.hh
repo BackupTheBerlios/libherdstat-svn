@@ -28,7 +28,7 @@
 #endif
 
 /**
- * @file saxparser.hh
+ * @file herdstat/xml/saxparser.hh
  * @brief Defines the saxparser/saxhandler classes.
  */
 

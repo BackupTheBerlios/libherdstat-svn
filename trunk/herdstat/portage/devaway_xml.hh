@@ -28,7 +28,7 @@
 #endif
 
 /**
- * @file devaway_xml.hh
+ * @file herdstat/portage/devaway_xml.hh
  * @brief Defines the interface for Gentoo's devaway.xml.
  */
 

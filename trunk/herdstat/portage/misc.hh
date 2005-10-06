@@ -28,7 +28,7 @@
 #endif
 
 /**
- * @file misc.hh
+ * @file herdstat/portage/misc.hh
  * @brief portage-related miscellaneous functions.
  */
 

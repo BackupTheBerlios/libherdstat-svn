@@ -28,7 +28,7 @@
 #endif
 
 /**
- * @file wgetfetcher.hh
+ * @file herdstat/fetcher/wgetfetcher.hh
  * @brief Defines the WgetFetcher concrete class.
  */
 

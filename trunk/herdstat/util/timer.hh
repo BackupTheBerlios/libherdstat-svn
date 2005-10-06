@@ -28,7 +28,7 @@
 #endif
 
 /**
- * @file timer.hh
+ * @file herdstat/util/timer.hh
  * @brief Defines the Timer class.
  */
 

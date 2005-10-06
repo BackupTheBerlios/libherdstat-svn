@@ -28,7 +28,7 @@
 #endif
 
 /**
- * @file fetcher.hh
+ * @file herdstat/fetcher/fetcher.hh
  * @brief Defines the Fetcher interface.
  */
 
