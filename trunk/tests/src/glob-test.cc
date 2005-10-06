@@ -1,6 +1,6 @@
 /*
  * herdstat -- tests/src/glob-test.cc
- * $Id: glob-test.cc 629 2005-09-26 11:54:23Z ka0ttic $
+ * $Id$
  * Copyright (c) 2005 Aaron Walker <ka0ttic@gentoo.org>
  *
  * This file is part of herdstat.
@@ -30,6 +30,7 @@
 #include <cstdlib>
 #include <herdstat/exceptions.hh>
 #include <herdstat/util/glob.hh>
+#include <herdstat/util/functional.hh>
 
 using namespace herdstat;
 
