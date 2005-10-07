@@ -1,5 +1,5 @@
 # $Id$
-
+#
 AUTOMAKE_OPTIONS = 1.8 dist-bzip2 no-dist-gzip
 
 SUBDIRS = herdstat doc
