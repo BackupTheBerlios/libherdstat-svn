@@ -58,9 +58,7 @@ ChangeLog: clitimestamp
 distcheck-hook:
 	@cp Makefile.am.common $(PACKAGE)-$(VERSION)/_build/
 
-dist-hook: ChangeLog TODO docs
-	@rm -fr doc/$(VERSION)/man/*/_*
-	@cp -R doc/$(VERSION) $(distdir)/doc
+dist-hook: ChangeLog TODO
 
 dist-sign: dist
 	gpg --armour --detach-sign "$(PACKAGE)-$(VERSION).tar.bz2"
