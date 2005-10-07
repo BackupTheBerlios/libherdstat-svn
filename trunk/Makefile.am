@@ -18,7 +18,7 @@ pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = $(pc)
 
 DISTCLEANFILES = ChangeLog TODO $(pc)
-EXTRA_DIST = ChangeLog Makefile.am.common autogen.sh .todo tests $(pc).in
+EXTRA_DIST = ChangeLog Makefile.am.common autogen.sh .todo tests libherdstat.pc.in
 
 docs:
 	cd doc && $(MAKE) $@
@@ -55,12 +55,18 @@ ChangeLog: clitimestamp
 	@rm clitimestamp
 
 $(pc):
-	@cp $(PACKAGE).pc $@
+	@SED@   -e "s|\@prefix\@|$(prefix)|g" \
+		-e "s|\@exec_prefix\@|$(exec_prefix)|g" \
+		-e "s|\@libdir\@|$(libdir)|g" \
+		-e "s|\@includedir\@|$(includedir)|g" \
+		-e "s|\@VERSION_MAJOR\@|$(VERSION_MAJOR)|g" \
+		-e "s|\@VERSION_MINOR\@|$(VERSION_MINOR)|g" \
+		libherdstat.pc.in > $@
 
 distcheck-hook:
 	@cp Makefile.am.common "$(PACKAGE)-$(VERSION)/_build/"
 
-dist-hook: ChangeLog TODO $(pc)
+dist-hook: ChangeLog TODO
 
 dist-sign: dist
 	gpg --armour --detach-sign "$(PACKAGE)-$(VERSION).tar.bz2"

@@ -9,7 +9,7 @@ VERSION_MAJOR=0
 VERSION_MINOR=1
 VERSION_MICRO=0
 VERSION_SUFFIX=beta
-VERSION_SUFFIX_VERSION=1
+VERSION_SUFFIX_VERSION=2
 VERSION_FULL="$VERSION_MAJOR.$VERSION_MINOR.$VERSION_MICRO"
 
 if ! test -z "$VERSION_SUFFIX" ; then
@@ -167,5 +167,4 @@ AC_OUTPUT(Makefile
 	  herdstat/xml/Makefile
 	  herdstat/portage/Makefile
 	  tests/Makefile
-	  tests/src/Makefile
-	  libherdstat.pc)
+	  tests/src/Makefile)
