@@ -13,12 +13,12 @@ MAINTAINERCLEANFILES = aclocal.m4 \
 		       html/*/*.html \
 		       *~
 
+pc = $(PACKAGE)-$(VERSION_MAJOR).$(VERSION_MINOR).pc
 pkgconfigdir = $(libdir)/pkgconfig
-pkgconfig_DATA = $(PACKAGE)-$(VERSION_MAJOR).$(VERSION_MINOR).pc
+pkgconfig_DATA = $(pc)
 
-DISTCLEANFILES = ChangeLog TODO $(pkgconfig_DATA)
-EXTRA_DIST = ChangeLog Makefile.am.common autogen.sh .todo tests \
-	$(pkgconfig_DATA).in
+DISTCLEANFILES = ChangeLog TODO $(pc)
+EXTRA_DIST = ChangeLog Makefile.am.common autogen.sh .todo tests $(pc).in
 
 docs:
 	cd doc && $(MAKE) $@
@@ -54,13 +54,13 @@ ChangeLog: clitimestamp
         fi
 	@rm clitimestamp
 
-pkgconfig:
-	cp $(PACKAGE).pc $(pkgconfig_DATA)
+$(pc):
+	@cp $(PACKAGE).pc $@
 
 distcheck-hook:
 	@cp Makefile.am.common "$(PACKAGE)-$(VERSION)/_build/"
 
-dist-hook: ChangeLog TODO pkgconfig
+dist-hook: ChangeLog TODO $(pc)
 
 dist-sign: dist
 	gpg --armour --detach-sign "$(PACKAGE)-$(VERSION).tar.bz2"
