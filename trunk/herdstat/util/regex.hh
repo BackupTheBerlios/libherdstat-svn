@@ -50,23 +50,23 @@ namespace util {
     {
         public:
             /// compilation cflags
-            enum cflags { };
+            enum Cflags { };
             /// exec eflags
-            enum eflags { };
+            enum Eflags { };
 
             /// REG_EXTENDED
-            static const cflags extended;
+            static const Cflags extended;
             /// REG_ICASE
-            static const cflags icase;
+            static const Cflags icase;
             /// REG_NOSUB
-            static const cflags nosub;
+            static const Cflags nosub;
             /// REG_NEWLINE
-            static const cflags newline;
+            static const Cflags newline;
 
             /// REG_NOTBOL
-            static const eflags notbol;
+            static const Eflags notbol;
             /// REG_NOTEOL
-            static const eflags noteol;
+            static const Eflags noteol;
 
             /// Default constructor.
             Regex();
@@ -148,12 +148,12 @@ namespace util {
             inline bool empty() const;
 
             /// Get CFLAGS.
-            inline int get_cflags() const;
+            inline int cflags() const;
             /// Set CFLAGS.
             inline void set_cflags(int cflags);
 
             /// Get EFLAGS.
-            inline int get_eflags() const;
+            inline int eflags() const;
             /// Set EFLAGS.
             inline void set_eflags(int eflags);
 
@@ -214,7 +214,7 @@ namespace util {
     }
 
     inline int
-    Regex::get_cflags() const
+    Regex::cflags() const
     {
         return _cflags;
     }
@@ -226,7 +226,7 @@ namespace util {
     }
 
     inline int
-    Regex::get_eflags() const
+    Regex::eflags() const
     {
         return _eflags;
     }

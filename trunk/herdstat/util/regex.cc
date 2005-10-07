@@ -1,6 +1,6 @@
 /*
  * herdstat -- herdstat/util/regex.cc
- * $Id: regex.cc 655 2005-10-02 16:15:01Z ka0ttic $
+ * $Id$
  * Copyright (c) 2005 Aaron Walker <ka0ttic@gentoo.org>
  *
  * This file is part of herdstat.
@@ -38,12 +38,12 @@
 namespace herdstat {
 namespace util {
 /*** static members **********************************************************/
-const Regex::cflags Regex::extended = Regex::cflags(REG_EXTENDED);
-const Regex::cflags Regex::icase = Regex::cflags(REG_ICASE);
-const Regex::cflags Regex::nosub = Regex::cflags(REG_NOSUB);
-const Regex::cflags Regex::newline = Regex::cflags(REG_NEWLINE);
-const Regex::eflags Regex::notbol = Regex::eflags(REG_NOTBOL);
-const Regex::eflags Regex::noteol = Regex::eflags(REG_NOTEOL);
+const Regex::Cflags Regex::extended = Regex::Cflags(REG_EXTENDED);
+const Regex::Cflags Regex::icase = Regex::Cflags(REG_ICASE);
+const Regex::Cflags Regex::nosub = Regex::Cflags(REG_NOSUB);
+const Regex::Cflags Regex::newline = Regex::Cflags(REG_NEWLINE);
+const Regex::Eflags Regex::notbol = Regex::Eflags(REG_NOTBOL);
+const Regex::Eflags Regex::noteol = Regex::Eflags(REG_NOTEOL);
 /*****************************************************************************/
 Regex::Regex()
     : _str(), _compiled(false), _cflags(0), _eflags(0), _regex()
