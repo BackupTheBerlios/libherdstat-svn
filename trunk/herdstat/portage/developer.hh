@@ -1,6 +1,6 @@
 /*
  * herdstat -- portage/developer.hh
- * $Id: developer.hh 661 2005-10-05 01:52:53Z ka0ttic $
+ * $Id$
  * Copyright (c) 2005 Aaron Walker <ka0ttic@gentoo.org>
  *
  * This file is part of herdstat.
@@ -44,7 +44,8 @@ namespace herdstat {
 namespace portage {
 
     /**
-     * Represents a Gentoo developer.
+     * @class Developer
+     * @brief Represents a Gentoo developer.
      */
 
     class Developer
@@ -62,6 +63,7 @@ namespace portage {
                       const std::string &email = "",
                       const std::string &name = "");
 
+            /// Destructor.
             ~Developer();
 
             /** Implicit conversion to std::string.
@@ -297,7 +299,8 @@ namespace portage {
     inline void Developer::set_away(const bool away) { _away = away; }
 
     /**
-     * Developer container.
+     * @class Developers
+     * @brief Developer container.
      */
 
     class Developers
@@ -346,6 +349,10 @@ namespace portage {
              */
             Developers& operator= (const std::vector<std::string>& v);
 
+            /**
+             * @name container_type subset
+             */
+            //@{
             inline iterator begin();
             inline const_iterator begin() const;
             inline iterator end();
@@ -360,8 +367,22 @@ namespace portage {
             inline value_type& back();
             inline const value_type& back() const;
 
+            /** Find developer with the given user name.
+             * @param dev user name string.
+             * @returns iterator to the first matching or end() if no match.
+             */
             inline iterator find(const std::string& dev) const;
+
+            /** Find developer that equals given developer.
+             * @param dev const reference to value_type.
+             * @returns iterator to the first matching or end() if no match.
+             */
             inline iterator find(const value_type& dev) const;
+
+            /** Find developer whose user name matches the given Regex.
+             * @param regex const reference to Regex.
+             * @returns iterator to the first matching or end() if no match.
+             */
             inline iterator find(const util::Regex &regex) const;
 
             inline size_type size() const;
@@ -378,6 +399,7 @@ namespace portage {
             inline void erase(iterator pos);
             inline size_type erase(const value_type& v);
             inline void erase(iterator begin, iterator end);
+            //@}
 
         private:
             container_type _devs;

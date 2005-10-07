@@ -1,6 +1,6 @@
 /*
  * herdstat -- herdstat/util/string.hh
- * $Id: string.hh 605 2005-09-19 14:59:34Z ka0ttic $
+ * $Id$
  * Copyright (c) 2005 Aaron Walker <ka0ttic@gentoo.org>
  *
  * This file is part of herdstat.
@@ -41,6 +41,7 @@
 #include <herdstat/exceptions.hh>
 
 namespace herdstat {
+/// General-purpose utility classes/functions.
 namespace util {
 
     /** Tidy whitespace of the given string.

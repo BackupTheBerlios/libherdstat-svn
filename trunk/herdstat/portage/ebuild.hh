@@ -1,6 +1,6 @@
 /*
  * herdstat -- portage/ebuild.hh
- * $Id: ebuild.hh 614 2005-09-21 13:53:35Z ka0ttic $
+ * $Id$
  * Copyright (c) 2005 Aaron Walker <ka0ttic@gentoo.org>
  *
  * This file is part of herdstat.
@@ -38,9 +38,11 @@ namespace herdstat {
 namespace portage {
 
     /**
-     * Represents ebuild variables.  This is really identical to util::vars,
-     * except it defines do_set_defaults() and inserts variables that should
-     * be pre-existing (${PN}, ${P}, etc).
+     * @class ebuild
+     * @brief Represents ebuild variables.
+     * This is really identical to util::vars, except it defines
+     * do_set_defaults() and inserts variables that should be
+     * pre-existing (${PN}, ${P}, etc).
      */
 
     class ebuild : public util::vars

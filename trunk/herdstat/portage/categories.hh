@@ -39,7 +39,8 @@ namespace herdstat {
 namespace portage {
 
     /**
-     * Represents a container of portage package categories.
+     * @class Categories
+     * @brief Represents a container of portage package categories.
      */
 
     class Categories
@@ -64,12 +65,17 @@ namespace portage {
              */
             Categories(const std::string& portdir, bool validate = false);
 
+            /**
+             * @name container_type subset.
+             */
+            //@{
             inline const_iterator begin() const;
             inline const_iterator end() const;
             inline const_iterator find(const value_type& v) const;
             inline size_type size() const;
             inline bool empty() const;
-
+            //@}
+                
         private:
             void fill();
 

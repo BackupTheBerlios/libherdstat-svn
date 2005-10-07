@@ -39,7 +39,8 @@ namespace herdstat {
 namespace portage {
 
     /**
-     * Represents Gentoo's devaway.xml.
+     * @class devaway_xml
+     * @brief Represents Gentoo's devaway.xml.
      */
 
     class devaway_xml : public xmlBase

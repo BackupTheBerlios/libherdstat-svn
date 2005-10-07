@@ -1,6 +1,6 @@
 /*
  * herdstat -- herdstat/portage/functional.hh
- * $Id: functional.hh 661 2005-10-05 01:52:53Z ka0ttic $
+ * $Id$
  * Copyright (c) 2005 Aaron Walker <ka0ttic@gentoo.org>
  *
  * This file is part of herdstat.
@@ -40,7 +40,8 @@ namespace herdstat {
 namespace portage {
 
     /**
-     * Returns T::name().
+     * @struct Name
+     * @brief Returns T::name().
      */
     struct Name
     {
@@ -49,6 +50,7 @@ namespace portage {
     };
 
     /**
+     * @struct User
      * Returns T::user().
      */
     struct User
@@ -58,7 +60,8 @@ namespace portage {
     };
 
     /**
-     * Compares regex against T::user().
+     * @struct UserRegexMatch
+     * @brief Compares regex against T::user().
      */
     template <typename T>
     struct UserRegexMatch : std::binary_function<util::Regex, T, bool>
@@ -68,7 +71,8 @@ namespace portage {
     };
 
     /**
-     * Compares regex against T::name().
+     * @struct NameRegexMatch
+     * @brief Compares regex against T::name().
      */
     template <typename T>
     struct NameRegexMatch : std::binary_function<util::Regex, T, bool>
@@ -78,7 +82,8 @@ namespace portage {
     };
 
     /**
-     * Function object that returns is_ebuild(path).
+     * @struct IsEbuild
+     * @brief Function object that returns is_ebuild(path).
      */
 
     struct IsEbuild
@@ -90,7 +95,8 @@ namespace portage {
     };
 
     /**
-     * Function object that returns is_pkg_dir(path).
+     * @struct IsPkgDir
+     * @brief Function object that returns is_pkg_dir(path).
      */
 
     struct IsPkgDir
@@ -102,7 +108,8 @@ namespace portage {
     };
 
     /**
-     * Function object that returns a "cat/pkg" string given a full
+     * @struct GetPkgFromPath
+     * @brief Function object that returns a "cat/pkg" string given a full
      * path to a package directory.
      */
 

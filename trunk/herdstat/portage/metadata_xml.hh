@@ -40,7 +40,8 @@ namespace herdstat {
 namespace portage {
 
     /**
-     * Interface to Gentoo's metadata.xml files.
+     * @class metadata_xml
+     * @brief Interface to Gentoo's metadata.xml files.
      */
 
     class metadata_xml : public parsable,

@@ -1,6 +1,6 @@
 /*
  * herdstat -- herdstat/portage/portage_config.hh
- * $Id: config.hh 614 2005-09-21 13:53:35Z ka0ttic $
+ * $Id$
  * Copyright (c) 2005 Aaron Walker <ka0ttic@gentoo.org>
  *
  * This file is part of herdstat.
@@ -35,11 +35,14 @@
 #include <herdstat/util/vars.hh>
 
 namespace herdstat {
+/// portage-related classes/functions.
 namespace portage {
 
     /**
-     * Represents the current portage configuration.  Reads make.conf and
-     * make.globals and stores variables in key/value pairs.
+     * @class config
+     * @brief Represents the current portage configuration.
+     * Reads make.conf and make.globals and stores variables in key/value
+     * pairs.
      */
 
     class config : public util::vars

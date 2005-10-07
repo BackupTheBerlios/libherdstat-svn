@@ -40,7 +40,8 @@ namespace herdstat {
 namespace portage {
 
     /**
-     * Represents the data contained in a metadata.xml file.
+     * @class metadata
+     * @brief Represents the data contained in a metadata.xml file.
      */
 
     class metadata

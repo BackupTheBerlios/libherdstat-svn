@@ -1,6 +1,6 @@
 /*
  * herdstat -- herdstat/exceptions.hh
- * $Id: exceptions.hh 601 2005-09-19 12:50:53Z ka0ttic $
+ * $Id$
  * Copyright (c) 2005 Aaron Walker <ka0ttic@gentoo.org>
  *
  * This file is part of herdstat.
@@ -37,106 +37,242 @@
 #include <sys/types.h>
 #include <regex.h>
 
+/// Main namespace all of libherdstat resides in.
 namespace herdstat {
 
-class BaseException : public std::exception { };
+    /**
+     * @mainpage
+     *
+     * libherdstat is a C++ library offering interfaces for portage-related
+     * things such as Gentoo-specific XML files, package searching, and
+     * version sorting.  Many general-purpose utility classes/functions are
+     * also offered.
+     */
 
-class Exception : public BaseException
-{
-    public:
-        Exception();
-        Exception(const Exception& that);
-        Exception(const char *fmt, va_list v);
-        Exception(const char *fmt, ...);
-        Exception(const std::string& fmt, ...);
+    /**
+     * @class BaseException
+     * @brief Base exception class.  All exception classes defined by libherdstat
+     * derive from this class.
+     */
+    class BaseException : public std::exception { };
 
-        Exception& operator= (const Exception& that);
+    /**
+     * @class Exception
+     * @brief Generic exception class.
+     */
+    class Exception : public BaseException
+    {
+        public:
+            /// Default constructor.
+            Exception();
 
-        virtual ~Exception() throw();
-        virtual const char *what() const throw();
+            /// Copy constructor.
+            Exception(const Exception& that);
 
-    protected:
-        const char *message() const { return _buf; }
+            /** Constructor.
+             * @param fmt printf-like format string.
+             * @param v va_list.
+             */
+            Exception(const char *fmt, va_list v);
 
-    private:
-        char *_buf;
-        va_list _v;
-};
+            //@{
+            /** Constructor.
+             * @param fmt printf-like format string.
+             * @param ... variable args.
+             */
+            Exception(const char *fmt, ...);
+            Exception(const std::string& fmt, ...);
+            //@}
 
-class ErrnoException : public Exception
-{
-    public:
-        ErrnoException();
-        ErrnoException(const char *msg);
-        ErrnoException(const std::string& msg);
-        virtual ~ErrnoException() throw() { }
+            /// Copy assignment operator.
+            Exception& operator= (const Exception& that);
 
-        virtual const char *what() const throw();
+            /// Destructor.
+            virtual ~Exception() throw();
 
-        int code() const { return _code; }
+            /// Get error message.
+            virtual const char *what() const throw();
 
-    private:
-        int _code;
-};
+        protected:
+            const char *message() const { return _buf; }
 
-class FileException : public ErrnoException
-{
-    public:
-        FileException();
-        FileException(const char *msg);
-        FileException(const std::string& msg);
-        virtual ~FileException() throw() { }
-};
+        private:
+            char *_buf;
+            va_list _v;
+    };
 
-class BadCast : public Exception
-{
-    public:
-        BadCast();
-        BadCast(const char *msg);
-        BadCast(const std::string& msg);
-        virtual ~BadCast() throw() { }
-};
+    /**
+     * @class ErrnoException
+     * @brief Exception class for errors where errno is set.
+     */
+    class ErrnoException : public Exception
+    {
+        public:
+            /// Default constructor.
+            ErrnoException();
 
-class BadRegex : public Exception
-{
-     public:
-         BadRegex();
-         BadRegex(int e, const regex_t *re);
-         BadRegex(const std::string& s);
-         virtual ~BadRegex() throw() { }
-         virtual const char *what() const throw();
+            //@{
+            /** Constructor.
+             * @param msg Error message prefix.
+             */
+            ErrnoException(const char *msg);
+            ErrnoException(const std::string& msg);
+            //@}
 
-     private:
-         int _err;
-         const regex_t *_re;
-};
+            /// Destructor.
+            virtual ~ErrnoException() throw() { }
 
-class BadDate : public Exception
-{
-    public:
-        BadDate();
-        BadDate(const char *msg);
-        BadDate(const std::string& msg);
-        virtual ~BadDate() throw() { }
-};
+            /// Get error message prefix + strerror(errno).
+            virtual const char *what() const throw();
 
-class FetchException : public Exception
-{
-    public:
-        FetchException();
-        FetchException(const char *msg);
-        FetchException(const std::string& msg);
-        virtual ~FetchException() throw() { }
-};
+            /// Get error code (errno) for this error.
+            int code() const { return _code; }
 
-class MalformedEmail : public Exception
-{
-    public:
-        MalformedEmail();
-        MalformedEmail(const char *msg);
-        MalformedEmail(const std::string& msg);
-        virtual ~MalformedEmail() throw() { }
-};
+        private:
+            int _code;
+    };
+    
+    /**
+     * @class FileException
+     * @brief Exception for file-related errors.
+     */
+    class FileException : public ErrnoException
+    {
+        public:
+            /// Default constructor.
+            FileException();
+
+            //@{
+            /** Constructor.
+             * @param msg Error message prefix.
+             */
+            FileException(const char *msg);
+            FileException(const std::string& msg);
+            //@}
+            
+            /// Destructor.
+            virtual ~FileException() throw() { }
+    };
+
+    /**
+     * @class BadCast
+     * @brief Exception for bad type casts.
+     */
+    class BadCast : public Exception
+    {
+        public:
+            /// Default constructor.
+            BadCast();
+
+            //@{
+            /** Constructor.
+             * @param msg Error message.
+             */
+            BadCast(const char *msg);
+            BadCast(const std::string& msg);
+            //@}
+
+            /// Destructor.
+            virtual ~BadCast() throw() { }
+    };
+
+    /**
+     * @class BadRegex
+     * @brief Exception for regular expression errors.
+     */
+    class BadRegex : public Exception
+    {
+        public:
+            /// Default constructor.
+            BadRegex();
+
+            /** Constructor.
+             * @param e error code.
+             * @param re regex_t associated with this error.
+             */
+            BadRegex(int e, const regex_t *re);
+
+            /** Constructor.
+             * @param s Error message.
+             */
+            BadRegex(const std::string& s);
+
+            /// Destructor.
+            virtual ~BadRegex() throw() { }
+
+            /// Get error message.
+            virtual const char *what() const throw();
+
+        private:
+            int _err;
+            const regex_t *_re;
+    };
+
+    /**
+     * @class BadDate
+     * @brief Exception for invalid dates.
+     */
+    class BadDate : public Exception
+    {
+        public:
+            /// Default constructor.
+            BadDate();
+
+            //@{
+            /** Constructor.
+             * @param msg Error message.
+             */
+            BadDate(const char *msg);
+            BadDate(const std::string& msg);
+            //@}
+
+            /// Destructor.
+            virtual ~BadDate() throw() { }
+    };
+
+    /**
+     * @class FetchException
+     * @brief Exception for fetching errors.
+     */
+    class FetchException : public Exception
+    {
+        public:
+            /// Default constructor.
+            FetchException();
+
+            //@{
+            /** Constructor.
+             * @param msg Error message.
+             */
+            FetchException(const char *msg);
+            FetchException(const std::string& msg);
+            //@}
+            
+            /// Destructor.
+            virtual ~FetchException() throw() { }
+    };
+
+    /**
+     * @class MalformedEmail
+     * @brief Exception for malformed email addresses.
+     */
+    class MalformedEmail : public Exception
+    {
+        public:
+            /// Default constructor.
+            MalformedEmail();
+
+            //@{
+            /** Constructor.
+             * @param msg Error message.
+             */
+            MalformedEmail(const char *msg);
+            MalformedEmail(const std::string& msg);
+            //@}
+
+            /// Destructor.
+            virtual ~MalformedEmail() throw() { }
+    };
 
 } // namespace herdstat
 

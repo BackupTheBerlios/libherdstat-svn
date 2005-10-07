@@ -41,7 +41,8 @@ namespace herdstat {
 namespace portage {
 
     /**
-     * Represents a sorted package list of the portage tree.
+     * @class PackageList
+     * @brief Represents a sorted package list of the portage tree.
      */
 
     class PackageList
@@ -72,6 +73,10 @@ namespace portage {
             /// Implicit conversion to const container_type&
             inline operator const container_type&() const;
 
+            //@{
+            /**
+             * @name container_type subset
+             */
             inline iterator begin();
             inline const_iterator begin() const;
             inline iterator end();
@@ -84,6 +89,7 @@ namespace portage {
             inline iterator insert(iterator pos, const_reference v);
             template <class In>
             inline void insert(iterator pos, In begin, In end);
+            //@}
 
         private:
             const std::string& _portdir;

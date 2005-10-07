@@ -1,6 +1,6 @@
 /*
  * herdstat -- portage/herd.hh
- * $Id: herd.hh 655 2005-10-02 16:15:01Z ka0ttic $
+ * $Id$
  * Copyright (c) 2005 Aaron Walker <ka0ttic@gentoo.org>
  *
  * This file is part of herdstat.
@@ -38,7 +38,8 @@ namespace herdstat {
 namespace portage {
 
     /**
-     * Represents a herd.
+     * @class Herd
+     * @brief Represents a herd.
      * Techically a herd is a group of packages, however here it makes more
      * sense to represent them as a group of developers.
      */
@@ -80,24 +81,40 @@ namespace portage {
             /// Implicit conversion to std::string.
             inline operator std::string() const;
 
-            /** Determine if this herd is equal to that herd.
+            //@{
+            /** Determine equivelance of this herd compared to that herd name.
              * @param name herd name.
-             * @returns True if herd names are equivelent.
+             * @returns Boolean value.
              */
             inline bool operator== (const std::string& name) const;
-            inline bool operator== (const Herd& herd) const;
-            inline bool operator== (const util::Regex& re) const;
             inline bool operator!= (const std::string& name) const;
-            inline bool operator!= (const Herd& herd) const;
-            inline bool operator!= (const util::Regex& re) const;
             inline bool operator<  (const std::string& name) const;
-            inline bool operator<  (const Herd& herd) const;
             inline bool operator>  (const std::string& name) const;
-            inline bool operator>  (const Herd& herd) const;
             inline bool operator<= (const std::string& name) const;
-            inline bool operator<= (const Herd& herd) const;
             inline bool operator>= (const std::string& name) const;
+            //@}
+
+            //@{
+            /** Determine equivelance of this herd compared to that herd.
+             * @param herd const reference to another Herd object.
+             * @returns Boolean value.
+             */
+            inline bool operator== (const Herd& herd) const;
+            inline bool operator!= (const Herd& herd) const;
+            inline bool operator<  (const Herd& herd) const;
+            inline bool operator>  (const Herd& herd) const;
+            inline bool operator<= (const Herd& herd) const;
             inline bool operator>= (const Herd& herd) const;
+            //@}
+
+            //@{
+            /** Determine equivelance of this herd compared to the regex.
+             * @param re const reference to a Regex object.
+             * @returns Boolean value.
+             */
+            inline bool operator== (const util::Regex& re) const;
+            inline bool operator!= (const util::Regex& re) const;
+            //@}
 
             /// Get herd name.
             inline const std::string& name() const;
@@ -155,7 +172,8 @@ namespace portage {
     inline void Herd::set_desc(const std::string& desc) { _desc.assign(desc); }
 
     /**
-     * Herd container.
+     * @class Herds
+     * @brief Herd container.
      */
 
     class Herds
@@ -200,7 +218,10 @@ namespace portage {
              */
             Herds& operator= (const std::vector<std::string>& v);
 
-            /* container_type subset */
+            /**
+             * @name container_type subset
+             */
+            //@{
             inline iterator begin();
             inline const_iterator begin() const;
             inline iterator end();
@@ -233,6 +254,7 @@ namespace portage {
             inline void erase(iterator pos);
             inline size_type erase(const value_type& v);
             inline void erase(iterator begin, iterator end);
+            //@}
 
         private:
             container_type _herds;

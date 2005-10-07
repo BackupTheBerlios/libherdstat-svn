@@ -49,7 +49,8 @@ namespace herdstat {
 namespace portage {
 
     /**
-     * Version component (${P}, ${PN}, etc) map.
+     * @class version_map
+     * @brief Version component (${P}, ${PN}, etc) map.
      */
 
     class version_map
@@ -66,7 +67,10 @@ namespace portage {
              */
             version_map(const std::string &path);
 
-            /* map subset */
+            /**
+             * @name container_type subset
+             */
+            //@{
             iterator begin() { return _vmap.begin(); }
             const_iterator begin() const { return _vmap.begin(); }
             iterator end() { return _vmap.end(); }
@@ -82,6 +86,7 @@ namespace portage {
                 const_iterator i = this->find(key);
                 return (i == this->end() ? "" : i->second);
             }
+            //@}
 
             /// Get version string.
             const std::string& version() const { return _verstr; }
@@ -95,7 +100,8 @@ namespace portage {
     };
 
     /**
-     * Represents a single version string.
+     * @class version_string.
+     * @brief Represents a single version string.
      */
 
     class version_string
@@ -156,7 +162,8 @@ namespace portage {
 
         private:
             /**
-             * Represents a version suffix (_alpha, _beta, etc).
+             * @class suffix
+             * @brief Represents a version suffix (_alpha, _beta, etc).
              */
 
             class suffix
@@ -222,7 +229,8 @@ namespace portage {
             };
 
             /**
-             * Represents package version minus the suffix.
+             * @class nosuffix
+             * @brief Represents package version minus the suffix.
              */
 
             class nosuffix
@@ -294,8 +302,9 @@ namespace portage {
     };
 
     /** 
-     * version_string container - generally used
-     * for all versions of a single package.
+     * @class versions
+     * @brief version_string container.
+     * Generally used for all versions of a single package.
      */
 
     class versions
@@ -324,7 +333,10 @@ namespace portage {
              */
             versions(const std::vector<std::string> &v);
 
-            /* small set subset */
+            /**
+             * @name container_type subset
+             */
+            //@{
             iterator begin() { return _vs.begin(); }
             const_iterator begin() const { return _vs.begin(); }
             iterator end() { return _vs.end(); }
@@ -332,23 +344,31 @@ namespace portage {
             size_type size() const { return _vs.size(); }
             bool empty() const { return _vs.empty(); }
             void clear() { _vs.clear(); }
-
-            inline const version_string& front() const;
-            inline const version_string& back() const;
-
-            inline iterator find(const std::string& path);
-            inline const_iterator find(const std::string& path) const;
             inline iterator find(const version_string& v);
             inline const_iterator find(const version_string& v) const;
+            inline bool insert(const version_string& v);
+            //@}
+
+            /// Get first version_string.
+            inline const version_string& front() const;
+            /// Get last version_string.
+            inline const version_string& back() const;
+
+            //@{
+            /** Find version string using ebuild matching path.
+             * @param path Ebuild path.
+             * @returns iterator to first match or end() if no match.
+             */
+            inline iterator find(const std::string& path);
+            inline const_iterator find(const std::string& path) const;
+            //@}
 
             /** Instantiate and insert a version_string object with the
              * specified path.
              * @param p Path.
-             * @returns A boolean value (whether insertion succeeded).
+             * @returns True if insertion was successful.
              */
             inline bool insert(const std::string &p);
-
-            inline bool insert(const version_string& v);
 
             /** Assign a new package directory clearing any previously
              * contained version_string instances.

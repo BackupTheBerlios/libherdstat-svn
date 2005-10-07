@@ -39,7 +39,8 @@ namespace herdstat {
 namespace portage {
 
     /**
-     * Represents Gentoo's userinfo.xml.
+     * @class userinfo_xml
+     * @brief Represents Gentoo's userinfo.xml.
      */
 
     class userinfo_xml : public xmlBase

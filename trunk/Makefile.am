@@ -13,12 +13,12 @@ MAINTAINERCLEANFILES = aclocal.m4 \
 		       html/*/*.html \
 		       *~
 
-DISTCLEANFILES = ChangeLog TODO
-
-EXTRA_DIST = ChangeLog Makefile.am.common autogen.sh .todo tests libherdstat-0.1.pc.in
-
 pkgconfigdir = $(libdir)/pkgconfig
-pkgconfig_DATA = libherdstat-0.1.pc
+pkgconfig_DATA = $(PACKAGE)-$(VERSION_MAJOR).$(VERSION_MINOR).pc
+
+DISTCLEANFILES = ChangeLog TODO $(pkgconfig_DATA)
+EXTRA_DIST = ChangeLog Makefile.am.common autogen.sh .todo tests \
+	$(pkgconfig_DATA).in
 
 docs:
 	cd doc && $(MAKE) $@
@@ -54,11 +54,13 @@ ChangeLog: clitimestamp
         fi
 	@rm clitimestamp
 
+pkgconfig:
+	cp $(PACKAGE).pc $(pkgconfig_DATA)
 
 distcheck-hook:
-	@cp Makefile.am.common $(PACKAGE)-$(VERSION)/_build/
+	@cp Makefile.am.common "$(PACKAGE)-$(VERSION)/_build/"
 
-dist-hook: ChangeLog TODO
+dist-hook: ChangeLog TODO pkgconfig
 
 dist-sign: dist
 	gpg --armour --detach-sign "$(PACKAGE)-$(VERSION).tar.bz2"

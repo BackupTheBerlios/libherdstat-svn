@@ -1,6 +1,6 @@
 /*
  * herdstat -- herdstat/portage/xmlbase.hh
- * $Id: xmlbase.hh 578 2005-09-15 16:14:40Z ka0ttic $
+ * $Id$
  * Copyright (c) 2005 Aaron Walker <ka0ttic@gentoo.org>
  *
  * This file is part of herdstat.
@@ -43,7 +43,8 @@ namespace portage {
     class Developer;
 
     /**
-     * Abstract base class for portage-specific XML files.
+     * @class xmlBase
+     * @brief Abstract base class for portage-specific XML files.
      */
 
     class xmlBase : public parsable,
@@ -51,11 +52,25 @@ namespace portage {
                     private noncopyable
     {
         public:
+            /// Default constructor.
             xmlBase() : parsable() { }
+
+            /** Constructor.
+             * @param path Path to XML file.
+             */
             xmlBase(const std::string& path) : parsable(path) { }
+
+            /// Destructor.
             virtual ~xmlBase() { }
 
+            /** Parse file.
+             * @param path Path to XML file (defaults to empty).
+             */
             virtual void parse(const std::string& path = "") = 0;
+
+            /** Fill Developer object with data relevant to that developer.
+             * @param dev Reference to Developer object.
+             */
             virtual void fill_developer(Developer& dev) const = 0;
 
         protected:

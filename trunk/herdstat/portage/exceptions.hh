@@ -1,6 +1,6 @@
 /*
  * herdstat -- herdstat/portage/portage_exceptions.hh
- * $Id: exceptions.hh 554 2005-09-11 15:56:33Z ka0ttic $
+ * $Id$
  * Copyright (c) 2005 Aaron Walker <ka0ttic@gentoo.org>
  *
  * This file is part of herdstat.
@@ -41,7 +41,8 @@ namespace herdstat {
 namespace portage {
 
     /**
-     * Bad version suffix exception.
+     * @class BadVersionSuffix
+     * @brief Bad version suffix exception.
      */
 
     class BadVersionSuffix : public Exception
@@ -60,7 +61,8 @@ namespace portage {
     };
 
     /**
-     * Ambiguous package name exception.
+     * @class AmbiguousPkg
+     * @brief Ambiguous package name exception.
      */
 
     class AmbiguousPkg : public Exception
@@ -90,7 +92,8 @@ namespace portage {
     };
 
     /**
-     * Non-existent package exception.
+     * @class NonExistentPkg
+     * @brief Non-existent package exception.
      */
 
     class NonExistentPkg : public Exception
@@ -108,7 +111,8 @@ namespace portage {
     };
 
     /**
-     * Quality Assurance exception.
+     * @class QAException
+     * @brief Quality Assurance exception.
      */
 
     class QAException : public Exception
@@ -121,7 +125,8 @@ namespace portage {
     };
 
     /**
-     * Quality Assurance (with strerror()) exception.
+     * @class QAErrnoException
+     * @brief Quality Assurance (with strerror()) exception.
      */
 
     class QAErrnoException : public ErrnoException

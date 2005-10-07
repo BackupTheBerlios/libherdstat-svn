@@ -1,6 +1,6 @@
 /*
  * herdstat -- src/xml.hh
- * $Id: document.hh 558 2005-09-12 11:54:23Z ka0ttic $
+ * $Id$
  * Copyright (c) 2005 Aaron Walker <ka0ttic@gentoo.org>
  *
  * This file is part of herdstat.
@@ -39,10 +39,12 @@
 #include <herdstat/xml/saxparser.hh>
 
 namespace herdstat {
+/// XML-related classes.
 namespace xml {
 
-    /*
-     * Represents an XML document.
+    /**
+     * @class Document
+     * @brief Represents an XML document.
      */
 
     template <class H>

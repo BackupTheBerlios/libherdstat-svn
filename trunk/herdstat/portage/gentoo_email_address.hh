@@ -1,6 +1,6 @@
 /*
  * herdstat -- portage/gentoo_email_address.hh
- * $Id: gentoo_email_address.hh 600 2005-09-18 16:43:32Z ka0ttic $
+ * $Id$
  * Copyright (c) 2005 Aaron Walker <ka0ttic@gentoo.org>
  *
  * This file is part of herdstat.
@@ -38,7 +38,8 @@ namespace herdstat {
 namespace portage {
 
     /**
-     * Represents a gentoo.org email address.
+     * @class GentooEmailAddress
+     * @brief Represents a gentoo.org email address.
      */
 
     class GentooEmailAddress : public EmailAddress
@@ -56,6 +57,7 @@ namespace portage {
             virtual ~GentooEmailAddress();
 
         protected:
+            /// Parse email address.
             virtual bool parse(const std::string& email);
     };
 
