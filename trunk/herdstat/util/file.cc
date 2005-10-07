@@ -37,14 +37,6 @@
 
 namespace herdstat {
 namespace util {
-/*** static members **********************************************************/
-const Stat::ftype Stat::regular = Stat::ftype(REGULAR);
-const Stat::ftype Stat::directory = Stat::ftype(DIRECTORY);
-const Stat::ftype Stat::character = Stat::ftype(CHARACTER);
-const Stat::ftype Stat::block = Stat::ftype(BLOCK);
-const Stat::ftype Stat::fifo = Stat::ftype(FIFO);
-const Stat::ftype Stat::link = Stat::ftype(LINK);
-const Stat::ftype Stat::socket = Stat::ftype(SOCKET);
 /*****************************************************************************/
 Stat::Stat()
     : _path(), _type(REGULAR), _exists(false), _opened(false)
@@ -78,19 +70,19 @@ Stat::operator() ()
     }
 
     if (S_ISREG(this->st_mode))
-        _type = regular;
+        _type = REGULAR;
     else if (S_ISDIR(this->st_mode))
-        _type = directory;
+        _type = DIRECTORY;
     else if (S_ISCHR(this->st_mode))
-        _type = character;
+        _type = CHARACTER;
     else if (S_ISBLK(this->st_mode))
-        _type = block;
+        _type = BLOCK;
     else if (S_ISFIFO(this->st_mode))
-        _type = fifo;
+        _type = FIFO;
     else if (S_ISLNK(this->st_mode))
-        _type = link;
+        _type = LINK;
     else if (S_ISSOCK(this->st_mode))
-        _type = socket;
+        _type = SOCKET;
 
     return _exists;
 }

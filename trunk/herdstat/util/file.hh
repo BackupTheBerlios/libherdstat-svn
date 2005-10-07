@@ -125,6 +125,8 @@ namespace util {
      */
     void move_file(const std::string &to, const std::string &from);
 
+    enum ftype { REGULAR, DIRECTORY, CHARACTER, BLOCK, FIFO, LINK, SOCKET };
+
     /**
      * A wrapper for struct stat and the stat() system call.
      */
@@ -139,26 +141,6 @@ namespace util {
             typedef gid_t   gid_type;
             typedef off_t   size_type;
             typedef time_t  time_type;
-
-            /// Denotes file type.
-            enum ftype
-            {
-                REGULAR,
-                DIRECTORY,
-                CHARACTER,
-                BLOCK,
-                FIFO,
-                LINK,
-                SOCKET
-            };
-
-            static const ftype regular;
-            static const ftype directory;
-            static const ftype character;
-            static const ftype block;
-            static const ftype fifo;
-            static const ftype link;
-            static const ftype socket;
 
             /// Default constructor.
             Stat();
