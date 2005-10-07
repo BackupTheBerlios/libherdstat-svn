@@ -1,6 +1,6 @@
 /*
  * herdstat -- herdstat/util/misc.hh
- * $Id: misc.hh 631 2005-09-28 11:50:27Z ka0ttic $
+ * $Id$
  * Copyright (c) 2005 Aaron Walker <ka0ttic@gentoo.org>
  *
  * This file is part of herdstat.
@@ -70,9 +70,6 @@ namespace util {
      * @returns A std::string object.
      */
     std::string current_user();
-
-    /// Determine current terminal width.
-    std::string::size_type getcols();
 
     /** Format date std::string.
      * @param t Reference to a time_t object.

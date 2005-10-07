@@ -1,6 +1,6 @@
 /*
  * herdstat -- herdstat/util/misc.cc
- * $Id: misc.cc 631 2005-09-28 11:50:27Z ka0ttic $
+ * $Id$
  * Copyright (c) 2005 Aaron Walker <ka0ttic@gentoo.org>
  *
  * This file is part of herdstat.
@@ -36,20 +36,10 @@
 #include <herdstat/util/string.hh>
 #include <herdstat/util/misc.hh>
 
-#ifdef HAVE_NCURSES
-# include <curses.h>
-# include <term.h>
-#endif /* HAVE_NCURSES */
-
 namespace herdstat {
 namespace util {
 /** static members **********************************************************/
 ColorMap::cmap ColorMap::_cm;
-
-#ifdef HAVE_NCURSES
-static bool term_init = false;
-static char term_info[2048];
-#endif /* HAVE_NCURSES */
 /****************************************************************************/
 std::string&
 ColorMap::operator[] (const std::string& color)
@@ -139,61 +129,6 @@ current_user()
     }
 
     return (user.empty() ? "nobody@gentoo.org" : user);
-}
-/****************************************************************************
- * Try to determine the columns of the current terminal; use                *
- * a sensible default if we can't get it for some reason.                   *
- ****************************************************************************/
-std::string::size_type
-getcols()
-{
-#ifdef HAVE_NCURSES
-
-    if (not term_init)
-    {
-        const char *type = std::getenv("TERM");
-        /* default to 'vt100' */
-        if (not type)
-        {
-            if (setenv("TERM", "vt100", 0) != 0)
-                throw Exception("setenv(\"TERM\", \"vt100\") failed");
-        }
-
-        int result = tgetent(term_info, std::getenv("TERM"));
-        if (result < 0)
-            throw Exception("Failed to access termcap database.");
-        else if (result == 0)
-            throw Exception("Unknown terminal type '%s'", type);
-
-        term_init = true;
-    }
-
-    int cols = tgetnum("co");
-    if (cols > 0)
-        return cols;
-
-#else /* HAVE_NCURSES */
-
-    std::string output;
-    FILE *p = popen("stty size 2>/dev/null", "r");
-    if (p)
-    {
-	char line[10];
-	if (std::fgets(line, sizeof(line) - 1, p) != NULL)
-	    output = line;
-	pclose(p);
-    }
-
-    if (not output.empty())
-    {
-	std::string::size_type pos;
-	if ((pos = output.find(" ")) != std::string::npos)
-	    return std::atoi(output.substr(pos).c_str());
-    }
-
-#endif /* HAVE_NCURSES */
-
-    return 78;
 }
 /****************************************************************************/
 const std::string

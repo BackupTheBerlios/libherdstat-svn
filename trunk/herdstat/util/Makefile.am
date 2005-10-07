@@ -1,4 +1,4 @@
-# $Id: Makefile.am 589 2005-09-17 11:28:33Z ka0ttic $
+# $Id$
 
 include $(top_builddir)/Makefile.am.common
 
@@ -24,7 +24,6 @@ hh_sources = string.hh \
 
 noinst_LTLIBRARIES = libutil.la
 libutil_la_SOURCES = $(cc_sources) $(hh_sources)
-libutil_la_LIBADD  = @TERMCAP_LIBS@
 
 library_includedir=$(includedir)/$(PACKAGE)-$(VERSION_MAJOR).$(VERSION_MINOR)/herdstat/util
 library_include_HEADERS = $(hh_sources)
