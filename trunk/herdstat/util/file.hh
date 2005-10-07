@@ -1,6 +1,6 @@
 /*
  * herdstat -- herdstat/util/file.hh
- * $Id: file.hh 629 2005-09-26 11:54:23Z ka0ttic $
+ * $Id$
  * Copyright (c) 2005 Aaron Walker <ka0ttic@gentoo.org>
  *
  * This file is part of herdstat.
@@ -125,9 +125,6 @@ namespace util {
      */
     void move_file(const std::string &to, const std::string &from);
 
-    /// Denotes file type.
-    enum ftype_T { REGULAR, DIRECTORY, CHARACTER, BLOCK, FIFO, LINK, SOCKET };
-
     /**
      * A wrapper for struct stat and the stat() system call.
      */
@@ -142,6 +139,26 @@ namespace util {
             typedef gid_t   gid_type;
             typedef off_t   size_type;
             typedef time_t  time_type;
+
+            /// Denotes file type.
+            enum ftype
+            {
+                REGULAR,
+                DIRECTORY,
+                CHARACTER,
+                BLOCK,
+                FIFO,
+                LINK,
+                SOCKET
+            };
+
+            static const ftype regular;
+            static const ftype directory;
+            static const ftype character;
+            static const ftype block;
+            static const ftype fifo;
+            static const ftype link;
+            static const ftype socket;
 
             /// Default constructor.
             Stat();
@@ -162,7 +179,7 @@ namespace util {
             time_type   mtime()    const { return this->st_mtime; }
             time_type   ctime()    const { return this->st_ctime; }
             const std::string& path()    const { return this->_path; }
-            ftype_T     type()     const { return this->_type; }
+            ftype       type()     const { return this->_type; }
 
             /// Assign a new path and stat it.
             void assign(const std::string &p, bool opened = false);
@@ -179,7 +196,7 @@ namespace util {
 
         protected:
             std::string _path;
-            ftype_T _type;
+            ftype _type;
             bool _exists, _opened;
     };
 

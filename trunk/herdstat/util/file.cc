@@ -1,6 +1,6 @@
 /*
  * herdstat -- herdstat/util/file.cc
- * $Id: file.cc 655 2005-10-02 16:15:01Z ka0ttic $
+ * $Id$
  * Copyright (c) 2005 Aaron Walker <ka0ttic@gentoo.org>
  *
  * This file is part of herdstat.
@@ -37,6 +37,14 @@
 
 namespace herdstat {
 namespace util {
+/*** static members **********************************************************/
+const Stat::ftype Stat::regular = Stat::ftype(REGULAR);
+const Stat::ftype Stat::directory = Stat::ftype(DIRECTORY);
+const Stat::ftype Stat::character = Stat::ftype(CHARACTER);
+const Stat::ftype Stat::block = Stat::ftype(BLOCK);
+const Stat::ftype Stat::fifo = Stat::ftype(FIFO);
+const Stat::ftype Stat::link = Stat::ftype(LINK);
+const Stat::ftype Stat::socket = Stat::ftype(SOCKET);
 /*****************************************************************************/
 Stat::Stat()
     : _path(), _type(REGULAR), _exists(false), _opened(false)
@@ -70,21 +78,21 @@ Stat::operator() ()
     }
 
     if (S_ISREG(this->st_mode))
-        this->_type = REGULAR;
+        _type = regular;
     else if (S_ISDIR(this->st_mode))
-        this->_type = DIRECTORY;
+        _type = directory;
     else if (S_ISCHR(this->st_mode))
-        this->_type = CHARACTER;
+        _type = character;
     else if (S_ISBLK(this->st_mode))
-        this->_type = BLOCK;
+        _type = block;
     else if (S_ISFIFO(this->st_mode))
-        this->_type = FIFO;
+        _type = fifo;
     else if (S_ISLNK(this->st_mode))
-        this->_type = LINK;
+        _type = link;
     else if (S_ISSOCK(this->st_mode))
-        this->_type = SOCKET;
+        _type = socket;
 
-    return this->_exists;
+    return _exists;
 }
 /*****************************************************************************/
 BaseFileObject::BaseFileObject()
