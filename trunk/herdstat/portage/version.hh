@@ -1,22 +1,22 @@
 /*
- * herdstat -- herdstat/portage/portage_version.hh
+ * libherdstat -- herdstat/portage/version.hh
  * $Id$
  * Copyright (c) 2005 Aaron Walker <ka0ttic@gentoo.org>
  *
- * This file is part of herdstat.
+ * This file is part of libherdstat.
  *
- * herdstat is free software; you can redistribute it and/or modify it under the
- * terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later
- * version.
+ * libherdstat is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free
+ * Software Foundation; either version 2 of the License, or (at your option)
+ * any later version.
  *
- * herdstat is distributed in the hope that it will be useful, but WITHOUT ANY
- * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
- * details.
+ * libherdstat is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
+ * more details.
  *
  * You should have received a copy of the GNU General Public License along with
- * herdstat; if not, write to the Free Software Foundation, Inc., 59 Temple
+ * libherdstat; if not, write to the Free Software Foundation, Inc., 59 Temple
  * Place, Suite 325, Boston, MA  02111-1257  USA
  */
 
@@ -42,6 +42,7 @@
 #include <cstdlib>
 #include <cassert>
 
+#include <herdstat/util/container_base.hh>
 #include <herdstat/util/functional.hh>
 #include <herdstat/util/file.hh>
 
@@ -53,40 +54,22 @@ namespace portage {
      * @brief Version component (${P}, ${PN}, etc) map.
      */
 
-    class version_map
+    class version_map : public util::MapBase<std::string, std::string>
     {
         public:
-            typedef std::map<std::string, std::string> container_type;
-            typedef container_type::value_type value_type;
-            typedef container_type::iterator iterator;
-            typedef container_type::const_iterator const_iterator;
-            typedef container_type::size_type size_type;
-
             /** Constructor.
              * @param path Path to ebuild.
              */
             version_map(const std::string &path);
 
-            /**
-             * @name container_type subset
+            /** Get value mapped to given key.
+             * @returns copy of value mapped to key.
              */
-            //@{
-            iterator begin() { return _vmap.begin(); }
-            const_iterator begin() const { return _vmap.begin(); }
-            iterator end() { return _vmap.end(); }
-            const_iterator end() const { return _vmap.end(); }
-            iterator find(const std::string &s) { return _vmap.find(s); }
-            const_iterator find(const std::string &s) const
-            { return _vmap.find(s); }
-
-            const std::string &operator[](const std::string &key)
-            { return _vmap[key]; }
             const std::string operator[](const std::string &key) const
             {
                 const_iterator i = this->find(key);
                 return (i == this->end() ? "" : i->second);
             }
-            //@}
 
             /// Get version string.
             const std::string& version() const { return _verstr; }
@@ -96,7 +79,6 @@ namespace portage {
             void parse();
 
             std::string _verstr;
-            mutable container_type _vmap;
     };
 
     /**
@@ -307,17 +289,9 @@ namespace portage {
      * Generally used for all versions of a single package.
      */
 
-    class versions
+    class versions : public util::SetBase<version_string>
     {
         public:
-            typedef std::set<version_string> container_type;
-            typedef container_type::iterator iterator;
-            typedef container_type::const_iterator const_iterator;
-            typedef container_type::size_type size_type;
-            typedef container_type::value_type value_type;
-            typedef container_type::reference reference;
-            typedef container_type::const_reference const_reference;
-
             /// Default constructor.
             versions();
 
@@ -333,22 +307,6 @@ namespace portage {
              */
             versions(const std::vector<std::string> &v);
 
-            /**
-             * @name container_type subset
-             */
-            //@{
-            iterator begin() { return _vs.begin(); }
-            const_iterator begin() const { return _vs.begin(); }
-            iterator end() { return _vs.end(); }
-            const_iterator end() const { return _vs.end(); }
-            size_type size() const { return _vs.size(); }
-            bool empty() const { return _vs.empty(); }
-            void clear() { _vs.clear(); }
-            inline iterator find(const version_string& v);
-            inline const_iterator find(const version_string& v) const;
-            inline bool insert(const version_string& v);
-            //@}
-
             /// Get first version_string.
             inline const version_string& front() const;
             /// Get last version_string.
@@ -362,6 +320,12 @@ namespace portage {
             inline iterator find(const std::string& path);
             inline const_iterator find(const std::string& path) const;
             //@}
+
+            /** Insert given version_string.
+             * @param v const reference to version_string.
+             * @returns True if insertion was successful.
+             */
+            inline bool insert(const version_string& v);
 
             /** Instantiate and insert a version_string object with the
              * specified path.
@@ -380,46 +344,30 @@ namespace portage {
              * @param p Path to package directory.
              */
             void append(const std::string &p);
-
-        private:
-            /// version_string container
-            mutable container_type _vs;
     };
 
     inline versions::iterator
     versions::find(const std::string& p)
     {
-        return _vs.find(version_string(p));
+        return this->find(version_string(p));
     }
 
     inline versions::const_iterator
     versions::find(const std::string& p) const
     {
-        return _vs.find(version_string(p));
-    }
-
-    inline versions::iterator
-    versions::find(const version_string& v)
-    {
-        return _vs.find(v);
-    }
-
-    inline versions::const_iterator
-    versions::find(const version_string& v) const
-    {
-        return _vs.find(v);
+        return this->find(version_string(p));
     }
 
     inline bool
     versions::insert(const std::string& path)
     {
-        return _vs.insert(version_string(path)).second;
+        return util::SetBase<version_string>::insert(version_string(path)).second;
     }
 
     inline bool
     versions::insert(const version_string& v)
     {
-        return _vs.insert(v).second;
+        return util::SetBase<version_string>::insert(v).second;
     }
 
     inline const version_string&

@@ -1,22 +1,22 @@
 /*
- * herdstat -- herdstat/portage/portage_version.cc
- * $Id: version.cc 661 2005-10-05 01:52:53Z ka0ttic $
+ * libherdstat -- herdstat/portage/version.cc
+ * $Id$
  * Copyright (c) 2005 Aaron Walker <ka0ttic@gentoo.org>
  *
- * This file is part of herdstat.
+ * This file is part of libherdstat.
  *
- * herdstat is free software; you can redistribute it and/or modify it under the
- * terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later
- * version.
+ * libherdstat is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free
+ * Software Foundation; either version 2 of the License, or (at your option)
+ * any later version.
  *
- * herdstat is distributed in the hope that it will be useful, but WITHOUT ANY
- * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
- * details.
+ * libherdstat is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
+ * more details.
  *
  * You should have received a copy of the GNU General Public License along with
- * herdstat; if not, write to the Free Software Foundation, Inc., 59 Temple
+ * libherdstat; if not, write to the Free Software Foundation, Inc., 59 Temple
  * Place, Suite 325, Boston, MA  02111-1257  USA
  */
 
@@ -83,14 +83,14 @@ version_map::parse()
     assert(parts.size() == 3);
 
     /* fill our map with the components */
-    std::pair<iterator, bool> pn = _vmap.insert(value_type("PN", parts[0]));
-    std::pair<iterator, bool> pv = _vmap.insert(value_type("PV", parts[1]));
-    std::pair<iterator, bool> pr = _vmap.insert(value_type("PR", parts[2]));
+    std::pair<iterator, bool> pn = this->insert(value_type("PN", parts[0]));
+    std::pair<iterator, bool> pv = this->insert(value_type("PV", parts[1]));
+    std::pair<iterator, bool> pr = this->insert(value_type("PR", parts[2]));
     assert(pn.second and pv.second and pr.second);
-    _vmap.insert(value_type("P", pn.first->second+"-"+pv.first->second));
-    std::pair<iterator, bool> pvr = _vmap.insert(value_type("PVR",
+    this->insert(value_type("P", pn.first->second+"-"+pv.first->second));
+    std::pair<iterator, bool> pvr = this->insert(value_type("PVR",
         pv.first->second+"-"+pr.first->second));
-    _vmap.insert(value_type("PF", pn.first->second+"-"+pvr.first->second));
+    this->insert(value_type("PF", pn.first->second+"-"+pvr.first->second));
 }
 /*****************************************************************************
  * suffix                                                                  *
@@ -401,14 +401,14 @@ versions::versions(const std::vector<std::string>& paths)
 void
 versions::assign(const std::string& path)
 {
-    this->_vs.clear();
+    this->clear();
 
     if (not util::is_dir(path))
         return;
 
     const util::Directory pkgdir(path);
     util::copy_if(pkgdir.begin(), pkgdir.end(),
-        std::inserter(_vs, _vs.end()), IsEbuild());
+        std::inserter(this->container(), this->end()), IsEbuild());
 }
 /*****************************************************************************
  * Same as assign() but does not call clear().                               *
@@ -418,7 +418,7 @@ versions::append(const std::string& path)
 {
     const util::Directory pkgdir(path);
     util::copy_if(pkgdir.begin(), pkgdir.end(),
-        std::inserter(_vs, _vs.end()), IsEbuild());
+        std::inserter(this->container(), this->end()), IsEbuild());
 }
 /*****************************************************************************/
 } // namespace portage
