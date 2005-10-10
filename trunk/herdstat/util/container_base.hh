@@ -79,6 +79,8 @@ namespace util {
 
             //@{
             /// Operations common among all standard containers.
+
+            // FIXME: this wont work for containers of pointers
             container_type& operator= (const container_type& c)
             { this->swap(c); }
 
@@ -223,6 +225,8 @@ namespace util {
             { return this->container().value_comp(); }
 
             iterator find(const key_type& k)
+            { return this->container().find(k); }
+            const_iterator find(const key_type& k) const
             { return this->container().find(k); }
             size_type count(const key_type& k) const
             { return this->container().count(k); }
