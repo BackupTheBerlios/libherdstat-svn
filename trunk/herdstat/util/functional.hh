@@ -1,22 +1,22 @@
 /*
- * herdstat -- herdstat/util/functional.hh
- * $Id: functional.hh 661 2005-10-05 01:52:53Z ka0ttic $
+ * libherdstat -- herdstat/util/functional.hh
+ * $Id$
  * Copyright (c) 2005 Aaron Walker <ka0ttic@gentoo.org>
  *
- * This file is part of herdstat.
+ * This file is part of libherdstat.
  *
- * herdstat is free software; you can redistribute it and/or modify it under the
- * terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later
- * version.
+ * libherdstat is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free
+ * Software Foundation; either version 2 of the License, or (at your option)
+ * any later version.
  *
- * herdstat is distributed in the hope that it will be useful, but WITHOUT ANY
- * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
- * details.
+ * libherdstat is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
+ * more details.
  *
  * You should have received a copy of the GNU General Public License along with
- * herdstat; if not, write to the Free Software Foundation, Inc., 59 Temple
+ * libherdstat; if not, write to the Free Software Foundation, Inc., 59 Temple
  * Place, Suite 325, Boston, MA  02111-1257  USA
  */
 
@@ -41,9 +41,9 @@ namespace herdstat {
 namespace util {
 
     /**
-     * Function object that returns a dereferenced pointer to type T.
+     * @struct Dereference
+     * @brief Function object that returns a dereferenced pointer to type T.
      */
-
     struct Dereference
     {
         template <typename T>
@@ -51,10 +51,10 @@ namespace util {
     };
 
     /**
-     * Function object that dereferences the given pointers and
-     * then compares their values via operator<.
+     * @struct DereferenceLess
+     * @brief Function object that dereferences the given pointers and then
+     * compares their values via operator<.
      */
-
     template <typename T>
     struct DereferenceLess
         : std::binary_function<const T*, const T*, bool>
@@ -63,10 +63,10 @@ namespace util {
     };
 
     /**
-     * Function object that dereferences the given pointers and
-     * then compares their values via operator<.
+     * @struct DereferenceGreater
+     * @brief Function object that dereferences the given pointers and then
+     * compares their values via operator<.
      */
-
     template <typename T>
     struct DereferenceGreater
         : std::binary_function<const T*, const T*, bool>
@@ -75,10 +75,10 @@ namespace util {
     };
 
     /**
-     * Function object that dereferences the given pointers and
-     * then compares their values via operator==.
+     * @struct DereferenceEqual
+     * @brief Function object that dereferences the given pointers and then
+     * compares their values via operator==.
      */
-
     template <typename T>
     struct DereferenceEqual
         : std::binary_function<const T*, const T*, bool>
@@ -87,11 +87,11 @@ namespace util {
     };
 
     /**
-     * Function object that dereferences the given pointer and
-     * calls operator< against the given string.  Assumes the
-     * pointer type defines operator<(std::string).
+     * @struct DereferenceStrLess
+     * @brief Function object that dereferences the given pointer and calls
+     * operator< against the given string.  Assumes the pointer type defines
+     * operator<(std::string).
      */
-
     template <typename T>
     struct DereferenceStrLess
         : std::binary_function<const T*, std::string, bool>
@@ -100,11 +100,11 @@ namespace util {
     };
 
     /**
-     * Function object that dereferences the given pointer and
-     * calls operator> against the given string.  Assumes the
-     * pointer type defines operator>(std::string).
+     * @struct DereferenceStrGreater
+     * @brief Function object that dereferences the given pointer and calls
+     * operator> against the given string.  Assumes the pointer type defines
+     * operator>(std::string).
      */
-
     template <typename T>
     struct DereferenceStrGreater
         : std::binary_function<const T*, std::string, bool>
@@ -113,11 +113,11 @@ namespace util {
     };
 
     /**
-     * Function object that dereferences the given pointer and
-     * calls operator== against the given string.  Assumes the
-     * pointer type defines operator==(std::string).
+     * @struct DereferenceStrEqual
+     * @brief Function object that dereferences the given pointer and calls
+     * operator== against the given string.  Assumes the pointer type defines
+     * operator==(std::string).
      */
-
     template <typename T>
     struct DereferenceStrEqual
         : std::binary_function<const T*, std::string, bool>
@@ -126,10 +126,38 @@ namespace util {
     };
 
     /**
-     * Function object that deletes the given pointer and sets
-     * it to NULL.
+     * @struct LengthLess
+     * @brief Function object that determines if length of v1 is less than
+     * length of v2.  Implicit interface assumes T offers a length() member.
      */
+    struct LengthLess
+    {
+        template <typename T>
+        bool operator()(const T& v1, const T& v2) const
+        {
+            return (v1.length() < v2.length());
+        }
+    };
 
+    /**
+     * @struct LengthGreater
+     * @brief Function object that determines if length of v1 is greater than
+     * length of v2.  Implicit interface assumes T offers a length() member.
+     */
+    struct LengthGreater
+    {
+        template <typename T>
+        bool operator()(const T& v1, const T& v2) const
+        {
+            return (v1.length() > v2.length());
+        }
+    };
+
+    /**
+     * @struct DeleteAndNullify
+     * @brief Function object that deletes the given pointer and sets it to
+     * NULL.
+     */
     struct DeleteAndNullify
     {
         template <typename T>
@@ -144,10 +172,10 @@ namespace util {
     };
 
     /**
-     * Function object that calls T::append(const U&).
+     * @struct Appender
+     * @brief Function object that calls T::append(const U&).
      * U defaults to T::value_type.
      */
-
     template <typename T, typename U = typename T::value_type>
     struct Appender : std::binary_function<U, T* const, void>
     {
@@ -155,9 +183,9 @@ namespace util {
     };
 
     /**
-     * Function object that returns util::file_exists().
+     * @struct FileExists
+     * @brief Function object that returns util::file_exists().
      */
-
     struct FileExists
     {
         bool operator()(const std::string& path) const
@@ -165,9 +193,9 @@ namespace util {
     };
 
     /**
-     * Function object that returns util::is_dir().
+     * @struct IsDir
+     * @brief Function object that returns util::is_dir().
      */
-
     struct IsDir
     {
         bool operator()(const std::string& path) const
@@ -175,9 +203,9 @@ namespace util {
     };
 
     /**
-     * Function object that returns util::is_file().
+     * @struct IsFile
+     * @brief Function object that returns util::is_file().
      */
-
     struct IsFile
     {
         bool operator()(const std::string& path) const
@@ -185,9 +213,9 @@ namespace util {
     };
 
     /**
-     * Function object for using Regex class with std algorithms.
+     * @struct regexMatch
+     * @brief Function object for using Regex class with std algorithms.
      */
-
     struct regexMatch : std::binary_function<Regex, std::string, bool>
     {
         bool operator() (const Regex &re, const std::string& s) const
@@ -195,9 +223,10 @@ namespace util {
     };
 
     /**
-     * Function object for using globs (pattern matching) with std algorithms.
+     * @struct patternMatch
+     * @brief Function object for using globs (pattern matching) with std
+     * algorithms.
      */
-
     struct patternMatch : std::binary_function<std::string, std::string, bool>
     {
         bool operator() (const std::string& path,
