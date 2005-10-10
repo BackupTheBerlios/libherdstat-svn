@@ -175,8 +175,8 @@ namespace util {
             { return this->container().erase(begin, end); }
 
             template <typename In>
-            void insert(In begin, In end)
-            { this->container().insert(begin, end); }
+            void insert(iterator pos, In begin, In end)
+            { this->container().insert(pos, begin, end); }
     };
 
     /**
