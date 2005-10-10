@@ -1,22 +1,22 @@
 /*
- * herdstat -- herdstat/portage/portage_exceptions.hh
+ * libherdstat -- herdstat/portage/exceptions.hh
  * $Id$
  * Copyright (c) 2005 Aaron Walker <ka0ttic@gentoo.org>
  *
- * This file is part of herdstat.
+ * This file is part of libherdstat.
  *
- * herdstat is free software; you can redistribute it and/or modify it under the
- * terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later
- * version.
+ * libherdstat is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free
+ * Software Foundation; either version 2 of the License, or (at your option)
+ * any later version.
  *
- * herdstat is distributed in the hope that it will be useful, but WITHOUT ANY
- * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
- * details.
+ * libherdstat is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
+ * more details.
  *
  * You should have received a copy of the GNU General Public License along with
- * herdstat; if not, write to the Free Software Foundation, Inc., 59 Temple
+ * libherdstat; if not, write to the Free Software Foundation, Inc., 59 Temple
  * Place, Suite 325, Boston, MA  02111-1257  USA
  */
 
@@ -140,6 +140,40 @@ namespace portage {
             {
                 std::string s("QA Violation: ");
                 s += ErrnoException::what();
+                return s.c_str();
+            }
+    };
+
+    /**
+     * @class InvalidKeywordMask
+     * @brief Exception for invalid mask characters ('~' in ~arch).
+     */
+
+    class InvalidKeywordMask : public Exception
+    {
+        public:
+            InvalidKeywordMask(const char c) : _mask(c) { }
+            virtual ~InvalidKeywordMask() throw() { }
+            virtual const char *what() const throw()
+            {
+                std::string s("Invalid keyword mask character '");
+                s += _mask + "'.";
+                return s.c_str();
+            }
+
+        private:
+            const char _mask;
+    };
+
+    class InvalidArch : public Exception
+    {
+        public:
+            InvalidArch(const std::string& arch) : Exception(arch) { }
+            virtual ~InvalidArch() throw() { }
+            virtual const char *what() const throw()
+            {
+                std::string s("Invalid arch '");
+                s += std::string(this->message()) + "'.";
                 return s.c_str();
             }
     };
