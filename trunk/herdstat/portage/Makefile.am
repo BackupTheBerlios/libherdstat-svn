@@ -1,9 +1,10 @@
-# $Id: Makefile.am 629 2005-09-26 11:54:23Z ka0ttic $
+# $Id$
 
 include $(top_builddir)/Makefile.am.common
 
 cc_sources = config.cc \
 	     version.cc \
+	     portage_file.cc \
 	     categories.cc \
 	     package_list.cc \
 	     find.cc \
@@ -20,6 +21,7 @@ cc_sources = config.cc \
 hh_sources = exceptions.hh \
 	     misc.hh \
 	     config.hh \
+	     portage_file.hh \
 	     categories.hh \
 	     package_list.hh \
 	     version.hh \
