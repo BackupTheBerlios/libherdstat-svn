@@ -1,6 +1,6 @@
 /*
  * herdstat -- herdstat/portage/portage_misc.cc
- * $Id: misc.cc 621 2005-09-23 13:50:53Z ka0ttic $
+ * $Id$
  * Copyright (c) 2005 Aaron Walker <ka0ttic@gentoo.org>
  *
  * This file is part of herdstat.
