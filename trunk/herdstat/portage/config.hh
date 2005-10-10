@@ -1,22 +1,22 @@
 /*
- * herdstat -- herdstat/portage/portage_config.hh
+ * libherdstat -- herdstat/portage/portage_config.hh
  * $Id$
  * Copyright (c) 2005 Aaron Walker <ka0ttic@gentoo.org>
  *
- * This file is part of herdstat.
+ * This file is part of libherdstat.
  *
- * herdstat is free software; you can redistribute it and/or modify it under the
- * terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later
- * version.
+ * libherdstat is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free
+ * Software Foundation; either version 2 of the License, or (at your option)
+ * any later version.
  *
- * herdstat is distributed in the hope that it will be useful, but WITHOUT ANY
- * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
- * details.
+ * libherdstat is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
+ * more details.
  *
  * You should have received a copy of the GNU General Public License along with
- * herdstat; if not, write to the Free Software Foundation, Inc., 59 Temple
+ * libherdstat; if not, write to the Free Software Foundation, Inc., 59 Temple
  * Place, Suite 325, Boston, MA  02111-1257  USA
  */
 
@@ -32,6 +32,7 @@
  * @brief Defines the config class, the interface to Portage configuration.
  */
 
+#include <herdstat/exceptions.hh>
 #include <herdstat/util/vars.hh>
 
 namespace herdstat {
@@ -69,9 +70,19 @@ namespace portage {
             static std::vector<std::string> _overlays;
     };
 
-    inline const std::string& config::portdir() { assert(_init); return _portdir; }
+    inline const std::string& config::portdir()
+    {
+        if (not _init)
+            throw Exception("You must instantiate a portage::config object before calling any of its static member functions.");
+        return _portdir;
+    }
+    
     inline const std::vector<std::string>& config::overlays()
-    { assert(_init); return _overlays; }
+    {
+        if (not _init)
+            throw Exception("You must instantiate a portage::config object before calling any of its static member functions.");
+        return _overlays;
+    }
 
 } // namespace portage
 } // namespace herdstat
