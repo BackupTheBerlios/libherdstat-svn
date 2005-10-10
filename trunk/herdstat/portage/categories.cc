@@ -1,22 +1,22 @@
 /*
- * herdstat -- herdstat/portage/categories.cc
- * $Id: categories.cc 614 2005-09-21 13:53:35Z ka0ttic $
+ * libherdstat -- herdstat/portage/categories.cc
+ * $Id$
  * Copyright (c) 2005 Aaron Walker <ka0ttic@gentoo.org>
  *
- * This file is part of herdstat.
+ * This file is part of libherdstat.
  *
- * herdstat is free software; you can redistribute it and/or modify it under the
- * terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later
- * version.
+ * libherdstat is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free
+ * Software Foundation; either version 2 of the License, or (at your option)
+ * any later version.
  *
- * herdstat is distributed in the hope that it will be useful, but WITHOUT ANY
- * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
- * details.
+ * libherdstat is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
+ * more details.
  *
  * You should have received a copy of the GNU General Public License along with
- * herdstat; if not, write to the Free Software Foundation, Inc., 59 Temple
+ * libherdstat; if not, write to the Free Software Foundation, Inc., 59 Temple
  * Place, Suite 325, Boston, MA  02111-1257  USA
  */
 
@@ -37,20 +37,19 @@
 
 namespace herdstat {
 namespace portage {
-/*** static members *********************************************************/
-bool Categories::_init = false;
-Categories::container_type Categories::_s;
 /****************************************************************************/
 Categories::Categories(bool validate)
-    : _portdir(config::portdir()), _validate(validate)
+    : PortageFileBase(config::portdir()+CATEGORIES),
+      _portdir(config::portdir()), _validate(validate)
 {
-    this->fill();
+    this->read();
 }
 /****************************************************************************/
 Categories::Categories(const std::string& portdir, bool validate)
-    : _portdir(portdir), _validate(validate)
+    : PortageFileBase(portdir+CATEGORIES), _portdir(portdir),
+      _validate(validate)
 {
-    this->fill();
+    this->read();
 }
 /****************************************************************************/
 // for QA - bails if given category does not exist
@@ -64,41 +63,30 @@ struct BailIfInvalid : std::binary_function<std::string, std::string, void>
 };
 
 void
-Categories::fill()
+Categories::validate() const
 {
-    if (_init)
-        return;
+    std::for_each(this->begin(), this->end(),
+        std::bind2nd(BailIfInvalid(), _portdir));
+}
 
-    /* read main categories file */
-    {
-        std::ifstream stream((_portdir+CATEGORIES).c_str());
-        if (not stream)
-            throw FileException(_portdir+CATEGORIES);
-
-        _s.insert(std::istream_iterator<std::string>(stream),
-                  std::istream_iterator<std::string>());
-    }
+void
+Categories::read()
+{
+    PortageFileBase::read();
 
     /* virtual isn't really a category */
-    _s.erase("virtual");
+    this->erase("virtual");
 
     /* validate if requested */
     if (_validate)
-        std::for_each(_s.begin(), _s.end(),
-            std::bind2nd(BailIfInvalid(), _portdir));
+        this->validate();
 
     /* read user categories file */
     if (util::is_file(CATEGORIES_USER))
     {
-        std::ifstream stream(CATEGORIES_USER);
-        if (not stream)
-            throw FileException(CATEGORIES_USER);
-
-        _s.insert(std::istream_iterator<std::string>(stream),
-                  std::istream_iterator<std::string>());
+        this->set_path(CATEGORIES_USER);
+        PortageFileBase::read();
     }
-
-    _init = true;
 }
 /****************************************************************************/
 } // namespace portage
