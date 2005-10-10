@@ -170,7 +170,7 @@ BaseFile::close()
 }
 /*****************************************************************************/
 File::File(const std::string &path, std::ios_base::openmode mode)
-    : BaseFile(path, mode), _contents()
+    : BaseFile(path, mode)
 {
     this->read();
 }
@@ -212,12 +212,12 @@ File::write()
     this->clear();
 }
 /*****************************************************************************/
-Directory::Directory() : _dirp(NULL), _contents()
+Directory::Directory() : _dirp(NULL)
 {
 }
 /*****************************************************************************/
 Directory::Directory(const std::string &path)
-    : BaseFileObject(path), _dirp(NULL), _contents()
+    : BaseFileObject(path), _dirp(NULL)
 {
     this->open();
     this->read();

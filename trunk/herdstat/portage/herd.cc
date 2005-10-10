@@ -61,12 +61,11 @@ Herd::~Herd()
 {
 }
 /****************************************************************************/
-Herds::Herds() : _herds()
+Herds::Herds()
 {
 }
 /****************************************************************************/
 Herds::Herds(const container_type& v)
-    : _herds()
 {
     *this = v;
 }
@@ -78,11 +77,11 @@ Herds::~Herds()
 Herds&
 Herds::operator= (const std::vector<std::string>& herds)
 {
-    _herds.clear();
+    this->clear();
     
     std::vector<std::string>::const_iterator i;
     for (i = herds.begin() ; i != herds.end() ; ++i)
-        _herds.insert(Herd(*i));
+        this->insert(Herd(*i));
     
     return *this;
 }
@@ -90,8 +89,8 @@ Herds::operator= (const std::vector<std::string>& herds)
 Herds&
 Herds::operator= (const container_type& v)
 {
-    _herds.clear();
-    _herds.insert(v.begin(), v.end());
+    this->clear();
+    this->insert(v.begin(), v.end());
     return *this;
 }
 /****************************************************************************/
@@ -99,7 +98,7 @@ Herds::operator
 std::vector<std::string>() const
 {
     std::vector<std::string> v;
-    std::transform(_herds.begin(), _herds.end(), std::back_inserter(v), Name());
+    std::transform(this->begin(), this->end(), std::back_inserter(v), Name());
     return v;
 }
 /****************************************************************************/

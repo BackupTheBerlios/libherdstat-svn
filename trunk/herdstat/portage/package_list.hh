@@ -33,7 +33,7 @@
  */
 
 #include <string>
-#include <vector>
+#include <herdstat/util/container_base.hh>
 
 #define PKGLIST_RESERVE            10130
 
@@ -45,17 +45,9 @@ namespace portage {
      * @brief Represents a sorted package list of the portage tree.
      */
 
-    class PackageList
+    class PackageList : public util::VectorBase<std::string>
     {
         public:
-            typedef std::vector<std::string> container_type;
-            typedef container_type::value_type value_type;
-            typedef container_type::reference reference;
-            typedef container_type::const_reference const_reference;
-            typedef container_type::iterator iterator;
-            typedef container_type::const_iterator const_iterator;
-            typedef container_type::size_type size_type;
-
             /// Default constructor.
             PackageList();
 
@@ -73,54 +65,13 @@ namespace portage {
             /// Implicit conversion to const container_type&
             inline operator const container_type&() const;
 
-            //@{
-            /**
-             * @name container_type subset
-             */
-            inline iterator begin();
-            inline const_iterator begin() const;
-            inline iterator end();
-            inline const_iterator end() const;
-            inline size_type size() const;
-            inline bool empty() const;
-            
-            inline void reserve(size_type n);
-            inline void push_back(const_reference v);
-            inline iterator insert(iterator pos, const_reference v);
-            template <class In>
-            inline void insert(iterator pos, In begin, In end);
-            //@}
-
         private:
             const std::string& _portdir;
             const std::vector<std::string>& _overlays;
-
-            static bool _init;
-            static container_type _pkgs;
     };
 
     inline PackageList::operator const PackageList::container_type&() const
-    { return _pkgs; }
-    inline PackageList::iterator PackageList::begin()
-    { return _pkgs.begin(); }
-    inline PackageList::const_iterator PackageList::begin() const
-    { return _pkgs.begin(); }
-    inline PackageList::iterator PackageList::end()
-    { return _pkgs.end(); }
-    inline PackageList::const_iterator PackageList::end() const
-    { return _pkgs.end(); }
-    inline PackageList::size_type PackageList::size() const
-    { return _pkgs.size(); }
-    inline bool PackageList::empty() const { return _pkgs.empty(); }
-    inline void PackageList::reserve(size_type n) { _pkgs.reserve(n); }
-    inline void PackageList::push_back(const_reference v)
-    { _pkgs.push_back(v); }
-    inline PackageList::iterator
-    PackageList::insert(iterator pos, const_reference v)
-    { return _pkgs.insert(pos, v); }
-    template <class In>
-    inline void PackageList::insert(iterator pos, In begin, In end)
-    { _pkgs.insert(pos, begin, end); }
+    { return this->container(); }
 
 } // namespace portage
 } // namespace herdstat

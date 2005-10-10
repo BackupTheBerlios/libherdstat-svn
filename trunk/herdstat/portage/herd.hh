@@ -176,19 +176,9 @@ namespace portage {
      * @brief Herd container.
      */
 
-    class Herds
+    class Herds : public util::SetBase<Herd>
     {
         public:
-            typedef std::set<Herd> container_type;
-            typedef container_type::value_type value_type;
-            typedef container_type::reference reference;
-            typedef container_type::const_reference const_reference;
-            typedef container_type::iterator iterator;
-            typedef container_type::const_iterator const_iterator;
-            typedef container_type::reverse_iterator reverse_iterator;
-            typedef container_type::const_reverse_iterator const_reverse_iterator;
-            typedef container_type::size_type size_type;
-
             /// Default constructor.
             Herds();
 
@@ -218,115 +208,85 @@ namespace portage {
              */
             Herds& operator= (const std::vector<std::string>& v);
 
-            /**
-             * @name container_type subset
-             */
-            //@{
-            inline iterator begin();
-            inline const_iterator begin() const;
-            inline iterator end();
-            inline const_iterator end() const;
-            inline reverse_iterator rbegin();
-            inline const_reverse_iterator rbegin() const;
-            inline reverse_iterator rend();
-            inline const_reverse_iterator rend() const;
-
             inline value_type& front();
             inline const value_type& front() const;
             inline value_type& back();
             inline const value_type& back() const;
 
-            inline iterator find(const std::string& herd) const;
-            inline iterator find(const value_type& h) const;
-            inline iterator find(const util::Regex& regex) const;
+            /** Find herd with given herd name.
+             * @param herd Herd name.
+             * @returns iterator to first match or end() if no match.
+             */
+            inline iterator find(const std::string& herd);
+            inline const_iterator find(const std::string& herd) const;
 
-            inline size_type size() const;
-            inline bool empty() const;
-            inline void clear();
-
-            inline iterator insert(iterator pos, const value_type& h);
-
-            template <class In>
-            inline void insert(In begin, In end);
-
-            inline std::pair<iterator, bool> insert(const value_type& v);
-
-            inline void erase(iterator pos);
-            inline size_type erase(const value_type& v);
-            inline void erase(iterator begin, iterator end);
-            //@}
-
-        private:
-            container_type _herds;
+            /** Find herd with name matching given regular expression.
+             * @param regex Regular expression.
+             * @returns iterator to first match or end() if no match.
+             */
+            inline iterator find(const util::Regex& regex);
+            inline const_iterator find(const util::Regex& regex) const;
     };
 
-    inline Herds::operator Herds::container_type() const { return _herds; }
-    inline Herds::iterator Herds::begin() { return _herds.begin(); }
-    inline Herds::const_iterator Herds::begin() const { return _herds.begin(); }
-    inline Herds::iterator Herds::end() { return _herds.end(); }
-    inline Herds::const_iterator Herds::end() const { return _herds.end(); }
-    inline Herds::reverse_iterator Herds::rbegin() { return _herds.rbegin(); }
-    inline Herds::const_reverse_iterator Herds::rbegin() const
-    { return _herds.rbegin(); }
-    inline Herds::reverse_iterator Herds::rend() { return _herds.rend(); }
-    inline Herds::const_reverse_iterator Herds::rend() const
-    { return _herds.rend(); }
+    inline Herds::operator
+    Herds::container_type() const
+    {
+        return this->container();
+    }
 
-    inline Herds::size_type Herds::size() const { return _herds.size(); }
-    inline bool Herds::empty() const { return _herds.empty(); }
-    inline void Herds::clear() { return _herds.clear(); }
-    inline Herds::iterator Herds::insert(iterator pos, const value_type& h)
-    { return _herds.insert(pos, h); }
+    inline Herds::iterator
+    Herds::find(const std::string& h)
+    {
+        return util::SetBase<Herd>::find(Herd(h));
+    }
 
-    template <class In> inline void
-    Herds::insert(In begin, In end) { _herds.insert(begin, end); }
-
-    inline std::pair<Herds::iterator, bool>
-    Herds::insert(const value_type& v) { return _herds.insert(v); }
-
-    inline void Herds::erase(iterator pos) { _herds.erase(pos); }
-    inline Herds::size_type Herds::erase(const value_type& v)
-    { return _herds.erase(v); }
-    inline void Herds::erase(iterator begin, iterator end)
-    { _herds.erase(begin, end); }
-
-    inline Herds::iterator Herds::find(const value_type& v) const
-    { return _herds.find(v); }
-
-    inline Herds::iterator Herds::find(const std::string& h) const
-    { return _herds.find(Herd(h)); }
+    inline Herds::const_iterator
+    Herds::find(const std::string& h) const
+    {
+        return util::SetBase<Herd>::find(Herd(h));
+    }
     
-    inline Herds::iterator Herds::find(const util::Regex& regex) const
-    { return std::find_if(_herds.begin(), _herds.end(), std::bind1st(
-            NameRegexMatch<Herd>(), regex)); }
+    inline Herds::iterator
+    Herds::find(const util::Regex& regex)
+    {
+        return std::find_if(this->begin(), this->end(), std::bind1st(
+                    NameRegexMatch<Herd>(), regex));
+    }
+
+    inline Herds::const_iterator
+    Herds::find(const util::Regex& regex) const
+    {
+        return std::find_if(this->begin(), this->end(), std::bind1st(
+                    NameRegexMatch<Herd>(), regex));
+    }
 
     inline Herds::value_type&
     Herds::front()
     {
-        assert(not _herds.empty());
-        return const_cast<value_type&>(*_herds.begin());
+        assert(not this->empty());
+        return const_cast<value_type&>(*this->begin());
     }
     
     inline const Herds::value_type&
     Herds::front() const
     {
-        assert(not _herds.empty());
-        return *(_herds.begin());
+        assert(not this->empty());
+        return *(this->begin());
     }
 
     inline Herds::value_type&
     Herds::back()
     {
-        assert(not _herds.empty());
-        iterator i(_herds.end());
+        assert(not this->empty());
+        iterator i(this->end());
         return const_cast<value_type&>(*(--i));
     }
     
     inline const Herds::value_type&
     Herds::back() const
     {
-        assert(not _herds.empty());
-        iterator i(_herds.end());
+        assert(not this->empty());
+        iterator i(this->end());
         return *(--i);
     }
 

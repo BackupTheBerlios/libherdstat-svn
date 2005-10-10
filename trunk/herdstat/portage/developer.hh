@@ -303,19 +303,9 @@ namespace portage {
      * @brief Developer container.
      */
 
-    class Developers
+    class Developers : public util::SetBase<Developer>
     {
         public:
-            typedef std::set<Developer> container_type;
-            typedef container_type::iterator iterator;
-            typedef container_type::const_iterator const_iterator;
-            typedef container_type::reverse_iterator reverse_iterator;
-            typedef container_type::const_reverse_iterator const_reverse_iterator;
-            typedef container_type::value_type value_type;
-            typedef container_type::size_type size_type;
-            typedef container_type::reference reference;
-            typedef container_type::const_reference const_reference;
-
             /// Default constructor.
             Developers();
 
@@ -349,19 +339,6 @@ namespace portage {
              */
             Developers& operator= (const std::vector<std::string>& v);
 
-            /**
-             * @name container_type subset
-             */
-            //@{
-            inline iterator begin();
-            inline const_iterator begin() const;
-            inline iterator end();
-            inline const_iterator end() const;
-            inline reverse_iterator rbegin();
-            inline const_reverse_iterator rbegin() const;
-            inline reverse_iterator rend();
-            inline const_reverse_iterator rend() const;
-
             inline value_type& front();
             inline const value_type& front() const;
             inline value_type& back();
@@ -371,107 +348,62 @@ namespace portage {
              * @param dev user name string.
              * @returns iterator to the first matching or end() if no match.
              */
-            inline iterator find(const std::string& dev) const;
-
-            /** Find developer that equals given developer.
-             * @param dev const reference to value_type.
-             * @returns iterator to the first matching or end() if no match.
-             */
-            inline iterator find(const value_type& dev) const;
+            inline iterator find(const std::string& dev);
+            inline const_iterator find(const std::string& dev) const;
 
             /** Find developer whose user name matches the given Regex.
              * @param regex const reference to Regex.
              * @returns iterator to the first matching or end() if no match.
              */
-            inline iterator find(const util::Regex &regex) const;
-
-            inline size_type size() const;
-            inline bool empty() const;
-            inline void clear();
-
-            inline iterator insert(iterator pos, const value_type& dev);
-
-            template <class In>
-            inline void insert(In begin, In end);
-
-            inline std::pair<iterator, bool> insert(const value_type& v);
-
-            inline void erase(iterator pos);
-            inline size_type erase(const value_type& v);
-            inline void erase(iterator begin, iterator end);
-            //@}
-
-        private:
-            container_type _devs;
+            inline iterator find(const util::Regex &regex);
+            inline const_iterator find(const util::Regex& regex) const;
     };
 
-    inline Developers::iterator Developers::begin() { return _devs.begin(); }
-    inline Developers::const_iterator Developers::begin() const { return _devs.begin(); }
-    inline Developers::iterator Developers::end() { return _devs.end(); }
-    inline Developers::const_iterator Developers::end() const { return _devs.end(); }
-    inline Developers::reverse_iterator Developers::rbegin() { return _devs.rbegin(); }
-    inline Developers::const_reverse_iterator Developers::rbegin() const
-    { return _devs.rbegin(); }
-    inline Developers::reverse_iterator Developers::rend() { return _devs.rend(); }
-    inline Developers::const_reverse_iterator Developers::rend() const
-    { return _devs.rend(); }
-    
-    inline Developers::size_type Developers::size() const { return _devs.size(); }
-    inline bool Developers::empty() const { return _devs.empty(); }
-    inline void Developers::clear() { return _devs.clear(); }
+    inline Developers::iterator Developers::find(const std::string& dev)
+    { return util::SetBase<Developer>::find(Developer(dev)); }
 
-    inline void Developers::erase(iterator pos) { _devs.erase(pos); }
-    inline Developers::size_type Developers::erase(const value_type& v)
-    { return _devs.erase(v); }
-    inline void Developers::erase(iterator begin, iterator end)
-    { return _devs.erase(begin, end); }
-    inline Developers::iterator Developers::insert(iterator pos, const value_type& dev)
-    { return _devs.insert(pos, dev); }
-    template <class In> inline void
-    Developers::insert(In begin, In end) { _devs.insert(begin, end); }
+    inline Developers::const_iterator Developers::find(const std::string& dev) const
+    { return util::SetBase<Developer>::find(Developer(dev)); }
 
-    inline std::pair<Developers::iterator, bool>
-    Developers::insert(const value_type& v) { return _devs.insert(v); }
-
-    inline Developers::iterator Developers::find(const value_type& dev) const
-    { return _devs.find(dev); }
-
-    inline Developers::iterator Developers::find(const std::string& dev) const
-    { return _devs.find(Developer(dev)); }
-
-    inline Developers::iterator Developers::find(const util::Regex& regex) const
+    inline Developers::iterator Developers::find(const util::Regex& regex)
     {
-        return std::find_if(_devs.begin(), _devs.end(), std::bind1st(
+        return std::find_if(this->begin(), this->end(), std::bind1st(
+            UserRegexMatch<Developer>(), regex));
+    }
+
+    inline Developers::const_iterator Developers::find(const util::Regex& regex) const
+    {
+        return std::find_if(this->begin(), this->end(), std::bind1st(
             UserRegexMatch<Developer>(), regex));
     }
 
     inline Developers::value_type&
     Developers::front()
     {
-        assert(not _devs.empty());
-        return const_cast<value_type&>(*_devs.begin());
+        assert(not this->empty());
+        return const_cast<value_type&>(*this->begin());
     }
     
     inline const Developers::value_type&
     Developers::front() const
     {
-        assert(not _devs.empty());
-        return *(_devs.begin());
+        assert(not this->empty());
+        return *(this->begin());
     }
 
     inline Developers::value_type&
     Developers::back()
     {
-        assert(not _devs.empty());
-        iterator i(_devs.end());
+        assert(not this->empty());
+        iterator i(this->end());
         return const_cast<value_type&>(*(--i));
     }
     
     inline const Developers::value_type&
     Developers::back() const
     {
-        assert(not _devs.empty());
-        iterator i(_devs.end());
+        assert(not this->empty());
+        iterator i(this->end());
         return *(--i);
     }
 

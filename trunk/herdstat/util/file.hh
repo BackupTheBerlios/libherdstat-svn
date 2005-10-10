@@ -45,6 +45,7 @@
 #include <dirent.h>
 
 #include <herdstat/util/regex.hh>
+#include <herdstat/util/container_base.hh>
 
 /// Default open mode.
 #define DEFAULT_MODE    std::ios::in
@@ -287,15 +288,10 @@ namespace util {
      * for storing file contents.
      */
 
-    class File : public BaseFile
+    class File : public BaseFile,
+                 public VectorBase<std::string>
     {
         public:
-            typedef std::vector<std::string> container_type;
-            typedef container_type::iterator iterator;
-            typedef container_type::const_iterator const_iterator;
-            typedef container_type::value_type value_type;
-            typedef container_type::size_type size_type;
-
             /** Constructor.  Opens and reads file.
              * @param path Path to file.
              * @param mode Open mode (defaults to DEFAULT_MODE).
@@ -309,12 +305,12 @@ namespace util {
             /** File size.
              * @returns An unsigned integer value.
              */
-            Stat::size_type size() const { return this->stat().size(); }
+            Stat::size_type filesize() const { return this->stat().size(); }
 
             /** Internal buffer size (number of lines in file).
              * @returns An unsigned integer value.
              */
-            size_type bufsize() const { return _contents.size(); }
+            size_type bufsize() const { return this->size(); }
 
             /** Determine if two files are equal.
              * @param f File object.
@@ -339,17 +335,6 @@ namespace util {
 
             /// Dump internal container to disk.
             virtual void write();
-
-            iterator begin() { return _contents.begin(); }
-            const_iterator begin() const { return _contents.begin(); }
-            iterator end() { return _contents.end(); }
-            const_iterator end() const { return _contents.end(); }
-            bool empty() const { return _contents.empty(); }
-            void push_back(const value_type &v) { _contents.push_back(v); }
-            void clear() { _contents.clear(); }
-
-        private:
-            container_type _contents;
     };
 
     /**
@@ -357,15 +342,10 @@ namespace util {
      * directory contents.
      */
 
-    class Directory  : public BaseFileObject
+    class Directory  : public BaseFileObject,
+                       public VectorBase<std::string>
     {
         public:
-            typedef std::vector<std::string> container_type;
-            typedef container_type::iterator iterator;
-            typedef container_type::const_iterator const_iterator;
-            typedef container_type::value_type value_type;
-            typedef container_type::size_type size_type;
-
             /// Default constructor.
             Directory();
 
@@ -410,19 +390,9 @@ namespace util {
              */
             const_iterator find(const Regex& r) const;
 
-            iterator begin() { return _contents.begin(); }
-            const_iterator begin() const { return _contents.begin(); }
-            iterator end() { return _contents.end(); }
-            const_iterator end() const { return _contents.end(); }
-            size_type size() const { return _contents.size(); }
-            bool empty() const { return _contents.empty(); }
-            void push_back(const value_type &v) { _contents.push_back(v); }
-
         private:
             /// Internal DIR pointer.
             DIR *_dirp;
-            /// Directory contents.
-            container_type _contents;
     };
 
 } // namespace util

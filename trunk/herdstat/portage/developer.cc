@@ -54,18 +54,15 @@ Developer::~Developer()
 }
 /****************************************************************************/
 Developers::Developers()
-    : _devs()
 {
 }
 /****************************************************************************/
 Developers::Developers(const container_type& v)
-    : _devs()
 {
     *this = v;
 }
 /****************************************************************************/
 Developers::Developers(const std::vector<std::string>& devs)
-    : _devs()
 {
     *this = devs;
 }
@@ -77,18 +74,18 @@ Developers::~Developers()
 Developers&
 Developers::operator= (const std::vector<std::string>& devs)
 {
-    _devs.clear();
+    this->clear();
     std::vector<std::string>::const_iterator i;
     for (i = devs.begin() ; i != devs.end() ; ++i)
-        _devs.insert(Developer(*i));
+        this->insert(Developer(*i));
     return *this;
 }
 /****************************************************************************/
 Developers&
 Developers::operator= (const container_type& v)
 {
-    _devs.clear();
-    _devs.insert(v.begin(), v.end());
+    this->clear();
+    this->insert(v.begin(), v.end());
     return *this;
 }
 /****************************************************************************/
@@ -96,7 +93,7 @@ Developers::operator
 std::vector<std::string>() const
 {
     std::vector<std::string> v;
-    std::transform(_devs.begin(), _devs.end(), std::back_inserter(v), User());
+    std::transform(this->begin(), this->end(), std::back_inserter(v), User());
     return v;
 }
 /****************************************************************************/

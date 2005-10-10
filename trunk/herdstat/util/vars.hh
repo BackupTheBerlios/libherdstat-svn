@@ -44,17 +44,10 @@ namespace util {
      * stored in key,value pairs.
      */
 
-    class vars : public BaseFile
+    class vars : public BaseFile,
+                 public MapBase<std::string, std::string>
     {
         public:
-            typedef std::map<std::string, std::string> container_type;
-            typedef container_type::iterator iterator;
-            typedef container_type::const_iterator const_iterator;
-            typedef container_type::mapped_type mapped_type;
-            typedef container_type::key_type key_type;
-            typedef container_type::value_type value_type;
-            typedef container_type::size_type size_type;
-
             /// Default constructor.
             vars();
 
@@ -88,23 +81,6 @@ namespace util {
             /// Set default variables to be present before substitution.
             void set_defaults();
 
-            inline iterator begin();
-            inline const_iterator begin() const;
-            inline iterator end();
-            inline const_iterator end() const;
-            inline size_type size() const;
-            inline bool empty() const;
-            inline iterator find(const key_type& k);
-            inline const_iterator find(const key_type& k) const;
-            inline mapped_type& operator[] (const key_type& k);
-            inline std::pair<iterator, bool> insert(const value_type& v);
-            inline iterator insert(iterator hpos, const value_type& v);
-            template <class In> inline void insert(In begin, In end);
-            inline void erase(iterator pos);
-            inline size_type erase(const key_type& k);
-            inline void erase(iterator begin, iterator end);
-            inline void clear();
-
         protected:
             virtual void do_set_defaults() { }
 
@@ -116,8 +92,6 @@ namespace util {
 
             /// subst() recursion depth (safeguard).
             unsigned short _depth;
-            /// variable container
-            container_type _vars;
     };
 
     inline vars::mapped_type vars::operator[] (const key_type& k) const
@@ -125,30 +99,6 @@ namespace util {
         const_iterator i = this->find(k);
         return (i == this->end() ? "" : i->second);
     }
-
-    inline vars::iterator vars::begin() { return _vars.begin(); }
-    inline vars::const_iterator vars::begin() const { return _vars.begin(); }
-    inline vars::iterator vars::end() { return _vars.end(); }
-    inline vars::const_iterator vars::end() const { return _vars.end(); }
-    inline vars::size_type vars::size() const { return _vars.size(); }
-    inline bool vars::empty() const { return _vars.empty(); }
-    inline vars::iterator vars::find(const key_type& k) { return _vars.find(k); }
-    inline vars::const_iterator vars::find(const key_type& k) const
-    { return _vars.find(k); }
-    inline vars::mapped_type& vars::operator[] (const key_type& k)
-    { return _vars[k]; }
-    inline std::pair<vars::iterator, bool> vars::insert(const value_type& v)
-    { return _vars.insert(v); }
-    inline vars::iterator vars::insert(iterator hpos, const value_type& v)
-    { return _vars.insert(hpos, v); }
-    template <class In> inline void vars::insert(In begin, In end)
-    { _vars.insert(begin, end); }
-    inline void vars::erase(iterator pos) { _vars.erase(pos); }
-    inline vars::size_type vars::erase(const key_type& k)
-    { return _vars.erase(k); }
-    inline void vars::erase(iterator begin, iterator end)
-    { _vars.erase(begin, end); }
-    inline void vars::clear() { _vars.clear(); }
 
 } // namespace util
 } // namespace herdstat

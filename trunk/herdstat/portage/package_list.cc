@@ -38,9 +38,6 @@
 
 namespace herdstat {
 namespace portage {
-/*** static members *********************************************************/
-bool PackageList::_init = false;
-PackageList::container_type PackageList::_pkgs;
 /****************************************************************************/
 PackageList::PackageList()
     : _portdir(config::portdir()), _overlays(config::overlays())
@@ -56,15 +53,12 @@ PackageList::PackageList(const std::string& portdir,
 void
 PackageList::fill()
 {
-    if (_init)
-        return;
-
     std::string path;
     const Categories categories(_portdir);
     Categories::const_iterator ci, cend;
 
     /* we can only use the estimate here */
-    _pkgs.reserve(PKGLIST_RESERVE);
+    this->reserve(PKGLIST_RESERVE);
 
     /* search portdir */
     for (ci = categories.begin(), cend = categories.end() ; ci != cend ; ++ci)
@@ -73,10 +67,10 @@ PackageList::fill()
         if (not util::is_dir(path))
             continue;
 
-        /* for each pkg in category, insert "cat/pkg" into _pkgs */
+        /* for each pkg in category, insert "cat/pkg" into container */
         const util::Directory cat(path);
-        std::transform(cat.begin(), cat.end(), std::back_inserter(_pkgs),
-            GetPkgFromPath());
+        std::transform(cat.begin(), cat.end(),
+            std::back_inserter(this->container()), GetPkgFromPath());
     }
 
     /* search overlays, if any */
@@ -94,18 +88,16 @@ PackageList::fill()
                 /* for each pkg in category, insert "cat/pkg" into _pkgs */
                 const util::Directory cat(path);
                 std::transform(cat.begin(), cat.end(),
-                    std::back_inserter(_pkgs), GetPkgFromPath());
+                    std::back_inserter(this->container()), GetPkgFromPath());
             }
         }
     }
 
-    std::sort(_pkgs.begin(), _pkgs.end());
+    std::sort(this->begin(), this->end());
 
     /* container may contain duplicates if overlays were searched */
     if (not _overlays.empty())
-        _pkgs.erase(std::unique(_pkgs.begin(), _pkgs.end()), _pkgs.end());
-
-    _init = true;
+        this->erase(std::unique(this->begin(), this->end()), this->end());
 }
 /****************************************************************************/
 } // namespace portage

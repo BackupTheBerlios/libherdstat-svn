@@ -35,12 +35,12 @@
 namespace herdstat {
 namespace util {
 /****************************************************************************/
-vars::vars() : _depth(0), _vars()
+vars::vars() : _depth(0)
 {
 }
 /****************************************************************************/
 vars::vars(const std::string &path)
-    : BaseFile(path), _depth(0), _vars()
+    : BaseFile(path), _depth(0)
 {
     this->read();
 }
