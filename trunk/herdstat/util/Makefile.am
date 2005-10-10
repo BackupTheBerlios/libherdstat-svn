@@ -11,7 +11,8 @@ cc_sources = string.cc \
 	     timer.cc \
 	     progress.cc
 
-hh_sources = string.hh \
+hh_sources = container_base.hh \
+	     string.hh \
 	     misc.hh \
 	     regex.hh \
 	     file.hh \
