@@ -156,7 +156,7 @@ Keywords::fill()
     const std::vector<std::string> v(util::split(_ebuild["KEYWORDS"]));
     std::vector<std::string>::const_iterator i;
     for (i = v.begin() ; i != v.end() ; ++i)
-        _keywords.insert(Keyword(*i));
+        this->insert(Keyword(*i));
 }
 
 void
@@ -164,7 +164,7 @@ Keywords::format()
 {
     util::ColorMap cmap;
     size_type n = 1;
-    for (iterator i = _keywords.begin() ; i != _keywords.end() ; ++i, ++n)
+    for (iterator i = this->begin() ; i != this->end() ; ++i, ++n)
     {
         if (_color)
         {
@@ -176,7 +176,7 @@ Keywords::format()
         else
             _str += i->str();
 
-        if ((n+1) != _keywords.size())
+        if ((n+1) != this->size())
             _str += " ";
     }
 }
