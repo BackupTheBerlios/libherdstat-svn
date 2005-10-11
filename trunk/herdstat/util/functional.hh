@@ -154,6 +154,66 @@ namespace util {
     };
 
     /**
+     * @struct FirstLess
+     * @brief Function object for comparing 'first' members of a pair<T, U>
+     * with operator<.
+     */
+    struct FirstLess
+    {
+        template <typename T, typename U>
+        bool operator()(const std::pair<T, U>& p1,
+                        const std::pair<T, U>& p2) const
+        {
+            return (p1.first < p2.first);
+        }
+    };
+
+    /**
+     * @struct FirstGreater
+     * @brief Function object for comparing 'first' members of a pair<T, U>
+     * with operator>.
+     */
+    struct FirstGreater
+    {
+        template <typename T, typename U>
+        bool operator()(const std::pair<T, U>& p1,
+                        const std::pair<T, U>& p2) const
+        {
+            return (p1.first > p2.first);
+        }
+    };
+
+    /**
+     * @struct SecondLess
+     * @brief Function object for comparing 'second' members of a pair<T, U>
+     * with operator<.
+     */
+    struct SecondLess
+    {
+        template <typename T, typename U>
+        bool operator()(const std::pair<T, U>& p1,
+                        const std::pair<T, U>& p2) const
+        {
+            return (p1.second < p2.second);
+        }
+    };
+
+    /**
+     * @struct SecondGreater
+     * @brief Function object for comparing 'second' members of a pair<T, U>
+     * with operator>.
+     */
+    struct SecondGreater
+    {
+        template <typename T, typename U>
+        bool operator()(const std::pair<T, U>& p1,
+                        const std::pair<T, U>& p2) const
+        {
+            return (p1.second > p2.second);
+        }
+    };
+
+    /**
      * @struct DeleteAndNullify
      * @brief Function object that deletes the given pointer and sets it to
      * NULL.
