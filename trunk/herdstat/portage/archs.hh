@@ -57,9 +57,6 @@ namespace portage {
 
         protected:
             virtual void read();
-
-        private:
-            const std::string& _portdir;
     };
 
 } // namespace portage
