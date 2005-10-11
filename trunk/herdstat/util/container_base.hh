@@ -80,7 +80,6 @@ namespace util {
             //@{
             /// Operations common among all standard containers.
 
-            // FIXME: this wont work for containers of pointers
             container_type& operator= (const container_type& c)
             { this->swap(c); }
 
