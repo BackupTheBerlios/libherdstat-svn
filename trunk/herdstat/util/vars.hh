@@ -58,13 +58,6 @@ namespace util {
 
             virtual ~vars();
 
-            /** Overloaded operator[] since std::map doesn't provide
-             * a const version.
-             * @param k Key to look up.
-             * @returns A std::string object (Value mapped to Key).
-             */
-            inline mapped_type operator[] (const key_type& k) const;
-
             /** Dump keys/values to specified stream.
              * @param s Output stream.
              */
@@ -93,12 +86,6 @@ namespace util {
             /// subst() recursion depth (safeguard).
             unsigned short _depth;
     };
-
-    inline vars::mapped_type vars::operator[] (const key_type& k) const
-    {
-        const_iterator i = this->find(k);
-        return (i == this->end() ? "" : i->second);
-    }
 
 } // namespace util
 } // namespace herdstat
