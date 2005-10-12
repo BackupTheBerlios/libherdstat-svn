@@ -19,6 +19,7 @@ Features
 	- Developer/Herd containers
 	- Package searching (supports overlay searching as well).
 	- Proper version sorting
+	- Keyword sorting
 
     * General-purpose:
 	- File fetcher
