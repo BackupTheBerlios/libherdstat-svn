@@ -60,7 +60,13 @@ int main(int argc, char **argv)
         << util::destringify<float>("4.29") << std::endl
         << util::destringify<bool>("false") << std::endl;
 
+    /* util::unhtmlify */
     std::cout << util::unhtmlify("&lt;jedi mind trick>") << std::endl;
+
+    /* util::strip_colors */
+    const std::string c("This is a \033[0;31mtest\033[00m");
+    std::cout << c << std::endl;
+    std::cout << util::strip_colors(c) << std::endl;
 
     return EXIT_SUCCESS;
 }

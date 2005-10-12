@@ -204,6 +204,25 @@ split(const std::string& str, const char delim, bool append_empty)
     return v;
 }
 /*****************************************************************************/
+std::string
+strip_colors(const std::string& str)
+{
+    std::string result(str);
+    std::string::size_type pos, lpos = 0;
+
+    while ((pos = result.find("\033", lpos)) != std::string::npos)
+    {
+	std::string::size_type mpos = result.find('m', pos);
+	if (mpos == std::string::npos)
+	    result.erase(pos);
+
+	result.erase(pos, (mpos-pos)+1);
+	lpos = ++pos;
+    }
+
+    return result;
+}
+/*****************************************************************************/
 } // namespace util
 } // namespace herdstat
 

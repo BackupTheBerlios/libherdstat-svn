@@ -68,23 +68,30 @@ namespace util {
     /** Convert vector of std::strings to one std::string.
      * @param v Vector of std::strings
      * @param d Delimiter.
-     * @returns Resulting std::string object.
+     * @returns Resulting string object.
      */
     std::string join(const std::vector<std::string>& v, const char d = ' ');
 
     /** Replace any unfriendly characters in the given std::string to their
      * HTML counterparts.
      * @param s String object.
-     * @returns Resulting std::string object.
+     * @returns Resulting string object.
      */
-    std::string htmlify(const std::string &s);
+    std::string htmlify(const std::string& s);
 
     /** Replace any HTML'ized characters in the given std::string to their
      * respective counterparts.
      * @param s String object.
-     * @returns Resulting std::string object.
+     * @returns Resulting string object.
      */
-    std::string unhtmlify(const std::string &s);
+    std::string unhtmlify(const std::string& s);
+
+    /** Return a copy of the given string with the ASCII color sequences
+     * removed.
+     * @param s string object.
+     * @returns Resulting string object.
+     */
+    std::string strip_colors(const std::string& s);
 
     /************************************************************************/
     /** Convert string to all lowercase.
@@ -112,7 +119,7 @@ namespace util {
      */
     template <typename T>
     std::string
-    stringify(const T &v)
+    stringify(const T& v)
     {
         std::ostringstream os;
         os << v;
@@ -125,7 +132,7 @@ namespace util {
      */
     template <typename T>
     T
-    destringify(const std::string &s)
+    destringify(const std::string& s)
     {
         std::istringstream is(s.c_str());
 
@@ -140,7 +147,7 @@ namespace util {
     /************************************************************************/
     template <>
     inline int
-    destringify<int>(const std::string &s)
+    destringify<int>(const std::string& s)
     {
         char *invalid;
         int result = std::strtol(s.c_str(), &invalid, 10);
@@ -151,7 +158,7 @@ namespace util {
     /************************************************************************/
     template <>
     inline long
-    destringify<long>(const std::string &s)
+    destringify<long>(const std::string& s)
     {
         char *invalid;
         long result = std::strtol(s.c_str(), &invalid, 10);
@@ -162,7 +169,7 @@ namespace util {
     /************************************************************************/
     template <>
     inline unsigned long
-    destringify<unsigned long>(const std::string &s)
+    destringify<unsigned long>(const std::string& s)
     {
         char *invalid;
         unsigned long result = std::strtoul(s.c_str(), &invalid, 10);
@@ -173,7 +180,7 @@ namespace util {
     /************************************************************************/
     template <>
     inline double
-    destringify<double>(const std::string &s)
+    destringify<double>(const std::string& s)
     {
         char *invalid;
         double result = std::strtod(s.c_str(), &invalid);
@@ -184,7 +191,7 @@ namespace util {
     /************************************************************************/
     template <>
     inline float
-    destringify<float>(const std::string &s)
+    destringify<float>(const std::string& s)
     {
         char *invalid;
         float result = std::strtod(s.c_str(), &invalid);
@@ -195,7 +202,7 @@ namespace util {
     /************************************************************************/
     template <>
     inline bool
-    destringify<bool>(const std::string &s)
+    destringify<bool>(const std::string& s)
     {
         if (s == "true" or s == "yes" or s == "on")  return true;
         if (s == "false" or s == "no" or s == "off") return false;
