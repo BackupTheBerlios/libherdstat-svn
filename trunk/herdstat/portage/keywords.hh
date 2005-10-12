@@ -47,18 +47,43 @@ namespace portage {
     class Keyword
     {
         public:
+            /** Constructor.
+             * @param kw keyword string.
+             */
             Keyword(const std::string& kw);
 
+            /// Get mask character (or '\0' if empty).
             const char mask() const { return _mask; }
+            /// Get architecture.
             const std::string& arch() const { return _arch; }
+            /// Get keyword string.
             const std::string str() const
             { std::string s(1, _mask); s+=_arch; return s; }
 
-            bool operator< (const Keyword& that) const;
+            /** Is this Keyword less that that Keyword?
+             * @param that const reference to Keyword
+             * @returns Boolean value.
+             */
+            inline bool operator< (const Keyword& that) const;
+
+            /** Is this Keyword greater than that Keyword?
+             * @param that const reference to Keyword
+             * @returns Boolean value
+             */
             bool operator> (const Keyword& that) const
             { return (that < *this); }
+
+            /** Is this Keyword equal to that Keyword?
+             * @param that const reference to Keyword
+             * @returns Boolean value
+             */
             bool operator==(const Keyword& that) const
             { return ((_mask == that._mask) and (_arch == that._arch)); }
+
+            /** Is this Keyword not equal to that Keyword?
+             * @param that const reference to Keyword
+             * @returns Boolean value
+             */
             bool operator!=(const Keyword& that) const
             { return (*this != that); }
 
@@ -70,21 +95,50 @@ namespace portage {
             class maskc
             {
                 public:
+                    /// Default constructor.
                     maskc();
+
+                    /** Constructor.
+                     * @param c mask character
+                     */
                     maskc(const char c);
+
+                    /** Assignment operator.
+                     * @param c mask character.
+                     */
                     maskc& operator= (const char c)
                     { _c = c; return *this; }
                     
-                    /// implicit conversion to char
+                    /// Implicit conversion to char
                     operator char() const { return _c; }
 
-                    bool empty() const { return (_c == 0); }
+                    /// Do we not hold a mask character?
+                    bool empty() const { return (_c == '\0'); }
 
+                    /** Is this maskc less than that maskc?
+                     * @param that const reference to maskc
+                     * @returns Boolean value
+                     */
                     bool operator< (const maskc& that) const;
+
+                    /** Is this maskc greater than that maskc?
+                     * @param that const reference to maskc
+                     * @returns Boolean value
+                     */
                     bool operator> (const maskc& that) const
                     { return (that < *this); }
+
+                    /** Is this maskc equal to that maskc?
+                     * @param const reference to masc
+                     * @returns Boolean value
+                     */
                     bool operator==(const maskc& that) const
                     { return (_c == that._c); }
+                    
+                    /** Is this maskc not equal to that maskc?
+                     * @param const reference to maskc
+                     * @returns Boolean value
+                     */
                     bool operator!=(const maskc& that) const
                     { return (*this != that); }
 
@@ -102,6 +156,14 @@ namespace portage {
             static const std::string _valid_masks;
     };
 
+    inline bool
+    Keyword::operator< (const Keyword& that) const
+    {
+        return ((_mask == that._mask) ?
+                (_arch < that._arch) :
+                (_mask < that._mask));
+    }
+
     /**
      * @class Keywords
      * @brief Keyword container.
@@ -113,33 +175,47 @@ namespace portage {
     {
         public:
             /** Default constructor.
-             * @param use_colors Use colors when formatting keywords string.
+             * @param use_colors Use colors when formatting keywords string
              */
             Keywords(bool use_colors = false);
 
             /** Constructor.
              * @param path Path to ebuild.
-             * @param use_colors Use colors when formatting keywords string.
+             * @param use_colors Use colors when formatting keywords string
              */
             Keywords(const std::string& path, bool use_colors = false);
 
             /** Constructor.
-             * @param e Pre-existing ebuild instance.
-             * @param use_colors Use colors when formatting keywords string.
+             * @param e Pre-existing ebuild instance
+             * @param use_colors Use colors when formatting keywords string
              */
             Keywords(const ebuild& e, bool use_colors = false);
 
+            /** Constructor.
+             * @param v vector of keywords strings
+             * @param use_colors Use colors when formatting keywords string
+             */
+            Keywords(const std::vector<std::string>& keywords,
+                     bool use_colors = false);
+
             /** Assign new ebuild path.
-             * @param path Path to ebuild.
-             * @param use_colors Use colors when formatting keywords string.
+             * @param path Path to ebuild
+             * @param use_colors Use colors when formatting keywords string
              */
             void assign(const std::string& path, bool use_colors = false);
 
             /** Assign new ebuild.
-             * @param e Pre-existing ebuild instance.
-             * @param use_colors Use colors when formatting keywords string.
+             * @param e Pre-existing ebuild instance
+             * @param use_colors Use colors when formatting keywords string
              */
             void assign(const ebuild& e, bool use_colors = false);
+
+            /** Assign a vector of keyword strings.
+             * @param v const reference to std::vector<std::string>
+             * @param use_colors Use colors when formatting keywords string
+             */
+            void assign(const std::vector<std::string>& v,
+                        bool use_colors = false);
 
             /// Get formatted keywords string.
             inline const std::string& str() const;
@@ -148,9 +224,9 @@ namespace portage {
             inline const std::string& path() const;
 
             /// Are all keywords masked?
-//            bool all_masked() const;
+            bool all_masked() const;
             /// Are all ebuilds unstable?
-//            bool all_unstable() const;
+            bool all_unstable() const;
 
         private:
             void fill();

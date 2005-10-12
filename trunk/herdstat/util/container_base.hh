@@ -58,6 +58,7 @@ namespace util {
             typedef typename container_type::const_reference const_reference;
             typedef typename container_type::value_type value_type;
             typedef typename container_type::size_type size_type;
+            typedef typename container_type::difference_type difference_type;
 
             /// Default constructor.
             ContainerBase() { }
@@ -123,6 +124,7 @@ namespace util {
             typedef ContainerBase<std::vector<T> > base_type;
             typedef typename base_type::container_type container_type;
             typedef typename container_type::size_type size_type;
+            typedef typename container_type::difference_type difference_type;
             typedef typename container_type::value_type value_type;
             typedef typename container_type::iterator iterator;
             typedef typename container_type::const_iterator const_iterator;
@@ -190,6 +192,7 @@ namespace util {
             typedef ContainerBase<std::set<T> > base_type;
             typedef typename base_type::container_type container_type;
             typedef typename container_type::size_type size_type;
+            typedef typename container_type::difference_type difference_type;
             typedef typename container_type::value_type value_type;
             typedef typename container_type::iterator iterator;
             typedef typename container_type::const_iterator const_iterator;
@@ -250,6 +253,7 @@ namespace util {
             typedef ContainerBase<std::map<K, V, Compare> > base_type;
             typedef typename base_type::container_type container_type;
             typedef typename container_type::size_type size_type;
+            typedef typename container_type::difference_type difference_type;
             typedef typename container_type::value_type value_type;
             typedef typename container_type::iterator iterator;
             typedef typename container_type::const_iterator const_iterator;

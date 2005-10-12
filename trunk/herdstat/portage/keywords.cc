@@ -35,11 +35,11 @@ namespace portage {
 /*** static members *********************************************************/
 const std::string Keyword::_valid_masks("-~");
 /****************************************************************************/
-Keyword::maskc::maskc() : _c(0)
+Keyword::maskc::maskc() : _c('\0')
 {
 }
 /****************************************************************************/
-Keyword::maskc::maskc(const char c) : _c(0)
+Keyword::maskc::maskc(const char c) : _c('\0')
 {
     if (_valid_masks.find(c) == std::string::npos)
         throw InvalidKeywordMask(c);
@@ -76,25 +76,10 @@ void
 Keyword::parse(const std::string& kw)
 {
     if (_valid_masks.find(kw[0]) != std::string::npos)
-    {
         _mask = kw[0];
-        _arch = kw.substr(1);
-    }
-    else
-        _arch = kw;
+
+    _arch = (_mask.empty() ? kw : kw.substr(1));
 }
-
-bool
-Keyword::operator< (const Keyword& that) const
-{
-//    if (_mask == that._mask)
-//        return (_arch < that._arch);
-
-//    return (_mask < that._mask);
-
-    return ((_mask == that._mask) ? (_arch < that._arch) : (_mask < that._mask));
-}
-
 /****************************************************************************/
 Keywords::Keywords(bool use_colors)
     : _color(use_colors), _ebuild(), _str()
@@ -115,6 +100,12 @@ Keywords::Keywords(const ebuild& e, bool use_colors)
     this->format();
 }
 /****************************************************************************/
+Keywords::Keywords(const std::vector<std::string>& keywords, bool use_colors)
+    : _color(), _ebuild(), _str()
+{
+    this->assign(keywords, use_colors);
+}
+/****************************************************************************/
 void
 Keywords::assign(const std::string& path, bool use_colors)
 {
@@ -133,37 +124,18 @@ Keywords::assign(const ebuild& e, bool use_colors)
     this->format();
 }
 /****************************************************************************/
+void
+Keywords::assign(const std::vector<std::string>& v, bool use_colors)
+{
+    _color = use_colors;
 
-    /**
-     * @struct KeywordLess
-     * @brief Determine if the first keyword is less than the second keyword.
-     */
-//    struct KeywordLess
-//    {
-//        bool operator()(const std::string& kw1, const std::string& kw2) const
-//        {
-//            /* '-*' is less than everything */
-//            if (kw1 == "-*")
-//                return true;
-
-//            const char k1 = kw1.at(0);
-//            const char k2 = kw2.at(0);
-
-//            /* if first char of both is equal or the first char of both
-//             * does not equal a mask char, use normal string comparison */
-//            if ((k1 == k2) or
-//                (k1 != '-' and k1 != '~' and k2 != '-' and k2 != '~'))
-//                return (kw1 < kw2);
-
-//            if (k1 == '-')
-//                return true;
-//            if (k1 == '~' and k2 != '-')
-//                return true;
-
-//            return false;
-//        }
-//    };
-
+    this->clear();
+    
+    std::vector<std::string>::const_iterator i;
+    for (i = v.begin() ; i != v.end() ; ++i)
+        this->insert(Keyword(*i));
+}
+/****************************************************************************/
 void
 Keywords::fill()
 {
@@ -171,23 +143,31 @@ Keywords::fill()
         throw Exception(_ebuild.path()+": no KEYWORDS variable defined");
 
     const std::vector<std::string> v(util::split(_ebuild["KEYWORDS"]));
-    std::vector<std::string>::const_iterator i;
-    for (i = v.begin() ; i != v.end() ; ++i)
-        this->insert(Keyword(*i));
+    this->assign(v, _color);
 }
-
+/****************************************************************************/
 void
 Keywords::format()
 {
-    util::ColorMap cmap;
     size_type n = 0;
+    util::ColorMap cmap;
+
     for (iterator i = this->begin() ; i != this->end() ; ++i, ++n)
     {
         if (_color)
         {
-            if (i->mask() == '-')        _str += cmap[red];
-            else if (i->mask() == '~')   _str += cmap[yellow];
-            else                         _str += cmap[blue];
+            switch (i->mask())
+            {
+                case '-':
+                    _str += cmap[red];
+                    break;
+                case '~':
+                    _str += cmap[yellow];
+                    break;
+                default:
+                    _str += cmap[blue];
+            }
+
             _str += i->str() + cmap[none];
         }
         else
@@ -196,6 +176,28 @@ Keywords::format()
         if ((n+1) != this->size())
             _str += " ";
     }
+}
+/****************************************************************************/
+struct IsMaskChar : std::binary_function<Keyword, char, bool>
+{
+    bool operator()(const Keyword& kw, char maskc) const
+    { return (kw.mask() == maskc); }
+};
+
+bool
+Keywords::all_masked() const
+{
+    difference_type size(this->size());
+    return (std::count_if(this->begin(), this->end(),
+                std::bind2nd(IsMaskChar(), '-')) == size);
+}
+
+bool
+Keywords::all_unstable() const
+{
+    difference_type size(this->size());
+    return (std::count_if(this->begin(), this->end(),
+                std::bind2nd(IsMaskChar(), '~')) == size);
 }
 /****************************************************************************/
 } // namespace portage

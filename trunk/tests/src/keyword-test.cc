@@ -25,6 +25,7 @@
 #endif
 
 #include <iostream>
+#include <vector>
 #include <cstdlib>
 #include <cassert>
 
@@ -41,14 +42,27 @@ int main(int argc, char **argv)
     try
     {
         std::cout << "Testing keyword sorting:" << std::endl;
-        const Keywords keywords(argv[1], false);
+        Keywords keywords(argv[1], false);
         std::cout << "'" << keywords.str() << "'" << std::endl;
 
         std::cout << std::endl
             << "Testing keyword iterator:" << std::endl;
-        Keywords::const_iterator k;
+        Keywords::iterator k;
         for (k = keywords.begin() ; k != keywords.end() ; ++k)
             std::cout << k->str() << std::endl;
+        std::cout << "All unstable? " << keywords.all_unstable() << std::endl;
+
+        std::cout << std::endl
+            << "Testing all_unstable():" << std::endl;
+
+        std::vector<std::string> v;
+        v.push_back("~x86"); v.push_back("~alpha"); v.push_back("~mips");
+        keywords.assign(v, false);
+
+        for (k = keywords.begin() ; k != keywords.end() ; ++k)
+            std::cout << k->str() << std::endl;
+
+        std::cout << "All unstable? " << keywords.all_unstable() << std::endl;
     }
     catch (const BaseException& e)
     {
