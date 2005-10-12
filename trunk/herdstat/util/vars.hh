@@ -56,6 +56,7 @@ namespace util {
              */
             vars(const std::string &path);
 
+            /// Destructor.
             virtual ~vars();
 
             /** Dump keys/values to specified stream.
@@ -63,19 +64,12 @@ namespace util {
              */
             virtual void dump(std::ostream &s) const;
 
-            /// Read file.
-            virtual void read();
-
-            /** Read specified file.
-             * @param p Path.
-             */
-            virtual void read(const std::string &p);
-
             /// Set default variables to be present before substitution.
             void set_defaults();
 
         protected:
             virtual void do_set_defaults() { }
+            virtual void do_read();
 
         private:
             /** Perform elementary variable substitution.

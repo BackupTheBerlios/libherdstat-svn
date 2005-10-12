@@ -39,7 +39,7 @@ vars::vars() : _depth(0)
 {
 }
 /****************************************************************************/
-vars::vars(const std::string &path)
+vars::vars(const std::string& path)
     : BaseFile(path), _depth(0)
 {
     this->read();
@@ -50,17 +50,10 @@ vars::~vars()
 }
 /****************************************************************************/
 void
-vars::dump(std::ostream &stream) const
+vars::dump(std::ostream& stream) const
 {
     for (const_iterator i = this->begin() ; i != this->end() ; ++i)
         stream << i->first << "=" << i->second << std::endl;
-}
-/****************************************************************************/
-void
-vars::read(const std::string &path)
-{
-    this->stat().assign(path);
-    this->read();
 }
 /****************************************************************************/
 void
@@ -87,17 +80,13 @@ vars::set_defaults()
  * scripts or VARIABLE=value-type configuration files.
  ****************************************************************************/
 void
-vars::read()
+vars::do_read()
 {
-    if (not this->is_open())
-        this->open();
-
-    std::string s;
+    std::string line;
     std::string::size_type pos;
 
-    while (std::getline(*(this->stream), s))
+    while (std::getline(this->stream(), line))
     {
-        std::string line(s);
         pos = line.find_first_not_of(" \t");
         if (pos != std::string::npos)
             line.erase(0, pos);
@@ -145,9 +134,8 @@ vars::read()
  * recursively calling ourselves each time we find another occurrence.
  ****************************************************************************/
 void
-vars::subst(std::string &value)
+vars::subst(std::string& value)
 {
-
     std::vector<std::string> vars;
     std::vector<std::string>::iterator v;
     std::string::size_type lpos = 0;
