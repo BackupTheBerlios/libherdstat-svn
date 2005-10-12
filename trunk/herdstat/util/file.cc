@@ -101,12 +101,41 @@ BaseFileObject::~BaseFileObject()
 {
 }
 /*****************************************************************************/
-BaseFile::BaseFile() : stream(NULL)
+void
+BaseFileObject::close()
+{
+    if (not this->is_open())
+        return;
+    this->do_close();
+    this->set_open(false);
+}
+
+void
+BaseFileObject::read()
+{
+    assert(this->is_open());
+    this->do_read();    
+}
+
+void
+BaseFileObject::read(const std::string& path)
+{
+    if (this->is_open())
+        this->close();
+
+    _stat.assign(path);
+    this->set_path(path);
+    this->open();
+
+    this->do_read();
+}
+/*****************************************************************************/
+BaseFile::BaseFile() : _stream(NULL)
 {
 }
 /*****************************************************************************/
 BaseFile::BaseFile(const std::string &path, std::ios_base::openmode mode)
-    : BaseFileObject(path), stream(NULL)
+    : BaseFileObject(path), _stream(NULL)
 {
     this->open(this->path().c_str(), mode);
 }
@@ -120,26 +149,23 @@ BaseFile::~BaseFile()
 void
 BaseFile::open(const char *n, std::ios_base::openmode mode)
 {
-    if (this->is_open())
-        return;
-
     if (this->path() != n)
         this->stat().assign(n);
 
-    if (this->stream)
+    if (_stream)
     {
-        if (this->stream->is_open())
+        if (_stream->is_open())
         {
             this->set_open(true);
             return;
         }
         
-        this->stream->open(n, mode);
+        _stream->open(n, mode);
     }
     else
-        this->stream = new std::fstream(n, mode);
+        _stream = new std::fstream(n, mode);
 
-    if (not this->stream->is_open())
+    if (not _stream->is_open())
         throw FileException(n);
 
     this->set_open(true);
@@ -158,15 +184,10 @@ BaseFile::open(std::ios_base::openmode mode)
 }
 /*****************************************************************************/
 void
-BaseFile::close()
+BaseFile::do_close()
 {
-    if (not this->is_open())
-        return;
-
-    delete this->stream;
-    this->stream = NULL;
-
-    this->set_open(false);
+    delete _stream;
+    _stream = NULL;
 }
 /*****************************************************************************/
 File::File(const std::string &path, std::ios_base::openmode mode)
@@ -180,13 +201,17 @@ File::~File()
 }
 /*****************************************************************************/
 void
-File::read()
+File::do_read()
 {
-    assert(this->stream and this->stream->is_open());
-
     std::string line;
-    while (std::getline(*(this->stream), line))
-        this->push_back(std::string(line));
+    while (std::getline(this->stream(), line))
+        this->push_back(line);
+
+    /*
+     * this->insert(this->end(),
+     *      std::istream_iterator<std::string>(this->stream()),
+     *      std::istream_iterator<std::string>());
+     */
 }
 /*****************************************************************************/
 bool
@@ -208,7 +233,7 @@ File::dump(std::ostream &os) const
 void
 File::write()
 {
-    this->dump(*(this->stream));
+    this->dump(this->stream());
     this->clear();
 }
 /*****************************************************************************/
@@ -230,19 +255,14 @@ Directory::~Directory()
 }
 /*****************************************************************************/
 void
-Directory::close()
+Directory::do_close()
 {
-    if (not this->is_open())
-        return;
-
 #ifdef CLOSEDIR_VOID
-    closedir(this->_dirp);
+    closedir(_dirp);
 #else /* CLOSEDIR_VOID */
-    if (closedir(this->_dirp) != 0)
+    if (closedir(_dirp) != 0)
         throw ErrnoException("closedir: " + this->path());
 #endif /* CLOSEDIR_VOID */
-
-    this->set_open(false);
 }
 /*****************************************************************************/
 void
@@ -253,15 +273,15 @@ Directory::open()
 
     assert(not this->path().empty());
 
-    this->_dirp = opendir(this->path().c_str());
-    if (not this->_dirp)
+    _dirp = opendir(this->path().c_str());
+    if (not _dirp)
         throw FileException(this->path());
 
     this->set_open(true);
 }
 /*****************************************************************************/
 void
-Directory::read()
+Directory::do_read()
 {
     struct dirent *d = NULL;
     while ((d = readdir(this->_dirp)))

@@ -202,16 +202,18 @@ namespace util {
             virtual ~BaseFileObject();
 
             /// Get path of file.
-            const std::string& path() const { return this->_stat.path(); }
+            const std::string& path() const { return _stat.path(); }
+            /// Set path of file.
+            void set_path(const std::string& path) { _stat.assign(path); }
             /// Get reference to stat member.
-            Stat& stat() { return this->_stat; }
+            Stat& stat() { return _stat; }
             /// Get const reference to stat member.
-            const Stat& stat() const { return this->_stat; }
+            const Stat& stat() const { return _stat; }
 
             /** Has this file object been opened?
              * @returns A boolean value.
              */
-            bool is_open() const { return this->_opened; }
+            bool is_open() const { return _opened; }
 
             /** Dump our internal contents to disk.
              * @param s Output stream.
@@ -222,15 +224,22 @@ namespace util {
             virtual void open()     = 0;
 
             /// Close file object.
-            virtual void close()    = 0;
+            void close();
 
             /// Read file object, filling internal container.
-            virtual void read()     = 0;
+            void read();
+            void read(const std::string& path);
 
         protected:
             /// Manually override whether this file is opened or not.
             void set_open(const bool opened) { _opened = opened; }
-            
+
+            /// Read file object, filling internal container.
+            virtual void do_read() = 0;
+
+            /// Close
+            virtual void do_close() = 0;
+
         private:
             /// stat object associated with this file object.
             Stat  _stat;
@@ -275,12 +284,16 @@ namespace util {
              */
             virtual void open(std::ios_base::openmode mode);
 
-            /// Close file.
-            virtual void close();
-
         protected:
-            /// Stream associated with this file object.
-            stream_type *stream;
+            /// close file
+            virtual void do_close();
+
+            /// Get stream associated with this.
+            stream_type& stream() { return *_stream; }
+
+        private:
+            /// stream associated with this.
+            stream_type *_stream;
     };
 
     /**
@@ -325,9 +338,6 @@ namespace util {
             bool operator!= (const File &f) const
             { return not (*this == f); }
 
-            /// Load file into internal container.
-            virtual void read();
-
             /** Dump internal container to specified stream.
              * @param s Output stream.
              */
@@ -335,6 +345,10 @@ namespace util {
 
             /// Dump internal container to disk.
             virtual void write();
+
+        protected:
+            /// read contents into container
+            virtual void do_read();
     };
 
     /**
@@ -352,19 +366,13 @@ namespace util {
             /** Constructor.  Opens and reads directory.
              * @param path Path.
              */
-            Directory(const std::string &path);
+            Directory(const std::string& path);
 
             /// Destructor. Closes directory if opened.
             virtual ~Directory();
 
             /// Open directory.
             virtual void open();
-
-            /// Close directory.
-            virtual void close();
-
-            /// Read directory.
-            virtual void read();
 
             /** Find element with the specified name.
              * @param p Path.
@@ -389,6 +397,13 @@ namespace util {
              * @returns A const_iterator to the element (or end() if not found).
              */
             const_iterator find(const Regex& r) const;
+
+        protected:
+            /// Read directory.
+            virtual void do_read();
+
+            /// Close directory.
+            virtual void do_close();
 
         private:
             /// Internal DIR pointer.
