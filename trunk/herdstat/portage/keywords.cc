@@ -27,13 +27,17 @@
 #include <herdstat/util/misc.hh>
 #include <herdstat/util/string.hh>
 #include <herdstat/portage/exceptions.hh>
+#include <herdstat/portage/config.hh>
 #include <herdstat/portage/keywords.hh>
 
 namespace herdstat {
 namespace portage {
 /*** static members *********************************************************/
-const Archs Keyword::_valid_archs;
-const std::string Keyword::maskc::_valid_masks("-~");
+const std::string Keyword::_valid_masks("-~");
+/****************************************************************************/
+Keyword::maskc::maskc() : _c(0)
+{
+}
 /****************************************************************************/
 Keyword::maskc::maskc(const char c) : _c(0)
 {
@@ -51,15 +55,16 @@ Keyword::maskc::operator< (const maskc& that) const
 
     /* '-' is less than everything */
     if (_c == '-')
-        return false;
+        return true;
 
-    if (_c == '~' and that._c == '-')
-        return false;
+    if (not this->empty() and that.empty())
+        return true;
 
-    return true;
+    return false;
 }
 /****************************************************************************/
 Keyword::Keyword(const std::string& kw)
+    : _valid_archs(GlobalConfig().archs())
 {
     this->parse(kw);
 
@@ -70,7 +75,7 @@ Keyword::Keyword(const std::string& kw)
 void
 Keyword::parse(const std::string& kw)
 {
-    if (kw[0] == '-' or kw[0] == '~')
+    if (_valid_masks.find(kw[0]) != std::string::npos)
     {
         _mask = kw[0];
         _arch = kw.substr(1);
@@ -78,6 +83,18 @@ Keyword::parse(const std::string& kw)
     else
         _arch = kw;
 }
+
+bool
+Keyword::operator< (const Keyword& that) const
+{
+//    if (_mask == that._mask)
+//        return (_arch < that._arch);
+
+//    return (_mask < that._mask);
+
+    return ((_mask == that._mask) ? (_arch < that._arch) : (_mask < that._mask));
+}
+
 /****************************************************************************/
 Keywords::Keywords(bool use_colors)
     : _color(use_colors), _ebuild(), _str()
@@ -163,7 +180,7 @@ void
 Keywords::format()
 {
     util::ColorMap cmap;
-    size_type n = 1;
+    size_type n = 0;
     for (iterator i = this->begin() ; i != this->end() ; ++i, ++n)
     {
         if (_color)

@@ -333,15 +333,15 @@ version_string::version_string(const std::string& path)
 /*****************************************************************************
  * Display full version std::string (as portage would).                           *
  *****************************************************************************/
-version_string::operator
-std::string() const
+std::string
+version_string::str() const
 {
     /* chop -r0 if necessary */
-    std::string::size_type pos = this->_verstr.rfind("-r0");
+    std::string::size_type pos = _verstr.rfind("-r0");
     if (pos != std::string::npos)
-        return this->_verstr.substr(0, pos);
+        return _verstr.substr(0, pos);
 
-    return this->_verstr;
+    return _verstr;
 }
 /*****************************************************************************
  * Is this version less than that version?                                   *

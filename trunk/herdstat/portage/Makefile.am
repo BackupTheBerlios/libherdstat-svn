@@ -4,10 +4,11 @@ include $(top_builddir)/Makefile.am.common
 
 cc_sources = config.cc \
 	     version.cc \
-	     portage_file.cc \
 	     categories.cc \
 	     package_list.cc \
 	     find.cc \
+	     archs.cc \
+	     keywords.cc \
 	     ebuild.cc \
 	     gentoo_email_address.cc \
 	     developer.cc \
@@ -21,11 +22,12 @@ cc_sources = config.cc \
 hh_sources = exceptions.hh \
 	     misc.hh \
 	     config.hh \
-	     portage_file.hh \
 	     categories.hh \
 	     package_list.hh \
 	     version.hh \
 	     find.hh \
+	     archs.hh \
+	     keywords.hh \
 	     ebuild.hh \
 	     gentoo_email_address.hh \
 	     developer.hh \

@@ -79,7 +79,7 @@ ebuild_which(const std::string &pkg, bool overlays, util::Timer *timer,
      */
 
     std::string ebuild;
-    const std::string& portdir(config::portdir());
+    const std::string& portdir(GlobalConfig().portdir());
     if (p.first != portdir)
     {
         std::string ebuild1, ebuild2;
@@ -143,7 +143,7 @@ find_package_in(const std::string &portdir, const std::string &pkg,
 
     if (pkgcache.empty())
     {
-        const Categories categories;
+        const Categories& categories(GlobalConfig().categories());
         Categories::const_iterator c, ce;
         for (c = categories.begin(), ce = categories.end() ; c != ce ; ++c)
         {
@@ -231,7 +231,7 @@ find_package_regex_in(const std::string &portdir, const util::Regex &regex,
 
     if (pkgcache.empty())
     {
-        const Categories categories;
+        const Categories& categories(GlobalConfig().categories());
         Categories::const_iterator c, ce;
 
         for (c = categories.begin(), ce = categories.end() ; c != ce ; ++c)
@@ -330,8 +330,8 @@ find_package(const std::string &pkg, bool do_overlays, util::Timer *timer,
              const std::vector<std::string> &pkgcache)
 {
     std::string package;
-    std::string portdir(config::portdir());
-    const std::vector<std::string>& overlays(config::overlays());
+    std::string portdir(GlobalConfig().portdir());
+    const std::vector<std::string>& overlays(GlobalConfig().overlays());
     std::pair<std::string, std::string> p;
 
     try
@@ -408,8 +408,8 @@ std::multimap<std::string, std::string>
 find_package_regex(const util::Regex &regex, bool do_overlays,
                    util::Timer *timer, const std::vector<std::string> &pkgcache)
 {
-    std::string portdir(config::portdir());
-    const std::vector<std::string>& overlays(config::overlays());
+    std::string portdir(GlobalConfig().portdir());
+    const std::vector<std::string>& overlays(GlobalConfig().overlays());
     std::vector<std::string> result;
     std::vector<std::string>::iterator r, re;
     std::multimap<std::string, std::string> matches;
@@ -434,7 +434,7 @@ find_package_regex(const util::Regex &regex, bool do_overlays,
             }
         }
     }
-    catch (const NonExistentPkg)
+    catch (const NonExistentPkg& e)
     {
         bool found = false;
 
@@ -455,7 +455,7 @@ find_package_regex(const util::Regex &regex, bool do_overlays,
         }
 
         if (not found)
-            throw;
+            throw e;
     }
 
     return matches;

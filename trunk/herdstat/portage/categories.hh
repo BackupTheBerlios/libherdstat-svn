@@ -27,41 +27,44 @@
 # include "config.h"
 #endif
 
+#include <string>
+#include <herdstat/util/file.hh>
+#include <herdstat/util/container_base.hh>
+
 /**
  * @file herdstat/portage/categories.hh
  * @brief Defines the Categories class.
  */
-
-#include <herdstat/portage/portage_file.hh>
 
 namespace herdstat {
 namespace portage {
 
     /**
      * @class Categories
-     * @brief Represents a container of portage package categories.
+     * @brief Represents a container of package categories.  Contents are only
+     * validated if told to do so.  Otherwise, you'll want to make sure an
+     * element is valid before using it.
      */
 
-    class Categories : public PortageFileBase
+    class Categories : public util::SetBase<std::string>,
+                       protected util::BaseFile
     {
         public:
-            /** Default constructor.
-             * @param validate Validate whether categories are valid?
-             */
-            Categories(bool validate = false);
-
             /** Constructor.
              * @param portdir PORTDIR to look in.
-             * @param validate Validate whether categories are valid?
+             * @param validate Bail if an invalid category is found?
              */
             Categories(const std::string& portdir, bool validate = false);
 
         protected:
-            virtual void validate() const;
-            virtual void read();
+            virtual void do_read();
 
         private:
-            const std::string& _portdir;
+            friend class config;
+            Categories(bool validate = false);
+            void init(const std::string& portdir);
+
+            std::string _portdir;
             const bool _validate;
     };
 

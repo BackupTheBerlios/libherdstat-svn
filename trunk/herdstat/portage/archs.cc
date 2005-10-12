@@ -24,6 +24,7 @@
 # include "config.h"
 #endif
 
+#include <iterator>
 #include <herdstat/portage/archs.hh>
 
 #define ARCH_LIST   "/profiles/arch.list"
@@ -32,21 +33,29 @@ namespace herdstat {
 namespace portage {
 /****************************************************************************/
 Archs::Archs()
-    : PortageFileBase(config::portdir()+ARCH_LIST)
 {
-    this->read();
 }
 /****************************************************************************/
 Archs::Archs(const std::string& portdir)
-    : PortageFileBase(portdir+ARCH_LIST)
+    : util::BaseFile(portdir+ARCH_LIST)
 {
     this->read();
 }
 /****************************************************************************/
 void
-Archs::read()
+Archs::init(const std::string& pd)
 {
-    PortageFileBase::read();
+    _portdir.assign(pd);
+    this->set_path(_portdir+ARCH_LIST);
+    this->open();
+    this->read();
+}
+/****************************************************************************/
+void
+Archs::do_read()
+{
+    this->insert(std::istream_iterator<std::string>(this->stream()),
+                 std::istream_iterator<std::string>());
 
     /* so keywords like '-*' are recognized. */
     this->insert("*");

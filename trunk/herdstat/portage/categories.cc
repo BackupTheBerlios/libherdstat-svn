@@ -29,7 +29,6 @@
 #include <algorithm>
 #include <functional>
 #include <herdstat/portage/exceptions.hh>
-#include <herdstat/portage/config.hh>
 #include <herdstat/portage/categories.hh>
 
 #define CATEGORIES      "/profiles/categories"
@@ -39,16 +38,23 @@ namespace herdstat {
 namespace portage {
 /****************************************************************************/
 Categories::Categories(bool validate)
-    : PortageFileBase(config::portdir()+CATEGORIES),
-      _portdir(config::portdir()), _validate(validate)
+    : util::BaseFile(), _portdir(), _validate(validate)
+{
+}
+/****************************************************************************/
+Categories::Categories(const std::string& portdir, bool validate)
+    : util::BaseFile(portdir+CATEGORIES), _portdir(portdir),
+      _validate(validate)
 {
     this->read();
 }
 /****************************************************************************/
-Categories::Categories(const std::string& portdir, bool validate)
-    : PortageFileBase(portdir+CATEGORIES), _portdir(portdir),
-      _validate(validate)
+void
+Categories::init(const std::string& pd)
 {
+    _portdir.assign(pd);
+    this->set_path(_portdir+CATEGORIES);
+    this->open();
     this->read();
 }
 /****************************************************************************/
@@ -63,29 +69,28 @@ struct BailIfInvalid : std::binary_function<std::string, std::string, void>
 };
 
 void
-Categories::validate() const
+Categories::do_read()
 {
-    std::for_each(this->begin(), this->end(),
-        std::bind2nd(BailIfInvalid(), _portdir));
-}
-
-void
-Categories::read()
-{
-    PortageFileBase::read();
+    this->insert(std::istream_iterator<std::string>(this->stream()),
+                 std::istream_iterator<std::string>());
 
     /* virtual isn't really a category */
     this->erase("virtual");
 
     /* validate if requested */
     if (_validate)
-        this->validate();
+        std::for_each(this->begin(), this->end(),
+            std::bind2nd(BailIfInvalid(), _portdir));
 
     /* read user categories file */
     if (util::is_file(CATEGORIES_USER))
     {
-        this->set_path(CATEGORIES_USER);
-        PortageFileBase::read();
+        std::ifstream stream(CATEGORIES_USER);
+        if (not stream)
+            throw FileException(CATEGORIES_USER);
+
+        this->insert(std::istream_iterator<std::string>(stream),
+                     std::istream_iterator<std::string>());
     }
 }
 /****************************************************************************/

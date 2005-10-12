@@ -1,5 +1,5 @@
 /*
- * libherdstat -- herdstat/portage/portage_config.cc
+ * libherdstat -- herdstat/portage/config.cc
  * $Id$
  * Copyright (c) 2005 Aaron Walker <ka0ttic@gentoo.org>
  *
@@ -29,30 +29,24 @@
 
 namespace herdstat {
 namespace portage {
-/*** static members *********************************************************/
-bool config::_init = false;
-std::string config::_portdir;
-std::vector<std::string> config::_overlays;
 /****************************************************************************/
 config::config()
+    : _vars(), _portdir(), _overlays(), _cats(), _archs()
 {
-    if (_init)
-        return;
-
     /* read default config */
-    this->read("/etc/make.globals");
-    this->close();
+    _vars.read("/etc/make.globals");
+    _vars.close();
     /* read make.conf overriding any defined settings */
-    this->read("/etc/make.conf");
-    this->close();
+    _vars.read("/etc/make.conf");
+    _vars.close();
 
-    iterator x;
+    util::vars::iterator x;
     char *result = NULL;
 
     /* PORTDIR */
     if ((result = std::getenv("PORTDIR")))
         _portdir.assign(result);
-    else if ((x = this->find("PORTDIR")) != this->end())
+    else if ((x = _vars.find("PORTDIR")) != _vars.end())
         _portdir.assign(x->second);
     
     /* default to /usr/portage */
@@ -65,13 +59,15 @@ config::config()
         if (std::strlen(result) > 0)
             _overlays = util::split(result);
     }
-    else if ((x = this->find("PORTDIR_OVERLAY")) != this->end())
+    else if ((x = _vars.find("PORTDIR_OVERLAY")) != _vars.end())
     {
         if (not x->second.empty())
             _overlays = util::split(x->second);
     }
 
-    _init = true;
+    /* initialize categories and archs now that we know PORTDIR */
+    _cats.init(_portdir);
+    _archs.init(_portdir);
 }
 /****************************************************************************/
 } // namespace portage

@@ -40,7 +40,8 @@ namespace herdstat {
 namespace portage {
 /****************************************************************************/
 PackageList::PackageList()
-    : _portdir(config::portdir()), _overlays(config::overlays())
+    : _portdir(GlobalConfig().portdir()),
+      _overlays(GlobalConfig().overlays())
 {
 }
 /****************************************************************************/
@@ -54,7 +55,7 @@ void
 PackageList::fill()
 {
     std::string path;
-    const Categories categories(_portdir);
+    const Categories& categories(GlobalConfig().categories());
     Categories::const_iterator ci, cend;
 
     /* we can only use the estimate here */

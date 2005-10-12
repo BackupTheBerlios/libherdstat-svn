@@ -1,5 +1,5 @@
 /*
- * libherdstat -- herdstat/portage/portage_config.hh
+ * libherdstat -- herdstat/portage/config.hh
  * $Id$
  * Copyright (c) 2005 Aaron Walker <ka0ttic@gentoo.org>
  *
@@ -32,8 +32,14 @@
  * @brief Defines the config class, the interface to Portage configuration.
  */
 
+#include <vector>
+#include <string>
+
+#include <herdstat/noncopyable.hh>
 #include <herdstat/exceptions.hh>
 #include <herdstat/util/vars.hh>
+#include <herdstat/portage/archs.hh>
+#include <herdstat/portage/categories.hh>
 
 namespace herdstat {
 /// portage-related classes/functions.
@@ -42,69 +48,67 @@ namespace portage {
     /**
      * @class config
      * @brief Represents the current portage configuration.
-     * Reads make.conf and make.globals and stores variables in key/value
-     * pairs.
      */
 
-    class config : public util::vars
+    class config : private noncopyable
     {
         public:
-            /** Default constructor.
-             * Opens and reads make.conf and make.globals.
-             */
-            config();
+            /// Get PORTDIR.
+            inline const std::string& portdir() const;
+            /// Get PORTDIR_OVERLAY
+            inline const std::vector<std::string>& overlays() const;
 
-            /** Determine PORTDIR.
-             * @returns A std::string object.
+            /** Get value of a portage configuration variable (anything in
+             * make.conf/make.globals is valid).
+             * @returns a copy of the value mapped to the specified variable
+             * or an empty string if the value doesn't exist.
              */
-            inline static const std::string& portdir();
+            inline std::string operator[] (const std::string& var) const;
 
-            /** Determine PORTDIR_OVERLAY.
-             * @returns A vector of std::string objects.
-             */
-            inline static const std::vector<std::string>& overlays();
+            /// Get categories.
+            inline const Categories& categories() const;
+            /// Get arch keywords.
+            inline const Archs& archs() const;
 
         private:
-            static bool _init;
-            static std::string _portdir;
-            static std::vector<std::string> _overlays;
+            /// Only GlobalConfig() can instantiate this class.
+            friend const config& GlobalConfig();
+
+            /// Constructor.
+            config();
+
+            util::vars _vars;
+            std::string _portdir;
+            std::vector<std::string> _overlays;
+            Categories _cats;
+            Archs _archs;
     };
 
-    inline const std::string& config::portdir()
-    {
-        if (not _init)
-            throw Exception("You must instantiate a portage::config object before calling any of its static member functions.");
-        return _portdir;
-    }
+    inline const std::string& config::portdir() const { return _portdir; }
+    inline const std::vector<std::string>& config::overlays() const
+    { return _overlays; }
+    inline const Categories& config::categories() const { return _cats; }
+    inline const Archs& config::archs() const { return _archs; }
     
-    inline const std::vector<std::string>& config::overlays()
+    inline std::string
+    config::operator[] (const std::string& var) const
     {
-        if (not _init)
-            throw Exception("You must instantiate a portage::config object before calling any of its static member functions.");
-        return _overlays;
+        util::vars::const_iterator i = _vars.find(var);
+        return (i == _vars.end() ? std::string() : i->second);
+    }
+
+    /** Create a local static instance of the config class.
+     * @returns const reference to the static instance.
+     */
+    inline const config&
+    GlobalConfig()
+    {
+        static config c;
+        return c;
     }
 
 } // namespace portage
 } // namespace herdstat
-
-/// operator<< for portage::config
-template<class charT, class traits>
-std::basic_ostream<charT, traits> &
-operator<< (std::basic_ostream<charT, traits> &stream,
-            const herdstat::portage::config& that)
-{
-    stream << std::endl;
-    herdstat::portage::config::const_iterator i;
-    for (i = that.begin() ; i != that.end() ; ++i)
-    {
-        std::string s;
-        while (s.length() < 20)
-            s.append(" ");
-        s += i->first + " = " + i->second;
-        stream << s << std::endl;
-    }
-    return stream;
-}
 
 #endif
 

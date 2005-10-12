@@ -54,8 +54,7 @@ namespace portage {
             const std::string str() const
             { std::string s(1, _mask); s+=_arch; return s; }
 
-            bool operator< (const Keyword& that) const
-            { return ((_mask < that._mask) and (_arch < that._arch)); }
+            bool operator< (const Keyword& that) const;
             bool operator> (const Keyword& that) const
             { return (that < *this); }
             bool operator==(const Keyword& that) const
@@ -71,7 +70,7 @@ namespace portage {
             class maskc
             {
                 public:
-                    maskc() : _c(0) { }
+                    maskc();
                     maskc(const char c);
                     maskc& operator= (const char c)
                     { _c = c; return *this; }
@@ -79,7 +78,7 @@ namespace portage {
                     /// implicit conversion to char
                     operator char() const { return _c; }
 
-                    bool empty() const { return (_c != 0); }
+                    bool empty() const { return (_c == 0); }
 
                     bool operator< (const maskc& that) const;
                     bool operator> (const maskc& that) const
@@ -91,7 +90,6 @@ namespace portage {
 
                 private:
                     char _c;
-                    static const std::string _valid_masks;
             };
 
 
@@ -100,7 +98,8 @@ namespace portage {
 
             std::string _arch;
             maskc _mask;
-            static const Archs _valid_archs;
+            const Archs& _valid_archs;
+            static const std::string _valid_masks;
     };
 
     /**

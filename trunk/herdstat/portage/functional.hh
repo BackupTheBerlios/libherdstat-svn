@@ -35,7 +35,7 @@
 #include <functional>
 #include <herdstat/util/regex.hh>
 #include <herdstat/portage/misc.hh>
-#include <herdstat/portage/categories.hh>
+#include <herdstat/portage/config.hh>
 
 namespace herdstat {
 namespace portage {
@@ -91,8 +91,8 @@ namespace portage {
     {
         bool operator()(const std::string& cat) const
         {
-            const Categories categories;
-            return categories.count(cat);
+
+            return GlobalConfig().categories().count(cat);
         }
     };
 

@@ -32,8 +32,7 @@
  * @brief Defines the Archs class.
  */
 
-#include <herdstat/portage/portage_file.hh>
-#include <herdstat/portage/config.hh>
+#include <herdstat/util/file.hh>
 
 namespace herdstat {
 namespace portage {
@@ -44,19 +43,24 @@ namespace portage {
      * (those listed in $PORTDIR/profiles/arch.list).
      */
 
-    class Archs : public PortageFileBase
+    class Archs : public util::SetBase<std::string>,
+                  protected util::BaseFile
     {
         public:
-            /// Default constructor.
-            Archs();
-
             /** Constructor.
              * @param portdir PORTDIR
              */
             Archs(const std::string& portdir);
 
         protected:
-            virtual void read();
+            virtual void do_read();
+
+        private:
+            friend class config;
+            Archs();
+            void init(const std::string& portdir);
+
+            std::string _portdir;
     };
 
 } // namespace portage

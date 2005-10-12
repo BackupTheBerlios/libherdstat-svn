@@ -94,8 +94,11 @@ namespace portage {
              */
             version_string(const std::string &path);
 
+            /// Get version string.
+            std::string str() const;
+
             /// Implicit conversion to std::string.
-            operator std::string() const;
+            operator std::string() const { return this->str(); }
 
             /** Get version string (minus the suffix).
              * @returns String object.
@@ -276,7 +279,7 @@ namespace portage {
             /// Version components map.
             const version_map  _v;
             /// Reference to actual version string
-            const std::string &_verstr;
+            const std::string _verstr;
             /// Our version suffix.
             const suffix _suffix;
             /// Our version minus suffix.
