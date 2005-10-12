@@ -1,0 +1,37 @@
+Testing version_string:
+  found version 'foo-1.0b'.
+  found version 'foo-1.0a_rc1'.
+  found version 'foo-1.0a_beta1'.
+  found version 'foo-1.10.20040629'.
+  found version 'foo-1.0a_pre1'.
+  found version 'foo-1.10.20050629'.
+  found version 'foo-1.0a'.
+  found version 'foo-1.10'.
+  found version 'foo-1.0a_alpha1'.
+  found version 'foo-1.10.20050629-r1'.
+  found version 'foo-1.2'.
+  found version 'foo-1.0e'.
+  found version 'foo-1.0a_p1'.
+
+Testing sorted version_string container:
+  foo-1.0a_alpha1
+  foo-1.0a_beta1
+  foo-1.0a_pre1
+  foo-1.0a_rc1
+  foo-1.0a
+  foo-1.0a_p1
+  foo-1.0b
+  foo-1.0e
+  foo-1.2
+  foo-1.10
+  foo-1.10.20040629
+  foo-1.10.20050629
+  foo-1.10.20050629-r1
+
+Testing version_map for ./portdir/app-misc/foo/foo-1.10.20050629-r1.ebuild: 
+  P = foo-1.10.20050629
+  PF = foo-1.10.20050629-r1
+  PN = foo
+  PR = r1
+  PV = 1.10.20050629
+  PVR = 1.10.20050629-r1

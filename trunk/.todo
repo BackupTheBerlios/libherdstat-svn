@@ -17,19 +17,4 @@
             Add keywords test
         </note>
     </note>
-    <note priority="veryhigh" time="1128952627">
-        Specialize ContainerBase to work with pointers properly
-    </note>
-    <note priority="high" time="1128850057">
-        Add base class for portage files where all contents get inserted into a set
-        <note priority="medium" time="1128850076">
-            Fex: profiles/categories, profiles/arch.list
-        </note>
-    </note>
-    <note priority="high" time="1128937257">
-        Have PortageBaseFile inherit from one of the File classes ; move it to util NS and have it represent any file w/unique contents.
-        <note priority="medium" time="1129024305">
-            Instead have each container publicly inherit from SetBase and privately inherit from util::BaseFile
-        </note>
-    </note>
 </todo>

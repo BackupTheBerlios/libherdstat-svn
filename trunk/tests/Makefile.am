@@ -1,10 +1,13 @@
-# $Id: Makefile.am 596 2005-09-18 11:22:59Z ka0ttic $
+# $Id$
 
 SUBDIRS = src
 
 tests = string \
 	glob \
+	regex \
 	algo \
+	version \
+	keyword \
 	herds.xml \
 	devaway.xml \
 	userinfo.xml \
