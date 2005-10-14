@@ -53,12 +53,12 @@ namespace portage {
             Keyword(const std::string& kw);
 
             /// Get mask character (or '\0' if empty).
-            const char mask() const { return _mask; }
+            char mask() const { return _mask; }
             /// Get architecture.
             const std::string& arch() const { return _arch; }
             /// Get keyword string.
             const std::string str() const
-            { std::string s(1, _mask); s+=_arch; return s; }
+            { return (std::string(1, _mask)+_arch); }
 
             /** Is this Keyword less that that Keyword?
              * @param that const reference to Keyword
