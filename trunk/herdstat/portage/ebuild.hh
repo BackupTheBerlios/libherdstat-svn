@@ -32,7 +32,9 @@
  * @brief Defines the ebuild class.
  */
 
+#include <set>
 #include <herdstat/util/vars.hh>
+#include <herdstat/portage/version.hh>
 
 namespace herdstat {
 namespace portage {
@@ -62,6 +64,13 @@ namespace portage {
         protected:
             /// Set default variables.
             virtual void do_set_defaults();
+            /// Action to perform on each line read
+            virtual void do_perform_action_on(const std::string& line);
+
+        private:
+            /// set of eclasses we've parsed; used for preventing recursion
+            std::set<std::string> _parsed;
+            version_map _vmap;
     };
 
 } // namespace portage

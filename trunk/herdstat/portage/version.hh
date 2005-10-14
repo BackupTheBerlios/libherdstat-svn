@@ -57,15 +57,23 @@ namespace portage {
     class version_map : public util::MapBase<std::string, std::string>
     {
         public:
+            /// Default constructor.
+            version_map();
+
             /** Constructor.
              * @param path Path to ebuild.
              */
-            version_map(const std::string &path);
+            version_map(const std::string& path);
+
+            /** Assign new path.
+             * @param path Path to ebuild.
+             */
+            void assign(const std::string& path);
 
             /** Get value mapped to given key.
              * @returns copy of value mapped to key.
              */
-            const std::string operator[](const std::string &key) const
+            const std::string operator[](const std::string& key) const
             {
                 const_iterator i = this->find(key);
                 return (i == this->end() ? "" : i->second);

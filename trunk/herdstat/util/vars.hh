@@ -68,8 +68,16 @@ namespace util {
             void set_defaults();
 
         protected:
+            /// Strip leading/trailing whitespace
+            void strip_ws(std::string& str);
+
+            /// Derivatives may override this to set any defaults
             virtual void do_set_defaults() { }
             virtual void do_read();
+
+            /// Derivatives may override this to define something that must
+            /// be done for each line of the file.
+            virtual void do_perform_action_on(const std::string& line) { }
 
         private:
             /** Perform elementary variable substitution.

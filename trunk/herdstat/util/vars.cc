@@ -73,6 +73,16 @@ vars::set_defaults()
     /* for derivatives to define their own defaults */
     this->do_set_defaults();
 }
+
+void
+vars::strip_ws(std::string& str)
+{
+    std::string::size_type pos;
+    if ((pos = str.find_first_not_of(" \t")) != std::string::npos)
+        str.erase(0, pos);
+    if ((pos = str.find_last_not_of(" \t")) != std::string::npos)
+        str.erase(++pos);
+}
 /****************************************************************************
  * Read from our stream, saving any VARIABLE=["']value['"]
  * statements in our map.  Lines beginning with a '#'
@@ -83,43 +93,40 @@ void
 vars::do_read()
 {
     std::string line;
-    std::string::size_type pos;
-
     while (std::getline(this->stream(), line))
     {
-        pos = line.find_first_not_of(" \t");
-        if (pos != std::string::npos)
-            line.erase(0, pos);
-
-        if (line.length() < 1 or line[0] == '#')
-            continue;
-
-        if ((pos = line.find('=')) != std::string::npos)
+        /* it's a variable assignment, so insert the key/value */
+        if (line.find('=') != std::string::npos)
         {
-            std::string key = line.substr(0, pos);
-            std::string val = line.substr(pos + 1);
+            std::string str(line);
+            std::string::size_type pos = line.find_first_not_of(" \t");
+            if (pos != std::string::npos)
+                line.erase(0, pos);
 
-            /* handle leading/trailing whitespace */
-            if (std::string::npos != (pos = key.find_first_not_of(" \t")))
-                key.erase(0, pos);
-            if (std::string::npos != (pos = val.find_first_not_of(" \t")))
-                val.erase(0, pos);
-            if (std::string::npos != (pos = key.find_last_not_of(" \t")))
-                key.erase(++pos);
-            if (std::string::npos != (pos = val.find_last_not_of(" \t")))
-                val.erase(++pos);
- 
-            /* handle quotes */
-            if (std::string::npos != (pos = val.find_first_of("'\"")))
+            if (line.length() > 0 and line[0] != '#')
             {
-                val.erase(pos, pos + 1);
-                if (std::string::npos != (pos = val.find_last_of("'\"")))
-                    val.erase(pos, pos + 1);
-            }
+                pos = line.find('=');
+                std::string key(line.substr(0, pos));
+                std::string val(line.substr(++pos));
+
+                /* handle leading/trailing whitespace */
+                strip_ws(key);
+                strip_ws(val);
  
-            (void)this->erase(key);
-            this->insert(std::make_pair(key, val));
+                /* handle quotes */
+                if ((pos = val.find_first_of("'\"")) != std::string::npos)
+                {
+                    val.erase(pos, pos + 1);
+                    if ((pos = val.find_last_of("'\"")) != std::string::npos)
+                        val.erase(pos, pos + 1);
+                }
+ 
+                (void)this->erase(key);
+                this->insert(std::make_pair(key, val));
+            }
         }
+
+        this->do_perform_action_on(line);
     }
 
     this->set_defaults();

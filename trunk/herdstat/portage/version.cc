@@ -45,9 +45,21 @@ namespace portage {
 /*** static members *********************************************************/
 std::vector<std::string> version_string::suffix::_suffixes;
 /****************************************************************************/
+version_map::version_map()
+{
+}
+/****************************************************************************/
 version_map::version_map(const std::string &path)
     : _verstr(util::chop_fileext(util::basename(path)))
 {
+    this->parse();
+}
+/****************************************************************************/
+void
+version_map::assign(const std::string& path)
+{
+    _verstr.assign(util::chop_fileext(util::basename(path)));
+    this->clear();
     this->parse();
 }
 /****************************************************************************/

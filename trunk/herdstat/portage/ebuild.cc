@@ -24,9 +24,10 @@
 # include "config.h"
 #endif
 
+#include <iostream>
 #include <cassert>
+#include <herdstat/util/string.hh>
 #include <herdstat/portage/misc.hh>
-#include <herdstat/portage/version.hh>
 #include <herdstat/portage/ebuild.hh>
 
 namespace herdstat {
@@ -36,9 +37,10 @@ ebuild::ebuild()
 {
 }
 /****************************************************************************/
-ebuild::ebuild(const std::string &path) : util::vars(path)
+ebuild::ebuild(const std::string &path)
+    : util::vars()
 {
-    assert(is_ebuild(path));
+    this->read(path);
 }
 /****************************************************************************/
 ebuild::~ebuild()
@@ -48,10 +50,53 @@ ebuild::~ebuild()
 void
 ebuild::do_set_defaults()
 {
-    /* insert its variable components
-     * (${P}, ${PN}, ${PV}, etc) into our map */
-    version_map vmap(this->path());
-    this->insert(vmap.begin(), vmap.end());
+    /* in case path() is an eclass */
+    if (is_ebuild(this->path()))
+    {
+        _vmap.assign(this->path());
+        /* insert this ebuild's variable components
+         * (${P}, ${PN}, ${PV}, etc) into our map */
+        this->insert(_vmap.begin(), _vmap.end());
+    }
+}
+/****************************************************************************/
+void
+ebuild::do_perform_action_on(const std::string& str)
+{
+    /* perform any inherits */
+    if (str.find("inherit") != std::string::npos)
+    {
+        std::string line(str);
+        this->strip_ws(line);
+
+        std::vector<std::string> parts(util::split(line));
+        if (parts[0] == "inherit")
+        {
+            std::vector<std::string>::iterator i;
+            for (i = parts.begin() + 1 ; i != parts.end() ; ++i)
+            {
+                const std::string eclass =
+                    util::sprintf(GlobalConfig().portdir()+"/eclass/%s.eclass",
+                        i->c_str());
+
+                /* only recurse if we havent parsed this eclass already */
+                if (util::file_exists(eclass) and
+                    _parsed.insert(eclass).second)
+                {
+                    ebuild e;
+                    /* insert version components into eclass */
+                    e.insert(_vmap.begin(), _vmap.end());
+                    e.read(eclass);
+
+                    for (iterator i = e.begin() ; i != e.end() ; ++i)
+                    {
+                        /* eclass overrides any variables set at this point */
+                        this->operator[](i->first) = i->second;
+                    }
+                }
+            }
+        }
+    }
 }
 /****************************************************************************/
 } // namespace portage
