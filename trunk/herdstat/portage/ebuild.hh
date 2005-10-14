@@ -65,7 +65,7 @@ namespace portage {
             /// Set default variables.
             virtual void do_set_defaults();
             /// Action to perform on each line read
-            virtual void do_perform_action_on(const std::string& line);
+//            virtual void do_perform_action_on(const std::string& line);
 
         private:
             /// set of eclasses we've parsed; used for preventing recursion

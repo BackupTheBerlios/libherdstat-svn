@@ -60,44 +60,44 @@ ebuild::do_set_defaults()
     }
 }
 /****************************************************************************/
-void
-ebuild::do_perform_action_on(const std::string& str)
-{
-    /* perform any inherits */
-    if (str.find("inherit") != std::string::npos)
-    {
-        std::string line(str);
-        this->strip_ws(line);
+//void
+//ebuild::do_perform_action_on(const std::string& str)
+//{
+//    /* perform any inherits */
+//    if (str.find("inherit") != std::string::npos)
+//    {
+//        std::string line(str);
+//        this->strip_ws(line);
 
-        std::vector<std::string> parts(util::split(line));
-        if (parts[0] == "inherit")
-        {
-            std::vector<std::string>::iterator i;
-            for (i = parts.begin() + 1 ; i != parts.end() ; ++i)
-            {
-                const std::string eclass =
-                    util::sprintf(GlobalConfig().portdir()+"/eclass/%s.eclass",
-                        i->c_str());
+//        std::vector<std::string> parts(util::split(line));
+//        if (parts[0] == "inherit")
+//        {
+//            std::vector<std::string>::iterator i;
+//            for (i = parts.begin() + 1 ; i != parts.end() ; ++i)
+//            {
+//                const std::string eclass =
+//                    util::sprintf(GlobalConfig().portdir()+"/eclass/%s.eclass",
+//                        i->c_str());
 
-                /* only recurse if we havent parsed this eclass already */
-                if (util::file_exists(eclass) and
-                    _parsed.insert(eclass).second)
-                {
-                    ebuild e;
-                    /* insert version components into eclass */
-                    e.insert(_vmap.begin(), _vmap.end());
-                    e.read(eclass);
+//                /* only recurse if we havent parsed this eclass already */
+//                if (util::file_exists(eclass) and
+//                    _parsed.insert(eclass).second)
+//                {
+//                    ebuild e;
+//                    /* insert version components into eclass */
+//                    e.insert(_vmap.begin(), _vmap.end());
+//                    e.read(eclass);
 
-                    for (iterator i = e.begin() ; i != e.end() ; ++i)
-                    {
-                        /* eclass overrides any variables set at this point */
-                        this->operator[](i->first) = i->second;
-                    }
-                }
-            }
-        }
-    }
-}
+//                    for (iterator i = e.begin() ; i != e.end() ; ++i)
+//                    {
+//                        /* eclass overrides any variables set at this point */
+//                        this->operator[](i->first) = i->second;
+//                    }
+//                }
+//            }
+//        }
+//    }
+//}
 /****************************************************************************/
 } // namespace portage
 } // namespace herdstat

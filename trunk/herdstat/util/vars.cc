@@ -83,6 +83,46 @@ vars::strip_ws(std::string& str)
     if ((pos = str.find_last_not_of(" \t")) != std::string::npos)
         str.erase(++pos);
 }
+
+void
+vars::perform_action_on(const std::string& str)
+{
+    if (str.empty())
+        return;
+
+    /* it's a variable assignment, so insert the key/value */
+    if (str.find('=') != std::string::npos)
+    {
+        std::string line(str);
+        std::string::size_type pos = line.find_first_not_of(" \t");
+        if (pos != std::string::npos)
+            line.erase(0, pos);
+
+        if (line.length() > 0 and line[0] != '#')
+        {
+            pos = line.find('=');
+            std::string key(line.substr(0, pos));
+            std::string val(line.substr(++pos));
+
+            /* handle leading/trailing whitespace */
+            strip_ws(key);
+            strip_ws(val);
+ 
+            /* handle quotes */
+            if ((pos = val.find_first_of("'\"")) != std::string::npos)
+            {
+                val.erase(pos, pos + 1);
+                if ((pos = val.find_last_of("'\"")) != std::string::npos)
+                    val.erase(pos, pos + 1);
+            }
+ 
+            this->erase(key);
+            this->insert(std::make_pair(key, val));
+        }
+    }
+
+    this->do_perform_action_on(str);
+}
 /****************************************************************************
  * Read from our stream, saving any VARIABLE=["']value['"]
  * statements in our map.  Lines beginning with a '#'
@@ -92,48 +132,15 @@ vars::strip_ws(std::string& str)
 void
 vars::do_read()
 {
-    std::string line;
-    while (std::getline(this->stream(), line))
-    {
-        /* it's a variable assignment, so insert the key/value */
-        if (line.find('=') != std::string::npos)
-        {
-            std::string str(line);
-            std::string::size_type pos = line.find_first_not_of(" \t");
-            if (pos != std::string::npos)
-                line.erase(0, pos);
-
-            if (line.length() > 0 and line[0] != '#')
-            {
-                pos = line.find('=');
-                std::string key(line.substr(0, pos));
-                std::string val(line.substr(++pos));
-
-                /* handle leading/trailing whitespace */
-                strip_ws(key);
-                strip_ws(val);
- 
-                /* handle quotes */
-                if ((pos = val.find_first_of("'\"")) != std::string::npos)
-                {
-                    val.erase(pos, pos + 1);
-                    if ((pos = val.find_last_of("'\"")) != std::string::npos)
-                        val.erase(pos, pos + 1);
-                }
- 
-                (void)this->erase(key);
-                this->insert(std::make_pair(key, val));
-            }
-        }
-
-        this->do_perform_action_on(line);
-    }
-
     this->set_defaults();
 
+    std::string line;
+    while (std::getline(this->stream(), line))
+        this->perform_action_on(line);
+
     /* loop through our map performing variable substitutions */
-    iterator e = this->end();
-    for (iterator i = this->begin() ; i != e ; ++i)
+    iterator i, e;
+    for (i = this->begin(), e = this->end() ; i != e ; ++i)
         this->subst(i->second);
 }
 /****************************************************************************

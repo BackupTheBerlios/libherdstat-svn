@@ -67,6 +67,8 @@ namespace util {
             /// Set default variables to be present before substitution.
             void set_defaults();
 
+            void perform_action_on(const std::string& line);
+
         protected:
             /// Strip leading/trailing whitespace
             void strip_ws(std::string& str);
