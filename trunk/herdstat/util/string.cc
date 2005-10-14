@@ -94,6 +94,27 @@ sprintf(const char *fmt, va_list v)
     std::free(buf);
     return s;
 }
+/*****************************************************************************/
+std::string
+sprintf(const std::string& fmt, ...)
+{
+    va_list v;
+#ifdef HAVE_GCC4
+    va_start(v, fmt);
+#else
+    va_start(v, fmt.c_str());
+#endif
+
+    std::string s(util::sprintf(fmt, v));
+    va_end(v);
+    return s;
+}
+/*****************************************************************************/
+std::string
+sprintf(const std::string& fmt, va_list v)
+{
+    return util::sprintf(fmt.c_str(), v);
+}
 /*****************************************************************************
  * HTMLify the given std::string (replace any occurrences of &,>,<)               *
  *****************************************************************************/

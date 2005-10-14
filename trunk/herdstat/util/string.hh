@@ -50,9 +50,13 @@ namespace util {
      */
     std::string tidy_whitespace(const std::string &s);
 
-    /// sprintf() wrapper
+    //@{
+    /// sprintf() wrappers
     std::string sprintf(const char *, ...);
     std::string sprintf(const char *, va_list);
+    std::string sprintf(const std::string&, ...);
+    std::string sprintf(const std::string&, va_list);
+    //@}
 
     /** Split string into a vector of strings.
      * @param s String to split.
