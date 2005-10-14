@@ -36,6 +36,7 @@
 #include <herdstat/util/misc.hh>
 #include <herdstat/util/regex.hh>
 #include <herdstat/util/file.hh>
+#include <herdstat/portage/config.hh>
 
 namespace herdstat {
 namespace portage {
