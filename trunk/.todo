@@ -7,14 +7,5 @@
     </note>
     <note priority="veryhigh" time="1128936789">
         Add more tests
-        <note priority="high" time="1129024351">
-            Add regex test
-        </note>
-        <note priority="high" time="1129024372">
-            Add Directory test
-        </note>
-        <note priority="medium" time="1129024361">
-            Add keywords test
-        </note>
     </note>
 </todo>
