@@ -49,6 +49,15 @@ namespace portage {
         return (fnmatch("*.ebuild", path.c_str(), 0) == 0);
     }
 
+    /** Is the specified string the name of a category?
+     * @param str string.
+     * @returns A boolean value.
+     */
+    inline bool is_category(const std::string& str)
+    {
+        return GlobalConfig().categories().count(str);
+    }
+
     /** Is the specified path a package directory?
      * @param path Path.
      * @returns A boolean value.

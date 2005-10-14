@@ -91,8 +91,7 @@ namespace portage {
     {
         bool operator()(const std::string& cat) const
         {
-
-            return GlobalConfig().categories().count(cat);
+            return is_category(cat);
         }
     };
 
