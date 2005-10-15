@@ -32,6 +32,8 @@
 
 namespace herdstat {
 namespace portage {
+/*** static members *********************************************************/
+//ebuild::eclass_map ebuild::_eclasses;
 /****************************************************************************/
 ebuild::ebuild()
 {
@@ -80,19 +82,33 @@ ebuild::do_set_defaults()
 //                        i->c_str());
 
 //                /* only recurse if we havent parsed this eclass already */
-//                if (util::file_exists(eclass) and
-//                    _parsed.insert(eclass).second)
+//                eclass_map::iterator x = _eclasses.find(eclass);
+//                if (x == _eclasses.end())
 //                {
-//                    ebuild e;
-//                    /* insert version components into eclass */
-//                    e.insert(_vmap.begin(), _vmap.end());
-//                    e.read(eclass);
-
-//                    for (iterator i = e.begin() ; i != e.end() ; ++i)
+//                    if (util::file_exists(eclass))
 //                    {
-//                        /* eclass overrides any variables set at this point */
-//                        this->operator[](i->first) = i->second;
+//                        std::cout << "parsing eclass '" << eclass << "'" << std::endl;
+//                        x = _eclasses.insert(std::make_pair(eclass,
+//                                         new ebuild())).first;
+//                        x->second->insert(_vmap.begin(), _vmap.end());
+//                        x->second->read(eclass);
 //                    }
+//                    else
+//                    {
+//                        std::cerr << this->path() << ": non-existent eclass "
+//                            << eclass << std::endl;
+//                        continue;
+//                    }
+//                }
+//                else
+//                    x->second->insert(_vmap.begin(), _vmap.end());
+
+//                assert(x->second);
+//                for (iterator e = x->second->begin() ;
+//                        e != x->second->end() ; ++e)
+//                {
+//                    /* eclass overrides any variables set at this point */
+//                    this->operator[](e->first) = e->second;
 //                }
 //            }
 //        }

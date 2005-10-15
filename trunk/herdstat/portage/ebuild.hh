@@ -32,7 +32,7 @@
  * @brief Defines the ebuild class.
  */
 
-#include <set>
+#include <map>
 #include <herdstat/util/vars.hh>
 #include <herdstat/portage/version.hh>
 
@@ -68,8 +68,9 @@ namespace portage {
 //            virtual void do_perform_action_on(const std::string& line);
 
         private:
+//            typedef std::map<std::string, ebuild * > eclass_map;
             /// set of eclasses we've parsed; used for preventing recursion
-            std::set<std::string> _parsed;
+//            static eclass_map _eclasses;
             version_map _vmap;
     };
 
