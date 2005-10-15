@@ -87,41 +87,52 @@ vars::strip_ws(std::string& str)
 void
 vars::perform_action_on(const std::string& str)
 {
-    if (str.empty())
+    if (str.empty() or str[0] == '#')
         return;
 
-    /* it's a variable assignment, so insert the key/value */
-    if (str.find('=') != std::string::npos)
+    /* strip comments on the same line */
+    std::string line(str);
+    std::string::size_type pos = line.find_last_of("'\"");
+    if (pos == std::string::npos)
     {
-        std::string line(str);
-        std::string::size_type pos = line.find_first_not_of(" \t");
-        if (pos != std::string::npos)
-            line.erase(0, pos);
-
-        if (line.length() > 0 and line[0] != '#')
-        {
-            pos = line.find('=');
-            std::string key(line.substr(0, pos));
-            std::string val(line.substr(++pos));
-
-            /* handle leading/trailing whitespace */
-            strip_ws(key);
-            strip_ws(val);
- 
-            /* handle quotes */
-            if ((pos = val.find_first_of("'\"")) != std::string::npos)
-            {
-                val.erase(pos, pos + 1);
-                if ((pos = val.find_last_of("'\"")) != std::string::npos)
-                    val.erase(pos, pos + 1);
-            }
- 
-            this->erase(key);
-            this->insert(std::make_pair(key, val));
-        }
+        if ((pos = line.rfind('#')) != std::string::npos)
+            line.erase(pos);
+    }
+    else
+    {
+        if ((pos = line.find('#', pos)) != std::string::npos)
+            line.erase(pos);
     }
 
-    this->do_perform_action_on(str);
+    /* it's a variable assignment, so insert the key/value */
+    if (line.find('=') != std::string::npos)
+    {
+        if ((pos = line.find_first_not_of(" \t")) != std::string::npos)
+            line.erase(0, pos);
+
+        pos = line.find('=');
+        std::string key(line.substr(0, pos));
+        std::string val(line.substr(++pos));
+
+        /* handle leading/trailing whitespace */
+        strip_ws(key);
+        strip_ws(val);
+ 
+        /* handle quotes */
+        if ((pos = val.find_first_of("'\"")) != std::string::npos)
+        {
+            val.erase(pos, pos + 1);
+            if ((pos = val.find_last_of("'\"")) != std::string::npos)
+                val.erase(pos);
+        }
+        else if ((pos = val.rfind('#')) != std::string::npos)
+            val.erase(pos);
+ 
+        this->erase(key);
+        this->insert(std::make_pair(key, val));
+    }
+
+    this->do_perform_action_on(line);
 }
 /****************************************************************************
  * Read from our stream, saving any VARIABLE=["']value['"]
@@ -132,11 +143,11 @@ vars::perform_action_on(const std::string& str)
 void
 vars::do_read()
 {
-    this->set_defaults();
-
     std::string line;
     while (std::getline(this->stream(), line))
         this->perform_action_on(line);
+
+    this->set_defaults();
 
     /* loop through our map performing variable substitutions */
     iterator i, e;

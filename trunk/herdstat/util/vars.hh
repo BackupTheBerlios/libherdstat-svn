@@ -64,11 +64,6 @@ namespace util {
              */
             virtual void dump(std::ostream &s) const;
 
-            /// Set default variables to be present before substitution.
-            void set_defaults();
-
-            void perform_action_on(const std::string& line);
-
         protected:
             /// Strip leading/trailing whitespace
             void strip_ws(std::string& str);
@@ -82,6 +77,9 @@ namespace util {
             virtual void do_perform_action_on(const std::string& line) { }
 
         private:
+            void set_defaults();
+            void perform_action_on(const std::string& line);
+
             /** Perform elementary variable substitution.
              * @param v Variable.
              */
