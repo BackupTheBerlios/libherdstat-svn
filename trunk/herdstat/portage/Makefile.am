@@ -9,6 +9,7 @@ cc_sources = config.cc \
 	     find.cc \
 	     archs.cc \
 	     keywords.cc \
+	     license.cc \
 	     ebuild.cc \
 	     gentoo_email_address.cc \
 	     developer.cc \
@@ -28,6 +29,7 @@ hh_sources = exceptions.hh \
 	     find.hh \
 	     archs.hh \
 	     keywords.hh \
+	     license.hh \
 	     ebuild.hh \
 	     gentoo_email_address.hh \
 	     developer.hh \

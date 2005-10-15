@@ -8,6 +8,7 @@ tests = string \
 	algo \
 	version \
 	keyword \
+	license \
 	herds.xml \
 	devaway.xml \
 	userinfo.xml \
