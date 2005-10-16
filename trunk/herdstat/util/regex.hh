@@ -39,11 +39,14 @@
 #include <sys/types.h>
 #include <regex.h>
 
+#include <herdstat/util/container_base.hh>
+
 namespace herdstat {
 namespace util {
 
     /**
-     * POSIX Regular Expressions interface.
+     * @class Regex
+     * @brief POSIX Regular Expressions interface.
      */
 
     class Regex
@@ -137,6 +140,20 @@ namespace util {
              */
             inline bool operator!= (const Regex& that) const;
 
+            /** Determine if this regex is less than that regex.  Only
+             * compares uncompiled regex strings.
+             * @param that const reference to Regex object.
+             * @returns A boolean value.
+             */
+            inline bool operator< (const Regex& that) const;
+
+            /** Determine if this regex is greater than that regex.  Only
+             * compares uncompiled regex strings.
+             * @param that const reference to Regex object.
+             * @returns A boolean value.
+             */
+            inline bool operator> (const Regex& that) const;
+
             /** Get regular expression std::string.
              * @returns A std::string object.
              */
@@ -201,6 +218,18 @@ namespace util {
         return (_str != that._str);
     }
 
+    inline bool
+    Regex::operator< (const Regex& that) const
+    {
+        return (_str < that._str);
+    }
+
+    inline bool
+    Regex::operator> (const Regex& that) const
+    {
+        return (_str > that._str);
+    }
+
     inline const std::string&
     Regex::operator()() const
     {
@@ -235,6 +264,73 @@ namespace util {
     Regex::set_eflags(int eflags)
     {
         _eflags = eflags;
+    }
+
+    /**
+     * @class RegexMap
+     * @brief Acts like an unsorted map (ie. a vector of uniqie pairs) with
+     * Regex object mapped to objects of the specified type.  Provides a few
+     * map-compatible member functions such as insert, operator[], and find.
+     */
+
+    template <typename T>
+    class RegexMap
+        : public herdstat::util::VectorBase<std::pair<Regex, T> >
+    {
+        public:
+            typedef herdstat::util::VectorBase<std::pair<Regex, T> > base_type;
+            typedef typename base_type::container_type container_type;
+            typedef typename container_type::size_type size_type;
+            typedef typename container_type::difference_type difference_type;
+            typedef typename container_type::value_type value_type;
+            typedef typename container_type::iterator iterator;
+            typedef typename container_type::const_iterator const_iterator;
+            typedef Regex key_type;
+            typedef T mapped_type;
+
+            mapped_type& operator[](const key_type& k);
+            std::pair<iterator, bool> insert(const value_type& v);
+
+            inline iterator find(const std::string& str);
+            inline const_iterator find(const std::string& str) const;
+    };
+
+    template <typename T>
+    inline typename RegexMap<T>::iterator
+    RegexMap<T>::find(const std::string& str)
+    {
+        for (iterator i = this->begin() ; i != this->end() ; ++i)
+            if (i->first == str) return i;
+        return this->end();
+    }
+
+    template <typename T>
+    inline typename RegexMap<T>::const_iterator
+    RegexMap<T>::find(const std::string& str) const
+    {
+        for (const_iterator i = this->begin() ; i != this->end() ; ++i)
+            if (i->first == str) return i;
+        return this->end();
+    }
+
+    template <typename T>
+    typename RegexMap<T>::mapped_type&
+    RegexMap<T>::operator[](const key_type& k)
+    {
+        for (iterator i = this->begin() ; i != this->end() ; ++i)
+            if (i->first == k) return i->second;
+        return this->insert(this->end(), value_type(k, "")).second;
+    }
+
+    template <typename T>
+    std::pair<typename RegexMap<T>::iterator, bool>
+    RegexMap<T>::insert(const value_type& v)
+    {
+        for (iterator i = this->begin() ; i != this->end() ; ++i)
+            if (i->first == v.first)
+                return std::pair<iterator, bool>(this->end(), false);
+        return std::pair<iterator, bool>(
+                base_type::insert(this->end(), v), true);
     }
 
 } // namespace util

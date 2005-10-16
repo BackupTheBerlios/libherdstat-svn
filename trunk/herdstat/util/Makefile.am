@@ -3,9 +3,9 @@
 include $(top_builddir)/Makefile.am.common
 
 cc_sources = string.cc \
-	     misc.cc \
 	     regex.cc \
 	     file.cc \
+	     misc.cc \
 	     vars.cc \
 	     glob.cc \
 	     timer.cc \
@@ -13,9 +13,9 @@ cc_sources = string.cc \
 
 hh_sources = container_base.hh \
 	     string.hh \
-	     misc.hh \
 	     regex.hh \
 	     file.hh \
+	     misc.hh \
 	     vars.hh \
 	     glob.hh \
 	     timer.hh \
