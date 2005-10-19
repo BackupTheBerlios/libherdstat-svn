@@ -67,6 +67,7 @@ distcheck-hook:
 	@cp Makefile.am.common "$(PACKAGE)-$(VERSION)/_build/"
 
 dist-hook: ChangeLog TODO
+	find $(top_srcdir)/tests -type d -name '.svn' -exec rm -fr {} \; 2>/dev/null || true
 
 dist-sign: dist
 	gpg --armour --detach-sign "$(PACKAGE)-$(VERSION).tar.bz2"
