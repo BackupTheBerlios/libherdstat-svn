@@ -52,7 +52,7 @@ namespace portage {
              */
             Keyword(const std::string& kw);
 
-            /// Get mask character (or '\0' if empty).
+            /// Get mask character (or nul byte if empty).
             char mask() const { return _mask; }
             /// Get architecture.
             const std::string& arch() const { return _arch; }
@@ -195,7 +195,7 @@ namespace portage {
              * @param v vector of keywords strings
              * @param use_colors Use colors when formatting keywords string
              */
-            Keywords(const std::vector<std::string>& keywords,
+            Keywords(const std::vector<std::string>& v,
                      bool use_colors = false);
 
             /** Assign new ebuild path.

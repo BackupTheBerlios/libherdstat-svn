@@ -45,11 +45,14 @@ namespace portage {
     class License
     {
         public:
-            /// Default constructor.
+            /** Default constructor.
+             * @param validate Bail if an invalid license is found?
+             */
             License(bool validate = false);
 
             /** Constructor.
              * @param str License string as found in an ebuild.
+             * @param validate Bail if an invalid license is found?
              */
             License(const std::string& str, bool validate = false);
 
