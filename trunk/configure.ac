@@ -61,7 +61,7 @@ AC_ARG_WITH(test-data,
     AC_HELP_STRING([--with-test-data],[Directory where test data is located]),
     [TEST_DATA=$withval],[TEST_DATA=foo])
 if test x"$TEST_DATA" = "xfoo" ; then
-    TEST_DATA="${PWD}/../tests-common"
+    TEST_DATA="${PWD}/../test-data"
 fi
 AC_SUBST(TEST_DATA)
 
