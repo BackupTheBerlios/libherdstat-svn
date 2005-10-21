@@ -28,7 +28,7 @@ Testing sorted version_string container:
   foo-1.10.20050629
   foo-1.10.20050629-r1
 
-Testing version_map for ./portdir/app-misc/foo/foo-1.10.20050629-r1.ebuild: 
+Testing version_map
   P = foo-1.10.20050629
   PF = foo-1.10.20050629-r1
   PN = foo

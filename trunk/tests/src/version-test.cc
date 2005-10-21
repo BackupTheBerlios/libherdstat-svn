@@ -26,6 +26,8 @@
 
 #include <iostream>
 #include <cstdlib>
+#include <cassert>
+#include <unistd.h>
 
 #include <herdstat/exceptions.hh>
 #include <herdstat/portage/misc.hh>
@@ -68,7 +70,7 @@ int main(int argc, char **argv)
         }
 
         std::cout << std::endl
-            << "Testing version_map for " << ebuild << ": " << std::endl;
+            << "Testing version_map" << std::endl;
     
         const portage::version_map vmap(ebuild);
         portage::version_map::const_iterator v;

@@ -28,6 +28,9 @@
 #include <algorithm>
 #include <functional>
 #include <cstdlib>
+#include <cassert>
+#include <unistd.h>
+
 #include <herdstat/exceptions.hh>
 #include <herdstat/util/glob.hh>
 #include <herdstat/util/functional.hh>
@@ -39,6 +42,10 @@ int main()
     try
     {
         /* test Glob */
+        char *test_data = std::getenv("TEST_DATA");
+        assert(test_data);
+        chdir(test_data);
+
         const util::Glob results("portdir/*/*/*.ebuild");
         util::Glob::const_iterator i;
         for (i = results.begin() ; i != results.end() ; ++i)

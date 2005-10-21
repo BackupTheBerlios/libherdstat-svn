@@ -2,7 +2,7 @@
 
 SUBDIRS = src
 
-tests = string \
+export tests := string \
 	glob \
 	regex \
 	algo \
@@ -15,12 +15,8 @@ tests = string \
 	metadata.xml
 
 TESTS = $(foreach f, $(tests), $(f)-test.sh)
-TESTS_ENVIRONMENT = PORTDIR=portdir PORTDIR_OVERLAY=''
+TESTS_ENVIRONMENT = TEST_DATA=$(TEST_DATA) PORTDIR=$(TEST_DATA)/portdir PORTDIR_OVERLAY=''
 
 CLEANFILES = actual/* localstatedir/*cache*
 MAINTAINERCLEANFILES = Makefile.in *~
-EXTRA_DIST = $(TESTS) \
-	     common.sh \
-	     portdir \
-	     expected \
-	     localstatedir
+EXTRA_DIST = $(TESTS) common.sh expected

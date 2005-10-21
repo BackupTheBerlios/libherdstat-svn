@@ -8,8 +8,8 @@ AC_INIT(herdstat/util/string.cc)
 VERSION_MAJOR=0
 VERSION_MINOR=1
 VERSION_MICRO=0
-VERSION_SUFFIX=
-VERSION_SUFFIX_VERSION=
+VERSION_SUFFIX=p
+VERSION_SUFFIX_VERSION=2
 VERSION_FULL="$VERSION_MAJOR.$VERSION_MINOR.$VERSION_MICRO"
 
 if ! test -z "$VERSION_SUFFIX" ; then
@@ -55,6 +55,15 @@ AC_ARG_ENABLE(tests,
     [enable_tests=$enableval],[enable_tests=yes])
 AM_CONDITIONAL(BUILD_TESTS, test x$enable_tests != "xno")
 AC_MSG_RESULT([$enable_tests])
+
+dnl --with-test-data
+AC_ARG_WITH(test-data,
+    AC_HELP_STRING([--with-test-data],[Directory where test data is located]),
+    [TEST_DATA=$withval],[TEST_DATA=foo])
+if test x"$TEST_DATA" = "xfoo" ; then
+    TEST_DATA="${PWD}/../tests-common"
+fi
+AC_SUBST(TEST_DATA)
 
 dnl --enable-debug
 AC_MSG_CHECKING([whether to enable debugging code/flags])

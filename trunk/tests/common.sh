@@ -35,9 +35,3 @@ run_test() {
     eend ${rv}
     return ${rv}
 }
-
-run_herdstat() {
-    local lsd="${srcdir}/localstatedir"
-    run_test "$(get_caller ${1})" "${2}" "${srcdir}/../src/herdstat" \
-	"-T -L ${lsd} -A ${lsd}/devaway.xml -H ${lsd}/herds.xml ${3}" "${4}"
-}
