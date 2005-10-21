@@ -48,6 +48,13 @@ test x$sysconfdir = "xNONE" && sysconfdir="$ac_default_sysconfdir"
 AC_DEFINE_UNQUOTED(LOCALSTATEDIR, "$localstatedir/herdstat", [Local state directory])
 AC_DEFINE_UNQUOTED(SYSCONFDIR, "$sysconfdir", [System configuration directory])
 
+dnl --enable-tests
+AC_MSG_CHECKING([whether to build tests])
+AC_ARG_ENABLE(tests,
+    AC_HELP_STRING([--enable-tests],[Build tests]),
+    [enable_tests=$enableval],[enable_tests=yes])
+AM_CONDITIONAL(BUILD_TESTS, test x$enable_tests != "xno")
+
 dnl --enable-debug
 AC_MSG_CHECKING([whether to enable debugging code/flags])
 AC_ARG_ENABLE(debug,

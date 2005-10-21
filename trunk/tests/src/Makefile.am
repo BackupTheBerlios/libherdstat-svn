@@ -1,5 +1,7 @@
 include $(top_builddir)/Makefile.am.common
 
+if BUILD_TESTS
+
 noinst_PROGRAMS = string-test \
 		  glob-test \
 		  regex-test \
@@ -25,5 +27,7 @@ herds_xml_test_SOURCES = herds.xml-test.cc
 devaway_xml_test_SOURCES = devaway.xml-test.cc
 userinfo_xml_test_SOURCES = userinfo.xml-test.cc
 metadata_xml_test_SOURCES = metadata.xml-test.cc
+
+endif
 
 MAINTAINERCLEANFILES = Makefile.in *~ .loT

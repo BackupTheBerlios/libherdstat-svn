@@ -2,7 +2,7 @@
 #
 AUTOMAKE_OPTIONS = 1.8 dist-bzip2 no-dist-gzip
 
-SUBDIRS = herdstat doc
+SUBDIRS = doc herdstat tests
 
 MAINTAINERCLEANFILES = aclocal.m4 \
 		       configure \
@@ -18,13 +18,10 @@ pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = $(pc)
 
 DISTCLEANFILES = ChangeLog TODO $(pc)
-EXTRA_DIST = ChangeLog Makefile.am.common autogen.sh .todo tests libherdstat.pc.in
+EXTRA_DIST = ChangeLog Makefile.am.common autogen.sh .todo libherdstat.pc.in
 
 docs:
 	cd doc && $(MAKE) $@
-
-check:
-	cd tests && $(MAKE) $@
 
 srchtml:
 	@test -d ${PWD}/html || mkdir ${PWD}/html ; \
@@ -38,7 +35,7 @@ srchtml:
 	done
 
 TODO: .todo
-	@test -x $(prefix)/bin/devtodo && devtodo all --TODO
+	@test -x /usr/bin/devtodo && devtodo all --TODO
 
 clitimestamp:
 	@touch clitimestamp
