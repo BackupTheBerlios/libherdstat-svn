@@ -54,6 +54,7 @@ AC_ARG_ENABLE(tests,
     AC_HELP_STRING([--enable-tests],[Build tests]),
     [enable_tests=$enableval],[enable_tests=yes])
 AM_CONDITIONAL(BUILD_TESTS, test x$enable_tests != "xno")
+AC_MSG_RESULT([$enable_tests])
 
 dnl --enable-debug
 AC_MSG_CHECKING([whether to enable debugging code/flags])
