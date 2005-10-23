@@ -58,6 +58,7 @@ namespace portage {
 
             /** Assign new license string.
              * @param str License string as found in an ebuild.
+             * @param validate Bail if an invalid license is found?
              */
             inline void assign(const std::string& str, bool validate = false);
 
