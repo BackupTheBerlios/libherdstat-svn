@@ -1,7 +1,11 @@
 This file contains a summary of changes in released versions.  Please read the
 ChangeLog file for a more detailed listing of changes/bug fixes.
 
-0.1.0:
+0.1.0_p2:
+    - Added a few more tests.
+    - Fixed missing version in pkgconfig file.
+
+0.1.0_p1:
     - Removed util::getcols() and thus the ncurses checks, linking, etc.
     - Rewrote portage::config class.  It can no longer be used directly
       (private constructor) and instead can only be access via

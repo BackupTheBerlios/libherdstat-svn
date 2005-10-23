@@ -3,12 +3,16 @@
 SUBDIRS = src
 
 export tests = string \
+	container_base \
 	glob \
 	regex \
 	algo \
 	version \
 	keyword \
 	license \
+	ebuild \
+	find \
+	package_list \
 	herds.xml \
 	devaway.xml \
 	userinfo.xml \

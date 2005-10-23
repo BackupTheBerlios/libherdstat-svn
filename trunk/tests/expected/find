@@ -1,0 +1,14 @@
+Testing ebuild_which()
+  app-misc/foo/foo-1.10.20050629-r1.ebuild
+
+Testing find_package() with ambiguous package name
+  libfoo is ambigious, matches are:
+    media-libs/libfoo
+    sys-libs/libfoo
+
+Testing find_package()
+  sys-libs/pfft
+
+Testing find_package_regex()
+  Found app-lala/foomatic
+  Found app-misc/foo
