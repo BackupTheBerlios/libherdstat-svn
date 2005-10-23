@@ -153,7 +153,7 @@ namespace portage {
             std::string _arch;
             maskc _mask;
             const Archs& _valid_archs;
-            static const std::string _valid_masks;
+            static const char * const _valid_masks;
     };
 
     inline bool

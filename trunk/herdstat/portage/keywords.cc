@@ -24,6 +24,7 @@
 # include "config.h"
 #endif
 
+#include <cstring>
 #include <herdstat/util/misc.hh>
 #include <herdstat/util/string.hh>
 #include <herdstat/portage/exceptions.hh>
@@ -33,7 +34,7 @@
 namespace herdstat {
 namespace portage {
 /*** static members *********************************************************/
-const std::string Keyword::_valid_masks("-~");
+const char * const Keyword::_valid_masks = "-~";
 /****************************************************************************/
 Keyword::maskc::maskc() : _c('\0')
 {
@@ -41,7 +42,7 @@ Keyword::maskc::maskc() : _c('\0')
 /****************************************************************************/
 Keyword::maskc::maskc(const char c) : _c('\0')
 {
-    if (_valid_masks.find(c) == std::string::npos)
+    if (std::strchr(_valid_masks, c) == NULL)
         throw InvalidKeywordMask(c);
 
     _c = c;
@@ -75,7 +76,7 @@ Keyword::Keyword(const std::string& kw)
 void
 Keyword::parse(const std::string& kw)
 {
-    if (_valid_masks.find(kw[0]) != std::string::npos)
+    if (std::strchr(_valid_masks, kw[0]))
         _mask = kw[0];
 
     _arch = (_mask.empty() ? kw : kw.substr(1));
