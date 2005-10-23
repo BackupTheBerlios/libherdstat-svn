@@ -21,6 +21,23 @@
     <roles>Gentoo/BSD, cron, commonbox, shell-tools, cvs-utils, forensics, netmon, vim, web-apps security, recruitment</roles>
     <location>Daytona Beach, FL, USA</location>
   </user>
+  <user username="mrfoo">
+    <realname fullname="Simon Foo">
+      <firstname>Simon</firstname>
+      <familyname>Foo</familyname>
+    </realname>
+    <email role="gentoo">mrfoo@gentoo.org</email>
+    <joined>21 February 1976</joined>
+    <birthday>1 January 1920</birthday>
+    <location>Fort Lauderdale, FL, USA</location>
+  </user>
+  <user username="widowmaker">
+    <realname fullname="Sancho Widowmaker">
+        <firstname>Sancho</firstname>
+        <familyname>Widowmaker</familyname>
+      </realname>
+      <email role="gentoo">widowmaker@gentoo.org</email>
+  </user>
 </userlist>
 
 <!--
