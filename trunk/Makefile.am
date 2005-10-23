@@ -56,6 +56,7 @@ $(pc):
 		-e "s|\@exec_prefix\@|$(exec_prefix)|g" \
 		-e "s|\@libdir\@|$(libdir)|g" \
 		-e "s|\@includedir\@|$(includedir)|g" \
+		-e "s|\@VERSION\@|$(VERSION)|g" \
 		-e "s|\@VERSION_MAJOR\@|$(VERSION_MAJOR)|g" \
 		-e "s|\@VERSION_MINOR\@|$(VERSION_MINOR)|g" \
 		libherdstat.pc.in > $@
