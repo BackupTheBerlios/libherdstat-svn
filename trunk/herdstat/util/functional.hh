@@ -214,6 +214,18 @@ namespace util {
     };
 
     /**
+     * @struct EmptyFirst
+     * @brief Function object for instantiating a new std::pair<string, T> with
+     * the 'first' member as an empty string.
+     */
+    struct EmptyFirst
+    {
+        template <typename T>
+        std::pair<std::string, T> operator()(const T& v) const
+        { return std::pair<std::string, T>("", v); }
+    };
+
+    /**
      * @struct DeleteAndNullify
      * @brief Function object that deletes the given pointer and sets it to
      * NULL.
