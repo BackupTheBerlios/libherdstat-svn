@@ -27,6 +27,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <herdstat/exceptions.hh>
+#include <herdstat/xml/init.hh>
 #include <herdstat/portage/herds_xml.hh>
 
 using namespace herdstat;
@@ -39,6 +40,8 @@ main(int argc, char **argv)
     {
         if (argc != 2)
             throw Exception("usage: herds.xml-test <path>");
+
+        herdstat::xml::GlobalInit();
 
         herds_xml h;
         h.parse(argv[1]);

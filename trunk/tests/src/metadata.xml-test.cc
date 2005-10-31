@@ -28,6 +28,7 @@
 #include <iostream>
 #include <herdstat/exceptions.hh>
 #include <herdstat/util/string.hh>
+#include <herdstat/xml/init.hh>
 #include <herdstat/portage/metadata_xml.hh>
 
 using namespace herdstat;
@@ -40,6 +41,8 @@ main(int argc, char **argv)
     {
         if (argc != 2)
             throw Exception("usage: metadata_xml <path>");
+
+        herdstat::xml::GlobalInit();
 
         std::string path(argv[1]);
         metadata_xml meta(path);

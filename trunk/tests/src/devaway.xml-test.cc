@@ -29,6 +29,7 @@
 #include <herdstat/exceptions.hh>
 #include <herdstat/util/string.hh>
 #include <herdstat/util/file.hh>
+#include <herdstat/xml/init.hh>
 #include <herdstat/portage/devaway_xml.hh>
 
 using namespace herdstat;
@@ -42,6 +43,8 @@ main(int argc, char **argv)
     {
         if (argc != 2)
             throw Exception("usage: devaway_xml <path>");
+
+        herdstat::xml::GlobalInit();
 
         std::string path(argv[1]);
         assert(util::is_file(path));

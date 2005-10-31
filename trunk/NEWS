@@ -1,6 +1,14 @@
 This file contains a summary of changes in released versions.  Please read the
 ChangeLog file for a more detailed listing of changes/bug fixes.
 
+0.1.1:
+    - Added util::EmptyFirst function object for instantiating a
+      std::pair<std::string, T> with the 'first' member as an empty
+      string.
+    - xml::Init now has a private constructor and a friend function
+      GlobalInit() so that access can be controlled and we're guaranteed
+      to only have one instance.
+
 0.1.0_p2:
     - Added a few more tests.
     - Fixed missing version in pkgconfig file.

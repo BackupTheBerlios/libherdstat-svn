@@ -28,6 +28,7 @@
 #include <cstdlib>
 #include <unistd.h>
 #include <herdstat/exceptions.hh>
+#include <herdstat/xml/init.hh>
 #include <herdstat/portage/userinfo_xml.hh>
 
 using namespace herdstat;
@@ -40,6 +41,8 @@ main(int argc, char **argv)
     {
         if (argc != 3)
             throw Exception("usage: userinfo_xml <path> <dev>");
+
+        herdstat::xml::GlobalInit();
 
         std::string path(argv[1]);
         std::string dev(argv[2]);
