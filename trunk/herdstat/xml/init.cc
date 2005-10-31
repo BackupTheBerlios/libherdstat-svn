@@ -28,8 +28,6 @@
 
 namespace herdstat {
 namespace xml {
-/*** static members *********************************************************/
-::xml::init Init::_init;
 /****************************************************************************/
 Init::Init(bool validate)
 {

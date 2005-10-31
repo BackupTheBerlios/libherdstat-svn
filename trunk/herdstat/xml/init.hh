@@ -44,12 +44,19 @@ namespace xml {
 
     class Init
     {
-        public:
+        private:
+            friend Init& GlobalInit(bool validate = false);
             Init(bool validate = false);
 
-        private:
-            static ::xml::init _init;
+            ::xml::init _init;
     };
+
+    inline Init&
+    GlobalInit(bool validate)
+    {
+        static Init i(validate);
+        return i;
+    }
 
 } // namespace xml
 } // namespace herdstat
