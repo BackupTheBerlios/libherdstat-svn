@@ -223,6 +223,11 @@ namespace util {
         template <typename T>
         std::pair<std::string, T> operator()(const T& v) const
         { return std::pair<std::string, T>("", v); }
+
+        template <typename T>
+        std::pair<std::string, T>
+        operator()(const std::pair<std::string, T>& v) const
+        { return std::pair<std::string, T>("", v.second); }
     };
 
     /**
