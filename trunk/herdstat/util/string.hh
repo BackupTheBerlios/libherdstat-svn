@@ -129,6 +129,15 @@ namespace util {
         os << v;
         return os.str();
     }
+
+    template <>
+    inline std::string
+    stringify<bool>(const bool& v)
+    {
+        std::ostringstream os;
+        os << std::boolalpha << v;
+        return os.str();
+    }
     /************************************************************************/
     /** Convert a std::string to a type.
      * @param s A std::string object.
