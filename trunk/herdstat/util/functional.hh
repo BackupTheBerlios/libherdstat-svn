@@ -214,6 +214,21 @@ namespace util {
     };
 
     /**
+     * @struct SecondEqual
+     * @brief Function object for comparing a string with the 'second' member of
+     * a pair<string, string>.
+     */
+    struct SecondEqual : std::binary_function<std::string,
+                         std::pair<std::string, std::string> , bool>
+    {
+        bool operator()(const std::string& str,
+                        const std::pair<std::string, std::string>& p) const
+        {
+            return (str == p.second);
+        }
+    };
+
+    /**
      * @struct EmptyFirst
      * @brief Function object for instantiating a new std::pair<string, T> with
      * the 'first' member as an empty string.
