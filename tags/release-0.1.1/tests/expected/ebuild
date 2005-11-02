@@ -1,0 +1,12 @@
+DESCRIPTION = libfoo for writing foomatic apps
+HOMEPAGE = http://www.gentoo.org/proj/en/libfoo
+KEYWORDS = -* ~alpha amd64 -x86-fbsd x86 ~sparc
+LICENSE = || ( GPL-2 BSD )
+MY_P = ${MY_P}
+P = libfoo-1.9
+PF = libfoo-1.9-r0
+PN = libfoo
+PR = r0
+PV = 1.9
+PVR = 1.9-r0
+SRC_URI = mirror://gentoo/libfoo-1.9.tar.gz

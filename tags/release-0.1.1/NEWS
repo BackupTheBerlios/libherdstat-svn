@@ -1,0 +1,39 @@
+This file contains a summary of changes in released versions.  Please read the
+ChangeLog file for a more detailed listing of changes/bug fixes.
+
+0.1.1:
+    - Added util::EmptyFirst function object for instantiating a
+      std::pair<std::string, T> with the 'first' member as an empty
+      string.
+    - xml::Init now has a private constructor and a friend function
+      GlobalInit() so that access can be controlled and we're guaranteed
+      to only have one instance.
+
+0.1.0_p2:
+    - Added a few more tests.
+    - Fixed missing version in pkgconfig file.
+
+0.1.0_p1:
+    - Removed util::getcols() and thus the ncurses checks, linking, etc.
+    - Rewrote portage::config class.  It can no longer be used directly
+      (private constructor) and instead can only be access via
+      portage::GlobalConfig(), which returns a const reference to a local
+      static instance.
+    - util::BaseFileObject now defines read() and close(), calling pure
+      virtuals, do_read() and do_close() respectively.
+
+    New features:
+	- Added an interface to architecture keywords.  Provides a Keyword
+	  class that represents a single architecture keyword.  Also provides
+	  a Keyword container, Keywords, that besides holding keywords, is
+	  able to produce a sorted, colored (if desired) keywords string.
+	- Added a few more function objects: portage::IsCategory,
+	  util::First{Less,Greater}, util::Second{Less,Greater}.
+
+0.1.0_beta1:
+    Broke out libherdstat from herdstat proper into its own package.
+
+    Bug fixes:
+     - Fixed uncaught exception thrown when a projectxml file doesnt exist when
+       parsing herds.xml that caused parsing to cease before finished.  Thanks
+       to Diego (Flameeyes) for catching this one.
