@@ -145,6 +145,13 @@ namespace util {
     {
         return join(v);
     }
+
+    template <>
+    inline std::string
+    stringify<std::string>(const std::string& v)
+    {
+        return v;
+    }
     /************************************************************************/
     /** Convert a std::string to a type.
      * @param s A std::string object.
