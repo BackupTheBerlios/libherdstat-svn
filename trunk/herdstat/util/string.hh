@@ -138,6 +138,13 @@ namespace util {
         os << std::boolalpha << v;
         return os.str();
     }
+
+    template <>
+    inline std::string
+    stringify<std::vector<std::string> >(const std::vector<std::string>& v)
+    {
+        return join(v);
+    }
     /************************************************************************/
     /** Convert a std::string to a type.
      * @param s A std::string object.
@@ -156,6 +163,13 @@ namespace util {
             throw BadCast("Failed to cast '"+s+"'.");
 
         return v;
+    }
+
+    template <>
+    inline std::vector<std::string>
+    destringify<std::vector<std::string> >(const std::string& s)
+    {
+        return split(s);
     }
     /************************************************************************/
     template <>
