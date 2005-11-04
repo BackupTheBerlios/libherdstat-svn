@@ -44,6 +44,7 @@ namespace util {
      * @struct Dereference
      * @brief Function object that returns a dereferenced pointer to type T.
      */
+
     struct Dereference
     {
         template <typename T>
@@ -55,6 +56,7 @@ namespace util {
      * @brief Function object that dereferences the given pointers and then
      * compares their values via operator<.
      */
+
     template <typename T>
     struct DereferenceLess
         : std::binary_function<const T*, const T*, bool>
@@ -67,6 +69,7 @@ namespace util {
      * @brief Function object that dereferences the given pointers and then
      * compares their values via operator<.
      */
+
     template <typename T>
     struct DereferenceGreater
         : std::binary_function<const T*, const T*, bool>
@@ -79,6 +82,7 @@ namespace util {
      * @brief Function object that dereferences the given pointers and then
      * compares their values via operator==.
      */
+
     template <typename T>
     struct DereferenceEqual
         : std::binary_function<const T*, const T*, bool>
@@ -92,6 +96,7 @@ namespace util {
      * operator< against the given string.  Assumes the pointer type defines
      * operator<(std::string).
      */
+
     template <typename T>
     struct DereferenceStrLess
         : std::binary_function<const T*, std::string, bool>
@@ -105,6 +110,7 @@ namespace util {
      * operator> against the given string.  Assumes the pointer type defines
      * operator>(std::string).
      */
+
     template <typename T>
     struct DereferenceStrGreater
         : std::binary_function<const T*, std::string, bool>
@@ -118,6 +124,7 @@ namespace util {
      * operator== against the given string.  Assumes the pointer type defines
      * operator==(std::string).
      */
+
     template <typename T>
     struct DereferenceStrEqual
         : std::binary_function<const T*, std::string, bool>
@@ -126,10 +133,35 @@ namespace util {
     };
 
     /**
+     * @struct First
+     * @brief Returns the 'first' member of a std::pair<K, V>.
+     */
+
+    struct First
+    {
+        template <typename K, typename V>
+        const K& operator()(const std::pair<K, V>& p) const
+        { return p.first; }
+    };
+
+    /**
+     * @struct Second
+     * @brief Returns the 'second' member of a std::pair<K, V>.
+     */
+
+    struct Second
+    {
+        template <typename K, typename V>
+        const V& operator()(const std::pair<K, V>& p) const
+        { return p.second; }
+    };
+
+    /**
      * @struct LengthLess
      * @brief Function object that determines if length of v1 is less than
      * length of v2.  Implicit interface assumes T offers a length() member.
      */
+
     struct LengthLess
     {
         template <typename T>
@@ -144,6 +176,7 @@ namespace util {
      * @brief Function object that determines if length of v1 is greater than
      * length of v2.  Implicit interface assumes T offers a length() member.
      */
+
     struct LengthGreater
     {
         template <typename T>
@@ -158,6 +191,7 @@ namespace util {
      * @brief Function object for comparing 'first' members of a pair<T, U>
      * with operator<.
      */
+
     struct FirstLess
     {
         template <typename T, typename U>
@@ -173,6 +207,7 @@ namespace util {
      * @brief Function object for comparing 'first' members of a pair<T, U>
      * with operator>.
      */
+
     struct FirstGreater
     {
         template <typename T, typename U>
@@ -188,6 +223,7 @@ namespace util {
      * @brief Function object for comparing 'second' members of a pair<T, U>
      * with operator<.
      */
+
     struct SecondLess
     {
         template <typename T, typename U>
@@ -203,6 +239,7 @@ namespace util {
      * @brief Function object for comparing 'second' members of a pair<T, U>
      * with operator>.
      */
+
     struct SecondGreater
     {
         template <typename T, typename U>
@@ -218,6 +255,7 @@ namespace util {
      * @brief Function object for comparing a string with the 'second' member of
      * a pair<string, string>.
      */
+
     struct SecondEqual : std::binary_function<std::string,
                          std::pair<std::string, std::string> , bool>
     {
@@ -233,6 +271,7 @@ namespace util {
      * @brief Function object for instantiating a new std::pair<string, T> with
      * the 'first' member as an empty string.
      */
+
     struct EmptyFirst
     {
         template <typename T>
@@ -250,6 +289,7 @@ namespace util {
      * @brief Function object that deletes the given pointer and sets it to
      * NULL.
      */
+
     struct DeleteAndNullify
     {
         template <typename T>
@@ -268,6 +308,7 @@ namespace util {
      * @brief Function object that calls T::append(const U&).
      * U defaults to T::value_type.
      */
+
     template <typename T, typename U = typename T::value_type>
     struct Appender : std::binary_function<U, T* const, void>
     {
@@ -278,6 +319,7 @@ namespace util {
      * @struct FileExists
      * @brief Function object that returns util::file_exists().
      */
+
     struct FileExists
     {
         bool operator()(const std::string& path) const
@@ -288,6 +330,7 @@ namespace util {
      * @struct IsDir
      * @brief Function object that returns util::is_dir().
      */
+
     struct IsDir
     {
         bool operator()(const std::string& path) const
@@ -298,6 +341,7 @@ namespace util {
      * @struct IsFile
      * @brief Function object that returns util::is_file().
      */
+
     struct IsFile
     {
         bool operator()(const std::string& path) const
@@ -308,6 +352,7 @@ namespace util {
      * @struct regexMatch
      * @brief Function object for using Regex class with std algorithms.
      */
+
     struct regexMatch : std::binary_function<Regex, std::string, bool>
     {
         bool operator() (const Regex &re, const std::string& s) const
@@ -319,6 +364,7 @@ namespace util {
      * @brief Function object for using globs (pattern matching) with std
      * algorithms.
      */
+
     struct patternMatch : std::binary_function<std::string, std::string, bool>
     {
         bool operator() (const std::string& path,
