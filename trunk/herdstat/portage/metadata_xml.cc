@@ -57,6 +57,9 @@ metadata_xml::parse(const std::string& path)
     if (not path.empty()) this->set_path(path);
     if (not util::file_exists(this->path())) throw FileException(this->path());
     this->parse_file(this->path().c_str());
+
+    if (_data.longdesc().empty() and not _longdesc.empty())
+        _data.set_longdesc(_longdesc);
 }
 /****************************************************************************/
 bool
@@ -127,7 +130,9 @@ metadata_xml::text(const std::string& text)
         const_cast<Developer&>(*_cur_dev).set_name(_cur_dev->name() + text);
     else if (in_desc)
         const_cast<Developer&>(*_cur_dev).set_role(text);
-    else if (in_en_longdesc or in_longdesc)
+    else if (in_en_longdesc)
+        _longdesc += text;
+    else if (in_longdesc)
         _data.set_longdesc(_data.longdesc() + text);
     return true;
 }

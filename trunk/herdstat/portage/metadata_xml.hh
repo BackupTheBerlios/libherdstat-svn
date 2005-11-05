@@ -96,6 +96,7 @@ namespace portage {
                  in_en_longdesc;
 
             Developers::iterator _cur_dev;
+            std::string _longdesc;
     };
 
     inline const metadata& metadata_xml::data() const { return _data; }
