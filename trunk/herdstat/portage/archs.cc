@@ -32,22 +32,9 @@
 namespace herdstat {
 namespace portage {
 /****************************************************************************/
-Archs::Archs()
-{
-}
-/****************************************************************************/
 Archs::Archs(const std::string& portdir)
     : util::BaseFile(portdir+ARCH_LIST)
 {
-    this->read();
-}
-/****************************************************************************/
-void
-Archs::init(const std::string& pd)
-{
-    _portdir.assign(pd);
-    this->set_path(_portdir+ARCH_LIST);
-    this->open();
     this->read();
 }
 /****************************************************************************/

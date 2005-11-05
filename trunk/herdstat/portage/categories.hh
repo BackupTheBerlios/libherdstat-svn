@@ -60,10 +60,6 @@ namespace portage {
             virtual void do_read();
 
         private:
-            friend class config;
-            Categories(bool validate = false);
-            void init(const std::string& portdir);
-
             std::string _portdir;
             const bool _validate;
     };

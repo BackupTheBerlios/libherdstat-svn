@@ -37,24 +37,10 @@
 namespace herdstat {
 namespace portage {
 /****************************************************************************/
-Categories::Categories(bool validate)
-    : util::BaseFile(), _portdir(), _validate(validate)
-{
-}
-/****************************************************************************/
 Categories::Categories(const std::string& portdir, bool validate)
     : util::BaseFile(portdir+CATEGORIES), _portdir(portdir),
       _validate(validate)
 {
-    this->read();
-}
-/****************************************************************************/
-void
-Categories::init(const std::string& pd)
-{
-    _portdir.assign(pd);
-    this->set_path(_portdir+CATEGORIES);
-    this->open();
     this->read();
 }
 /****************************************************************************/
@@ -67,7 +53,7 @@ struct BailIfInvalid : std::binary_function<std::string, std::string, void>
             throw QAException("invalid category '"+cat+"'.");
     }
 };
-
+/****************************************************************************/
 void
 Categories::do_read()
 {

@@ -57,13 +57,6 @@ namespace portage {
             virtual void do_read();
 
         private:
-            friend class config;
-
-            /// Default constructor for config class.
-            Archs();
-            /// Initialize and read arch.list.
-            void init(const std::string& portdir);
-
             std::string _portdir;
     };
 

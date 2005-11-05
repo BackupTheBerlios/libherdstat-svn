@@ -24,6 +24,7 @@
 # include "config.h"
 #endif
 
+#include <cstdlib>
 #include <herdstat/util/string.hh>
 #include <herdstat/portage/config.hh>
 
@@ -31,7 +32,7 @@ namespace herdstat {
 namespace portage {
 /****************************************************************************/
 config::config()
-    : _vars(), _portdir(), _overlays(), _cats(), _archs()
+    : _vars(), _portdir(), _overlays(), _cats(NULL), _archs(NULL)
 {
     /* read default config */
     _vars.read("/etc/make.globals");
@@ -64,10 +65,12 @@ config::config()
         if (not x->second.empty())
             _overlays = util::split(x->second);
     }
+}
 
-    /* initialize categories and archs now that we know PORTDIR */
-    _cats.init(_portdir);
-    _archs.init(_portdir);
+config::~config()
+{
+    if (_cats) delete _cats;
+    if (_archs) delete _archs;
 }
 /****************************************************************************/
 } // namespace portage

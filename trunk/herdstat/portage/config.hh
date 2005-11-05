@@ -76,20 +76,34 @@ namespace portage {
 
             /// Constructor.
             config();
+            /// Destructor.
+            ~config();
 
             util::vars _vars;
             std::string _portdir;
             std::vector<std::string> _overlays;
-            Categories _cats;
-            Archs _archs;
+            mutable Categories *_cats;
+            mutable Archs *_archs;
     };
 
     inline const std::string& config::portdir() const { return _portdir; }
     inline const std::vector<std::string>& config::overlays() const
     { return _overlays; }
-    inline const Categories& config::categories() const { return _cats; }
-    inline const Archs& config::archs() const { return _archs; }
-    
+
+    inline const Categories&
+    config::categories() const
+    {
+        if (not _cats) _cats = new Categories(_portdir);
+        return *_cats;
+    }
+
+    inline const Archs&
+    config::archs() const
+    {
+        if (not _archs) _archs = new Archs(_portdir);
+        return *_archs;
+    }
+
     inline std::string
     config::operator[] (const std::string& var) const
     {
