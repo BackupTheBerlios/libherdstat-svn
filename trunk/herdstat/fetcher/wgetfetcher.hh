@@ -44,10 +44,10 @@ namespace herdstat {
     {
         public:
             /// Default constructor.
-            WgetFetcher() { }
+            WgetFetcher();
 
             /// Destructor.
-            virtual ~WgetFetcher() { }
+            virtual ~WgetFetcher();
 
             /** Save url to path.
              * @param url URL string.

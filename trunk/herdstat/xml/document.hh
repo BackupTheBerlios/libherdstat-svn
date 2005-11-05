@@ -47,7 +47,7 @@ namespace xml {
      * @brief Represents an XML document.
      */
 
-    template <class H>
+    template <typename H>
     class Document : public parsable
     {
         public:
@@ -62,7 +62,7 @@ namespace xml {
             Document(const std::string& path);
 
             /// Destructor.
-            virtual ~Document() { }
+            virtual ~Document();
 
             /// Get pointer to underlying handler.
             H *handler() const { return this->_handler.get(); }
@@ -76,10 +76,10 @@ namespace xml {
             const std::auto_ptr<H> _handler;    /* content handler */
     };
 
-    template <class H>
+    template <typename H>
     Document<H>::Document() : parsable(), _handler(new H()) { }
 
-    template <class H>
+    template <typename H>
     Document<H>::Document(const std::string &path)
         : parsable(path), _handler(new H())
     {
@@ -89,7 +89,12 @@ namespace xml {
         this->parse();
     }
 
-    template <class H>
+    template <typename H>
+    Document<H>::~Document()
+    {
+    }
+
+    template <typename H>
     void
     Document<H>::parse(const std::string &path)
     {

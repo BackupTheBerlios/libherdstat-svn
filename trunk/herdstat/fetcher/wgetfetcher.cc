@@ -30,6 +30,14 @@
 
 namespace herdstat {
 
+WgetFetcher::WgetFetcher()
+{
+}
+
+WgetFetcher::~WgetFetcher()
+{
+}
+
 bool
 WgetFetcher::fetch(const std::string& url, const std::string& path) const
 {

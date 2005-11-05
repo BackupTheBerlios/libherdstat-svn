@@ -36,6 +36,14 @@
 
 namespace herdstat {
 
+CurlFetcher::CurlFetcher()
+{
+}
+
+CurlFetcher::~CurlFetcher()
+{
+}
+
 bool
 CurlFetcher::fetch(const std::string& url, const std::string& path) const
 {

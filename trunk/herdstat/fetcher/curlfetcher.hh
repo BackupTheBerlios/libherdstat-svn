@@ -44,10 +44,10 @@ namespace herdstat {
     {
         public:
             /// Default constructor.
-            CurlFetcher() { }
+            CurlFetcher();
 
             /// Destructor.
-            virtual ~CurlFetcher() { }
+            virtual ~CurlFetcher();
 
             /** Fetch URL and save to path.
              * @param url URL string.

@@ -61,22 +61,22 @@ namespace util {
             typedef typename container_type::difference_type difference_type;
 
             /// Default constructor.
-            ContainerBase() { }
+            ContainerBase();
 
             /** Constructor.
              * @param c const reference to container_type.
              */
-            explicit ContainerBase(const container_type& c) : _c(c) { }
+            explicit ContainerBase(const container_type& c);
 
             /** Constructor.  Initialize with range [begin,end).
              * @param begin Beginning iterator.
              * @param end Ending iterator.
              */
             template <typename In>
-            ContainerBase(In begin, In end) : _c(begin, end) { }
+            ContainerBase(In begin, In end);
 
             /// Destructor.
-            virtual ~ContainerBase() { }
+            virtual ~ContainerBase();
 
             //@{
             /// Operations common among all standard containers.
@@ -112,6 +112,29 @@ namespace util {
             container_type _c;
     };
 
+    template <typename T>
+    ContainerBase<T>::ContainerBase()
+    {
+    }
+
+    template <typename T>
+    ContainerBase<T>::ContainerBase(const container_type& c)
+        : _c(c)
+    {
+    }
+
+    template <typename T>
+    template <typename In>
+    ContainerBase<T>::ContainerBase(In begin, In end)
+        : _c(begin, end)
+    {
+    }
+
+    template <typename T>
+    ContainerBase<T>::~ContainerBase()
+    {
+    }
+
     /**
      * @class VectorBase
      * @brief Base class template for classes acting like vector<T>.
@@ -129,12 +152,12 @@ namespace util {
             typedef typename container_type::iterator iterator;
             typedef typename container_type::const_iterator const_iterator;
 
-            VectorBase() { }
-            VectorBase(const container_type& c) : base_type(c) { }
+            VectorBase();
+            VectorBase(const container_type& c);
             template <typename In>
-            VectorBase(In begin, In end) : base_type(begin, end) { }
+            VectorBase(In begin, In end);
 
-            virtual ~VectorBase() { }
+            virtual ~VectorBase();
 
             template <typename In>
             void assign(In begin, In end)
@@ -180,6 +203,29 @@ namespace util {
             { this->container().insert(pos, begin, end); }
     };
 
+    template <typename T>
+    VectorBase<T>::VectorBase()
+    {
+    }
+
+    template <typename T>
+    VectorBase<T>::VectorBase(const container_type& c)
+        : base_type(c)
+    {
+    }
+    
+    template <typename T>
+    template <typename In>
+    VectorBase<T>::VectorBase(In begin, In end)
+        : base_type(begin, end)
+    {
+    }
+
+    template <typename T>
+    VectorBase<T>::~VectorBase()
+    {
+    }
+
     /**
      * @class SetBase
      * @brief Base class template for classes that act like a set<T>.
@@ -200,12 +246,12 @@ namespace util {
             typedef Compare key_compare;
             typedef Compare value_compare;
 
-            SetBase() { }
-            SetBase(const container_type& c) : base_type(c) { }
+            SetBase();
+            SetBase(const container_type& c);
             template <class In>
-            SetBase(In begin, In end) : base_type(begin, end) { }
+            SetBase(In begin, In end);
 
-            virtual ~SetBase() { }
+            virtual ~SetBase();
 
             std::pair<iterator, bool> insert(const value_type& v)
             { return this->container().insert(v); }
@@ -241,6 +287,29 @@ namespace util {
             { return this->container().equal_range(k); }
     };
 
+    template <typename T, typename Compare>
+    SetBase<T, Compare>::SetBase()
+    {
+    }
+
+    template <typename T, typename Compare>
+    SetBase<T, Compare>::SetBase(const container_type& c)
+        : base_type(c)
+    {
+    }
+    
+    template <typename T, typename Compare>
+    template <class In>
+    SetBase<T, Compare>::SetBase(In begin, In end)
+        : base_type(begin, end)
+    {
+    }
+
+    template <typename T, typename Compare>
+    SetBase<T, Compare>::~SetBase()
+    {
+    }
+
     /**
      * @class MapBase
      * @brief Base class template for classes that act like a map<K,V>.
@@ -262,12 +331,12 @@ namespace util {
             typedef Compare key_compare;
             typedef typename container_type::value_compare value_compare;
 
-            MapBase() { }
-            MapBase(const container_type& c) : base_type(c) { }
+            MapBase();
+            MapBase(const container_type& c);
             template <typename In>
-            MapBase(In begin, In end) : base_type(begin, end) { }
+            MapBase(In begin, In end);
 
-            virtual ~MapBase() { }
+            virtual ~MapBase();
 
             mapped_type& operator[](const key_type& k)
             { return (this->container())[k]; }
@@ -313,6 +382,29 @@ namespace util {
             equal_range(const key_type& k) const
             { return this->container().equal_range(k); }
     };
+
+    template <typename K, typename V, typename Compare>
+    MapBase<K,V,Compare>::MapBase()
+    {
+    }
+    
+    template <typename K, typename V, typename Compare>
+    MapBase<K,V,Compare>::MapBase(const container_type& c) 
+        : base_type(c)
+    {
+    }
+    
+    template <typename K, typename V, typename Compare>
+    template <typename In>
+    MapBase<K,V,Compare>::MapBase(In begin, In end)
+        : base_type(begin, end)
+    {
+    }
+
+    template <typename K, typename V, typename Compare>
+    MapBase<K,V,Compare>::~MapBase()
+    {
+    }
 
 } // namespace util
 } // namespace herdstat
