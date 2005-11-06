@@ -35,7 +35,7 @@
 #include <string>
 #include <herdstat/util/container_base.hh>
 
-#define PKGLIST_RESERVE            10130
+#define PKGLIST_RESERVE            10250
 
 namespace herdstat {
 namespace portage {

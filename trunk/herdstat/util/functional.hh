@@ -252,11 +252,27 @@ namespace util {
 
     /**
      * @struct SecondEqual
+     * @brief Function object for comparing 'second' members of a pair<T, U>
+     * with operator==.
+     */
+
+    struct SecondEqual
+    {
+        template <typename T, typename U>
+        bool operator()(const std::pair<T, U>& p1,
+                        const std::pair<T, U>& p2) const
+        {
+            return (p1.second == p2.second);
+        }
+    };
+
+    /**
+     * @struct SecondStrEqual
      * @brief Function object for comparing a string with the 'second' member of
      * a pair<string, string>.
      */
 
-    struct SecondEqual : std::binary_function<std::string,
+    struct SecondStrEqual : std::binary_function<std::string,
                          std::pair<std::string, std::string> , bool>
     {
         bool operator()(const std::string& str,
