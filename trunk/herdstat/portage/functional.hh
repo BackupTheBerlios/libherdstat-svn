@@ -61,6 +61,17 @@ namespace portage {
     };
 
     /**
+     * @struct Email
+     * Returns T::email().
+     */
+
+    struct Email
+    {
+        template <typename T>
+        const std::string& operator()(const T& v) const { return v.email(); }
+    };
+
+    /**
      * @struct UserRegexMatch
      * @brief Compares regex against T::user().
      */
