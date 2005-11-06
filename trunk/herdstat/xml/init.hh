@@ -33,6 +33,7 @@
  */
 
 #include <xmlwrapp/init.h>
+#include <herdstat/noncopyable.hh>
 
 namespace herdstat {
 namespace xml {
@@ -42,16 +43,16 @@ namespace xml {
      * Calls underlying libxml2 initializations.
      */
 
-    class Init
+    class Init : private herdstat::noncopyable
     {
         private:
-            friend Init& GlobalInit(bool validate = false);
+            friend const Init& GlobalInit(bool validate = false);
             Init(bool validate = false);
 
             ::xml::init _init;
     };
 
-    inline Init&
+    inline const Init&
     GlobalInit(bool validate)
     {
         static Init i(validate);
