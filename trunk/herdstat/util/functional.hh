@@ -139,9 +139,9 @@ namespace util {
 
     struct First
     {
-        template <typename K, typename V>
-        const K& operator()(const std::pair<K, V>& p) const
-        { return p.first; }
+        template <typename T>
+        const typename T::first_type&
+        operator()(const T& v) { return v.first; }
     };
 
     /**
@@ -151,9 +151,9 @@ namespace util {
 
     struct Second
     {
-        template <typename K, typename V>
-        const V& operator()(const std::pair<K, V>& p) const
-        { return p.second; }
+        template <typename T>
+        const typename T::second_type&
+        operator()(const T& v) { return v.second; }
     };
 
     /**
@@ -194,11 +194,10 @@ namespace util {
 
     struct FirstLess
     {
-        template <typename T, typename U>
-        bool operator()(const std::pair<T, U>& p1,
-                        const std::pair<T, U>& p2) const
+        template <typename T>
+        bool operator()(const T& v1, const T& v2) const
         {
-            return (p1.first < p2.first);
+            return (v1.first < v2.first);
         }
     };
 
@@ -210,11 +209,10 @@ namespace util {
 
     struct FirstGreater
     {
-        template <typename T, typename U>
-        bool operator()(const std::pair<T, U>& p1,
-                        const std::pair<T, U>& p2) const
+        template <typename T>
+        bool operator()(const T& v1, const T& v2) const
         {
-            return (p1.first > p2.first);
+            return (v1.first > v2.first);
         }
     };
 
@@ -226,11 +224,10 @@ namespace util {
 
     struct SecondLess
     {
-        template <typename T, typename U>
-        bool operator()(const std::pair<T, U>& p1,
-                        const std::pair<T, U>& p2) const
+        template <typename T>
+        bool operator()(const T& v1, const T& v2) const
         {
-            return (p1.second < p2.second);
+            return (v1.second < v2.second);
         }
     };
 
@@ -242,11 +239,10 @@ namespace util {
 
     struct SecondGreater
     {
-        template <typename T, typename U>
-        bool operator()(const std::pair<T, U>& p1,
-                        const std::pair<T, U>& p2) const
+        template <typename T>
+        bool operator()(const T& v1, const T& v2)
         {
-            return (p1.second > p2.second);
+            return (v1.second > v2.second);
         }
     };
 
@@ -258,11 +254,10 @@ namespace util {
 
     struct SecondEqual
     {
-        template <typename T, typename U>
-        bool operator()(const std::pair<T, U>& p1,
-                        const std::pair<T, U>& p2) const
+        template <typename T>
+        bool operator()(const T& v1, const T& v2)
         {
-            return (p1.second == p2.second);
+            return (v1.second == v2.second);
         }
     };
 
