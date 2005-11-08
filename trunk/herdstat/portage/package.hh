@@ -245,6 +245,24 @@ namespace portage {
             throw NonExistentPkg(v);
     }
 
+    class PackageWhich
+    {
+        public:
+            void clear_results() { _results.clear(); }
+            const std::vector<std::string>& results() const { return _results; }
+
+            template <typename T>
+            const std::vector<std::string>&
+            operator()(const T& v, const std::vector<Package>& results) throw (NonExistentPkg);
+
+            template <typename T>
+            const std::vector<std::string>&
+            operator()(const T& v, const PackageList& pkglit) throw (NonExistentPkg);
+
+        private:
+            void transform_results_to_paths
+            const std::vector<std::string> _results;
+    };
 
 } // namespace portage
 } // namespace herdstat

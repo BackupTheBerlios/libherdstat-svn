@@ -30,7 +30,6 @@
 #include <herdstat/exceptions.hh>
 #include <herdstat/portage/exceptions.hh>
 #include <herdstat/portage/package.hh>
-#include <herdstat/portage/package_list.hh>
 #include <herdstat/portage/find.hh>
 
 using namespace herdstat;
