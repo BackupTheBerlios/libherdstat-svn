@@ -31,6 +31,7 @@
 #include <algorithm>
 #include <iterator>
 
+#include <herdstat/util/timer.hh>
 #include <herdstat/util/regex.hh>
 #include <herdstat/util/algorithm.hh>
 #include <herdstat/portage/misc.hh>
@@ -213,11 +214,11 @@ namespace portage {
              */
             template <typename T>
             const std::vector<Package>&
-            operator()(const T& v) throw (NonExistentPkg);
+            operator()(const T& v, util::Timer *timer = NULL) throw (NonExistentPkg);
 
             const std::vector<Package>&
-            operator()(const char * const v)
-            { return operator()(std::string(v)); }
+            operator()(const char * const v, util::Timer *timer = NULL)
+            { return operator()(std::string(v), timer); }
 
         private:
             template <typename T>
@@ -242,11 +243,17 @@ namespace portage {
 
     template <typename T>
     const std::vector<Package>&
-    PackageFinder::operator()(const T& v) throw (NonExistentPkg)
+    PackageFinder::operator()(const T& v, util::Timer *timer) throw (NonExistentPkg)
     {
+        if (timer and not timer->is_running())
+            timer->start();
+
         util::copy_if(_pkglist.begin(), _pkglist.end(),
             std::back_inserter(_results),
             std::bind2nd(PkgMatches<T>(), v));
+
+        if (timer)
+            timer->stop();
 
         if (_results.empty())
             throw NonExistentPkg(v);
