@@ -71,6 +71,9 @@ namespace portage {
             AmbiguousPkg() : packages() { }
             AmbiguousPkg(const std::vector<std::string> &v)
                 : packages(v) { }
+            template <typename InputIterator>
+            AmbiguousPkg(InputIterator first, InputIterator last)
+                : packages(first, last) { }
             virtual ~AmbiguousPkg() throw() { }
 
             virtual const std::string name() const
