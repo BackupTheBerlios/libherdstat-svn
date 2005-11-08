@@ -28,8 +28,12 @@
 #endif
 
 #include <string>
-#include <herdstat/util/algorithm.hh>
+#include <algorithm>
+#include <iterator>
+
 #include <herdstat/util/regex.hh>
+#include <herdstat/util/algorithm.hh>
+#include <herdstat/portage/misc.hh>
 #include <herdstat/portage/exceptions.hh>
 #include <herdstat/portage/version.hh>
 
@@ -176,9 +180,8 @@ namespace portage {
             /// Fill container.
             void fill();
 
-            /// Implicit conversion to const container_type&
-            operator const container_type&() const
-            { return this->container(); }
+            /// Implicit conversion to const vector<Package>&
+            operator const container_type&() const { return this->container(); }
 
         private:
             const std::string& _portdir;
@@ -212,6 +215,10 @@ namespace portage {
             const std::vector<Package>&
             operator()(const T& v) throw (NonExistentPkg);
 
+            const std::vector<Package>&
+            operator()(const char * const v)
+            { return operator()(std::string(v)); }
+
         private:
             template <typename T>
             struct PkgMatches : std::binary_function<Package, T, bool>
@@ -243,7 +250,14 @@ namespace portage {
 
         if (_results.empty())
             throw NonExistentPkg(v);
+
+        return _results;
     }
+
+    /**
+     * @class PackageWhich
+     * @brief Interface for finding the newest ebuild of a package.
+     */
 
     class PackageWhich
     {
@@ -253,16 +267,58 @@ namespace portage {
 
             template <typename T>
             const std::vector<std::string>&
-            operator()(const T& v, const std::vector<Package>& results) throw (NonExistentPkg);
+            operator()(const T& v,
+                       const std::vector<Package>& results) throw (NonExistentPkg);
 
             template <typename T>
             const std::vector<std::string>&
             operator()(const T& v, const PackageList& pkglit) throw (NonExistentPkg);
 
         private:
-            void transform_results_to_paths
-            const std::vector<std::string> _results;
+            struct GetWhichFromPkg
+            {
+                std::string operator()(const Package& pkg) const
+                {
+                    const versions& versions(pkg.versions());
+                    if (versions.empty())
+                        throw NonExistentPkg(pkg);
+                    return versions.back().ebuild();
+                }
+            };
+
+            std::vector<std::string> _results;
     };
+
+    template <typename T>
+    const std::vector<std::string>&
+    PackageWhich::operator()(const T& v,
+                const std::vector<Package>& finder_results) throw (NonExistentPkg)
+    {
+        std::transform(finder_results.begin(), finder_results.end(),
+            std::back_inserter(_results), GetWhichFromPkg());
+        
+        if (_results.empty())
+            throw NonExistentPkg(v);
+
+        return _results;
+    }
+
+    template <typename T>
+    const std::vector<std::string>&
+    PackageWhich::operator()(const T& v,
+                             const PackageList& pkglist) throw (NonExistentPkg)
+    {
+        PackageFinder find(pkglist);
+        const std::vector<Package>& finder_results(find(v));
+
+        std::transform(finder_results.begin(), finder_results.end(),
+            std::back_inserter(_results), GetWhichFromPkg());
+
+        if (_results.empty())
+            throw NonExistentPkg(v);
+
+        return _results;
+    }
 
 } // namespace portage
 } // namespace herdstat

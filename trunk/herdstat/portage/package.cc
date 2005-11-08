@@ -155,16 +155,6 @@ PackageList::fill()
         this->erase(std::unique(this->begin(), this->end()), this->end());
 }
 /****************************************************************************/
-PackageWhich::PackageWhich(const PackageList& pkglist)
-    : _results()
-{
-}
-/****************************************************************************/
-PackageWhich::PackageWhich(const std::vector<Package>& search_results)
-    : _results(transform_results_to_paths(search_results))
-{
-}
-/****************************************************************************/
 } // namespace portage
 } // namespace herdstat
 
