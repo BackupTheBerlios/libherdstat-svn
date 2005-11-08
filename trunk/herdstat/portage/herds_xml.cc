@@ -83,7 +83,8 @@ void
 herds_xml::fill_developer(Developer& dev) const
 {
     /* at least the dev's username needs to be present for searching */
-    assert(not dev.user().empty());
+    if (dev.user().empty())
+        throw Exception("herds_xml::fill_developer() requires you pass a Developer object with at least the user name filled in");
 
     /* for each herd */
     for (Herds::const_iterator h = _herds.begin() ; h != _herds.end() ; ++h)

@@ -72,7 +72,8 @@ devaway_xml::parse(const std::string& path)
 void
 devaway_xml::fill_developer(Developer& dev) const
 {
-    assert(not dev.user().empty());
+    if (dev.user().empty())
+        throw Exception("devaway_xml::fill_developer() requires you pass a Developer object with at least the user name filled in");
 
     Developers::const_iterator d = _devs.find(dev);
     if (d != _devs.end())

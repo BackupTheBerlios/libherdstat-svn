@@ -64,14 +64,14 @@ userinfo_xml::parse(const std::string& path)
 void
 userinfo_xml::fill_developer(Developer& dev) const
 {
-    assert(not dev.user().empty());
+    if (dev.user().empty())
+        throw Exception("userinfo_xml::fill_developer() requires you pass a Developer object with at least the user name filled in");
+
     Herd::const_iterator d = _devs.find(dev);
     if (d != _devs.end())
     {
         if (dev.name().empty() and not d->name().empty())
             dev.set_name(d->name());
-//        if (dev.email().empty() and not d->email().empty())
-//            dev.set_email(d->email());
 
         dev.set_status(d->status().empty() ? "Active" : d->status());
         dev.set_location(d->location());
