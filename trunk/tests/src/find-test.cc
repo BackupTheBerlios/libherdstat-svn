@@ -28,9 +28,8 @@
 #include <cstdlib>
 #include <cassert>
 #include <herdstat/exceptions.hh>
-#include <herdstat/portage/exceptions.hh>
+#include <herdstat/portage/config.hh>
 #include <herdstat/portage/package.hh>
-#include <herdstat/portage/find.hh>
 
 using namespace herdstat;
 using namespace herdstat::portage;
@@ -40,45 +39,61 @@ main(int argc, char **argv)
 {
     try
     {
+        PackageList pkgs; pkgs.fill();
+        PackageFinder find(pkgs);
+        const std::vector<Package>& results(find.results());
         const std::string& portdir(portage::GlobalConfig().portdir());
-        std::cout << "Testing ebuild_which()" << std::endl;
-        const std::string path = portage::ebuild_which("foo", false);
-        assert(not path.empty());
 
-        std::cout << "  " << path.substr(portdir.length()+1) << std::endl;
+        {
+            std::cout << "Testing PackageWhich" << std::endl;
+
+            PackageWhich which;
+            const std::vector<std::string>& results(which("foo", pkgs));
+            assert(results.size() == 1);
+            const std::string& result(results.front());
+
+            std::cout << "  " << result.substr(portdir.length()+1) << std::endl;
+        }
 
         try
         {
             std::cout << std::endl
-                << "Testing find_package() with ambiguous package name" << std::endl;
-            std::pair<std::string, std::string> search_results =
-                portage::find_package("libfoo", false);
-            assert(not search_results.first.empty() and
-                   not search_results.second.empty());
-            std::cout << "  " << search_results.second << std::endl;
+                << "Testing PackageFinder with ambiguous package name" << std::endl;
+            find.clear_results();
+            find("libfoo");
+            assert(results.size() > 1);
+            throw AmbiguousPkg(results.begin(), results.end());
         }
         catch (const portage::AmbiguousPkg& e)
         {
-            std::cerr << "  libfoo is ambigious, matches are:" << std::endl;
+            std::cerr << "  libfoo is ambiguous, matches are:" << std::endl;
             std::vector<std::string>::const_iterator i;
             for (i = e.packages.begin() ; i != e.packages.end() ; ++i)
                 std::cerr << "    " << *i << std::endl;
         }
 
-        std::cout << std::endl
-            << "Testing find_package()" << std::endl;
-        std::pair<std::string, std::string> search_results =
-            portage::find_package("pfft", false);
-        assert(not search_results.first.empty() and
-               not search_results.second.empty());
-        std::cout << "  " << search_results.second << std::endl;
+        {
+            std::cout << std::endl
+                << "Testing PackageFinder" << std::endl;
+            find.clear_results();
+            find("pfft");
+            assert(results.size() == 1);
+            const Package& result(results.front());
+            std::cout << "  " << result.category() << "/" << result.name()
+                << std::endl;
+        }
 
-        std::cout << std::endl << "Testing find_package_regex()" << std::endl;
-        std::multimap<std::string, std::string> results_map =
-            portage::find_package_regex(util::Regex("^foo"), false);
-        std::multimap<std::string, std::string>::iterator i;
-        for (i = results_map.begin() ; i != results_map.end() ; ++i)
-            std::cout << "  Found " << i->second << std::endl;
+        {
+            std::cout << std::endl << "Testing PackageFinder w/regex:" << std::endl;
+            find.clear_results();
+            find(util::Regex("^foo"));
+            assert(results.size() > 1);
+            std::vector<Package>::const_iterator i;
+            for (i = results.begin() ; i != results.end() ; ++i)
+                std::cout << "  Found " << i->category() << "/" << i->name()
+                    << std::endl;
+             
+        }
     }
     catch (const BaseException& e)
     {

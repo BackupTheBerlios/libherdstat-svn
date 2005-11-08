@@ -29,7 +29,7 @@
 #include <herdstat/exceptions.hh>
 #include <herdstat/portage/config.hh>
 #include <herdstat/portage/misc.hh>
-#include <herdstat/portage/package_list.hh>
+#include <herdstat/portage/package.hh>
 
 using namespace herdstat;
 
@@ -47,8 +47,8 @@ main(int argc, char **argv)
         portage::PackageList::iterator i;
         for (i = pkgs.begin() ; i != pkgs.end() ; ++i)
         {
-            if (portage::is_pkg_dir(portdir+"/"+(*i)))
-                std::cout << *i << std::endl;
+            if (portage::is_pkg_dir(portdir+"/"+i->category()+"/"+i->name()))
+                std::cout << i->category() << "/" << i->name() << std::endl;
         }
     }
     catch (const BaseException& e)
