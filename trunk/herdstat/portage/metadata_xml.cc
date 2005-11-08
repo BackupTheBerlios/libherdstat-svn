@@ -123,9 +123,9 @@ bool
 metadata_xml::text(const std::string& text)
 {
     if (in_herd)
-        _data._herds.insert(Herd(text));
+        _data.herds().insert(Herd(text));
     else if (in_email)
-        _cur_dev = _data._devs.insert(Developer(util::lowercase(text))).first;
+        _cur_dev = _data.devs().insert(Developer(util::lowercase(text))).first;
     else if (in_name)
         const_cast<Developer&>(*_cur_dev).set_name(_cur_dev->name() + text);
     else if (in_desc)

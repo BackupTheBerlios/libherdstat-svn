@@ -84,13 +84,11 @@ namespace portage {
             inline const Developers& devs() const;
 
         private:
-            friend class metadata_xml;
-
             std::string _pkg;
             std::string _longdesc;
             bool _cat;
-            Herds _herds;
-            Developers _devs;
+            mutable Herds *_herds;
+            mutable Developers *_devs;
     };
 
     inline bool metadata::is_category() const { return _cat; }
@@ -101,10 +99,34 @@ namespace portage {
     inline void metadata::set_pkg(const std::string& pkg) { _pkg.assign(pkg); }
     inline void metadata::set_longdesc(const std::string& longdesc)
     { _longdesc.assign(longdesc); }
-    inline const Herds& metadata::herds() const { return _herds; }
-    inline const Developers& metadata::devs() const { return _devs; }
-    inline Herds& metadata::herds() { return _herds; }
-    inline Developers& metadata::devs() { return _devs; }
+
+    inline const Herds&
+    metadata::herds() const
+    {
+        if (not _herds) _herds = new Herds();
+        return *_herds;
+    }
+
+    inline const Developers&
+    metadata::devs() const
+    {
+        if (not _devs) _devs = new Developers();
+        return *_devs;
+    }
+
+    inline Herds&
+    metadata::herds()
+    {
+        if (not _herds) _herds = new Herds();
+        return *_herds;
+    }
+
+    inline Developers&
+    metadata::devs()
+    {
+        if (not _devs) _devs = new Developers();
+        return *_devs;
+    }
 
 } // namespace portage
 } // namespace herdstat

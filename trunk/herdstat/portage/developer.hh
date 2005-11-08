@@ -225,7 +225,7 @@ namespace portage {
             std::string _location;
             std::string _awaymsg;
             bool _away;
-            std::vector<std::string> _herds;
+            mutable std::vector<std::string> *_herds;
     };
 
     inline Developer::operator std::string() const { return _user; }
@@ -270,7 +270,10 @@ namespace portage {
     inline const std::string& Developer::awaymsg() const { return _awaymsg; }
     inline bool Developer::is_away() const { return _away; }
     inline const std::vector<std::string>& Developer::herds() const
-    { return _herds; }
+    {
+        if (not _herds) _herds = new std::vector<std::string>();
+        return *_herds;
+    }
 
     inline void Developer::set_user(const std::string& user)
     { _user.assign(user); }
@@ -293,9 +296,15 @@ namespace portage {
     inline void Developer::set_awaymsg(const std::string& msg)
     { _awaymsg.assign(msg); }
     inline void Developer::set_herds(const std::vector<std::string>& herds)
-    { _herds = herds; }
+    {
+        if (not _herds) _herds = new std::vector<std::string>(herds);
+        else           *_herds = herds;
+    }
     inline void Developer::append_herd(const std::string& herd)
-    { _herds.push_back(herd); }
+    {
+        if (not _herds) _herds = new std::vector<std::string>(1, herd);
+        else            _herds->push_back(herd);
+    }
     inline void Developer::set_away(const bool away) { _away = away; }
 
     /**

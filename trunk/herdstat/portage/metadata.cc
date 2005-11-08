@@ -29,12 +29,13 @@
 namespace herdstat {
 namespace portage {
 /****************************************************************************/
-metadata::metadata() : _pkg(), _longdesc(), _cat(false), _herds(), _devs()
+metadata::metadata()
+    : _pkg(), _longdesc(), _cat(false), _herds(NULL), _devs(NULL)
 {
 }
 /****************************************************************************/
 metadata::metadata(const std::string &pkg)
-    : _pkg(pkg), _longdesc(), _cat(false), _herds(), _devs()
+    : _pkg(pkg), _longdesc(), _cat(false), _herds(NULL), _devs(NULL)
 {
 }
 /****************************************************************************/
