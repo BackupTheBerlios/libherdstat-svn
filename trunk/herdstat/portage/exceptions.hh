@@ -36,6 +36,7 @@
 #include <vector>
 
 #include <herdstat/exceptions.hh>
+#include <herdstat/util/regex.hh>
 
 namespace herdstat {
 namespace portage {
@@ -102,15 +103,23 @@ namespace portage {
     class NonExistentPkg : public Exception
     {
         public:
-            NonExistentPkg() { }
-            NonExistentPkg(const char *msg) : Exception(msg) { }
-            NonExistentPkg(const std::string &msg) : Exception(msg) { }
+            NonExistentPkg() : regex(false) { }
+            NonExistentPkg(const char *msg) : Exception(msg), regex(false) { }
+            NonExistentPkg(const std::string &msg) : Exception(msg), regex(false) { }
+            NonExistentPkg(const util::Regex& re)  : Exception(re()), regex(true) { }
             virtual ~NonExistentPkg() throw() { }
             virtual const char *what() const throw()
             {
+                if (regex)
+                    return (std::string("Failed to find any packages matching '") +
+                            this->message() + "'.").c_str();
+
                 return (std::string(this->message()) +
                         " doesn't seem to exist.").c_str();
             }
+
+        private:
+            const bool regex;
     };
 
     /**
