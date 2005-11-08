@@ -28,10 +28,13 @@
 #include <cstdlib>
 #include <cassert>
 #include <herdstat/exceptions.hh>
-#include <herdstat/portage/find.hh>
 #include <herdstat/portage/exceptions.hh>
+#include <herdstat/portage/package.hh>
+#include <herdstat/portage/package_list.hh>
+#include <herdstat/portage/find.hh>
 
 using namespace herdstat;
+using namespace herdstat::portage;
 
 int
 main(int argc, char **argv)
