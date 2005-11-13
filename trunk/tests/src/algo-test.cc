@@ -72,6 +72,29 @@ int main()
             std::ostream_iterator<int>(std::cout, " "));
         std::cout << std::endl;
         v2.clear();
+
+        std::cout << "testing all_equal()" << std::endl;
+        std::cout << "  v1 = ";
+        std::copy(v1.begin(), v1.end(),
+            std::ostream_iterator<int>(std::cout, " "));
+        std::cout << std::endl << "  all_equal(v1.begin(), v1.end()) ? "
+            << std::boolalpha << util::all_equal(v1.begin(), v1.end())
+            << std::endl;
+        std::cout << "  all_equal(v1.begin(), v1.end(), std::plus<int>(5)) ? "
+            << util::all_equal(v1.begin(), v1.end(),
+                std::bind2nd(std::plus<int>(), 5)) << std::endl;
+
+        v2.push_back(1);
+        v2.push_back(1);
+        std::cout << "  v2 = ";
+        std::copy(v2.begin(), v2.end(),
+            std::ostream_iterator<int>(std::cout, " "));
+        std::cout << std::endl << "  all_equal(v2.begin(), v2.end()) ? "
+            << std::boolalpha << util::all_equal(v2.begin(), v2.end())
+            << std::endl;
+        std::cout << "  all_equal(v2.begin(), v2.end(), std::plus<int>(5)) ? "
+            << util::all_equal(v2.begin(), v2.end(),
+                std::bind2nd(std::plus<int>(), 5)) << std::endl;
     }
     catch (const Exception& e)
     {

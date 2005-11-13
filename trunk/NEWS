@@ -1,6 +1,23 @@
 This file contains a summary of changes in released versions.  Please read the
 ChangeLog file for a more detailed listing of changes/bug fixes.
 
+0.2.0:
+    - Renamed util::SecondEqual function object to util::SecondStrEqual and
+      added a SecondEqual that actually does what the name suggests (compares
+      the 'second' member of two objects for equality).
+    - xml::GlobalInit() access function now returns a const reference.
+    - Added a Package class for representing a portage "package".
+    - portage::PackageList is now a vector of portage::Package's and has been
+      moved from package_list.hh to package.hh.  package_list.hh has been
+      removed.
+    - Portage package searching interface has been completely rewritten.  The
+      implementation is *much* cleaner and the interface can actually be
+      considered usable (unlike before).  The find_package family of functions
+      has been replaced by the PackageFinder class.  The ebuild_which family
+      of functions has been replaced by the PackageWhich class.  These classes
+      are defined in package.hh.  find.hh has been removed.
+    - Added util::all_equal() algorithms.
+
 0.1.1:
     - Added util::EmptyFirst function object for instantiating a
       std::pair<std::string, T> with the 'first' member as an empty
