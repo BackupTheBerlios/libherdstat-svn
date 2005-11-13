@@ -70,15 +70,37 @@ Package::operator=(const Package& that)
 void
 Package::set_name(const std::string& name)
 {
-    std::string::size_type pos = name.find('/');
-    if (pos != std::string::npos)
-    {
-        set_category(name.substr(0, pos));
-        _name.assign(name.substr(++pos));
-        _full.assign(_cat+"/"+_name);
-    }
+    if (name.find('/') != std::string::npos)
+        set_full(name);
     else
         _name.assign(name);
+}
+/****************************************************************************/
+void
+Package::set_full(const std::string& full)
+{
+    std::string::size_type pos = full.find('/');
+    if (pos != std::string::npos)
+    {
+        set_category(full.substr(0, pos));
+        set_name(full.substr(++pos));
+        _full.assign(full);
+    }
+}
+/****************************************************************************/
+bool
+Package::operator< (const Package& that) const
+{
+    if (_full == that._full)
+    {
+        /* if package names are equal, this is only less than that if this
+         * portdir is the real portdir and that portdir isn't */
+        const std::string& portdir(GlobalConfig().portdir());
+        return (not ((_dir == portdir and that._dir == portdir) or
+                     (that._dir == portdir)));
+    }
+
+    return (_full < that._full);
 }
 /****************************************************************************/
 PackageList::PackageList()
@@ -92,16 +114,6 @@ PackageList::PackageList(const std::string& portdir,
     : _portdir(portdir), _overlays(overlays)
 {
 }
-/****************************************************************************/
-struct NewPackage
-    : std::binary_function<std::string, std::string, Package>
-{
-    Package
-    operator()(const std::string& path, const std::string& portdir) const
-    {
-        return Package(get_pkg_from_path(path), portdir);
-    }
-};
 /****************************************************************************/
 void
 PackageList::fill()
@@ -153,6 +165,58 @@ PackageList::fill()
     /* container may contain duplicates if overlays were searched */
     if (not _overlays.empty())
         this->erase(std::unique(this->begin(), this->end()), this->end());
+}
+/****************************************************************************/
+PackageFinder::PackageFinder(const PackageList& pkglist)
+    : _pkglist(pkglist), _results()
+{
+}
+/****************************************************************************/
+const std::vector<std::string>&
+PackageWhich::operator()(const std::vector<Package>& finder_results)
+    throw (NonExistentPkg)
+{
+    const std::string& portdir(GlobalConfig().portdir());
+
+    /* Loop through the results only keeping the newest of packages */
+    std::vector<Package> pkgs;
+    std::vector<Package>::const_iterator i;
+    for (i = finder_results.begin() ; i != finder_results.end() ; ++i)
+    {
+        std::vector<Package>::iterator p =
+            std::find_if(pkgs.begin(), pkgs.end(),
+            std::bind2nd(FullPkgNameEqual(), *i));
+
+        /* package doesn't exist, so add it */
+        if (p == pkgs.end())
+            pkgs.push_back(*i);
+        /* package of the same name exists */
+        else
+        {
+            const Package& p1(*i);
+            Package& p2(*p);
+
+            const versions& v1(p1.versions());
+            const versions& v2(p2.versions());
+
+            /* if the package that already exists is older than the current one,
+             * replace it */
+            if (v2.back() < v1.back())
+                p2 = p1;
+            else if (v2.back() == v1.back())
+            {
+                /* if they're equal and the one not already in pkgs is in an
+                 * overlay, replace it */
+                if (p1.portdir() != portdir)
+                    p2 = p1;
+            }
+        }
+    }
+
+    std::transform(pkgs.begin(), pkgs.end(),
+        std::back_inserter(_results), GetWhichFromPkg());
+
+    return _results;
 }
 /****************************************************************************/
 } // namespace portage

@@ -76,6 +76,11 @@ namespace portage {
             /// Implicit conversion to category/package string.
             inline operator const std::string&() const;
 
+            /// Get full category/package name.
+            inline const std::string& full() const;
+            /// Set full category/package name.
+            void set_full(const std::string& full);
+
             /// Get package name.
             inline const std::string& name() const;
             /// Set package name.
@@ -91,20 +96,32 @@ namespace portage {
             /// Set portdir this package is in.
             inline void set_portdir(const std::string& dir);
 
+            /// Is this package located in an overlay?
+            inline bool in_overlay() const;
+
             /// Get a versions object for this package.
             inline const portage::versions& versions() const;
 
             ///@{
             /** Compare that Package to this Package.
-             * Only compares the full category/package string for container
-             * sorting criterion.
+             * Compares the full category/package string and portdir.
              */
-            inline bool operator< (const Package& that) const;
+            bool operator< (const Package& that) const;
             inline bool operator<=(const Package& that) const;
             inline bool operator> (const Package& that) const;
             inline bool operator>=(const Package& that) const;
             inline bool operator==(const Package& that) const;
             inline bool operator!=(const Package& that) const;
+            ///@}
+
+            ///@{
+            /// Does the given string match this full category/package name?
+            inline bool operator< (const std::string& full) const;
+            inline bool operator<=(const std::string& full) const;
+            inline bool operator> (const std::string& full) const;
+            inline bool operator>=(const std::string& full) const;
+            inline bool operator==(const std::string& full) const;
+            inline bool operator!=(const std::string& full) const;
             ///@}
 
             //@{
@@ -128,24 +145,57 @@ namespace portage {
     inline void Package::set_category(const std::string& cat) { _cat.assign(cat); }
     inline const std::string& Package::name() const { return _name; }
     inline const std::string& Package::portdir() const { return _dir; }
+    inline const std::string& Package::full() const { return _full; }
     inline void Package::set_portdir(const std::string& dir) { _dir.assign(dir); }
+    inline bool Package::in_overlay() const
+    { return (_dir != GlobalConfig().portdir()); }
 
     inline bool
-    Package::operator< (const Package& that) const { return (_full < that._full); }
+    Package::operator<=(const Package& that) const
+    { return not (*this > that); }
+
     inline bool
-    Package::operator<=(const Package& that) const { return (_full <= that._full); }
+    Package::operator> (const Package& that) const
+    { return (that < *this); }
+    
     inline bool
-    Package::operator> (const Package& that) const { return (_full > that._full); }
+    Package::operator>= (const Package& that) const
+    { return not (*this < that); }
+    
     inline bool
-    Package::operator>=(const Package& that) const { return (_full >= that._full); }
+    Package::operator== (const Package& that) const
+    { return ((_full == that._full) and (_dir == that._dir)); }
+    
     inline bool
-    Package::operator==(const Package& that) const { return (_full == that._full); }
+    Package::operator!= (const Package& that) const
+    { return not (*this == that); }
+
     inline bool
-    Package::operator!=(const Package& that) const { return (_full != that._full); }
+    Package::operator< (const std::string& full) const
+    { return (_full < full); }
     inline bool
-    Package::operator==(const util::Regex& re) const { return (re == _full); }
+    Package::operator<=(const std::string& full) const
+    { return (_full <= full); }
     inline bool
-    Package::operator!=(const util::Regex& re) const { return (re != _full); }
+    Package::operator> (const std::string& full) const
+    { return (_full > full); }
+    inline bool
+    Package::operator>=(const std::string& full) const
+    { return (_full >= full); }
+    inline bool
+    Package::operator==(const std::string& full) const
+    { return (_full == full); }
+    inline bool
+    Package::operator!=(const std::string& full) const
+    { return (_full != full); }
+
+    inline bool
+    Package::operator==(const util::Regex& re) const
+    { return (re == _full); }
+
+    inline bool
+    Package::operator!=(const util::Regex& re) const
+    { return (re != _full); }
 
     inline const portage::versions&
     Package::versions() const
@@ -190,6 +240,113 @@ namespace portage {
     };
 
     /**
+     * @struct FullPkgName
+     * @brief Function object for explicit conversion from Package to
+     * std::string (the category/package string).
+     */
+
+    struct FullPkgName
+    {
+        std::string operator()(const Package& pkg) const
+        {
+            return pkg.full();
+        }
+    };
+
+    /**
+     * @struct FullPkgNameLess
+     * @brief Function object for sorting by full package name only (Package
+     * operators sort by name and portdir).
+     */
+    
+    struct FullPkgNameLess
+    {
+        bool operator()(const Package& p1, const Package& p2) const
+        { return (p1.full() < p2.full()); }
+    };
+
+    /**
+     * @struct FullPkgNameEqual
+     * @brief Function object for sorting by full package name only (Package
+     * operators sort by name and portdir).
+     */
+
+    struct FullPkgNameEqual
+        : std::binary_function<Package, Package, bool>
+    {
+        bool operator()(const Package& p1, const Package& p2) const
+        { return (p1.full() == p2.full()); }
+    };
+
+    /**
+     * @struct NewPackage
+     * @brief Function object for instantiating a Package class with the given
+     * path (to the package directory) and a portdir (may be an overlay).
+     */
+
+    struct NewPackage
+        : std::binary_function<std::string, std::string, Package>
+    {
+        Package
+        operator()(const std::string& path, const std::string& portdir) const
+        {
+            return Package(get_pkg_from_path(path), portdir);
+        }
+    };
+
+    /**
+     * @struct GetWhichFromPkg
+     * @brief Function object for retrieving the path to the newest ebuild for
+     * the given Package object.
+     */
+
+    struct GetWhichFromPkg
+    {
+        std::string operator()(const Package& pkg) const
+        {
+            const versions& versions(pkg.versions());
+            if (versions.empty())
+                throw NonExistentPkg(pkg);
+            return versions.back().ebuild();
+        }
+    };
+
+    /**
+     * @struct PkgMatches
+     * @brief Function object for comparing a Package object with an object of
+     * type T and making sure it has a valid package directory.  Implicit
+     * interface assumes there is an operator==(std::string) available for
+     * type T.
+     */
+
+    template <typename T>
+    struct PkgMatches : std::binary_function<Package, T, bool>
+    {
+        bool operator()(const Package& pkg, const T& criteria) const
+        {    
+                    /* criteria matches cat/pkg string? */
+            return ((criteria == std::string(pkg)) or
+                    /* or matches just the pkg string? */
+                    (criteria == pkg.name())) and
+                    /* and is a valid package directory? */
+                    is_pkg_dir(pkg.portdir()+"/"+std::string(pkg));
+        }
+    };
+
+    /**
+     * @struct PackageLivesInOverlay
+     * @brief Function object that determines whether the given Package object
+     * represents a package that exists in an overlay (or technically one whose
+     * portdir member is not the real PORTDIR).
+     */
+
+    struct PackageLivesInOverlay
+    {
+        bool operator()(const Package& pkg) const
+        { return pkg.in_overlay(); }
+    };
+
+    /**
      * @class PackageFinder
      * @brief Interface for portage package searching.
      */
@@ -221,25 +378,9 @@ namespace portage {
             { return operator()(std::string(v), timer); }
 
         private:
-            template <typename T>
-            struct PkgMatches : std::binary_function<Package, T, bool>
-            {
-                bool operator()(const Package& pkg, const T& criteria) const
-                {           /* criteria matches cat/pkg string? */
-                    return ((criteria == std::string(pkg)) or
-                            /* or matches just the pkg string? */
-                            (criteria == pkg.name())) and
-                            /* and is a valid package directory? */
-                             is_pkg_dir(pkg.portdir()+"/"+std::string(pkg));
-                }
-            };
-
             const PackageList& _pkglist;
             std::vector<Package> _results;
     };
-
-    PackageFinder::PackageFinder(const PackageList& pkglist)
-        : _pkglist(pkglist), _results() { }
 
     template <typename T>
     const std::vector<Package>&
@@ -269,62 +410,64 @@ namespace portage {
     class PackageWhich
     {
         public:
+            /// Clear search results.
             void clear_results() { _results.clear(); }
+            /// Get search results.
             const std::vector<std::string>& results() const { return _results; }
 
-            template <typename T>
+            /** Get the latest ebuild for each package in the given vector. Any
+             * vector<Package> will do, but this is mainly offered for use with
+             * PackageFinder results.
+             * @param results const reference to a std::vector<Package>.
+             * @returns vector of ebuild paths.
+             */
             const std::vector<std::string>&
-            operator()(const T& v,
-                       const std::vector<Package>& results) throw (NonExistentPkg);
+            operator()(const std::vector<Package>& results) throw (NonExistentPkg);
 
+            /** Get the latest ebuild(s) for the given package string/portdir.
+             * @param pkg Full category/package string.
+             * @parma portdir PORTDIR the package is located in.
+             * @returns vector of ebuild paths.
+             */
+            inline const std::vector<std::string>&
+            operator()(const std::string& pkg, const std::string& portdir)
+                throw (NonExistentPkg);
+
+            /** Get the latest ebuild(s) for those packages matching the given
+             * type T using the given PackageList.  Uses PackageFinder to get
+             * the list of matching packages.
+             * @param v search criteria of type T.
+             * @param pkglist const reference to a PackageList.
+             * @returns vector of ebuild paths.
+             */
             template <typename T>
-            const std::vector<std::string>&
-            operator()(const T& v, const PackageList& pkglit) throw (NonExistentPkg);
+            inline const std::vector<std::string>&
+            operator()(const T& v, const PackageList& pkglist) throw (NonExistentPkg);
 
         private:
-            struct GetWhichFromPkg
-            {
-                std::string operator()(const Package& pkg) const
-                {
-                    const versions& versions(pkg.versions());
-                    if (versions.empty())
-                        throw NonExistentPkg(pkg);
-                    return versions.back().ebuild();
-                }
-            };
-
             std::vector<std::string> _results;
     };
 
-    template <typename T>
-    const std::vector<std::string>&
-    PackageWhich::operator()(const T& v,
-                const std::vector<Package>& finder_results) throw (NonExistentPkg)
+    inline const std::vector<std::string>&
+    PackageWhich::operator()(const std::string& pkg, const std::string& portdir)
+        throw (NonExistentPkg)
     {
-        std::transform(finder_results.begin(), finder_results.end(),
-            std::back_inserter(_results), GetWhichFromPkg());
-        
-        if (_results.empty())
-            throw NonExistentPkg(v);
+        if (not util::is_dir(portdir+"/"+pkg))
+            throw NonExistentPkg(pkg);
 
+        Package p(pkg, portdir);
+        const versions& v(p.versions());
+        _results.push_back(v.back().ebuild());
         return _results;
     }
 
     template <typename T>
-    const std::vector<std::string>&
+    inline const std::vector<std::string>&
     PackageWhich::operator()(const T& v,
                              const PackageList& pkglist) throw (NonExistentPkg)
     {
         PackageFinder find(pkglist);
-        const std::vector<Package>& finder_results(find(v));
-
-        std::transform(finder_results.begin(), finder_results.end(),
-            std::back_inserter(_results), GetWhichFromPkg());
-
-        if (_results.empty())
-            throw NonExistentPkg(v);
-
-        return _results;
+        return this->operator()(find(v));
     }
 
 } // namespace portage
