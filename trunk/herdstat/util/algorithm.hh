@@ -32,6 +32,8 @@
  * @brief Defines the general purpose algorithms.
  */
 
+#include <iterator>
+
 namespace herdstat {
 namespace util {
 
@@ -47,11 +49,10 @@ namespace util {
     transform_if(InputIterator first, InputIterator last,
                  OutputIterator result, UnaryPred pred, UnaryOp op)
     {
-        while (first != last)
+        for ( ; first != last ; ++first)
         {
             if (pred(*first))
                 *result++ = op(*first);
-            ++first;
         }
 
         return result;
@@ -67,14 +68,47 @@ namespace util {
     copy_if(InputIterator first, InputIterator last,
             OutputIterator result, UnaryPred pred)
     {
-        while (first != last)
+        for ( ; first != last ; ++first )
         {
             if (pred(*first))
                 *result++ = *first;
-            ++first;
         }
 
         return result;
+    }
+
+    /**
+     * Determine whether all elements in the range [first,last) are equal.
+     */
+
+    template <typename InputIterator>
+    bool
+    all_equal(InputIterator first, InputIterator last)
+    {
+        typename std::iterator_traits<InputIterator>::value_type v(*first);
+        const typename std::iterator_traits<InputIterator>::difference_type size =
+            std::distance(first, last);
+        return (size == std::count(first, last, v));
+    }
+
+    /**
+     * Determine whether the return values of UnaryOp run on each in the range
+     * [first,last) are equal.
+     */
+
+    template <typename InputIterator, typename UnaryOp>
+    bool
+    all_equal(InputIterator first, InputIterator last, UnaryOp op)
+    {
+        typename std::iterator_traits<InputIterator>::value_type v(op(*first++));
+
+        while (first != last)
+        {
+	    if (v != op(*first++))
+	        return false;
+        }
+
+        return true;
     }
 
 } // namespace util
