@@ -32,8 +32,8 @@
 #include <sys/types.h>
 #include <regex.h>
 
-#include <herdstat/util/regex.hh>
 #include <herdstat/exceptions.hh>
+#include <herdstat/util/regex.hh>
 
 namespace herdstat {
 namespace util {
@@ -109,6 +109,8 @@ Regex::assign(const std::string &regex, int c, int e)
 void
 Regex::compile()
 {
+    BacktraceContext c("util::Regex::compile("+_str+")");
+
     if (this->_compiled)
         this->cleanup();
 
@@ -130,4 +132,4 @@ Regex::cleanup()
 } // namespace util
 } // namespace herdstat
 
-/* vim: set tw=80 sw=4 et : */
+/* vim: set tw=80 sw=4 fdm=marker et : */

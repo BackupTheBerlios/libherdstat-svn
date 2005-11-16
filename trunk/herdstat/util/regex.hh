@@ -266,6 +266,18 @@ namespace util {
         _eflags = eflags;
     }
 
+    inline bool
+    operator==(const std::string& lhs, const Regex& rhs)
+    {
+        return (rhs == lhs);
+    }
+
+    inline bool
+    operator!=(const std::string& lhs, const Regex& rhs)
+    {
+        return (rhs != lhs);
+    }
+
     /**
      * @class RegexMap
      * @brief Acts like an unsorted map (ie. a vector of uniqie pairs) with
@@ -338,4 +350,4 @@ namespace util {
 
 #endif /* HAVE_REGEX_HH */
 
-/* vim: set tw=80 sw=4 et : */
+/* vim: set tw=80 sw=4 fdm=marker et : */

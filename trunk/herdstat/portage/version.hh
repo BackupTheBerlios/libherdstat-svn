@@ -50,20 +50,20 @@ namespace herdstat {
 namespace portage {
 
     /**
-     * @class version_map
+     * @class VersionComponents
      * @brief Version component (${P}, ${PN}, etc) map.
      */
 
-    class version_map : public util::MapBase<std::string, std::string>
+    class VersionComponents : public util::MapBase<std::string, std::string>
     {
         public:
             /// Default constructor.
-            version_map();
+            VersionComponents();
 
             /** Constructor.
              * @param path Path to ebuild.
              */
-            version_map(const std::string& path);
+            VersionComponents(const std::string& path);
 
             /** Assign new path.
              * @param path Path to ebuild.
@@ -90,17 +90,23 @@ namespace portage {
     };
 
     /**
-     * @class version_string.
+     * @class VersionString
      * @brief Represents a single version string.
      */
 
-    class version_string
+    class VersionString
     {
         public:
             /** Constructor.
              * @param path Path to ebuild.
              */
-            version_string(const std::string &path);
+            VersionString(const std::string &path);
+
+            /// Copy constructor.
+            VersionString(const VersionString& that);
+
+            /// Copy assignment operator.
+            VersionString& operator=(const VersionString& that);
 
             /// Get version string.
             std::string str() const;
@@ -121,36 +127,36 @@ namespace portage {
             /** Get version component map for this version string.
              * @returns Reference to version_map object.
              */
-            const version_map& components() const { return this->_v; }
+            const VersionComponents& components() const { return this->_v; }
 
-            /** Determine whether given version_string object is less
+            /** Determine whether given VersionString object is less
              * than this one.
-             * @param that Reference to a version_string object.
+             * @param that Reference to a VersionString object.
              * @returns    A boolean value.
              */
-            bool operator< (const version_string& that) const;
+            bool operator< (const VersionString& that) const;
 
-            /** Determine whether given version_string object is greater
+            /** Determine whether given VersionString object is greater
              * than this one.
-             * @param that Reference to a version_string object.
+             * @param that Reference to a VersionString object.
              * @returns    A boolean value.
              */
-            bool operator> (const version_string& that) const
+            bool operator> (const VersionString& that) const
             { return (that < *this); }
 
-            /** Determine whether given version_string object is equal
+            /** Determine whether given VersionString object is equal
              * to this one.
-             * @param that Reference to a version_string object.
+             * @param that Reference to a VersionString object.
              * @returns    A boolean value.
              */
-            bool operator==(const version_string& that) const;
+            bool operator==(const VersionString& that) const;
 
-            /** Determine whether given version_string object is not equal
+            /** Determine whether given VersionString object is not equal
              * to this one.
-             * @param that Reference to a version_string object.
+             * @param that Reference to a VersionString object.
              * @returns    A boolean value.
              */
-            bool operator!=(const version_string& that) const
+            bool operator!=(const VersionString& that) const
             { return not (*this == that); }
 
         private:
@@ -285,7 +291,7 @@ namespace portage {
             /// Absolute path to ebuild.
             const std::string _ebuild;
             /// Version components map.
-            const version_map  _v;
+            const VersionComponents _v;
             /// Reference to actual version string
             const std::string _verstr;
             /// Our version suffix.
@@ -295,33 +301,36 @@ namespace portage {
     };
 
     /** 
-     * @class versions
-     * @brief version_string container.
+     * @class Versions
+     * @brief VersionString container.
      * Generally used for all versions of a single package.
      */
 
-    class versions : public util::SetBase<version_string>
+    class Versions : public util::SetBase<VersionString>
     {
         public:
             /// Default constructor.
-            versions();
+            Versions();
 
-            /** Constructor.  Instantiate version_string objects for each
+            /** Constructor.  Instantiate VersionString objects for each
              * ebuild existing in the specified package directory.
              * @param path Path to package directory.
              */
-            versions(const std::string &path);
+            Versions(const std::string &path);
 
-            /** Constructor.  Instantiate version_string objects for each
+            /** Constructor.  Instantiate VersionString objects for each
              * ebuild existing in each element (package directories).
              * @param v Vector of package directory paths.
              */
-            versions(const std::vector<std::string> &v);
+            Versions(const std::vector<std::string> &v);
 
-            /// Get first version_string.
-            inline const version_string& front() const;
-            /// Get last version_string.
-            inline const version_string& back() const;
+            /// Destructor.
+            virtual ~Versions();
+
+            /// Get first VersionString.
+            inline const VersionString& front() const;
+            /// Get last VersionString.
+            inline const VersionString& back() const;
 
             //@{
             /** Find version string using ebuild matching path.
@@ -332,13 +341,13 @@ namespace portage {
             inline const_iterator find(const std::string& path) const;
             //@}
 
-            /** Insert given version_string.
-             * @param v const reference to version_string.
+            /** Insert given VersionString.
+             * @param v const reference to VersionString.
              * @returns True if insertion was successful.
              */
-            inline bool insert(const version_string& v);
+            inline bool insert(const VersionString& v);
 
-            /** Instantiate and insert a version_string object with the
+            /** Instantiate and insert a VersionString object with the
              * specified path.
              * @param p Path.
              * @returns True if insertion was successful.
@@ -346,7 +355,7 @@ namespace portage {
             inline bool insert(const std::string &p);
 
             /** Assign a new package directory clearing any previously
-             * contained version_string instances.
+             * contained VersionString instances.
              * @param p Path to package directory.
              */
             void assign(const std::string &p);
@@ -357,48 +366,76 @@ namespace portage {
             void append(const std::string &p);
     };
 
-    inline versions::iterator
-    versions::find(const std::string& p)
+    inline Versions::iterator
+    Versions::find(const std::string& p)
     {
-        return this->find(version_string(p));
+        return this->find(VersionString(p));
     }
 
-    inline versions::const_iterator
-    versions::find(const std::string& p) const
+    inline Versions::const_iterator
+    Versions::find(const std::string& p) const
     {
-        return this->find(version_string(p));
-    }
-
-    inline bool
-    versions::insert(const std::string& path)
-    {
-        return util::SetBase<version_string>::insert(version_string(path)).second;
+        return this->find(VersionString(p));
     }
 
     inline bool
-    versions::insert(const version_string& v)
+    Versions::insert(const std::string& path)
     {
-        return util::SetBase<version_string>::insert(v).second;
+        return util::SetBase<VersionString>::insert(VersionString(path)).second;
     }
 
-    inline const version_string&
-    versions::front() const
+    inline bool
+    Versions::insert(const VersionString& v)
+    {
+        return util::SetBase<VersionString>::insert(v).second;
+    }
+
+    inline const VersionString&
+    Versions::front() const
     {
         assert(not this->empty());
         return *(this->begin());
     }
 
-    inline const version_string&
-    versions::back() const
+    inline const VersionString&
+    Versions::back() const
     {
         assert(not this->empty());
         const_iterator i = this->end();
         return *(--i);
     }
 
+    /**
+     * @class VersionsMap
+     * @brief Template class for mapping VersionString objects to objects of
+     * type T.
+     */
+
+    template <typename T>
+    class VersionsMap : public util::MapBase<VersionString, T>
+    {
+
+    };
+
+    /**
+     * @struct NewVersionsMapElem
+     * @brief Function object for creating a new std::pair<VersionString, T> for
+     * inserting into a VersionsMap instance.
+     */
+
+    template <typename T>
+    struct NewVersionStringPair
+    {
+        std::pair<VersionString, T>
+        operator()(const std::string& path) const
+        {
+            return std::make_pair(VersionString(path), T(path));
+        }
+    };
+
 } // namespace portage
 } // namespace herdstat
 
 #endif
 
-/* vim: set tw=80 sw=4 et : */
+/* vim: set tw=80 sw=4 fdm=marker et : */

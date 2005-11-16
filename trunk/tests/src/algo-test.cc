@@ -96,12 +96,12 @@ int main()
             << util::all_equal(v2.begin(), v2.end(),
                 std::bind2nd(std::plus<int>(), 5)) << std::endl;
     }
-    catch (const Exception& e)
+    catch (const BaseException& e)
     {
-        std::cerr << e.what() << std::endl;
+        std::cerr << e.backtrace(":\n  * ") << e.what() << std::endl;
         return EXIT_FAILURE;
     }
     return EXIT_SUCCESS;
 }
 
-/* vim: set tw=80 sw=4 et : */
+/* vim: set tw=80 sw=4 fdm=marker et : */

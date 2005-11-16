@@ -133,6 +133,18 @@ namespace util {
     };
 
     /**
+     * @struct Str
+     * @brief Returns T::str().
+     */
+
+    struct Str
+    {
+        template <typename T>
+        std::string operator()(const T& v) const
+        { return v.str(); }
+    };
+
+    /**
      * @struct First
      * @brief Returns the 'first' member of a std::pair<K, V>.
      */
@@ -383,9 +395,124 @@ namespace util {
         { return (fnmatch(pattern.c_str(), path.c_str(), 0) == 0); }
     };
 
+    ///@{
+    /** Composition function objects as described/implemented in Josuttis'
+     * "The C++ Standard Library - A Tutorial and Reference".
+     */
+
+    /**
+     * @class compose_f_gx_t
+     * @brief Function object adapter that uses the result of a unary operation
+     * as input to another unary operation.
+     */
+
+    template <typename Op1, typename Op2>
+    class compose_f_gx_t
+        : public std::unary_function<typename Op2::argument_type,
+                                     typename Op1::result_type>
+    {
+        public:
+            /// Constructor.
+            compose_f_gx_t(const Op1& o1, const Op2& o2)
+                : op1(o1), op2(o2) { }
+
+            typename Op1::result_type
+            operator()(const typename Op2::argument_type& x) const
+            { return op1(op2(x)); }
+
+        private:
+            Op1 op1;
+            Op2 op2;
+    };
+
+    /// Helper function for the compose_f_gx_t adapter.
+    template <typename Op1, typename Op2>
+    inline compose_f_gx_t<Op1, Op2>
+    compose_f_gx(const Op1& o1, const Op2& o2)
+    {
+        return compose_f_gx_t<Op1, Op2>(o1, o2);
+    }
+
+    /**
+     * @class compose_f_gx_hx_t
+     * @brief Function object adapter that allows the combination of two
+     * criteria logically to formulate a single criterion.  Use this when you
+     * want to do something like "greater than 10 and less than 15".
+     */
+
+    template <typename Op1, typename Op2, typename Op3>
+    class compose_f_gx_hx_t
+        : public std::unary_function<typename Op2::argument_type,
+                                     typename Op1::result_type>
+    {
+        public:
+            /// Constructor.
+            compose_f_gx_hx_t(const Op1& o1, const Op2& o2, const Op3& o3)
+                : op1(o1), op2(o2), op3(o3) { }
+
+            typename Op1::result_type
+            operator()(const typename Op2::argument_type& x) const
+            {
+                return op1(op2(x), op3(x));
+            }
+
+        private:
+            Op1 op1;
+            Op2 op2;
+            Op3 op3;
+    };
+
+    /// Helper function for the compose_f_gx_hx_t adapter.
+    template <typename Op1, typename Op2, typename Op3>
+    inline compose_f_gx_hx_t<Op1, Op2, Op3>
+    compose_f_gx_hx(const Op1& o1, const Op2& o2, const Op3& o3)
+    {
+        return compose_f_gx_hx_t<Op1, Op2, Op3>(o1, o2, o3);
+    }
+
+    /**
+     * @class compose_f_gx_hy_t
+     * @brief Function object adapter for use when you have two arguments to
+     * pass to two different unary predicates (Op2 and Op3).  The results from
+     * both are passed to the binary predicate Op1.
+     */
+
+    template <typename Op1, typename Op2, typename Op3>
+    class compose_f_gx_hy_t
+        : std::binary_function<typename Op2::argument_type,
+                               typename Op3::argument_type,
+                               typename Op1::result_type>
+    {
+        public:
+            compose_f_gx_hy_t(const Op1& o1, const Op2& o2, const Op3& o3)
+                : op1(o1), op2(o2), op3(o3) { }
+
+            typename Op1::result_type
+            operator()(const typename Op2::argument_type& x,
+                       const typename Op3::argument_type& y) const
+            {
+                return op1(op2(x), op3(y));
+            }
+
+        private:
+            Op1 op1;
+            Op2 op2;
+            Op3 op3;
+    };
+
+    /// Helper function for the compose_f_gx_hy_t adapter.
+    template <typename Op1, typename Op2, typename Op3>
+    inline compose_f_gx_hy_t<Op1, Op2, Op3>
+    compose_f_gx_hy(const Op1& o1, const Op2& o2, const Op3& o3)
+    {
+        return compose_f_gx_hy_t<Op1, Op2, Op3>(o1, o2, o3);
+    }
+
+    ///@}
+
 } // namespace util
 } // namespace herdstat
 
 #endif /* _HAVE_UTIL_FUNCTIONAL_HH */
 
-/* vim: set tw=80 sw=4 et : */
+/* vim: set tw=80 sw=4 fdm=marker et : */

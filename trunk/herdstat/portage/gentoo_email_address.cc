@@ -56,4 +56,4 @@ GentooEmailAddress::parse(const std::string& email)
 } // namespace portage
 } // namespace herdstat
 
-/* vim: set tw=80 sw=4 et : */
+/* vim: set tw=80 sw=4 fdm=marker et : */

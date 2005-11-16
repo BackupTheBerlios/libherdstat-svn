@@ -24,6 +24,7 @@
 # include "config.h"
 #endif
 
+#include <herdstat/exceptions.hh>
 #include <herdstat/util/file.hh>
 #include <herdstat/portage/userinfo_xml.hh>
 
@@ -57,6 +58,9 @@ void
 userinfo_xml::parse(const std::string& path)
 {
     if (not path.empty()) this->set_path(path);
+
+    BacktraceContext c("portage::userinfo_xml::parse("+this->path()+")");
+
     if (not util::is_file(this->path())) throw FileException(this->path());
     this->parse_file(this->path().c_str());
 }
@@ -64,6 +68,8 @@ userinfo_xml::parse(const std::string& path)
 void
 userinfo_xml::fill_developer(Developer& dev) const
 {
+    BacktraceContext c("portage::userinfo_xml::fill_developer()");
+
     if (dev.user().empty())
         throw Exception("userinfo_xml::fill_developer() requires you pass a Developer object with at least the user name filled in");
 
@@ -87,6 +93,8 @@ userinfo_xml::start_element(const std::string& name, const attrs_type& attrs)
 {
     if (name == "user")
     {
+        BacktraceContext c("portage::userinfo_xml::start_element("+name+")");
+
         attrs_type::const_iterator pos = attrs.find("username");
         if (pos == attrs.end())
             throw Exception("<user> tag with no username attribute!");
@@ -166,4 +174,4 @@ userinfo_xml::text(const std::string& text)
 } // namespace portage
 } // namespace herdstat
 
-/* vim: set tw=80 sw=4 et : */
+/* vim: set tw=80 sw=4 fdm=marker et : */

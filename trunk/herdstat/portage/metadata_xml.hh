@@ -110,4 +110,4 @@ namespace portage {
 
 #endif /* _HAVE_METADATA_XML_HH */
 
-/* vim: set tw=80 sw=4 et : */
+/* vim: set tw=80 sw=4 fdm=marker et : */

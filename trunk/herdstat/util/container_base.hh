@@ -411,4 +411,4 @@ namespace util {
 
 #endif /* _HAVE_CONTAINER_BASE_HH */
 
-/* vim: set tw=80 sw=4 et : */
+/* vim: set tw=80 sw=4 fdm=marker et : */

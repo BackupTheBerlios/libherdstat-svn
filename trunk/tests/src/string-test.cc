@@ -34,41 +34,49 @@ using namespace herdstat;
 
 int main(int argc, char **argv)
 {
-    std::string s("Mary had a little lamb!");
-    std::cout << s << std::endl;
-    
-    /* test util::split() */
-    std::vector<std::string> v(util::split(s));
-    assert(v.size() == 5);
-    std::vector<std::string>::iterator i;
-    std::cout << "[ ";
-    for (i = v.begin() ; i != v.end() ; ++i)
+    try
     {
-        std::cout << "'" << *i << "'";
-        if ((i+1) != v.end())
-            std::cout << ", ";
+        std::string s("Mary had a little lamb!");
+        std::cout << s << std::endl;
+    
+        /* test util::split() */
+        std::vector<std::string> v(util::split(s));
+        assert(v.size() == 5);
+        std::vector<std::string>::iterator i;
+        std::cout << "[ ";
+        for (i = v.begin() ; i != v.end() ; ++i)
+        {
+            std::cout << "'" << *i << "'";
+            if ((i+1) != v.end())
+                std::cout << ", ";
+        }
+        std::cout << " ]" << std::endl;
+
+        /* util::lowercase */
+        std::cout << util::lowercase(s) << std::endl;
+
+        /* util::destringify */
+        std::cout << util::destringify<int>("10") << std::endl
+            << util::destringify<long>("01") << std::endl
+            << util::destringify<unsigned long>("385233535") << std::endl
+            << util::destringify<float>("4.29") << std::endl
+            << util::destringify<bool>("false") << std::endl;
+
+        /* util::unhtmlify */
+        std::cout << util::unhtmlify("&lt;jedi mind trick>") << std::endl;
+
+        /* util::strip_colors */
+        const std::string c("This is a \033[0;31mtest\033[00m");
+        std::cout << c << std::endl;
+        std::cout << util::strip_colors(c) << std::endl;
     }
-    std::cout << " ]" << std::endl;
-
-    /* util::lowercase */
-    std::cout << util::lowercase(s) << std::endl;
-
-    /* util::destringify */
-    std::cout << util::destringify<int>("10") << std::endl
-        << util::destringify<long>("01") << std::endl
-        << util::destringify<unsigned long>("385233535") << std::endl
-        << util::destringify<float>("4.29") << std::endl
-        << util::destringify<bool>("false") << std::endl;
-
-    /* util::unhtmlify */
-    std::cout << util::unhtmlify("&lt;jedi mind trick>") << std::endl;
-
-    /* util::strip_colors */
-    const std::string c("This is a \033[0;31mtest\033[00m");
-    std::cout << c << std::endl;
-    std::cout << util::strip_colors(c) << std::endl;
+    catch (const BaseException& e)
+    {
+        std::cerr << e.backtrace(":\n  * ") << e.what() << std::endl;
+        return EXIT_FAILURE;
+    }
 
     return EXIT_SUCCESS;
 }
 
-/* vim: set tw=80 sw=4 et : */
+/* vim: set tw=80 sw=4 fdm=marker et : */

@@ -39,7 +39,7 @@ main(int argc, char **argv)
 {
     try
     {
-        PackageList pkgs; pkgs.fill();
+        PackageList pkgs;
         PackageFinder find(pkgs);
         const std::vector<Package>& results(find.results());
         const std::string& portdir(portage::GlobalConfig().portdir());
@@ -97,11 +97,11 @@ main(int argc, char **argv)
     }
     catch (const BaseException& e)
     {
-        std::cerr << e.what() << std::endl;
+        std::cerr << e.backtrace(":\n  * ") << e.what() << std::endl;
         return EXIT_FAILURE;
     }
 
     return EXIT_SUCCESS;
 }
 
-/* vim: set tw=80 sw=4 et : */
+/* vim: set tw=80 sw=4 fdm=marker et : */

@@ -68,11 +68,11 @@ int main()
     }
     catch (const BaseException& e)
     {
-        std::cerr << e.what() << std::endl;
+        std::cerr << e.backtrace(":\n  * ") << e.what() << std::endl;
         return EXIT_FAILURE;
     }
 
     return EXIT_SUCCESS;
 }
 
-/* vim: set tw=80 sw=4 et : */
+/* vim: set tw=80 sw=4 fdm=marker et : */

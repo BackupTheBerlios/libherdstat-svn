@@ -48,6 +48,8 @@ License::License(const std::string& str, bool validate)
 void
 License::parse()
 {
+    BacktraceContext c("portage::License::parse("+_license+")");
+
     _license.erase(std::remove(_license.begin(),
                 _license.end(), '|'), _license.end());
     _license.erase(std::remove(_license.begin(),
@@ -86,4 +88,4 @@ License::parse()
 } // namespace portage
 } // namespace herdstat
 
-/* vim: set tw=80 sw=4 et : */
+/* vim: set tw=80 sw=4 fdm=marker et : */

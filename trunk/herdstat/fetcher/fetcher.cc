@@ -34,30 +34,30 @@
 #include <herdstat/fetcher/fetcher.hh>
 
 namespace herdstat {
-
+/****************************************************************************/
 Fetcher::Fetcher() : _imp(NULL)
 {
     newFetcherImp();
 }
-
+/****************************************************************************/
 Fetcher::Fetcher(const FetcherOptions& opts) : _imp(NULL)
 {
     newFetcherImp();
     _imp->set_options(opts);
 }
-
+/****************************************************************************/
 Fetcher::Fetcher(const std::string& url, const std::string& path)
     : _imp(NULL)
 {
     newFetcherImp();
     this->operator()(url, path);
 }
-
+/****************************************************************************/
 Fetcher::~Fetcher()
 {
     if (_imp) delete _imp;
 }
-
+/****************************************************************************/
 void
 Fetcher::newFetcherImp()
 {
@@ -70,10 +70,12 @@ Fetcher::newFetcherImp()
 #endif
     }
 }
-
+/****************************************************************************/
 void
 Fetcher::operator()(const std::string& url, const std::string& path) const
 {
+    BacktraceContext c("Fetcher::operator()("+url+", "+path+")");
+
     /* ensure we have write access to the directory */
     const char * const dir = util::dirname(path).c_str();
     if (access(dir, W_OK) != 0)
@@ -85,7 +87,7 @@ Fetcher::operator()(const std::string& url, const std::string& path) const
     if (not _imp->fetch(url, path))
         throw FetchException();
 }
-
+/****************************************************************************/
 } // namespace herdstat
 
-/* vim: set tw=80 sw=4 et : */
+/* vim: set tw=80 sw=4 fdm=marker et : */

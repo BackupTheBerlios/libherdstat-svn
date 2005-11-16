@@ -32,6 +32,8 @@ namespace util {
 /****************************************************************************/
 Glob::Glob(const char *pattern) : _glob()
 {
+    BacktraceContext c("util::Glob::Glob("+std::string(pattern)+")");
+
     int ret = glob(pattern, GLOB_ERR, NULL, &(this->_glob));
     if (ret != 0 and ret != GLOB_NOMATCH)
         throw ErrnoException("glob");
@@ -52,4 +54,4 @@ Glob::~Glob()
 } // namespace util
 } // namespace herdstat
 
-/* vim: set tw=80 sw=4 et : */
+/* vim: set tw=80 sw=4 fdm=marker et : */

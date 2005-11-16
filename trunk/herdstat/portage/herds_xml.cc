@@ -26,6 +26,8 @@
 
 #include <iostream>
 #include <cassert>
+
+#include <herdstat/exceptions.hh>
 #include <herdstat/util/string.hh>
 #include <herdstat/util/file.hh>
 #include <herdstat/xml/document.hh>
@@ -71,6 +73,8 @@ herds_xml::parse(const std::string& path)
     if      (not path.empty())      this->set_path(path);
     else if (this->path().empty())  this->set_path(_local_default);
 
+    BacktraceContext c("portage::herds_xml::parse("+this->path()+")");
+
     if (not util::is_file(this->path()))
         throw FileException(this->path());
 
@@ -82,6 +86,8 @@ herds_xml::parse(const std::string& path)
 void
 herds_xml::fill_developer(Developer& dev) const
 {
+    BacktraceContext c("portage::herds_xml::fill_developer()");
+
     /* at least the dev's username needs to be present for searching */
     if (dev.user().empty())
         throw Exception("herds_xml::fill_developer() requires you pass a Developer object with at least the user name filled in");
@@ -194,4 +200,4 @@ herds_xml::text(const std::string& text)
 } // namespace portage
 } // namespace herdstat
 
-/* vim: set tw=80 sw=4 et : */
+/* vim: set tw=80 sw=4 fdm=marker et : */

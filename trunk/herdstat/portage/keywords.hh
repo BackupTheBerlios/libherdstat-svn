@@ -36,6 +36,7 @@
 #include <herdstat/util/container_base.hh>
 #include <herdstat/portage/ebuild.hh>
 #include <herdstat/portage/archs.hh>
+#include <herdstat/portage/version.hh>
 
 namespace herdstat {
 namespace portage {
@@ -87,6 +88,13 @@ namespace portage {
             bool operator!=(const Keyword& that) const
             { return (*this != that); }
 
+            /// Is this a masked keyword?
+            bool is_masked() const { return _mask == '-'; }
+            /// Is this a testing keyword?
+            bool is_testing() const { return _mask == '~'; }
+            /// Is this a stable keyword?
+            bool is_stable() const { return _mask.empty(); }
+
         private:
             /**
              * @class maskc
@@ -129,7 +137,7 @@ namespace portage {
                     { return (that < *this); }
 
                     /** Is this maskc equal to that maskc?
-                     * @param const reference to masc
+                     * @param const reference to maskc
                      * @returns Boolean value
                      */
                     bool operator==(const maskc& that) const
@@ -142,6 +150,18 @@ namespace portage {
                     bool operator!=(const maskc& that) const
                     { return (*this != that); }
 
+                    ///@{
+                    /// Compare this with a character.
+                    bool operator< (const char c) const
+                    { return (_c < c); }
+                    bool operator> (const char c) const
+                    { return (_c > c); }
+                    bool operator==(const char c) const
+                    { return (_c == c); }
+                    bool operator!=(const char c) const
+                    { return (_c != c); }
+                    ///@}
+                
                 private:
                     char _c;
             };
@@ -160,8 +180,7 @@ namespace portage {
     Keyword::operator< (const Keyword& that) const
     {
         return ((_mask == that._mask) ?
-                (_arch < that._arch) :
-                (_mask < that._mask));
+                (_arch < that._arch) : (_mask < that._mask));
     }
 
     /**
@@ -174,48 +193,31 @@ namespace portage {
     class Keywords : public util::SetBase<Keyword>
     {
         public:
-            /** Default constructor.
-             * @param use_colors Use colors when formatting keywords string
-             */
-            Keywords(bool use_colors = false);
+            /// Default constructor.
+            Keywords();
 
             /** Constructor.
              * @param path Path to ebuild.
-             * @param use_colors Use colors when formatting keywords string
              */
-            Keywords(const std::string& path, bool use_colors = false);
+            Keywords(const std::string& path);
 
             /** Constructor.
              * @param e Pre-existing ebuild instance
-             * @param use_colors Use colors when formatting keywords string
              */
-            Keywords(const ebuild& e, bool use_colors = false);
+            Keywords(const ebuild& e);
 
-            /** Constructor.
-             * @param v vector of keywords strings
-             * @param use_colors Use colors when formatting keywords string
-             */
-            Keywords(const std::vector<std::string>& v,
-                     bool use_colors = false);
+            /// Destructor.
+            virtual ~Keywords();
 
             /** Assign new ebuild path.
              * @param path Path to ebuild
-             * @param use_colors Use colors when formatting keywords string
              */
-            void assign(const std::string& path, bool use_colors = false);
+            void assign(const std::string& path);
 
             /** Assign new ebuild.
              * @param e Pre-existing ebuild instance
-             * @param use_colors Use colors when formatting keywords string
              */
-            void assign(const ebuild& e, bool use_colors = false);
-
-            /** Assign a vector of keyword strings.
-             * @param v const reference to std::vector<std::string>
-             * @param use_colors Use colors when formatting keywords string
-             */
-            void assign(const std::vector<std::string>& v,
-                        bool use_colors = false);
+            void assign(const ebuild& e);
 
             /// Get formatted keywords string.
             inline const std::string& str() const;
@@ -224,16 +226,17 @@ namespace portage {
             inline const std::string& path() const;
 
             /// Are all keywords masked?
-            bool all_masked() const;
-            /// Are all ebuilds unstable?
-            bool all_unstable() const;
+            inline bool all_masked() const;
+            /// Are all keywords testing?
+            inline bool all_testing() const;
+            /// Are all keywords stable?
+            inline bool all_stable() const;
 
         private:
             void fill();
             /// prepare keywords string
             void format();
 
-            bool _color;
             ebuild _ebuild;
             std::string _str;
     };
@@ -241,9 +244,67 @@ namespace portage {
     inline const std::string& Keywords::str() const { return _str; }
     inline const std::string& Keywords::path() const { return _ebuild.path(); }
 
+    /**
+     * @struct NewKeyword
+     * @brief Function object for instantiating a new Keyword object.
+     */
+    
+    struct NewKeyword
+    {
+        Keyword operator()(const std::string& kw) const
+        { return Keyword(kw); }
+    };
+
+    inline bool
+    Keywords::all_masked() const
+    {
+        const difference_type size(this->size());
+        return (std::count_if(this->begin(), this->end(),
+                    std::mem_fun_ref(&Keyword::is_masked)) == size);
+    }
+
+    inline bool
+    Keywords::all_testing() const
+    {
+        const difference_type size(this->size());
+        return (std::count_if(this->begin(), this->end(),
+                    std::mem_fun_ref(&Keyword::is_testing)) == size);
+    }
+
+    inline bool
+    Keywords::all_stable() const
+    {
+        const difference_type size(this->size());
+        return (std::count_if(this->begin(), this->end(),
+                    std::mem_fun_ref(&Keyword::is_stable)) == size);
+    }
+
+    /**
+     * @class KeywordsMap
+     * @brief Maps version_string objects to Keywords objects.
+     */
+
+    class KeywordsMap : public VersionsMap<Keywords>
+    {
+        public:
+            /** Constructor.  Instantiate/insert a new VersionString/Keywords
+             * object for each ebuild in the given package directory.
+             * @param pkgdir Package directory.
+             */
+            KeywordsMap(const std::string& pkgdir);
+
+            /// Destructor.
+            virtual ~KeywordsMap();
+
+            void set_colors(bool c) { _colors = c; }
+
+        private:
+            bool _colors;
+    };
+
 } // namespace portage
 } // namespace herdstat
 
 #endif /* _HAVE_KEYWORDS_HH */
 
-/* vim: set tw=80 sw=4 et : */
+/* vim: set tw=80 sw=4 fdm=marker et : */

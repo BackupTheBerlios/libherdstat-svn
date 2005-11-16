@@ -31,12 +31,14 @@
 #include <algorithm>
 #include <iterator>
 
+#include <herdstat/exceptions.hh>
 #include <herdstat/util/timer.hh>
 #include <herdstat/util/regex.hh>
 #include <herdstat/util/algorithm.hh>
 #include <herdstat/portage/misc.hh>
 #include <herdstat/portage/exceptions.hh>
 #include <herdstat/portage/version.hh>
+#include <herdstat/portage/keywords.hh>
 
 /** Rough estimate of number of packages updated from time to time.
  * Used for reserve()'ing to prevent a sleu of allocations. */
@@ -96,17 +98,25 @@ namespace portage {
             /// Set portdir this package is in.
             inline void set_portdir(const std::string& dir);
 
+            /// Get path to package directory.
+            inline const std::string& path() const;
+            /// Set path to package directory.
+            inline void set_path(const std::string& path);
+
             /// Is this package located in an overlay?
             inline bool in_overlay() const;
 
-            /// Get a versions object for this package.
-            inline const portage::versions& versions() const;
+            /// Get a Versions object for this package.
+            inline const Versions& versions() const;
+
+            /// Get a KeywordsMap object for each ebuild of this package.
+            inline const KeywordsMap& keywords() const;
 
             ///@{
             /** Compare that Package to this Package.
              * Compares the full category/package string and portdir.
              */
-            bool operator< (const Package& that) const;
+            inline bool operator< (const Package& that) const;
             inline bool operator<=(const Package& that) const;
             inline bool operator> (const Package& that) const;
             inline bool operator>=(const Package& that) const;
@@ -137,7 +147,9 @@ namespace portage {
             std::string _cat;
             std::string _dir;
             std::string _full;
-            mutable portage::versions *_versions;
+            std::string _path;
+            mutable Versions *_versions;
+            mutable KeywordsMap *_kwmap;
     };
 
     inline Package::operator const std::string&() const { return _full; }
@@ -147,8 +159,24 @@ namespace portage {
     inline const std::string& Package::portdir() const { return _dir; }
     inline const std::string& Package::full() const { return _full; }
     inline void Package::set_portdir(const std::string& dir) { _dir.assign(dir); }
+    inline void Package::set_path(const std::string& path) { _path.assign(path); }
+    inline const std::string& Package::path() const { return _path; }
+
     inline bool Package::in_overlay() const
-    { return (_dir != GlobalConfig().portdir()); }
+    {
+        static const std::string& portdir(GlobalConfig().portdir());
+        return (_dir != portdir);
+    }
+
+    inline bool
+    Package::operator< (const Package& that) const
+    {
+        /* if package names are equal, this is only less than that if this
+         * portdir is the real portdir and that portdir isn't */
+        return (_full == that._full ?
+                    not ((not in_overlay() and not that.in_overlay()) or
+                        not that.in_overlay()) : _full < that._full);
+    }
 
     inline bool
     Package::operator<=(const Package& that) const
@@ -197,12 +225,58 @@ namespace portage {
     Package::operator!=(const util::Regex& re) const
     { return (re != _full); }
 
-    inline const portage::versions&
+    inline const Versions&
     Package::versions() const
     {
         if (not _versions)
-            _versions = new portage::versions(_dir+"/"+_full);
+            _versions = new Versions(_path);
+        assert(_versions);
         return *_versions;
+    }
+
+    inline const KeywordsMap&
+    Package::keywords() const
+    {
+        if (not _kwmap)
+            _kwmap = new KeywordsMap(_path);
+        assert(_kwmap);
+        return *_kwmap;
+    }
+
+    inline bool
+    operator< (const std::string& lhs, const Package& rhs)
+    {
+        return (lhs < rhs.full());
+    }
+
+    inline bool
+    operator<=(const std::string& lhs, const Package& rhs)
+    {
+        return (lhs <= rhs.full());
+    }
+
+    inline bool
+    operator> (const std::string& lhs, const Package& rhs)
+    {
+        return (lhs > rhs.full());
+    }
+
+    inline bool
+    operator>=(const std::string& lhs, const Package& rhs)
+    {
+        return (lhs >= rhs.full());
+    }
+
+    inline bool
+    operator==(const std::string& lhs, const Package& rhs)
+    {
+        return (lhs == rhs.full());
+    }
+
+    inline bool
+    operator!=(const std::string& lhs, const Package& rhs)
+    {
+        return (lhs != rhs.full());
     }
 
     /**
@@ -217,19 +291,33 @@ namespace portage {
     class PackageList : public util::VectorBase<Package>
     {
         public:
-            /// Default constructor.
-            PackageList();
+            /** Default constructor.
+             * @param fill Fill with all packages in the tree?
+             */
+            PackageList(bool fill = true);
 
             /** Constructor.
              * @param portdir PORTDIR to search.
              * @param overlays const reference to a vector of strings denoting
              * overlays (defaults to empty).
+             * @param fill Fill with all packages in the tree?
              */
             PackageList(const std::string& portdir, const std::vector<std::string>&
-                overlays = std::vector<std::string>());
+                overlays = std::vector<std::string>(), bool fill = true);
+
+            /// Destructor.
+            ~PackageList();
 
             /// Fill container.
             void fill();
+            /// Has our container been fill()'d?
+            bool filled() const { return _filled; }
+
+            ///@{
+            /// Is the specified package present in our container?
+            inline bool has_package(const std::string& pkg) const;
+            inline bool has_package(const Package& pkg) const;
+            ///@}
 
             /// Implicit conversion to const vector<Package>&
             operator const container_type&() const { return this->container(); }
@@ -237,7 +325,20 @@ namespace portage {
         private:
             const std::string& _portdir;
             const std::vector<std::string>& _overlays;
+            bool _filled;
     };
+
+    inline bool
+    PackageList::has_package(const std::string& pkg) const
+    {
+        return std::binary_search(this->begin(), this->end(), pkg);
+    }
+
+    inline bool
+    PackageList::has_package(const Package& pkg) const
+    {
+        return has_package(pkg.full());
+    }
 
     /**
      * @struct FullPkgName
@@ -245,12 +346,10 @@ namespace portage {
      * std::string (the category/package string).
      */
 
-    struct FullPkgName
+    struct FullPkgName : std::unary_function<Package, std::string>
     {
         std::string operator()(const Package& pkg) const
-        {
-            return pkg.full();
-        }
+        { return pkg.full(); }
     };
 
     /**
@@ -259,7 +358,7 @@ namespace portage {
      * operators sort by name and portdir).
      */
     
-    struct FullPkgNameLess
+    struct FullPkgNameLess : std::binary_function<Package, Package, bool>
     {
         bool operator()(const Package& p1, const Package& p2) const
         { return (p1.full() < p2.full()); }
@@ -289,22 +388,22 @@ namespace portage {
     {
         Package
         operator()(const std::string& path, const std::string& portdir) const
-        {
-            return Package(get_pkg_from_path(path), portdir);
-        }
+        { return Package(get_pkg_from_path(path), portdir); }
     };
 
     /**
-     * @struct GetWhichFromPkg
+     * @struct GetWhichFromPackage
      * @brief Function object for retrieving the path to the newest ebuild for
      * the given Package object.
      */
 
-    struct GetWhichFromPkg
+    struct GetWhichFromPackage : std::unary_function<Package, std::string>
     {
         std::string operator()(const Package& pkg) const
         {
-            const versions& versions(pkg.versions());
+            BacktraceContext c("herdstat::portage::GetWhichFromPackage::operator()("+pkg.full()+")");
+
+            const Versions& versions(pkg.versions());
             if (versions.empty())
                 throw NonExistentPkg(pkg);
             return versions.back().ebuild();
@@ -312,25 +411,33 @@ namespace portage {
     };
 
     /**
-     * @struct PkgMatches
+     * @struct PackageMatches
      * @brief Function object for comparing a Package object with an object of
-     * type T and making sure it has a valid package directory.  Implicit
-     * interface assumes there is an operator==(std::string) available for
      * type T.
      */
 
     template <typename T>
-    struct PkgMatches : std::binary_function<Package, T, bool>
+    struct PackageMatches : std::binary_function<Package, T, bool>
     {
         bool operator()(const Package& pkg, const T& criteria) const
         {    
                     /* criteria matches cat/pkg string? */
-            return ((criteria == std::string(pkg)) or
+            return ((pkg.full() == criteria) or
                     /* or matches just the pkg string? */
-                    (criteria == pkg.name())) and
-                    /* and is a valid package directory? */
-                    is_pkg_dir(pkg.portdir()+"/"+std::string(pkg));
+                    (pkg.name() == criteria));
         }
+    };
+
+    /**
+     * @struct PackageIsValid
+     * @brief Function object for determining whether the given Package object
+     * has a valid package directory.
+     */
+
+    struct PackageIsValid : std::unary_function<Package, bool>
+    {
+        bool operator()(const Package& pkg) const
+        { return is_pkg_dir(pkg.path()); }
     };
 
     /**
@@ -340,7 +447,7 @@ namespace portage {
      * portdir member is not the real PORTDIR).
      */
 
-    struct PackageLivesInOverlay
+    struct PackageLivesInOverlay : std::unary_function<Package, bool>
     {
         bool operator()(const Package& pkg) const
         { return pkg.in_overlay(); }
@@ -359,6 +466,9 @@ namespace portage {
              */
             PackageFinder(const PackageList& pkglist);
 
+            /// Destructor.
+            ~PackageFinder();
+
             /// Clear search results.
             void clear_results() { _results.clear(); }
             /// Get search results.
@@ -371,10 +481,12 @@ namespace portage {
              */
             template <typename T>
             const std::vector<Package>&
-            operator()(const T& v, util::Timer *timer = NULL) throw (NonExistentPkg);
+            operator()(const T& v, util::Timer *timer = NULL)
+                throw (NonExistentPkg);
 
             const std::vector<Package>&
             operator()(const char * const v, util::Timer *timer = NULL)
+                throw (NonExistentPkg)
             { return operator()(std::string(v), timer); }
 
         private:
@@ -386,12 +498,21 @@ namespace portage {
     const std::vector<Package>&
     PackageFinder::operator()(const T& v, util::Timer *timer) throw (NonExistentPkg)
     {
+        BacktraceContext c("herdstat::portage::PackageFinder::operator()");
+
         if (timer and not timer->is_running())
             timer->start();
 
+        /* copy those packages in _pkglist that
+         *      a) match the given criteria (v), and
+         *      b) have a valid package directory
+         * to our _results vector.
+         */
         util::copy_if(_pkglist.begin(), _pkglist.end(),
             std::back_inserter(_results),
-            std::bind2nd(PkgMatches<T>(), v));
+            util::compose_f_gx_hx(std::logical_and<bool>(),
+                    std::bind2nd(PackageMatches<T>(), v),
+                    PackageIsValid()));
 
         if (timer)
             timer->stop();
@@ -410,6 +531,12 @@ namespace portage {
     class PackageWhich
     {
         public:
+            /// Default constructor.
+            PackageWhich();
+
+            /// Destructor.
+            ~PackageWhich();
+
             /// Clear search results.
             void clear_results() { _results.clear(); }
             /// Get search results.
@@ -452,11 +579,13 @@ namespace portage {
     PackageWhich::operator()(const std::string& pkg, const std::string& portdir)
         throw (NonExistentPkg)
     {
+        BacktraceContext c("herdstat::portage::PackageWhich::operator()("+pkg+", "+portdir+")");
+
         if (not util::is_dir(portdir+"/"+pkg))
             throw NonExistentPkg(pkg);
 
         Package p(pkg, portdir);
-        const versions& v(p.versions());
+        const Versions& v(p.versions());
         _results.push_back(v.back().ebuild());
         return _results;
     }
@@ -467,7 +596,7 @@ namespace portage {
                              const PackageList& pkglist) throw (NonExistentPkg)
     {
         PackageFinder find(pkglist);
-        return this->operator()(find(v));
+        return operator()(find(v));
     }
 
 } // namespace portage
@@ -475,4 +604,4 @@ namespace portage {
 
 #endif /* _HAVE__PACKAGE_HH */
 
-/* vim: set tw=80 sw=4 et : */
+/* vim: set tw=80 sw=4 fdm=marker et : */

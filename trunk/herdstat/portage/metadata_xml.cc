@@ -25,6 +25,8 @@
 #endif
 
 #include <locale>
+
+#include <herdstat/exceptions.hh>
 #include <herdstat/util/string.hh>
 #include <herdstat/util/file.hh>
 #include <herdstat/portage/metadata_xml.hh>
@@ -55,6 +57,9 @@ void
 metadata_xml::parse(const std::string& path)
 {
     if (not path.empty()) this->set_path(path);
+
+    BacktraceContext c("portage::metadata_xml::parse("+this->path()+")");
+
     if (not util::file_exists(this->path())) throw FileException(this->path());
     this->parse_file(this->path().c_str());
 
@@ -140,4 +145,4 @@ metadata_xml::text(const std::string& text)
 } // namespace portage
 } // namespace herdstat
 
-/* vim: set tw=80 sw=4 et : */
+/* vim: set tw=80 sw=4 fdm=marker et : */

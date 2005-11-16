@@ -71,7 +71,7 @@ namespace portage {
 //            typedef std::map<std::string, ebuild * > eclass_map;
             /// set of eclasses we've parsed; used for preventing recursion
 //            static eclass_map _eclasses;
-            version_map _vmap;
+            VersionComponents _vmap;
     };
 
 } // namespace portage
@@ -79,4 +79,4 @@ namespace portage {
 
 #endif /* _HAVE_EBUILD_HH */
 
-/* vim: set tw=80 sw=4 et : */
+/* vim: set tw=80 sw=4 fdm=marker et : */

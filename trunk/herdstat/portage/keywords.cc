@@ -25,9 +25,14 @@
 #endif
 
 #include <cstring>
+
+#include <herdstat/exceptions.hh>
 #include <herdstat/util/misc.hh>
 #include <herdstat/util/string.hh>
+#include <herdstat/util/algorithm.hh>
 #include <herdstat/portage/exceptions.hh>
+#include <herdstat/portage/functional.hh>
+#include <herdstat/portage/misc.hh>
 #include <herdstat/portage/config.hh>
 #include <herdstat/portage/keywords.hh>
 
@@ -40,12 +45,14 @@ Keyword::maskc::maskc() : _c('\0')
 {
 }
 /****************************************************************************/
-Keyword::maskc::maskc(const char c) : _c('\0')
+Keyword::maskc::maskc(const char mc) : _c('\0')
 {
-    if (std::strchr(_valid_masks, c) == NULL)
-        throw InvalidKeywordMask(c);
+    BacktraceContext c("portage::Keyword::maskc::maskc(" + std::string(1, mc) + ")");
 
-    _c = c;
+    if (std::strchr(_valid_masks, mc) == NULL)
+        throw InvalidKeywordMask(mc);
+
+    _c = mc;
 }
 /****************************************************************************/
 bool
@@ -67,6 +74,8 @@ Keyword::maskc::operator< (const maskc& that) const
 Keyword::Keyword(const std::string& kw)
     : _valid_archs(GlobalConfig().archs())
 {
+    BacktraceContext c("portage::Keyword::Keyword("+kw+")");
+
     this->parse(kw);
 
     if (not _valid_archs.count(_arch))
@@ -82,126 +91,103 @@ Keyword::parse(const std::string& kw)
     _arch = (_mask.empty() ? kw : kw.substr(1));
 }
 /****************************************************************************/
-Keywords::Keywords(bool use_colors)
-    : _color(use_colors), _ebuild(), _str()
+Keywords::Keywords()
+    : _ebuild(), _str()
 {
 }
 /****************************************************************************/
-Keywords::Keywords(const std::string& path, bool use_colors)
-    : _color(use_colors), _ebuild(path), _str()
+Keywords::Keywords(const std::string& path)
+    : _ebuild(path), _str()
 {
     this->fill();
     this->format();
 }
 /****************************************************************************/
-Keywords::Keywords(const ebuild& e, bool use_colors)
-    : _color(use_colors), _ebuild(e), _str()
+Keywords::Keywords(const ebuild& e)
+    : _ebuild(e), _str()
 {
     this->fill();
     this->format();
 }
 /****************************************************************************/
-Keywords::Keywords(const std::vector<std::string>& keywords, bool use_colors)
-    : _color(), _ebuild(), _str()
+Keywords::~Keywords()
 {
-    this->assign(keywords, use_colors);
 }
 /****************************************************************************/
 void
-Keywords::assign(const std::string& path, bool use_colors)
+Keywords::assign(const std::string& path)
 {
-    _color = use_colors;
     _ebuild.read(path);
     this->fill();
     this->format();
 }
 /****************************************************************************/
 void
-Keywords::assign(const ebuild& e, bool use_colors)
+Keywords::assign(const ebuild& e)
 {
-    _color = use_colors;
     _ebuild = e;
     this->fill();
     this->format();
 }
 /****************************************************************************/
 void
-Keywords::assign(const std::vector<std::string>& v, bool use_colors)
-{
-    _color = use_colors;
-
-    this->clear();
-    
-    std::vector<std::string>::const_iterator i;
-    for (i = v.begin() ; i != v.end() ; ++i)
-        this->insert(Keyword(*i));
-}
-/****************************************************************************/
-void
 Keywords::fill()
 {
+    BacktraceContext c("portage::Keywords::fill()");
+
     if (_ebuild["KEYWORDS"].empty())
         throw Exception(_ebuild.path()+": no KEYWORDS variable defined");
 
     const std::vector<std::string> v(util::split(_ebuild["KEYWORDS"]));
-    this->assign(v, _color);
+    this->clear();
+    this->insert(v.begin(), v.end());
 }
 /****************************************************************************/
 void
 Keywords::format()
 {
-    size_type n = 0;
-    util::ColorMap cmap;
+    static util::ColorMap cmap;
 
+    size_type n = 0;
     for (iterator i = this->begin() ; i != this->end() ; ++i, ++n)
     {
-        if (_color)
+        switch (i->mask())
         {
-            switch (i->mask())
-            {
-                case '-':
-                    _str += cmap[red];
-                    break;
-                case '~':
-                    _str += cmap[yellow];
-                    break;
-                default:
-                    _str += cmap[blue];
-            }
-
-            _str += i->str() + cmap[none];
+            case '-':
+                _str += cmap[red];
+                break;
+            case '~':
+                _str += cmap[yellow];
+                break;
+            default:
+                _str += cmap[blue];
         }
-        else
-            _str += i->str();
+
+        _str += i->str() + cmap[none];
 
         if ((n+1) != this->size())
             _str += " ";
     }
 }
 /****************************************************************************/
-struct IsMaskChar : std::binary_function<Keyword, char, bool>
+KeywordsMap::KeywordsMap(const std::string& pkgdir)
 {
-    bool operator()(const Keyword& kw, char maskc) const
-    { return (kw.mask() == maskc); }
-};
+    BacktraceContext c("portage::KeywordsMap::KeywordsMap("+pkgdir+")");
 
-bool
-Keywords::all_masked() const
-{
-    difference_type size(this->size());
-    return (std::count_if(this->begin(), this->end(),
-                std::bind2nd(IsMaskChar(), '-')) == size);
+    if (not util::is_dir(pkgdir))
+        throw FileException(pkgdir);
+
+    const util::Directory dir(pkgdir);
+    util::transform_if(dir.begin(), dir.end(),
+        std::inserter(this->container(), this->end()),
+        IsEbuild(), NewVersionStringPair<Keywords>());
 }
-
-bool
-Keywords::all_unstable() const
+/****************************************************************************/
+KeywordsMap::~KeywordsMap()
 {
-    difference_type size(this->size());
-    return (std::count_if(this->begin(), this->end(),
-                std::bind2nd(IsMaskChar(), '~')) == size);
 }
 /****************************************************************************/
 } // namespace portage
 } // namespace herdstat
 
-/* vim: set tw=80 sw=4 et : */
+/* vim: set tw=80 sw=4 fdm=marker et : */

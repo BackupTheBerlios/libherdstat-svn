@@ -28,6 +28,7 @@
 #include <iterator>
 #include <algorithm>
 #include <functional>
+
 #include <herdstat/portage/exceptions.hh>
 #include <herdstat/portage/categories.hh>
 
@@ -38,9 +39,14 @@ namespace herdstat {
 namespace portage {
 /****************************************************************************/
 Categories::Categories(const std::string& portdir, bool validate)
-    : util::BaseFile(portdir+CATEGORIES), _portdir(portdir),
+    : util::BaseFile(), _portdir(portdir),
       _validate(validate)
 {
+    BacktraceContext c("herdstat::portage::Categories::Categories()");
+    if (not util::is_dir(portdir))
+        throw FileException(portdir);
+
+    this->open((_portdir+CATEGORIES).c_str(), std::ios::in);
     this->read();
 }
 /****************************************************************************/
@@ -49,6 +55,7 @@ struct BailIfInvalid : std::binary_function<std::string, std::string, void>
 {
     void operator()(const std::string& cat, const std::string& portdir) const
     {
+        BacktraceContext c("BailIfInvalid::operator()("+cat+", "+portdir+")");
         if (not util::is_dir(portdir+"/"+cat))
             throw QAException("invalid category '"+cat+"'.");
     }
@@ -57,6 +64,8 @@ struct BailIfInvalid : std::binary_function<std::string, std::string, void>
 void
 Categories::do_read()
 {
+    BacktraceContext c("herdstat::portage::Categories::do_read("+this->path()+")");
+
     this->insert(std::istream_iterator<std::string>(this->stream()),
                  std::istream_iterator<std::string>());
 
@@ -83,4 +92,4 @@ Categories::do_read()
 } // namespace portage
 } // namespace herdstat
 
-/* vim: set tw=80 sw=4 et : */
+/* vim: set tw=80 sw=4 fdm=marker et : */

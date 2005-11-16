@@ -32,18 +32,18 @@ namespace herdstat {
 namespace portage {
 /****************************************************************************/
 Package::Package()
-    : _name(), _cat(), _dir(), _versions(NULL)
+    : _name(), _cat(), _dir(), _path(), _versions(NULL), _kwmap(NULL)
 {
 }
 /****************************************************************************/
 Package::Package(const Package& that)
-    : _name(), _cat(), _dir(), _versions(NULL)
+    : _name(), _cat(), _dir(), _path(), _versions(NULL), _kwmap(NULL)
 {
     *this = that;
 }
 /****************************************************************************/
 Package::Package(const std::string& name, const std::string& portdir)
-    : _name(), _cat(), _dir(portdir), _versions(NULL)
+    : _name(), _cat(), _dir(portdir), _path(), _versions(NULL), _kwmap(NULL)
 {
     set_name(name);
 }
@@ -51,6 +51,7 @@ Package::Package(const std::string& name, const std::string& portdir)
 Package::~Package()
 {
     if (_versions) delete _versions;
+    if (_kwmap)    delete _kwmap;
 }
 /****************************************************************************/
 Package&
@@ -60,9 +61,10 @@ Package::operator=(const Package& that)
     _cat.assign(that._cat);
     _dir.assign(that._dir);
     _full.assign(that._full);
+    _path.assign(that._path);
 
     if (that._versions)
-        _versions = new portage::versions(*that._versions);
+        _versions = new Versions(*that._versions);
 
     return *this;
 }
@@ -70,6 +72,8 @@ Package::operator=(const Package& that)
 void
 Package::set_name(const std::string& name)
 {
+    BacktraceContext c("herdstat::portage::Package::set_name("+name+")");
+
     if (name.find('/') != std::string::npos)
         set_full(name);
     else
@@ -79,45 +83,48 @@ Package::set_name(const std::string& name)
 void
 Package::set_full(const std::string& full)
 {
-    std::string::size_type pos = full.find('/');
-    if (pos != std::string::npos)
-    {
-        set_category(full.substr(0, pos));
-        set_name(full.substr(++pos));
-        _full.assign(full);
-    }
-}
-/****************************************************************************/
-bool
-Package::operator< (const Package& that) const
-{
-    if (_full == that._full)
-    {
-        /* if package names are equal, this is only less than that if this
-         * portdir is the real portdir and that portdir isn't */
-        const std::string& portdir(GlobalConfig().portdir());
-        return (not ((_dir == portdir and that._dir == portdir) or
-                     (that._dir == portdir)));
-    }
+    BacktraceContext c("herdstat::portage::Package::set_full("+full+")");
 
-    return (_full < that._full);
+    std::string::size_type pos = full.find('/');
+    if (pos == std::string::npos)
+        throw Exception("Invalid full category/package specification '"+full+"'.");
+
+    set_category(full.substr(0, pos));
+    set_name(full.substr(++pos));
+    _full.assign(full);
+    set_path(_dir+"/"+_full);
 }
 /****************************************************************************/
-PackageList::PackageList()
+PackageList::PackageList(bool fill)
     : _portdir(GlobalConfig().portdir()),
-      _overlays(GlobalConfig().overlays())
+      _overlays(GlobalConfig().overlays()),
+      _filled(false)
 {
+    if (fill)
+        this->fill();
 }
 /****************************************************************************/
 PackageList::PackageList(const std::string& portdir,
-                         const std::vector<std::string>& overlays)
-    : _portdir(portdir), _overlays(overlays)
+                         const std::vector<std::string>& overlays,
+                         bool fill)
+    : _portdir(portdir), _overlays(overlays), _filled(false)
+{
+    if (fill)
+        this->fill();
+}
+/****************************************************************************/
+PackageList::~PackageList()
 {
 }
 /****************************************************************************/
 void
 PackageList::fill()
 {
+    BacktraceContext c("herdstat::portage::PackageList::fill()");
+
+    if (_filled)
+        return;
+
     std::string path;
     const Categories& categories(GlobalConfig().categories());
     Categories::const_iterator ci, cend;
@@ -165,6 +172,8 @@ PackageList::fill()
     /* container may contain duplicates if overlays were searched */
     if (not _overlays.empty())
         this->erase(std::unique(this->begin(), this->end()), this->end());
+
+    _filled = true;
 }
 /****************************************************************************/
 PackageFinder::PackageFinder(const PackageList& pkglist)
@@ -172,11 +181,23 @@ PackageFinder::PackageFinder(const PackageList& pkglist)
 {
 }
 /****************************************************************************/
+PackageFinder::~PackageFinder()
+{
+}
+/****************************************************************************/
+PackageWhich::PackageWhich()
+{
+}
+/****************************************************************************/
+PackageWhich::~PackageWhich()
+{
+}
+/****************************************************************************/
 const std::vector<std::string>&
 PackageWhich::operator()(const std::vector<Package>& finder_results)
     throw (NonExistentPkg)
 {
-    const std::string& portdir(GlobalConfig().portdir());
+    BacktraceContext c("herdstat::portage::PackageWhich::operator()(std::vector<Package>)");
 
     /* Loop through the results only keeping the newest of packages */
     std::vector<Package> pkgs;
@@ -185,7 +206,7 @@ PackageWhich::operator()(const std::vector<Package>& finder_results)
     {
         std::vector<Package>::iterator p =
             std::find_if(pkgs.begin(), pkgs.end(),
-            std::bind2nd(FullPkgNameEqual(), *i));
+                std::bind2nd(FullPkgNameEqual(), *i));
 
         /* package doesn't exist, so add it */
         if (p == pkgs.end())
@@ -196,25 +217,20 @@ PackageWhich::operator()(const std::vector<Package>& finder_results)
             const Package& p1(*i);
             Package& p2(*p);
 
-            const versions& v1(p1.versions());
-            const versions& v2(p2.versions());
+            const Versions& v1(p1.versions());
+            const Versions& v2(p2.versions());
 
-            /* if the package that already exists is older than the current one,
+            /* if the pkg that already exists is older than the current one, or
+             * they're equal and the one not already in 'pkgs' is in an overlay,
              * replace it */
-            if (v2.back() < v1.back())
+            if ((v2.back() < v1.back()) or
+                ((v2.back() == v1.back()) and p1.in_overlay()))
                 p2 = p1;
-            else if (v2.back() == v1.back())
-            {
-                /* if they're equal and the one not already in pkgs is in an
-                 * overlay, replace it */
-                if (p1.portdir() != portdir)
-                    p2 = p1;
-            }
         }
     }
 
     std::transform(pkgs.begin(), pkgs.end(),
-        std::back_inserter(_results), GetWhichFromPkg());
+        std::back_inserter(_results), GetWhichFromPackage());
 
     return _results;
 }

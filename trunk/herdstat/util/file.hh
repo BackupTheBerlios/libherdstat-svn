@@ -259,6 +259,9 @@ namespace util {
             /// Default constructor.
             BaseFile();
 
+            /// Copy constructor
+            BaseFile(const BaseFile& that);
+
             /** Constructor.  Opens file.
              * @param path Path to file.
              * @param mode Open mode (defaults to DEFAULT_MODE).
@@ -268,6 +271,11 @@ namespace util {
 
             /// Destructor.  Closes file if opened.
             virtual ~BaseFile();
+
+            /// Copy assignment operator.
+            BaseFile& operator= (const BaseFile& that);
+
+            const std::ios_base::openmode& mode() const { return _mode; }
 
             /// Open file with default open mode.
             virtual void open();
@@ -285,15 +293,19 @@ namespace util {
             virtual void open(std::ios_base::openmode mode);
 
         protected:
+            void set_mode(std::ios_base::openmode mode) { _mode = mode; }
+
             /// close file
             virtual void do_close();
 
             /// Get stream associated with this.
-            stream_type& stream() { return *_stream; }
+            stream_type& stream() { assert(_stream); return *_stream; }
 
         private:
             /// stream associated with this.
             stream_type *_stream;
+            /// open mode
+            std::ios_base::openmode _mode;
     };
 
     /**
@@ -415,4 +427,4 @@ namespace util {
 
 #endif /* HAVE_FILE_HH */
 
-/* vim: set tw=80 sw=4 et : */
+/* vim: set tw=80 sw=4 fdm=marker et : */

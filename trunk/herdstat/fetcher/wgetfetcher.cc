@@ -41,6 +41,8 @@ WgetFetcher::~WgetFetcher()
 bool
 WgetFetcher::fetch(const std::string& url, const std::string& path) const
 {
+    BacktraceContext c("WgetFetcher::fetch("+url+", "+path+")");
+
 #ifdef FETCH_METHOD_WGET
     std::string opts("-r -t3 -T15");
     opts += (options().verbose() ? " -v" : " -q");
@@ -56,4 +58,4 @@ WgetFetcher::fetch(const std::string& url, const std::string& path) const
 
 } // namespace herdstat
 
-/* vim: set tw=80 sw=4 et : */
+/* vim: set tw=80 sw=4 fdm=marker et : */

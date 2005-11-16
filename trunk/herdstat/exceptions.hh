@@ -36,12 +36,14 @@
 #include <stdexcept>
 #include <sys/types.h>
 #include <regex.h>
+#include <libebt/libebt.hh>
 
 /// Main namespace all of libherdstat resides in.
 namespace herdstat {
 
-    /**
-     * @mainpage Main Index
+    /** @mainpage Main Index
+     *
+     * @section overview Overview
      *
      * libherdstat is a C++ library offering interfaces for portage-related
      * things such as Gentoo-specific XML files, package searching, and
@@ -49,12 +51,21 @@ namespace herdstat {
      * also offered.
      */
 
+    class ExceptionTag { };
+
+    /// convenience typedef for backtrace contexts
+    typedef libebt::BacktraceContext<ExceptionTag, std::string> BacktraceContext;
+
     /**
      * @class BaseException
      * @brief Base exception class.  All exception classes defined by libherdstat
      * derive from this class.
      */
-    class BaseException : public std::exception { };
+
+    class BaseException : public std::exception,
+                          public libebt::Backtracable<ExceptionTag, std::string>
+    {
+    };
 
     /**
      * @class Exception
@@ -278,4 +289,4 @@ namespace herdstat {
 
 #endif /* _HAVE_HERDSTAT_EXCEPTIONS_HH */
 
-/* vim: set tw=80 sw=4 et : */
+/* vim: set tw=80 sw=4 fdm=marker et : */

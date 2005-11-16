@@ -41,7 +41,7 @@ int main(int argc, char **argv)
 
     try
     {
-        std::cout << "Testing version_string:" << std::endl;
+        std::cout << "Testing VersionString:" << std::endl;
 
         {
             const util::Directory dir(argv[1]);
@@ -50,19 +50,19 @@ int main(int argc, char **argv)
             {
                 if (portage::is_ebuild(*d))
                 {
-                    portage::version_string ver(*d);
+                    portage::VersionString ver(*d);
                     std::cout << "  found version '" << ver.str() << "'." << std::endl;
                 }
             }
         }
 
         std::cout << std::endl
-            << "Testing sorted version_string container:" << std::endl;
+            << "Testing sorted VersionString container:" << std::endl;
 
         std::string ebuild;
 
-        const portage::versions versions(argv[1]);
-        portage::versions::const_iterator i;
+        const portage::Versions versions(argv[1]);
+        portage::Versions::const_iterator i;
         for (i = versions.begin() ; i != versions.end() ; ++i)
         {
             std::cout << "  " << i->str() << std::endl;    
@@ -70,20 +70,20 @@ int main(int argc, char **argv)
         }
 
         std::cout << std::endl
-            << "Testing version_map" << std::endl;
+            << "Testing VersionComponents:" << std::endl;
     
-        const portage::version_map vmap(ebuild);
-        portage::version_map::const_iterator v;
+        const portage::VersionComponents vmap(ebuild);
+        portage::VersionComponents::const_iterator v;
         for (v = vmap.begin() ; v != vmap.end() ; ++v)
             std::cout << "  " << v->first << " = " << v->second << std::endl;
     }
     catch (const BaseException& e)
     {
-        std::cerr << e.what() << std::endl;
+        std::cerr << e.backtrace(":\n  * ") << e.what() << std::endl;
         return EXIT_FAILURE;
     }
 
     return EXIT_SUCCESS;
 }
 
-/* vim: set tw=80 sw=4 et : */
+/* vim: set tw=80 sw=4 fdm=marker et : */

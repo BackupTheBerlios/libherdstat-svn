@@ -38,10 +38,14 @@
 #include <cstdarg>
 #include <cerrno>
 #include <cctype>
+
 #include <herdstat/exceptions.hh>
 
 namespace herdstat {
-/// General-purpose utility classes/functions.
+/**
+ * @namespace util
+ * @brief General-purpose utility classes/functions.
+ */
 namespace util {
 
     /** Tidy whitespace of the given string.
@@ -130,6 +134,7 @@ namespace util {
         return os.str();
     }
 
+    /// stringify specialization for bool
     template <>
     inline std::string
     stringify<bool>(const bool& v)
@@ -139,6 +144,7 @@ namespace util {
         return os.str();
     }
 
+    /// stringify specialization for std::vector<std::string>
     template <>
     inline std::string
     stringify<std::vector<std::string> >(const std::vector<std::string>& v)
@@ -146,6 +152,7 @@ namespace util {
         return join(v);
     }
 
+    /// stringify specialization for std::string.
     template <>
     inline std::string
     stringify<std::string>(const std::string& v)
@@ -161,6 +168,8 @@ namespace util {
     T
     destringify(const std::string& s)
     {
+        BacktraceContext c("util::destringify("+s+")");
+
         std::istringstream is(s.c_str());
 
         T v;
@@ -183,6 +192,8 @@ namespace util {
     inline int
     destringify<int>(const std::string& s)
     {
+        BacktraceContext c("util::destringify<int>("+s+")");
+
         char *invalid;
         int result = std::strtol(s.c_str(), &invalid, 10);
         if (*invalid)
@@ -194,6 +205,8 @@ namespace util {
     inline long
     destringify<long>(const std::string& s)
     {
+        BacktraceContext c("util::destringify<long>("+s+")");
+
         char *invalid;
         long result = std::strtol(s.c_str(), &invalid, 10);
         if (*invalid)
@@ -205,6 +218,8 @@ namespace util {
     inline unsigned long
     destringify<unsigned long>(const std::string& s)
     {
+        BacktraceContext c("util::destringify<unsigned long>("+s+")");
+
         char *invalid;
         unsigned long result = std::strtoul(s.c_str(), &invalid, 10);
         if (*invalid or ((result == ULONG_MAX) and (errno == ERANGE)))
@@ -216,6 +231,8 @@ namespace util {
     inline double
     destringify<double>(const std::string& s)
     {
+        BacktraceContext c("util::destringify<double>("+s+")");
+
         char *invalid;
         double result = std::strtod(s.c_str(), &invalid);
         if (*invalid)
@@ -227,6 +244,8 @@ namespace util {
     inline float
     destringify<float>(const std::string& s)
     {
+        BacktraceContext c("util::destringify<float>("+s+")");
+
         char *invalid;
         float result = std::strtod(s.c_str(), &invalid);
         if (*invalid)
@@ -238,6 +257,8 @@ namespace util {
     inline bool
     destringify<bool>(const std::string& s)
     {
+        BacktraceContext c("util::destringify<bool>("+s+")");
+
         if (s == "true" or s == "yes" or s == "on")  return true;
         if (s == "false" or s == "no" or s == "off") return false;
         return destringify<int>(s);
@@ -249,4 +270,4 @@ namespace util {
 
 #endif /* HAVE_STRING_HH */
 
-/* vim: set tw=80 sw=4 et : */
+/* vim: set tw=80 sw=4 fdm=marker et : */

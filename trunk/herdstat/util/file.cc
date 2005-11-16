@@ -60,6 +60,8 @@ Stat::assign(const std::string &p, bool opened)
 bool
 Stat::operator() ()
 {
+    BacktraceContext s("herdstat::util::Stat::operator()("+_path+")");
+
     if (this->_opened)
     {
         /* TODO: figure out how to fstat an open stream. */
@@ -104,6 +106,8 @@ BaseFileObject::~BaseFileObject()
 void
 BaseFileObject::close()
 {
+    BacktraceContext c("herdstat::util::BaseFileObject::close("+this->path()+")");
+
     if (not this->is_open())
         return;
     this->do_close();
@@ -113,6 +117,7 @@ BaseFileObject::close()
 void
 BaseFileObject::read()
 {
+    BacktraceContext c("herdstat::util::BaseFileObject::read()");
     assert(this->is_open());
     this->do_read();    
 }
@@ -120,6 +125,8 @@ BaseFileObject::read()
 void
 BaseFileObject::read(const std::string& path)
 {
+    BacktraceContext c("herdstat::util::BaseFileObject::read("+path+")");
+
     if (this->is_open())
         this->close();
 
@@ -130,14 +137,37 @@ BaseFileObject::read(const std::string& path)
     this->do_read();
 }
 /*****************************************************************************/
-BaseFile::BaseFile() : _stream(NULL)
+BaseFile::BaseFile() : _stream(NULL), _mode(DEFAULT_MODE)
 {
 }
 /*****************************************************************************/
+BaseFile::BaseFile(const BaseFile& that) : _stream(NULL), _mode(DEFAULT_MODE)
+{
+    *this = that;
+}
+/*****************************************************************************/
 BaseFile::BaseFile(const std::string &path, std::ios_base::openmode mode)
-    : BaseFileObject(path), _stream(NULL)
+    : BaseFileObject(path), _stream(NULL), _mode(mode)
 {
     this->open(this->path().c_str(), mode);
+}
+/*****************************************************************************/
+BaseFile&
+BaseFile::operator=(const BaseFile& that)
+{
+    BacktraceContext c("herdstat::util::BaseFile::operator=()");
+
+    BaseFileObject::operator=(that);
+
+    set_mode(that.mode());
+
+    if (that._stream and that._stream->is_open())
+    {
+        const_cast<BaseFile&>(that).close();
+        this->open(that.path().c_str(), mode());
+    }
+
+    return *this;
 }
 /*****************************************************************************/
 BaseFile::~BaseFile()
@@ -151,6 +181,10 @@ BaseFile::open(const char *n, std::ios_base::openmode mode)
 {
     if (this->path() != n)
         this->stat().assign(n);
+
+    BacktraceContext c("herdstat::util::BaseFile::open("+this->path()+")");
+
+    set_mode(mode);
 
     if (_stream)
     {
@@ -180,14 +214,18 @@ BaseFile::open()
 void
 BaseFile::open(std::ios_base::openmode mode)
 {
+    set_mode(mode);
     this->open(this->path().c_str(), mode);
 }
 /*****************************************************************************/
 void
 BaseFile::do_close()
 {
-    delete _stream;
-    _stream = NULL;
+    if (_stream)
+    {
+        delete _stream;
+        _stream = NULL;
+    }
 }
 /*****************************************************************************/
 File::File(const std::string &path, std::ios_base::openmode mode)
@@ -203,6 +241,8 @@ File::~File()
 void
 File::do_read()
 {
+    BacktraceContext c("herdstat::util::File::do_read("+this->path()+")");
+
     std::string line;
     while (std::getline(this->stream(), line))
         this->push_back(line);
@@ -217,6 +257,8 @@ File::do_read()
 bool
 File::operator== (const File &that) const
 {
+    BacktraceContext c("herdstat::util::File::operator==()");
+
     if (this->bufsize() != that.bufsize())
         return false;
 
@@ -226,6 +268,7 @@ File::operator== (const File &that) const
 void
 File::dump(std::ostream &os) const
 {
+    BacktraceContext c("herdstat::util::File::dump("+this->path()+")");
     std::copy(this->begin(), this->end(),
         std::ostream_iterator<value_type>(os, "\n"));
 }
@@ -233,6 +276,7 @@ File::dump(std::ostream &os) const
 void
 File::write()
 {
+    BacktraceContext c("herdstat::util::File::write("+this->path()+")");
     this->dump(this->stream());
     this->clear();
 }
@@ -257,6 +301,8 @@ Directory::~Directory()
 void
 Directory::do_close()
 {
+    BacktraceContext c("herdstat::util::Directory::do_close("+this->path()+")");
+
 #ifdef CLOSEDIR_VOID
     closedir(_dirp);
 #else /* CLOSEDIR_VOID */
@@ -268,6 +314,8 @@ Directory::do_close()
 void
 Directory::open()
 {
+    BacktraceContext c("herdstat::util::Directory::open("+this->path()+")");
+
     if (this->is_open())
         return;
 
@@ -283,6 +331,8 @@ Directory::open()
 void
 Directory::do_read()
 {
+    BacktraceContext c("herdstat::util::Directory::do_read("+this->path()+")");
+
     struct dirent *d = NULL;
     while ((d = readdir(this->_dirp)))
     {
@@ -363,6 +413,8 @@ dirname(const std::string& path)
 const char *
 chop_fileext(const std::string& path, unsigned short depth)
 {
+    BacktraceContext c("herdstat::util::chop_fileext("+path+")");
+
     std::string result(path);
 
     for (; depth > 0 ; --depth)
@@ -378,6 +430,8 @@ chop_fileext(const std::string& path, unsigned short depth)
 void
 copy_file(const std::string& from, const std::string& to)
 {
+    BacktraceContext c("herdstat::util::copy_file("+from+", "+to+")");
+
     /* remove to if it exists */
     if (is_file(to) and (unlink(to.c_str()) != 0))
 	throw FileException(to);
@@ -399,6 +453,7 @@ copy_file(const std::string& from, const std::string& to)
 void
 move_file(const std::string& from, const std::string& to)
 {
+    BacktraceContext c("herdstat::util::move_file("+from+", "+to+")");
     copy_file(from, to);
     if (unlink(from.c_str()) != 0)
 	throw FileException(from);
@@ -407,4 +462,4 @@ move_file(const std::string& from, const std::string& to)
 } // namespace util
 } // namespace herdstat
 
-/* vim: set tw=80 sw=4 et : */
+/* vim: set tw=80 sw=4 fdm=marker et : */

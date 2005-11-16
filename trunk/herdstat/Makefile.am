@@ -1,4 +1,4 @@
-# $Id: Makefile.am 633 2005-09-28 12:11:58Z ka0ttic $
+# $Id$
 
 include $(top_builddir)/Makefile.am.common
 

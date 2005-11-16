@@ -112,12 +112,20 @@ ErrnoException::ErrnoException(const std::string& msg)
 const char *
 ErrnoException::what() const throw()
 {
-    std::string s(this->message());
+    std::string s;
     std::string e(std::strerror(_code));
+
+    if (this->message())
+        s.assign(this->message());
+
+    if (s.empty() and e.empty())
+        return "No error message.";
+
     if (s.empty())
         return e.c_str();
     if (e.empty())
         return s.c_str();
+
     return (s + ": " + e).c_str();
 }
 
@@ -227,4 +235,4 @@ MalformedEmail::MalformedEmail(const std::string& msg)
 
 } // namespace herdstat
 
-/* vim: set tw=80 sw=4 et : */
+/* vim: set tw=80 sw=4 fdm=marker et : */

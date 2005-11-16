@@ -67,6 +67,8 @@ project_xml::~project_xml()
 void
 project_xml::do_fetch(const std::string& p) const throw (FetchException)
 {
+    BacktraceContext c("portage::project_xml::do_fetch("+p+")");
+
     if (not _cvsdir.empty())
         return;
 
@@ -112,6 +114,9 @@ void
 project_xml::parse(const std::string& path)
 {
     if (not path.empty()) this->set_path(path);
+
+    BacktraceContext c("portage::project_xml::parse("+this->path()+")");
+
     if (not util::is_file(this->path()))
         throw FileException(this->path());
 
@@ -200,4 +205,4 @@ project_xml::text(const std::string& text)
 } // namespace portage
 } // namespace herdstat
 
-/* vim: set tw=80 sw=4 et : */
+/* vim: set tw=80 sw=4 fdm=marker et : */

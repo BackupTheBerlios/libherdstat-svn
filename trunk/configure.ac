@@ -174,6 +174,9 @@ PKG_CHECK_MODULES(xmlwrapp, xmlwrapp >= 0.5.0,
     [AC_MSG_ERROR([xmlwrapp is required])])
 AC_SUBST(xmlwrapp_LIBS)
 
+AC_CHECK_HEADERS(libebt/libebt.hh,,
+    AC_MSG_ERROR([libebt/libebt.hh is required]))
+
 AM_CONFIG_HEADER(config.h)
 AC_OUTPUT(Makefile
 	  doc/Makefile

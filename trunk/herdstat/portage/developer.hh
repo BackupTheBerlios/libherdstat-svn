@@ -234,13 +234,13 @@ namespace portage {
     inline bool Developer::operator== (const Developer& that) const
     { return (_user == that._user); }
     inline bool Developer::operator== (const util::Regex& re) const
-    { return (re == _user); }
+    { return (_user == re); }
     inline bool Developer::operator!= (const std::string& user) const
     { return not (*this == user); }
     inline bool Developer::operator!= (const Developer& that) const
     { return not (*this == that); }
     inline bool Developer::operator!= (const util::Regex& re) const
-    { return (re != _user); }
+    { return (_user != re); }
     inline bool Developer::operator<  (const std::string& user) const
     { return (_user < user); }
     inline bool Developer::operator<  (const Developer& dev) const
@@ -421,4 +421,4 @@ namespace portage {
 
 #endif /* _HAVE_DEVELOPER_HH */
 
-/* vim: set tw=80 sw=4 et : */
+/* vim: set tw=80 sw=4 fdm=marker et : */

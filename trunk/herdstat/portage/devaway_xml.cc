@@ -25,6 +25,7 @@
 #endif
 
 #include <iostream>
+#include <herdstat/exceptions.hh>
 #include <herdstat/util/string.hh>
 #include <herdstat/util/file.hh>
 #include <herdstat/portage/devaway_xml.hh>
@@ -61,6 +62,8 @@ devaway_xml::parse(const std::string& path)
     else if (this->path().empty())
         this->set_path(_local_default);
 
+    BacktraceContext c("portage::devaway_xml::parse("+this->path()+")");
+
     if (not util::is_file(this->path()))
         throw FileException(this->path());
 
@@ -72,6 +75,8 @@ devaway_xml::parse(const std::string& path)
 void
 devaway_xml::fill_developer(Developer& dev) const
 {
+    BacktraceContext c("portage::devaway_xml::fill_developer()");
+
     if (dev.user().empty())
         throw Exception("devaway_xml::fill_developer() requires you pass a Developer object with at least the user name filled in");
 
@@ -140,4 +145,4 @@ devaway_xml::text(const std::string& text)
 } // namespace portage
 } // namespace herdstat
 
-/* vim: set tw=80 sw=4 et : */
+/* vim: set tw=80 sw=4 fdm=marker et : */

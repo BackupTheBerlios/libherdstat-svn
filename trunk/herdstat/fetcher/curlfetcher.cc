@@ -35,18 +35,20 @@
 #include <herdstat/fetcher/curlfetcher.hh>
 
 namespace herdstat {
-
+/****************************************************************************/
 CurlFetcher::CurlFetcher()
 {
 }
-
+/****************************************************************************/
 CurlFetcher::~CurlFetcher()
 {
 }
-
+/****************************************************************************/
 bool
 CurlFetcher::fetch(const std::string& url, const std::string& path) const
 {
+    BacktraceContext c("CurlFetcher::fetch("+url+", "+path+")");
+
 #ifdef FETCH_METHOD_CURL
     FILE *fp = NULL;
     bool result = true;
@@ -89,11 +91,11 @@ CurlFetcher::fetch(const std::string& url, const std::string& path) const
     return result;
 
 #else
-    throw Exception("CurlFetcher::fetch() called, but curl support is not enabled.");
+    throw Exception("CurlFetcher::fetch() called, but curl support has not been enabled.");
     return false;
 #endif
 }
-
+/****************************************************************************/
 } // namespace herdstat
 
-/* vim: set tw=80 sw=4 et : */
+/* vim: set tw=80 sw=4 fdm=marker et : */

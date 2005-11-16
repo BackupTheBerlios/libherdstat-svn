@@ -30,6 +30,7 @@
 #include <cassert>
 
 #include <herdstat/exceptions.hh>
+#include <herdstat/util/string.hh>
 #include <herdstat/portage/keywords.hh>
 
 using namespace herdstat;
@@ -42,35 +43,49 @@ int main(int argc, char **argv)
     try
     {
         std::cout << "Testing keyword sorting:" << std::endl;
-        Keywords keywords(argv[1], false);
-        std::cout << "'" << keywords.str() << "'" << std::endl;
+        Keywords keywords(argv[1]);
+        std::cout << "'" << util::strip_colors(keywords.str()) << "'" << std::endl;
 
         std::cout << std::endl
             << "Testing keyword iterator:" << std::endl;
         Keywords::iterator k;
         for (k = keywords.begin() ; k != keywords.end() ; ++k)
             std::cout << k->str() << std::endl;
-        std::cout << "All unstable? " << keywords.all_unstable() << std::endl;
+        std::cout << "All testing? " << std::boolalpha
+            << keywords.all_testing() << std::endl;
 
         std::cout << std::endl
-            << "Testing all_unstable():" << std::endl;
+            << "Testing all_testing():" << std::endl;
 
         std::vector<std::string> v;
         v.push_back("~x86"); v.push_back("~alpha"); v.push_back("~mips");
-        keywords.assign(v, false);
+        keywords.clear();
+        keywords.insert(v.begin(), v.end());
 
         for (k = keywords.begin() ; k != keywords.end() ; ++k)
             std::cout << k->str() << std::endl;
 
-        std::cout << "All unstable? " << keywords.all_unstable() << std::endl;
+        std::cout << "All testing? " << keywords.all_testing() << std::endl;
+        std::cout << "All stable? " << keywords.all_stable() << std::endl;
+
+        v.clear();
+        v.push_back("x86"); v.push_back("alpha");
+        keywords.clear();
+        keywords.insert(v.begin(), v.end());
+        std::cout << std::endl << "Testing all_stable():" << std::endl;
+
+        for (k = keywords.begin() ; k != keywords.end() ; ++k)
+            std::cout << k->str() << std::endl;
+
+        std::cout << "All stable? " << keywords.all_stable() << std::endl;
     }
     catch (const BaseException& e)
     {
-        std::cerr << e.what() << std::endl;
+        std::cerr << e.backtrace(":\n  * ") << e.what() << std::endl;
         return EXIT_FAILURE;
     }
 
     return EXIT_SUCCESS;
 }
 
-/* vim: set tw=80 sw=4 et : */
+/* vim: set tw=80 sw=4 fdm=marker et : */

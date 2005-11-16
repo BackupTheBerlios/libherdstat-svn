@@ -64,4 +64,4 @@ namespace xml {
 
 #endif /* _HAVE_INIT_HH */
 
-/* vim: set tw=80 sw=4 et : */
+/* vim: set tw=80 sw=4 fdm=marker et : */

@@ -45,6 +45,8 @@ saxparser::~saxparser()
 void
 saxparser::parse(const std::string &path) throw (ParserException)
 {
+    BacktraceContext c("xml::saxparser::parse("+path+")");
+
     if (not this->_handler->parse_file(path.c_str()))
         throw ParserException(path, this->_handler->get_error_message());
 }
@@ -52,4 +54,4 @@ saxparser::parse(const std::string &path) throw (ParserException)
 } // namespace xml
 } // namespace herdstat
 
-/* vim: set tw=80 sw=4 et : */
+/* vim: set tw=80 sw=4 fdm=marker et : */

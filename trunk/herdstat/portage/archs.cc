@@ -51,4 +51,4 @@ Archs::do_read()
 } // namespace portdir
 } // namespace herdstat
 
-/* vim: set tw=80 sw=4 et : */
+/* vim: set tw=80 sw=4 fdm=marker et : */
