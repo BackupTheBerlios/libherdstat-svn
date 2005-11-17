@@ -122,6 +122,9 @@ VersionString::suffix::suffix(const std::string& pvr)
 void
 VersionString::suffix::parse(const std::string &pvr) const
 {
+    this->_suffix.clear();
+    this->_suffix_ver.clear();
+
     /* valid suffixes (in order) */
     if (this->_suffixes.empty())
     {
@@ -254,6 +257,9 @@ VersionString::nosuffix::nosuffix(const std::string& pv)
 void
 VersionString::nosuffix::parse(const std::string& pv) const
 {
+    this->_version.clear();
+    this->_extra.clear();
+
     this->_version.assign(pv);
 
     /* strip suffix */
@@ -337,8 +343,13 @@ VersionString::nosuffix::operator== (const nosuffix& that) const
             (this->_extra   == that._extra));
 }
 /*****************************************************************************
- * VersionString                                                          *
+ * VersionString                                                             *
  *****************************************************************************/
+VersionString::VersionString()
+    : _ebuild(), _v(), _verstr(), _suffix(), _version()
+{
+}
+
 VersionString::VersionString(const std::string& path)
     : _ebuild(path), _v(path), _verstr(_v.version()),
       _suffix(_v["PVR"]), _version(_v["PV"])
@@ -360,6 +371,16 @@ VersionString::operator=(const VersionString& that)
     const_cast<nosuffix&>(_version) = that._version;
 
     return *this;
+}
+
+void
+VersionString::assign(const std::string& path)
+{
+    _ebuild.assign(path);
+    _v.assign(path);
+    _verstr.assign(_v.version());
+    _suffix.assign(_v["PVR"]);
+    _version.assign(_v["PV"]);
 }
 /*****************************************************************************
  * Display full version std::string (as portage would).                           *

@@ -170,6 +170,27 @@ Keywords::format()
     }
 }
 /****************************************************************************/
+struct NewPair
+{
+    std::pair<VersionString, Keywords>
+    operator()(const std::string& ebuild) const
+    {
+        std::pair<VersionString, Keywords> p;
+
+        p.first.assign(ebuild);
+
+        try
+        {
+            p.second.assign(ebuild);
+        }
+        catch (const Exception)
+        {
+        }
+
+        return p;
+    }
+};
+
 KeywordsMap::KeywordsMap(const std::string& pkgdir)
 {
     BacktraceContext c("portage::KeywordsMap::KeywordsMap("+pkgdir+")");
@@ -180,7 +201,7 @@ KeywordsMap::KeywordsMap(const std::string& pkgdir)
     const util::Directory dir(pkgdir);
     util::transform_if(dir.begin(), dir.end(),
         std::inserter(this->container(), this->end()),
-        IsEbuild(), NewVersionStringPair<Keywords>());
+        IsEbuild(), NewPair());;
 }
 /****************************************************************************/
 KeywordsMap::~KeywordsMap()

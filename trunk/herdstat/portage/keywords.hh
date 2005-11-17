@@ -296,11 +296,24 @@ namespace portage {
             /// Destructor.
             virtual ~KeywordsMap();
 
-            void set_colors(bool c) { _colors = c; }
-
-        private:
-            bool _colors;
+            inline const value_type& front() const;
+            inline const value_type& back() const;
     };
+
+    inline const KeywordsMap::value_type&
+    KeywordsMap::front() const
+    {
+        assert(not this->empty());
+        return *(this->begin());
+    }
+
+    inline const KeywordsMap::value_type&
+    KeywordsMap::back() const
+    {
+        assert(not this->empty());
+        const_iterator i = this->end();
+        return *(--i);
+    }
 
 } // namespace portage
 } // namespace herdstat

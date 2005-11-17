@@ -97,6 +97,9 @@ namespace portage {
     class VersionString
     {
         public:
+            /// Default constructor.
+            VersionString();
+
             /** Constructor.
              * @param path Path to ebuild.
              */
@@ -110,6 +113,11 @@ namespace portage {
 
             /// Get version string.
             std::string str() const;
+
+            /** Assign a new path.
+             * @param path Path to ebuild.
+             */
+            void assign(const std::string& path);
 
             /// Implicit conversion to std::string.
             operator std::string() const { return this->str(); }
@@ -172,9 +180,15 @@ namespace portage {
                     suffix();
 
                     /** Constructor.
-                     * @param pvr PVR std::string object (version+revision).
+                     * @param pvr PVR string object (version+revision).
                      */
                     suffix(const std::string &pvr);
+
+                    /** Assign a new suffix.
+                     * @param pvr PVR string object (version+revision).
+                     */
+                    void assign(const std::string& pvr)
+                    { this->parse(pvr); }
 
                     /** Get suffix string.
                      * @returns String object.
@@ -238,9 +252,15 @@ namespace portage {
                     nosuffix();
 
                     /** Constructor.
-                     * @param pv PV std::string object.
+                     * @param pv PV string object.
                      */
                     nosuffix(const std::string &pv);
+
+                    /** Assign a new $PV.
+                     * @param pv PV string object.
+                     */
+                    void assign(const std::string& pv)
+                    { this->parse(pv); }
 
                     /** Get version string minus suffix.
                      * @returns String object.
@@ -289,15 +309,15 @@ namespace portage {
             };
 
             /// Absolute path to ebuild.
-            const std::string _ebuild;
+            mutable std::string _ebuild;
             /// Version components map.
-            const VersionComponents _v;
+            mutable VersionComponents _v;
             /// Reference to actual version string
-            const std::string _verstr;
+            mutable std::string _verstr;
             /// Our version suffix.
-            const suffix _suffix;
+            mutable suffix _suffix;
             /// Our version minus suffix.
-            const nosuffix _version;
+            mutable nosuffix _version;
     };
 
     /** 
