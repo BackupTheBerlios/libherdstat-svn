@@ -50,6 +50,16 @@ ebuild::~ebuild()
 }
 /****************************************************************************/
 void
+ebuild::assign(const std::string& path)
+{
+    if (this->is_open())
+        this->close();
+
+    this->clear();
+    this->read(path);
+}
+/****************************************************************************/
+void
 ebuild::do_set_defaults()
 {
     /* in case path() is an eclass */

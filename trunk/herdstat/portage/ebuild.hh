@@ -61,6 +61,8 @@ namespace portage {
             /// Destructor.
             virtual ~ebuild();
 
+            void assign(const std::string& path);
+
         protected:
             /// Set default variables.
             virtual void do_set_defaults();
