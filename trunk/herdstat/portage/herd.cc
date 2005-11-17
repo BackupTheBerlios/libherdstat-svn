@@ -98,7 +98,8 @@ Herds::operator
 std::vector<std::string>() const
 {
     std::vector<std::string> v;
-    std::transform(this->begin(), this->end(), std::back_inserter(v), Name());
+    std::transform(this->begin(), this->end(),
+        std::back_inserter(v), std::mem_fun_ref(&Herd::name));
     return v;
 }
 /****************************************************************************/

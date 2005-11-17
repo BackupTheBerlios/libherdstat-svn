@@ -37,7 +37,7 @@
 #include <vector>
 #include <algorithm>
 
-#include <herdstat/portage/functional.hh>
+#include <herdstat/util/functional.hh>
 #include <herdstat/portage/gentoo_email_address.hh>
 
 namespace herdstat {
@@ -376,14 +376,18 @@ namespace portage {
 
     inline Developers::iterator Developers::find(const util::Regex& regex)
     {
-        return std::find_if(this->begin(), this->end(), std::bind1st(
-            UserRegexMatch<Developer>(), regex));
+        return std::find_if(this->begin(), this->end(),
+                util::compose_f_gx(
+                    std::bind1st(util::regexMatch(), regex),
+                    std::mem_fun_ref(&Developer::user)));
     }
 
     inline Developers::const_iterator Developers::find(const util::Regex& regex) const
     {
-        return std::find_if(this->begin(), this->end(), std::bind1st(
-            UserRegexMatch<Developer>(), regex));
+        return std::find_if(this->begin(), this->end(),
+                util::compose_f_gx(
+                    std::bind1st(util::regexMatch(), regex),
+                    std::mem_fun_ref(&Developer::user)));
     }
 
     inline Developers::value_type&

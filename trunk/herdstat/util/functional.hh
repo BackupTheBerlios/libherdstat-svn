@@ -52,108 +52,15 @@ namespace util {
     };
 
     /**
-     * @struct DereferenceLess
-     * @brief Function object that dereferences the given pointers and then
-     * compares their values via operator<.
-     */
-
-    template <typename T>
-    struct DereferenceLess
-        : std::binary_function<const T*, const T*, bool>
-    {
-        bool operator() (const T *p1, const T *p2) const { return (*p1 < *p2); }
-    };
-
-    /**
-     * @struct DereferenceGreater
-     * @brief Function object that dereferences the given pointers and then
-     * compares their values via operator<.
-     */
-
-    template <typename T>
-    struct DereferenceGreater
-        : std::binary_function<const T*, const T*, bool>
-    {
-        bool operator() (const T *p1, const T *p2) const { return (*p2 < *p1); }
-    };
-
-    /**
-     * @struct DereferenceEqual
-     * @brief Function object that dereferences the given pointers and then
-     * compares their values via operator==.
-     */
-
-    template <typename T>
-    struct DereferenceEqual
-        : std::binary_function<const T*, const T*, bool>
-    {
-        bool operator() (const T *p1, const T *p2) const { return (*p1 == *p2); }
-    };
-
-    /**
-     * @struct DereferenceStrLess
-     * @brief Function object that dereferences the given pointer and calls
-     * operator< against the given string.  Assumes the pointer type defines
-     * operator<(std::string).
-     */
-
-    template <typename T>
-    struct DereferenceStrLess
-        : std::binary_function<const T*, std::string, bool>
-    {
-        bool operator()(const T *p, std::string s) const { return (*p < s); }
-    };
-
-    /**
-     * @struct DereferenceStrGreater
-     * @brief Function object that dereferences the given pointer and calls
-     * operator> against the given string.  Assumes the pointer type defines
-     * operator>(std::string).
-     */
-
-    template <typename T>
-    struct DereferenceStrGreater
-        : std::binary_function<const T*, std::string, bool>
-    {
-        bool operator()(const T *p, std::string s) const { return (*p > s); }
-    };
-
-    /**
-     * @struct DereferenceStrEqual
-     * @brief Function object that dereferences the given pointer and calls
-     * operator== against the given string.  Assumes the pointer type defines
-     * operator==(std::string).
-     */
-
-    template <typename T>
-    struct DereferenceStrEqual
-        : std::binary_function<const T*, std::string, bool>
-    {
-        bool operator()(const T *p, std::string s) const { return (*p == s); }
-    };
-
-    /**
-     * @struct Str
-     * @brief Returns T::str().
-     */
-
-    struct Str
-    {
-        template <typename T>
-        std::string operator()(const T& v) const
-        { return v.str(); }
-    };
-
-    /**
      * @struct First
      * @brief Returns the 'first' member of a std::pair<K, V>.
      */
 
-    struct First
+    template <typename T>
+    struct First : std::unary_function<T, typename T::first_type>
     {
-        template <typename T>
         const typename T::first_type&
-        operator()(const T& v) { return v.first; }
+        operator()(const T& v) const { return v.first; }
     };
 
     /**
@@ -161,11 +68,11 @@ namespace util {
      * @brief Returns the 'second' member of a std::pair<K, V>.
      */
 
-    struct Second
+    template <typename T>
+    struct Second : std::unary_function<T, typename T::second_type>
     {
-        template <typename T>
         const typename T::second_type&
-        operator()(const T& v) { return v.second; }
+        operator()(const T& v) const { return v.second; }
     };
 
     /**

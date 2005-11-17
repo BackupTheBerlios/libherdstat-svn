@@ -41,59 +41,6 @@ namespace herdstat {
 namespace portage {
 
     /**
-     * @struct Name
-     * @brief Returns T::name().
-     */
-    struct Name
-    {
-        template <typename T>
-        const std::string& operator()(const T& v) const { return v.name(); }
-    };
-
-    /**
-     * @struct User
-     * Returns T::user().
-     */
-    struct User
-    {
-        template <typename T>
-        const std::string& operator()(const T& v) const { return v.user(); }
-    };
-
-    /**
-     * @struct Email
-     * Returns T::email().
-     */
-
-    struct Email
-    {
-        template <typename T>
-        const std::string& operator()(const T& v) const { return v.email(); }
-    };
-
-    /**
-     * @struct UserRegexMatch
-     * @brief Compares regex against T::user().
-     */
-    template <typename T>
-    struct UserRegexMatch : std::binary_function<util::Regex, T, bool>
-    {
-        bool operator()(const util::Regex &re, const T& v) const
-        { return (re == v.user()); }
-    };
-
-    /**
-     * @struct NameRegexMatch
-     * @brief Compares regex against T::name().
-     */
-    template <typename T>
-    struct NameRegexMatch : std::binary_function<util::Regex, T, bool>
-    {
-        bool operator()(const util::Regex &re, const T& v) const
-        { return (re == v.name()); }
-    };
-
-    /**
      * @struct IsCategory
      * @brief Function object that determines whether the given string is a
      * category name.
@@ -101,9 +48,7 @@ namespace portage {
     struct IsCategory
     {
         bool operator()(const std::string& cat) const
-        {
-            return is_category(cat);
-        }
+        { return is_category(cat); }
     };
 
     /**
@@ -114,9 +59,7 @@ namespace portage {
     struct IsEbuild
     {
         bool operator()(const std::string& path) const
-        {
-            return is_ebuild(path);
-        }
+        { return is_ebuild(path); }
     };
 
     /**
@@ -127,9 +70,7 @@ namespace portage {
     struct IsPkgDir
     {
         bool operator()(const std::string& path) const
-        {
-            return is_pkg_dir(path);
-        }
+        { return is_pkg_dir(path); }
     };
 
     /**
@@ -141,9 +82,7 @@ namespace portage {
     struct GetPkgFromPath
     {
         std::string operator()(const std::string& path) const
-        {
-            return get_pkg_from_path(path);
-        }
+        { return get_pkg_from_path(path); }
     };
 
 } // namespace portage

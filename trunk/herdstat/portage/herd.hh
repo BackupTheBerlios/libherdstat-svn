@@ -249,15 +249,19 @@ namespace portage {
     inline Herds::iterator
     Herds::find(const util::Regex& regex)
     {
-        return std::find_if(this->begin(), this->end(), std::bind1st(
-                    NameRegexMatch<Herd>(), regex));
+        return std::find_if(this->begin(), this->end(),
+                util::compose_f_gx(
+                    std::bind1st(util::regexMatch(), regex),
+                    std::mem_fun_ref(&Herd::name)));
     }
 
     inline Herds::const_iterator
     Herds::find(const util::Regex& regex) const
     {
-        return std::find_if(this->begin(), this->end(), std::bind1st(
-                    NameRegexMatch<Herd>(), regex));
+        return std::find_if(this->begin(), this->end(),
+                util::compose_f_gx(
+                    std::bind1st(util::regexMatch(), regex),
+                    std::mem_fun_ref(&Herd::name)));
     }
 
     inline Herds::value_type&

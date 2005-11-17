@@ -25,6 +25,14 @@ ChangeLog file for a more detailed listing of changes/bug fixes.
     - Added compositional function object adapters compose_f_gx,
       compose_f_gx_hx, and compose_f_gx_hy as described/implemented in
       Josuttis' "The Standard C++ Library - A Tutorial and Reference".
+    - Removed function objects: portage::User, portage::Name, portage::Email.
+      Use std::mem_fun_ref instead.  Also removed portage::UserRegexMatch and
+      portage::NameRegexMatch.  Use util::compose_f_gx with util::regexMatch
+      and std::mem_fun_ref instead.  Also removed util::DereferenceLess,
+      util:DereferenceEqual, util::DereferenceGreater, and
+      util::DereferenceStrEqual.  Use util::compose_f_gx and util::Dereference
+      with the respective std function object (std::equal_to, std::less, etc)
+      instead.
 
 0.1.1:
     - Added util::EmptyFirst function object for instantiating a
