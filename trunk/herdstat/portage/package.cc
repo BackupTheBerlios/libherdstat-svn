@@ -32,26 +32,25 @@ namespace herdstat {
 namespace portage {
 /****************************************************************************/
 Package::Package()
-    : _name(), _cat(), _dir(), _path(), _versions(NULL), _kwmap(NULL)
+    : _name(), _cat(), _dir(), _path(), _kwmap(NULL)
 {
 }
 /****************************************************************************/
 Package::Package(const Package& that)
-    : _name(), _cat(), _dir(), _path(), _versions(NULL), _kwmap(NULL)
+    : _name(), _cat(), _dir(), _path(), _kwmap(NULL)
 {
     *this = that;
 }
 /****************************************************************************/
 Package::Package(const std::string& name, const std::string& portdir)
-    : _name(), _cat(), _dir(portdir), _path(), _versions(NULL), _kwmap(NULL)
+    : _name(), _cat(), _dir(portdir), _path(), _kwmap(NULL)
 {
     set_name(name);
 }
 /****************************************************************************/
 Package::~Package()
 {
-    if (_versions) delete _versions;
-    if (_kwmap)    delete _kwmap;
+    if (_kwmap) delete _kwmap;
 }
 /****************************************************************************/
 Package&
@@ -63,8 +62,8 @@ Package::operator=(const Package& that)
     _full.assign(that._full);
     _path.assign(that._path);
 
-    if (that._versions)
-        _versions = new Versions(*that._versions);
+    if (that._kwmap)
+        _kwmap = new KeywordsMap(*that._kwmap);
 
     return *this;
 }
@@ -217,14 +216,13 @@ PackageWhich::operator()(const std::vector<Package>& finder_results)
             const Package& p1(*i);
             Package& p2(*p);
 
-            const Versions& v1(p1.versions());
-            const Versions& v2(p2.versions());
+            const VersionString& v1(p1.keywords().back().first);
+            const VersionString& v2(p2.keywords().back().first);
 
             /* if the pkg that already exists is older than the current one, or
              * they're equal and the one not already in 'pkgs' is in an overlay,
              * replace it */
-            if ((v2.back() < v1.back()) or
-                ((v2.back() == v1.back()) and p1.in_overlay()))
+            if (((v2 < v1) or (v2 == v1)) and p1.in_overlay())
                 p2 = p1;
         }
     }

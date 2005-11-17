@@ -106,9 +106,6 @@ namespace portage {
             /// Is this package located in an overlay?
             inline bool in_overlay() const;
 
-            /// Get a Versions object for this package.
-            inline const Versions& versions() const;
-
             /// Get a KeywordsMap object for each ebuild of this package.
             inline const KeywordsMap& keywords() const;
 
@@ -148,7 +145,6 @@ namespace portage {
             std::string _dir;
             std::string _full;
             std::string _path;
-            mutable Versions *_versions;
             mutable KeywordsMap *_kwmap;
     };
 
@@ -225,21 +221,11 @@ namespace portage {
     Package::operator!=(const util::Regex& re) const
     { return (re != _full); }
 
-    inline const Versions&
-    Package::versions() const
-    {
-        if (not _versions)
-            _versions = new Versions(_path);
-        assert(_versions);
-        return *_versions;
-    }
-
     inline const KeywordsMap&
     Package::keywords() const
     {
         if (not _kwmap)
             _kwmap = new KeywordsMap(_path);
-        assert(_kwmap);
         return *_kwmap;
     }
 
@@ -403,10 +389,10 @@ namespace portage {
         {
             BacktraceContext c("herdstat::portage::GetWhichFromPackage::operator()("+pkg.full()+")");
 
-            const Versions& versions(pkg.versions());
+            const KeywordsMap& versions(pkg.keywords());
             if (versions.empty())
                 throw NonExistentPkg(pkg);
-            return versions.back().ebuild();
+            return versions.back().first.ebuild();
         }
     };
 
@@ -585,8 +571,8 @@ namespace portage {
             throw NonExistentPkg(pkg);
 
         Package p(pkg, portdir);
-        const Versions& v(p.versions());
-        _results.push_back(v.back().ebuild());
+        const KeywordsMap& v(p.keywords());
+        _results.push_back(v.back().first.ebuild());
         return _results;
     }
 
