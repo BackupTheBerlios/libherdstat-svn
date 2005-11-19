@@ -20,8 +20,8 @@ pkgconfig_DATA = $(pc)
 DISTCLEANFILES = ChangeLog TODO $(pc)
 EXTRA_DIST = ChangeLog Makefile.am.common autogen.sh .todo libherdstat.pc.in
 
-docs:
-	cd doc && $(MAKE) $@
+doxygen:
+	$(MAKE) -C doc doxygen
 
 srchtml:
 	@test -d ${PWD}/html || mkdir ${PWD}/html ; \

@@ -8,7 +8,7 @@ PROJECT_NAME           = @PACKAGE@
 # This could be handy for archiving the generated documentation or 
 # if some version control system is used.
 
-PROJECT_NUMBER         = @VERSION@
+PROJECT_NUMBER         = "Version @VERSION@"
 
 # The OUTPUT_DIRECTORY tag is used to specify the (relative or absolute) 
 # base path where the generated documentation will be put. 
@@ -151,7 +151,7 @@ INHERIT_DOCS           = YES
 # member in the group (if any) for the other members of the group. By default 
 # all members of a group must be documented explicitly.
 
-DISTRIBUTE_GROUP_DOC   = NO
+DISTRIBUTE_GROUP_DOC   = YES
 
 # If the SEPARATE_MEMBER_PAGES tag is set to YES, then doxygen will produce 
 # a new page for each member. If set to NO, the documentation of a member will 
@@ -214,13 +214,13 @@ EXTRACT_PRIVATE        = NO
 # If the EXTRACT_STATIC tag is set to YES all static members of a file 
 # will be included in the documentation.
 
-EXTRACT_STATIC         = YES
+EXTRACT_STATIC         = NO
 
 # If the EXTRACT_LOCAL_CLASSES tag is set to YES classes (and structs) 
 # defined locally in source files will be included in the documentation. 
 # If set to NO only classes defined in header files are included.
 
-EXTRACT_LOCAL_CLASSES  = YES
+EXTRACT_LOCAL_CLASSES  = NO
 
 # This flag is only useful for Objective-C code. When set to YES local 
 # methods, which are defined in the implementation section but not in 
@@ -394,7 +394,7 @@ WARNINGS               = YES
 # for undocumented members. If EXTRACT_ALL is set to YES then this flag will 
 # automatically be disabled.
 
-WARN_IF_UNDOCUMENTED   = YES
+WARN_IF_UNDOCUMENTED   = NO
 
 # If WARN_IF_DOC_ERROR is set to YES, doxygen will generate warnings for 
 # potential errors in the documentation, such as not documenting some 
@@ -1063,14 +1063,14 @@ HIDE_UNDOC_RELATIONS   = YES
 # toolkit from AT&T and Lucent Bell Labs. The other options in this section 
 # have no effect if this option is set to NO (the default)
 
-HAVE_DOT               = YES
+HAVE_DOT               = NO
 
 # If the CLASS_GRAPH and HAVE_DOT tags are set to YES then doxygen 
 # will generate a graph for each documented class showing the direct and 
 # indirect inheritance relations. Setting this tag to YES will force the 
 # the CLASS_DIAGRAMS tag to NO.
 
-CLASS_GRAPH            = NO
+CLASS_GRAPH            = YES
 
 # If the COLLABORATION_GRAPH and HAVE_DOT tags are set to YES then doxygen 
 # will generate a graph for each documented class showing the direct and 
