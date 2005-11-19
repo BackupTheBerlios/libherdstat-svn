@@ -281,7 +281,7 @@ namespace portage {
 
     /**
      * @class KeywordsMap
-     * @brief Maps version_string objects to Keywords objects.
+     * @brief Maps VersionString objects to Keywords objects.
      */
 
     class KeywordsMap : public VersionsMap<Keywords>

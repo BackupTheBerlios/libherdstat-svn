@@ -7,15 +7,13 @@ ChangeLog file for a more detailed listing of changes/bug fixes.
       the 'second' member of two objects for equality).
     - xml::GlobalInit() access function now returns a const reference.
     - Added a Package class for representing a portage "package".
-    - portage::PackageList is now a vector of portage::Package's and has been
-      moved from package_list.hh to package.hh.  package_list.hh has been
-      removed.
+    - portage::PackageList is now a vector of portage::Package's.
     - Portage package searching interface has been completely rewritten.  The
       implementation is *much* cleaner and the interface can actually be
       considered usable (unlike before).  The find_package family of functions
       has been replaced by the PackageFinder class.  The ebuild_which family
-      of functions has been replaced by the PackageWhich class.  These classes
-      are defined in package.hh.  find.hh has been removed.
+      of functions has been replaced by the PackageWhich class.  PackageFinder
+      is defined in package_finder.hh; PackageWhich in package_which.hh.
     - Added util::all_equal() algorithms.
     - Renamed portage::version_map => portage::VersionComponents.  Renamed
       portage::versions => portage::Versions.  Added class template VersionsMap

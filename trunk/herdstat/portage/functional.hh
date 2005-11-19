@@ -34,8 +34,10 @@
 
 #include <functional>
 #include <herdstat/util/regex.hh>
+#include <herdstat/portage/exceptions.hh>
 #include <herdstat/portage/misc.hh>
 #include <herdstat/portage/config.hh>
+#include <herdstat/portage/package.hh>
 
 namespace herdstat {
 namespace portage {
@@ -45,7 +47,7 @@ namespace portage {
      * @brief Function object that determines whether the given string is a
      * category name.
      */
-    struct IsCategory
+    struct IsCategory : std::unary_function<std::string, bool>
     {
         bool operator()(const std::string& cat) const
         { return is_category(cat); }
@@ -56,7 +58,7 @@ namespace portage {
      * @brief Function object that returns is_ebuild(path).
      */
 
-    struct IsEbuild
+    struct IsEbuild : std::unary_function<std::string, bool>
     {
         bool operator()(const std::string& path) const
         { return is_ebuild(path); }
@@ -67,7 +69,7 @@ namespace portage {
      * @brief Function object that returns is_pkg_dir(path).
      */
 
-    struct IsPkgDir
+    struct IsPkgDir : std::unary_function<std::string, bool>
     {
         bool operator()(const std::string& path) const
         { return is_pkg_dir(path); }
@@ -79,10 +81,123 @@ namespace portage {
      * path to a package directory.
      */
 
-    struct GetPkgFromPath
+    struct GetPkgFromPath : std::unary_function<std::string, std::string>
     {
         std::string operator()(const std::string& path) const
         { return get_pkg_from_path(path); }
+    };
+
+    /**
+     * @struct FullPkgName
+     * @brief Function object for explicit conversion from Package to
+     * std::string (the category/package string).
+     */
+
+    struct FullPkgName : std::unary_function<Package, std::string>
+    {
+        std::string operator()(const Package& pkg) const
+        { return pkg.full(); }
+    };
+
+    /**
+     * @struct FullPkgNameLess
+     * @brief Function object for sorting by full package name only (Package
+     * operators sort by name and portdir).
+     */
+    
+    struct FullPkgNameLess : std::binary_function<Package, Package, bool>
+    {
+        bool operator()(const Package& p1, const Package& p2) const
+        { return (p1.full() < p2.full()); }
+    };
+
+    /**
+     * @struct FullPkgNameEqual
+     * @brief Function object for sorting by full package name only (Package
+     * operators sort by name and portdir).
+     */
+
+    struct FullPkgNameEqual
+        : std::binary_function<Package, Package, bool>
+    {
+        bool operator()(const Package& p1, const Package& p2) const
+        { return (p1.full() == p2.full()); }
+    };
+
+    /**
+     * @struct NewPackage
+     * @brief Function object for instantiating a Package class with the given
+     * path (to the package directory) and a portdir (may be an overlay).
+     */
+
+    struct NewPackage
+        : std::binary_function<std::string, std::string, Package>
+    {
+        Package
+        operator()(const std::string& path, const std::string& portdir) const
+        { return Package(get_pkg_from_path(path), portdir); }
+    };
+
+    /**
+     * @struct GetWhichFromPackage
+     * @brief Function object for retrieving the path to the newest ebuild for
+     * the given Package object.
+     */
+
+    struct GetWhichFromPackage : std::unary_function<Package, std::string>
+    {
+        std::string operator()(const Package& pkg) const
+        {
+            BacktraceContext c("herdstat::portage::GetWhichFromPackage::operator()("+pkg.full()+")");
+
+            const KeywordsMap& versions(pkg.keywords());
+            if (versions.empty())
+                throw NonExistentPkg(pkg);
+            return versions.back().first.ebuild();
+        }
+    };
+
+    /**
+     * @struct PackageMatches
+     * @brief Function object for comparing a Package object with an object of
+     * type T.
+     */
+
+    template <typename T>
+    struct PackageMatches : std::binary_function<Package, T, bool>
+    {
+        bool operator()(const Package& pkg, const T& criteria) const
+        {    
+                    /* criteria matches cat/pkg string? */
+            return ((pkg.full() == criteria) or
+                    /* or matches just the pkg string? */
+                    (pkg.name() == criteria));
+        }
+    };
+
+    /**
+     * @struct PackageIsValid
+     * @brief Function object for determining whether the given Package object
+     * has a valid package directory.
+     */
+
+    struct PackageIsValid : std::unary_function<Package, bool>
+    {
+        bool operator()(const Package& pkg) const
+        { return is_pkg_dir(pkg.path()); }
+    };
+
+    /**
+     * @struct PackageLivesInOverlay
+     * @brief Function object that determines whether the given Package object
+     * represents a package that exists in an overlay (or technically one whose
+     * portdir member is not the real PORTDIR).
+     */
+
+    struct PackageLivesInOverlay : std::unary_function<Package, bool>
+    {
+        bool operator()(const Package& pkg) const
+        { return pkg.in_overlay(); }
     };
 
 } // namespace portage

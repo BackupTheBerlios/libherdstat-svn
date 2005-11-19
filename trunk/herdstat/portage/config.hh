@@ -42,7 +42,10 @@
 #include <herdstat/portage/categories.hh>
 
 namespace herdstat {
-/// portage-related classes/functions.
+/**
+ * @namespace herdstat::portage
+ * @brief portage-related classes/functions.
+ */
 namespace portage {
 
     /**

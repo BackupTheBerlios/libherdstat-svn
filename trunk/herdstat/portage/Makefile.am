@@ -6,6 +6,8 @@ cc_sources = config.cc \
 	     version.cc \
 	     categories.cc \
 	     package.cc \
+	     package_list.cc \
+	     package_which.cc \
 	     archs.cc \
 	     keywords.cc \
 	     license.cc \
@@ -24,6 +26,9 @@ hh_sources = exceptions.hh \
 	     config.hh \
 	     categories.hh \
 	     package.hh \
+	     package_list.hh \
+	     package_finder.hh \
+	     package_which.hh \
 	     version.hh \
 	     archs.hh \
 	     keywords.hh \

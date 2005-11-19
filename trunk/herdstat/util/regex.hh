@@ -266,6 +266,8 @@ namespace util {
         _eflags = eflags;
     }
 
+    ///@{
+    /// Compare a Regex with a std::string on the left-hand side.
     inline bool
     operator==(const std::string& lhs, const Regex& rhs)
     {
@@ -277,6 +279,7 @@ namespace util {
     {
         return (rhs != lhs);
     }
+    ///@}
 
     /**
      * @class RegexMap

@@ -434,17 +434,17 @@ namespace portage {
     template <typename T>
     class VersionsMap : public util::MapBase<VersionString, T>
     {
-
     };
 
     /**
-     * @struct NewVersionsMapElem
-     * @brief Function object for creating a new std::pair<VersionString, T> for
-     * inserting into a VersionsMap instance.
+     * @struct NewVersionStringPair
+     * @brief Function object for creating a new std::pair<VersionString, T>.
+     * Implicit interface assumes T has a constructor that takes a std::string.
      */
 
     template <typename T>
     struct NewVersionStringPair
+        : std::unary_function<std::string, std::pair<VersionString, T> >
     {
         std::pair<VersionString, T>
         operator()(const std::string& path) const

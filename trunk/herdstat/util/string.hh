@@ -43,7 +43,7 @@
 
 namespace herdstat {
 /**
- * @namespace util
+ * @namespace herdstat::util
  * @brief General-purpose utility classes/functions.
  */
 namespace util {

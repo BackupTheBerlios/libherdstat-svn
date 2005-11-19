@@ -3,6 +3,8 @@
 include $(top_builddir)/Makefile.am.common
 
 SUBDIRS = util fetcher xml portage
+MAINTAINERCLEANFILES = Makefile.in *~ .loT libherdstat_version.hh
+EXTRA_DIST = libherdstat_version.hh.in
 
 cc_sources = exceptions.cc \
 	     email_address.cc
@@ -22,9 +24,7 @@ libherdstat_la_LIBADD = util/libutil.la \
 libherdstat_la_SOURCES = $(hh_sources) $(cc_sources)
 
 library_includedir=$(includedir)/$(PACKAGE)-$(VERSION_MAJOR).$(VERSION_MINOR)/herdstat
-library_include_HEADERS = $(hh_sources)
-
-MAINTAINERCLEANFILES = Makefile.in *~ .loT
+library_include_HEADERS = $(hh_sources) libherdstat_version.hh
 
 srchtml: $(foreach f, $(libherdstat_la_SOURCES), $(f).html)
 	@for x in $(SUBDIRS) ; do \

@@ -39,7 +39,10 @@
 #include <herdstat/xml/saxparser.hh>
 
 namespace herdstat {
-/// XML-related classes.
+/**
+ * @namespace herdstat::xml
+ * @brief XML-related classes.
+ */
 namespace xml {
 
     /**
