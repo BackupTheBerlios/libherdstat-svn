@@ -1,5 +1,5 @@
 /*
- * libherdstat -- src/license-test.cc
+ * libherdstat -- tests/src/license-test.hh
  * $Id$
  * Copyright (c) 2005 Aaron Walker <ka0ttic@gentoo.org>
  *
@@ -20,37 +20,29 @@
  * Place, Suite 325, Boston, MA  02111-1257  USA
  */
 
+#ifndef _HAVE__LICENSE_TEST_HH
+#define _HAVE__LICENSE_TEST_HH 1
+
 #ifdef HAVE_CONFIG_H
 # include "config.h"
 #endif
 
-#include <iostream>
-#include <string>
-#include <cstdlib>
-
-#include <herdstat/exceptions.hh>
 #include <herdstat/portage/ebuild.hh>
 #include <herdstat/portage/license.hh>
 
-using namespace herdstat;
+#include "test_handler.hh"
 
-int main(int argc, char **argv)
+DECLARE_TEST_HANDLER(LicenseTest)
+
+void
+LicenseTest::operator()(const opts_type& opts) const
 {
-    assert(argc == 2);
-
-    try
-    {
-        portage::ebuild ebuild(argv[1]);
-        portage::License license(ebuild["LICENSE"], true);
-        std::cout << "License(s): " << license.str() << std::endl;
-    }
-    catch (const BaseException& e)
-    {
-        std::cerr << e.backtrace(":\n  * ") << e.what() << std::endl;
-        return EXIT_FAILURE;
-    }
-
-    return EXIT_SUCCESS;
+    assert(not opts.empty());
+    herdstat::portage::ebuild ebuild(opts.front());
+    herdstat::portage::License license(ebuild["LICENSE"], true);
+    std::cout << "License(s): " << license.str() << std::endl;
 }
+
+#endif /* _HAVE__LICENSE_TEST_HH */
 
 /* vim: set tw=80 sw=4 fdm=marker et : */

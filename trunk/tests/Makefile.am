@@ -4,7 +4,7 @@ if BUILD_TESTS
 
 SUBDIRS = src
 
-export tests = string \
+tests = string \
 	container_base \
 	glob \
 	regex \
@@ -13,8 +13,9 @@ export tests = string \
 	keyword \
 	license \
 	ebuild \
-	find \
 	package_list \
+	package_finder \
+	package_which \
 	herds.xml \
 	devaway.xml \
 	userinfo.xml \

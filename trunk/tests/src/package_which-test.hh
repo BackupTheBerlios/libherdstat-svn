@@ -1,5 +1,5 @@
 /*
- * libherdstat -- src/package_list-test.cc
+ * libherdstat -- tests/src/package_which-test.hh
  * $Id$
  * Copyright (c) 2005 Aaron Walker <ka0ttic@gentoo.org>
  *
@@ -20,43 +20,33 @@
  * Place, Suite 325, Boston, MA  02111-1257  USA
  */
 
+#ifndef _HAVE__PACKAGE_WHICH_TEST_HH
+#define _HAVE__PACKAGE_WHICH_TEST_HH 1
+
 #ifdef HAVE_CONFIG_H
 # include "config.h"
 #endif
 
-#include <iostream>
-#include <cstdlib>
-#include <herdstat/exceptions.hh>
 #include <herdstat/portage/config.hh>
-#include <herdstat/portage/misc.hh>
-#include <herdstat/portage/package.hh>
+#include <herdstat/portage/package_which.hh>
+#include "test_handler.hh"
 
-using namespace herdstat;
+DECLARE_TEST_HANDLER(PackageWhichTest)
 
-int
-main(int argc, char **argv)
+void
+PackageWhichTest::operator()(const opts_type& null) const
 {
-    try
-    {
-        const std::string& portdir(portage::GlobalConfig().portdir());
+    herdstat::portage::PackageList pkgs;
+    const std::string& portdir(herdstat::portage::GlobalConfig().portdir());
 
-        portage::PackageList pkgs;
+    herdstat::portage::PackageWhich which;
+    const std::vector<std::string>& results(which("foo", pkgs));
+    assert(results.size() == 1);
+    const std::string& result(results.front());
 
-        std::cout << "Package List:" << std::endl;
-        portage::PackageList::iterator i;
-        for (i = pkgs.begin() ; i != pkgs.end() ; ++i)
-        {
-            if (portage::is_pkg_dir(portdir+"/"+i->category()+"/"+i->name()))
-                std::cout << i->category() << "/" << i->name() << std::endl;
-        }
-    }
-    catch (const BaseException& e)
-    {
-        std::cerr << e.backtrace(":\n  * ") << e.what() << std::endl;
-        return EXIT_FAILURE;
-    }
-
-    return EXIT_SUCCESS;
+    std::cout << result.substr(portdir.length()+1) << std::endl;
 }
+
+#endif /* _HAVE__PACKAGE_WHICH_TEST_HH */
 
 /* vim: set tw=80 sw=4 fdm=marker et : */

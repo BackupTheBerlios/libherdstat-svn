@@ -1,5 +1,5 @@
 /*
- * libherdstat -- src/container_base-test.cc
+ * libherdstat -- tests/src/ebuild-test.hh
  * $Id$
  * Copyright (c) 2005 Aaron Walker <ka0ttic@gentoo.org>
  *
@@ -20,52 +20,32 @@
  * Place, Suite 325, Boston, MA  02111-1257  USA
  */
 
+#ifndef _HAVE__EBUILD_TEST_HH
+#define _HAVE__EBUILD_TEST_HH 1
+
 #ifdef HAVE_CONFIG_H
 # include "config.h"
 #endif
 
-#include <iostream>
-#include <cstdlib>
-#include <herdstat/exceptions.hh>
-#include <herdstat/util/container_base.hh>
+#include <herdstat/portage/ebuild.hh>
+#include "test_handler.hh"
 
-using namespace herdstat;
+DECLARE_TEST_HANDLER(EbuildTest)
 
-class MySet : public util::SetBase<std::string>
+void
+EbuildTest::operator()(const opts_type& opts) const
 {
-    public:
-        void display()
-        {
-            for (iterator i = this->begin() ; i != this->end() ; ++i)
-                std::cout << *i << std::endl;
-        }
-};
+    assert(not opts.empty());
 
-#define TRY_INSERT(x) \
-    if (not m.insert(#x).second) \
-        std::cout << "Failed to insert " << #x << std::endl;
-
-int
-main(int argc, char **argv)
-{
-    try
+    const herdstat::portage::ebuild ebuild(opts.front());
+    for (herdstat::portage::ebuild::const_iterator i = ebuild.begin() ;
+            i != ebuild.end() ; ++i)
     {
-        MySet m;
-        TRY_INSERT(foo);
-        TRY_INSERT(bar);
-        TRY_INSERT(baz);
-        TRY_INSERT(foo);
-        TRY_INSERT(foobarbaz);
-
-        m.display();
+        if (i->first != "HOME")
+            std::cout << i->first << " = " << i->second << std::endl;
     }
-    catch (const BaseException& e)
-    {
-        std::cerr << e.what() << std::endl;
-        return EXIT_FAILURE;
-    }
-
-    return EXIT_SUCCESS;
 }
+
+#endif /* _HAVE__EBUILD_TEST_HH */
 
 /* vim: set tw=80 sw=4 fdm=marker et : */
