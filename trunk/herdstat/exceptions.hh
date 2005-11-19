@@ -38,7 +38,11 @@
 #include <regex.h>
 #include <libebt/libebt.hh>
 
-/// Main namespace all of libherdstat resides in.
+/**
+ * @namespace herdstat
+ * @brief Main namespace all of libherdstat resides in.
+ */
+
 namespace herdstat {
 
     /** @mainpage Main Index
@@ -51,10 +55,11 @@ namespace herdstat {
      * also offered.
      */
 
+    /// exception group for use by libebt.
     class ExceptionTag { };
 
-    /// convenience typedef for backtrace contexts
-    typedef libebt::BacktraceContext<ExceptionTag, std::string> BacktraceContext;
+    /// convenience typedef for backtrace contexts provided by libebt.
+    typedef libebt::BacktraceContext<ExceptionTag> BacktraceContext;
 
     /**
      * @class BaseException
@@ -63,7 +68,7 @@ namespace herdstat {
      */
 
     class BaseException : public std::exception,
-                          public libebt::Backtracable<ExceptionTag, std::string>
+                          public libebt::Backtracable<ExceptionTag>
     {
     };
 
@@ -71,32 +76,33 @@ namespace herdstat {
      * @class Exception
      * @brief Generic exception class.
      */
+
     class Exception : public BaseException
     {
         public:
             /// Default constructor.
-            Exception();
+            Exception() throw();
 
             /// Copy constructor.
-            Exception(const Exception& that);
+            Exception(const Exception& that) throw();
 
             /** Constructor.
              * @param fmt printf-like format string.
              * @param v va_list.
              */
-            Exception(const char *fmt, va_list v);
+            Exception(const char *fmt, va_list v) throw();
 
             //@{
             /** Constructor.
              * @param fmt printf-like format string.
              * @param ... variable args.
              */
-            Exception(const char *fmt, ...);
-            Exception(const std::string& fmt, ...);
+            Exception(const char *fmt, ...) throw();
+            Exception(const std::string& fmt, ...) throw();
             //@}
 
             /// Copy assignment operator.
-            Exception& operator= (const Exception& that);
+            Exception& operator= (const Exception& that) throw();
 
             /// Destructor.
             virtual ~Exception() throw();
@@ -105,7 +111,7 @@ namespace herdstat {
             virtual const char *what() const throw();
 
         protected:
-            const char *message() const { return _buf; }
+            const char *message() const throw() { return _buf; }
 
         private:
             char *_buf;
@@ -116,18 +122,19 @@ namespace herdstat {
      * @class ErrnoException
      * @brief Exception class for errors where errno is set.
      */
+
     class ErrnoException : public Exception
     {
         public:
             /// Default constructor.
-            ErrnoException();
+            ErrnoException() throw();
 
             //@{
             /** Constructor.
              * @param msg Error message prefix.
              */
-            ErrnoException(const char *msg);
-            ErrnoException(const std::string& msg);
+            ErrnoException(const char *msg) throw();
+            ErrnoException(const std::string& msg) throw();
             //@}
 
             /// Destructor.
@@ -137,7 +144,7 @@ namespace herdstat {
             virtual const char *what() const throw();
 
             /// Get error code (errno) for this error.
-            int code() const { return _code; }
+            int code() const throw() { return _code; }
 
         private:
             int _code;
@@ -147,18 +154,19 @@ namespace herdstat {
      * @class FileException
      * @brief Exception for file-related errors.
      */
+
     class FileException : public ErrnoException
     {
         public:
             /// Default constructor.
-            FileException();
+            FileException() throw();
 
             //@{
             /** Constructor.
              * @param msg Error message prefix.
              */
-            FileException(const char *msg);
-            FileException(const std::string& msg);
+            FileException(const char *msg) throw();
+            FileException(const std::string& msg) throw();
             //@}
             
             /// Destructor.
@@ -169,18 +177,19 @@ namespace herdstat {
      * @class BadCast
      * @brief Exception for bad type casts.
      */
+
     class BadCast : public Exception
     {
         public:
             /// Default constructor.
-            BadCast();
+            BadCast() throw();
 
             //@{
             /** Constructor.
              * @param msg Error message.
              */
-            BadCast(const char *msg);
-            BadCast(const std::string& msg);
+            BadCast(const char *msg) throw();
+            BadCast(const std::string& msg) throw();
             //@}
 
             /// Destructor.
@@ -191,22 +200,23 @@ namespace herdstat {
      * @class BadRegex
      * @brief Exception for regular expression errors.
      */
+
     class BadRegex : public Exception
     {
         public:
             /// Default constructor.
-            BadRegex();
+            BadRegex() throw();
 
             /** Constructor.
              * @param e error code.
              * @param re regex_t associated with this error.
              */
-            BadRegex(int e, const regex_t *re);
+            BadRegex(int e, const regex_t *re) throw();
 
             /** Constructor.
              * @param s Error message.
              */
-            BadRegex(const std::string& s);
+            BadRegex(const std::string& s) throw();
 
             /// Destructor.
             virtual ~BadRegex() throw() { }
@@ -223,18 +233,19 @@ namespace herdstat {
      * @class BadDate
      * @brief Exception for invalid dates.
      */
+
     class BadDate : public Exception
     {
         public:
             /// Default constructor.
-            BadDate();
+            BadDate() throw();
 
             //@{
             /** Constructor.
              * @param msg Error message.
              */
-            BadDate(const char *msg);
-            BadDate(const std::string& msg);
+            BadDate(const char *msg) throw();
+            BadDate(const std::string& msg) throw();
             //@}
 
             /// Destructor.
@@ -245,18 +256,19 @@ namespace herdstat {
      * @class FetchException
      * @brief Exception for fetching errors.
      */
+
     class FetchException : public Exception
     {
         public:
             /// Default constructor.
-            FetchException();
+            FetchException() throw();
 
             //@{
             /** Constructor.
              * @param msg Error message.
              */
-            FetchException(const char *msg);
-            FetchException(const std::string& msg);
+            FetchException(const char *msg) throw();
+            FetchException(const std::string& msg) throw();
             //@}
             
             /// Destructor.
@@ -267,18 +279,19 @@ namespace herdstat {
      * @class MalformedEmail
      * @brief Exception for malformed email addresses.
      */
+
     class MalformedEmail : public Exception
     {
         public:
             /// Default constructor.
-            MalformedEmail();
+            MalformedEmail() throw();
 
             //@{
             /** Constructor.
              * @param msg Error message.
              */
-            MalformedEmail(const char *msg);
-            MalformedEmail(const std::string& msg);
+            MalformedEmail(const char *msg) throw();
+            MalformedEmail(const std::string& msg) throw();
             //@}
 
             /// Destructor.

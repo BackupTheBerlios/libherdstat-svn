@@ -31,23 +31,24 @@
 
 namespace herdstat {
 
-Exception::Exception() : _buf(NULL)
+Exception::Exception() throw()
+    : _buf(NULL)
 {
 }
 
-Exception::Exception(const Exception& that)
+Exception::Exception(const Exception& that) throw()
     : _buf(NULL)
 {
     *this = that;
 }
 
-Exception::Exception(const char *fmt, va_list v)
+Exception::Exception(const char *fmt, va_list v) throw()
     : _buf(NULL)
 {
     vasprintf(&_buf, fmt, v);
 }
 
-Exception::Exception(const char *fmt, ...)
+Exception::Exception(const char *fmt, ...) throw()
     : _buf(NULL)
 {
     va_start(_v, fmt);
@@ -55,7 +56,7 @@ Exception::Exception(const char *fmt, ...)
     va_end(_v);
 }
 
-Exception::Exception(const std::string& fmt, ...)
+Exception::Exception(const std::string& fmt, ...) throw()
     : _buf(NULL)
 {
 #ifdef HAVE_GCC4
@@ -74,7 +75,7 @@ Exception::~Exception() throw()
 }
 
 Exception&
-Exception::operator= (const Exception& that)
+Exception::operator= (const Exception& that) throw()
 {
     if (_buf)
     {
@@ -95,16 +96,17 @@ Exception::what() const throw()
     return _buf;
 }
 
-ErrnoException::ErrnoException() : _code(errno)
+ErrnoException::ErrnoException() throw()
+    : _code(errno)
 {
 }
 
-ErrnoException::ErrnoException(const char *msg)
+ErrnoException::ErrnoException(const char *msg) throw()
     : Exception(msg), _code(errno)
 {
 }
 
-ErrnoException::ErrnoException(const std::string& msg)
+ErrnoException::ErrnoException(const std::string& msg) throw()
     : Exception(msg), _code(errno)
 {
 }
@@ -129,45 +131,45 @@ ErrnoException::what() const throw()
     return (s + ": " + e).c_str();
 }
 
-FileException::FileException()
+FileException::FileException() throw()
 {
 }
 
-FileException::FileException(const char *msg)
+FileException::FileException(const char *msg) throw()
     : ErrnoException(msg)
 {
 }
 
-FileException::FileException(const std::string& msg)
+FileException::FileException(const std::string& msg) throw()
     : ErrnoException(msg)
 {
 }
 
-BadCast::BadCast()
+BadCast::BadCast() throw()
 {
 }
 
-BadCast::BadCast(const char *msg)
+BadCast::BadCast(const char *msg) throw()
     : Exception(msg)
 {
 }
 
-BadCast::BadCast(const std::string& msg)
+BadCast::BadCast(const std::string& msg) throw()
     : Exception(msg)
 {
 }
 
-BadRegex::BadRegex()
+BadRegex::BadRegex() throw()
     : _err(0), _re(NULL)
 {
 }
 
-BadRegex::BadRegex(int e, const regex_t *re)
+BadRegex::BadRegex(int e, const regex_t *re) throw()
     : _err(e), _re(re)
 {
 }
 
-BadRegex::BadRegex(const std::string& msg)
+BadRegex::BadRegex(const std::string& msg) throw()
     : Exception(msg), _err(0), _re(NULL)
 {
 }
@@ -191,44 +193,44 @@ BadRegex::what() const throw()
     return "";
 }
 
-BadDate::BadDate()
+BadDate::BadDate() throw()
 {
 }
 
-BadDate::BadDate(const char *msg)
+BadDate::BadDate(const char *msg) throw()
     : Exception(msg)
 {
 }
 
-BadDate::BadDate(const std::string& msg)
+BadDate::BadDate(const std::string& msg) throw()
     : Exception(msg)
 {
 }
 
-FetchException::FetchException()
+FetchException::FetchException() throw()
 {
 }
 
-FetchException::FetchException(const char *msg)
+FetchException::FetchException(const char *msg) throw()
     : Exception(msg)
 {
 }
 
-FetchException::FetchException(const std::string& msg)
+FetchException::FetchException(const std::string& msg) throw()
     : Exception(msg)
 {
 }
 
-MalformedEmail::MalformedEmail()
+MalformedEmail::MalformedEmail() throw()
 {
 }
 
-MalformedEmail::MalformedEmail(const char *msg)
+MalformedEmail::MalformedEmail(const char *msg) throw()
     : Exception(msg)
 {
 }
 
-MalformedEmail::MalformedEmail(const std::string& msg)
+MalformedEmail::MalformedEmail(const std::string& msg) throw()
     : Exception(msg)
 {
 }
