@@ -2,7 +2,8 @@
 # $Id: configure.ac 246 2005-04-26 12:03:53Z ka0ttic $
 
 AC_PREREQ(2.59)
-AC_INIT(herdstat/util/string.cc)
+AC_INIT([herdstat/exceptions.hh])
+AC_CONFIG_AUX_DIR(config)
 
 # release versioning
 VERSION_MAJOR=0
@@ -15,6 +16,8 @@ VERSION_FULL="$VERSION_MAJOR.$VERSION_MINOR.$VERSION_MICRO"
 if ! test -z "$VERSION_SUFFIX" ; then
     VERSION_FULL="$VERSION_FULL"_"$VERSION_SUFFIX""$VERSION_SUFFIX_VERSION"
 fi
+
+VERSION="$VERSION_FULL"
 
 AC_SUBST(VERSION_MAJOR)
 AC_SUBST(VERSION_MINOR)
@@ -38,10 +41,7 @@ LIBRARY_VERSION=1:0:0
 #        +- increment if interfaces have been added, removed or changed
 AC_SUBST(LIBRARY_VERSION)
 
-VERSION=$VERSION_FULL
-
-AC_CONFIG_AUX_DIR(config)
-AM_INIT_AUTOMAKE(libherdstat, $VERSION_FULL)
+AM_INIT_AUTOMAKE(libherdstat, [$VERSION_FULL])
 
 test x$localstatedir = "xNONE" && localstatedir="$ac_default_localstatedir"
 test x$sysconfdir = "xNONE" && sysconfdir="$ac_default_sysconfdir"
@@ -80,10 +80,11 @@ else
     AC_MSG_RESULT(no)
 fi
 
-AC_LANG_CPLUSPLUS
+AC_LANG([C++])
 AC_PROG_CXX
 AC_PROG_MAKE_SET
 AC_PROG_INSTALL
+AC_PROG_LN_S
 
 dnl hack to disable damn f77 libtool checks (stolen from sandbox's configure.in)
 m4_undefine([AC_PROG_F77])
@@ -182,6 +183,7 @@ AC_OUTPUT(Makefile
 	  doc/Makefile
           doc/Doxyfile
 	  herdstat/Makefile
+	  herdstat/libherdstat_version.hh
 	  herdstat/util/Makefile
 	  herdstat/fetcher/Makefile
 	  herdstat/xml/Makefile
