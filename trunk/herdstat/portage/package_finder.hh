@@ -35,7 +35,7 @@ namespace herdstat {
 namespace portage {
 
     /**
-     * @class PackageFinder
+     * @class PackageFinder package_finder.hh herdstat/portage/package_finder.hh
      * @brief Interface for portage package searching.
      */
 
@@ -76,15 +76,6 @@ namespace portage {
             const PackageList& _pkglist;
             std::vector<Package> _results;
     };
-
-    PackageFinder::PackageFinder(const PackageList& pkglist)
-        : _pkglist(pkglist), _results()
-    {
-    }
-
-    PackageFinder::~PackageFinder()
-    {
-    }
 
     template <typename T>
     const std::vector<Package>&
