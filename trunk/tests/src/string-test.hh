@@ -55,7 +55,8 @@ StringTest::operator()(const opts_type& null) const
     std::cout << herdstat::util::lowercase(s) << std::endl;
 
     /* util::destringify */
-    std::cout << herdstat::util::destringify<int>("10") << std::endl
+    std::cout
+        << herdstat::util::destringify<int>("10") << std::endl
         << herdstat::util::destringify<long>("01") << std::endl
         << herdstat::util::destringify<unsigned long>("385233535") << std::endl
         << herdstat::util::destringify<float>("4.29") << std::endl

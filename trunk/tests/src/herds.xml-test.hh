@@ -34,16 +34,25 @@
 
 DECLARE_TEST_HANDLER(HerdsXMLTest)
 
+struct DisplayDev
+{
+    void operator()(const herdstat::portage::Developer& dev) const
+    {
+        std::cout << "  " << dev.user() << std::endl;
+    }
+};
+
 void
 HerdsXMLTest::operator()(const opts_type& opts) const
 {
     assert(not opts.empty());
+    assert(herdstat::util::is_file(opts.front()));
 
     herdstat::xml::GlobalInit();
 
-    herdstat::portage::herds_xml h;
-    h.parse(opts.front());
-    const herdstat::portage::Herds& herds(h.herds());
+    herdstat::portage::herds_xml herds_xml;
+    herds_xml.parse(opts.front());
+    const herdstat::portage::Herds& herds(herds_xml.herds());
     assert(not herds.empty());
 
     std::cout << "Size: " << herds.size() << std::endl;
@@ -52,9 +61,7 @@ HerdsXMLTest::operator()(const opts_type& opts) const
     assert(i != herds.end());
 
     std::cout << i->name() << "(" << i->size() << ")" << std::endl;
-    for (herdstat::portage::Herd::const_iterator d = i->begin() ;
-        d != i->end() ; ++d)
-    std::cout << "  " << d->user() << std::endl;
+    std::for_each(i->begin(), i->end(), DisplayDev());
 }
 
 #endif /* _HAVE__HERDS.XML_TEST_HH */

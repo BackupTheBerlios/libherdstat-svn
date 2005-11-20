@@ -53,6 +53,8 @@ main(int argc, char **argv)
 {
     try
     {
+        typedef std::map<std::string, TestHandler *> TestsMap;
+
         if (argc < 2)
             throw herdstat::Exception("usage: run_lhs_test <test> <test opts>");
 
@@ -62,7 +64,7 @@ main(int argc, char **argv)
         if (argc > 2)
             std::copy(argv+2, argv+argc, std::back_inserter(opts));
 
-        std::map<std::string, TestHandler *> tests;
+        TestsMap tests;
         tests["algo"]           = new AlgoTest();
         tests["container_base"] = new ContainerBaseTest();
         tests["devaway.xml"]    = new DevawayXMLTest();
@@ -85,6 +87,13 @@ main(int argc, char **argv)
             throw herdstat::Exception("Unknown test '"+test_id+"'.");
 
         (*test)(opts);
+
+        /* delete the TestHandler pointer for each element in the tests map */
+        std::for_each(tests.begin(), tests.end(),
+            herdstat::util::compose_f_gx(
+                    herdstat::util::DeleteAndNullify<TestHandler>(),
+                    herdstat::util::Second<TestsMap::value_type>()
+                ));
     }
     catch (const herdstat::BaseException& e)
     {

@@ -27,6 +27,7 @@
 # include "config.h"
 #endif
 
+#include <herdstat/util/functional.hh>
 #include <herdstat/portage/metadata_xml.hh>
 #include "test_handler.hh"
 
@@ -44,16 +45,20 @@ MetadataXMLTest::operator()(const opts_type& opts) const
     const herdstat::portage::Developers& devs(meta.devs());
 
     std::cout << "herds: ";
-    for (herdstat::portage::Herds::const_iterator i = herds.begin() ;
-            i != herds.end() ; ++i)
-        std::cout << i->name() << " ";
-    std::cout << std::endl;
+    std::transform(herds.begin(), herds.end(),
+        std::ostream_iterator<std::string>(std::cout, "\n"),
+        herdstat::util::compose_f_gx(
+            std::bind2nd(std::plus<std::string>(), " "),
+            std::mem_fun_ref(&herdstat::portage::Herd::name)
+        ));
 
     std::cout << "devs: ";
-    for (herdstat::portage::Developers::const_iterator i = devs.begin() ;
-            i != devs.end() ; ++i)
-        std::cout << i->user() << " ";
-    std::cout << std::endl;
+    std::transform(devs.begin(), devs.end(),
+        std::ostream_iterator<std::string>(std::cout, "\n"),
+        herdstat::util::compose_f_gx(
+            std::bind2nd(std::plus<std::string>(), " "),
+            std::mem_fun_ref(&herdstat::portage::Developer::user)
+        ));
 
     if (not meta.longdesc().empty())
     {

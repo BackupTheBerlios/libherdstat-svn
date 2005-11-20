@@ -27,7 +27,12 @@
 # include "config.h"
 #endif
 
+#include <algorithm>
+#include <iterator>
+#include <functional>
 #include <herdstat/util/glob.hh>
+#include <herdstat/util/functional.hh>
+#include <unistd.h>
 #include "test_handler.hh"
 
 DECLARE_TEST_HANDLER(GlobTest)
@@ -38,12 +43,13 @@ GlobTest::operator()(const opts_type& null) const
     /* test Glob */
     char *test_data = std::getenv("TEST_DATA");
     assert(test_data);
-    chdir(test_data);
+    
+    if (chdir(test_data) != 0)
+        throw herdstat::ErrnoException("chdir");
 
     const herdstat::util::Glob results("portdir/*/*/*.ebuild");
-    herdstat::util::Glob::const_iterator i;
-    for (i = results.begin() ; i != results.end() ; ++i)
-        std::cout << *i << std::endl;
+    std::copy(results.begin(), results.end(),
+        std::ostream_iterator<std::string>(std::cout, "\n"));
 
     /* test patternMatch functor */
     herdstat::util::Glob::size_type n =

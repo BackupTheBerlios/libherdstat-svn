@@ -32,18 +32,21 @@
 
 DECLARE_TEST_HANDLER(EbuildTest)
 
+struct DisplayEbuildVars
+{
+    void operator()(const herdstat::portage::ebuild::value_type& v) const
+    {
+        if (v.first != "HOME")
+            std::cout << v.first << " = " << v.second << std::endl;
+    }
+};
+
 void
 EbuildTest::operator()(const opts_type& opts) const
 {
     assert(not opts.empty());
-
     const herdstat::portage::ebuild ebuild(opts.front());
-    for (herdstat::portage::ebuild::const_iterator i = ebuild.begin() ;
-            i != ebuild.end() ; ++i)
-    {
-        if (i->first != "HOME")
-            std::cout << i->first << " = " << i->second << std::endl;
-    }
+    std::for_each(ebuild.begin(), ebuild.end(), DisplayEbuildVars());
 }
 
 #endif /* _HAVE__EBUILD_TEST_HH */

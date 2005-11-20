@@ -33,9 +33,10 @@
  */
 
 #include <iostream>
-#include <cstdlib>
 #include <vector>
 #include <string>
+#include <cassert>
+#include <cstdlib>
 
 typedef std::vector<std::string> opts_type;
 

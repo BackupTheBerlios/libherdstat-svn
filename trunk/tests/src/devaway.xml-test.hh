@@ -35,6 +35,15 @@
 
 DECLARE_TEST_HANDLER(DevawayXMLTest)
 
+struct DisplayAwayDev
+{
+    void operator()(const herdstat::portage::Developer& dev) const
+    {
+        std::cout << dev.user() << " - "
+            << herdstat::util::tidy_whitespace(dev.awaymsg()) << std::endl;
+    }
+};
+
 void
 DevawayXMLTest::operator()(const opts_type& opts) const
 {
@@ -51,17 +60,13 @@ DevawayXMLTest::operator()(const opts_type& opts) const
     const herdstat::portage::Developers& devs(devaway.devs());
 
     std::cout << "Away developers(" << devs.size() << ")" << std::endl;
-
-    herdstat::portage::Developers::const_iterator i;
-    for (i = devs.begin() ; i != devs.end() ; ++i)
-        std::cout << i->user() << ": "
-            << herdstat::util::tidy_whitespace(i->awaymsg()) << std::endl;
-
+    std::for_each(devs.begin(), devs.end(), DisplayAwayDev());
     std::cout << std::endl;
 
-    assert((i = devs.find("lv")) != devs.end());
-    std::cout << i->user() << " - "
-        << herdstat::util::tidy_whitespace(i->awaymsg()) << std::endl;
+    herdstat::portage::Developers::const_iterator i = devs.find("lv");
+    assert(i != devs.end());
+    DisplayAwayDev display;
+    display(*i);
 }
 
 #endif /* _HAVE__DEVAWAY.XML_TEST_HH */

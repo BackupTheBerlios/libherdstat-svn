@@ -33,6 +33,14 @@
 
 DECLARE_TEST_HANDLER(KeywordTest)
 
+inline void
+display_keywords(const herdstat::portage::Keywords& keywords)
+{
+    std::transform(keywords.begin(), keywords.end(),
+        std::ostream_iterator<std::string>(std::cout, "\n"),
+        std::mem_fun_ref(&herdstat::portage::Keyword::str));
+}
+
 void
 KeywordTest::operator()(const opts_type& opts) const
 {
@@ -42,26 +50,19 @@ KeywordTest::operator()(const opts_type& opts) const
     herdstat::portage::Keywords keywords(opts.front());
     std::cout << "'"
         << herdstat::util::strip_colors(keywords.str()) << "'" << std::endl;
-
     std::cout << std::endl
         << "Testing keyword iterator:" << std::endl;
-    herdstat::portage::Keywords::iterator k;
-    for (k = keywords.begin() ; k != keywords.end() ; ++k)
-        std::cout << k->str() << std::endl;
+    display_keywords(keywords);
     std::cout << "All testing? " << std::boolalpha
         << keywords.all_testing() << std::endl;
 
     std::cout << std::endl
         << "Testing all_testing():" << std::endl;
-
     std::vector<std::string> v;
     v.push_back("~x86"); v.push_back("~alpha"); v.push_back("~mips");
     keywords.clear();
     keywords.insert(v.begin(), v.end());
-
-    for (k = keywords.begin() ; k != keywords.end() ; ++k)
-        std::cout << k->str() << std::endl;
-
+    display_keywords(keywords);
     std::cout << "All testing? " << keywords.all_testing() << std::endl;
     std::cout << "All stable? " << keywords.all_stable() << std::endl;
 
@@ -71,9 +72,7 @@ KeywordTest::operator()(const opts_type& opts) const
     keywords.insert(v.begin(), v.end());
     std::cout << std::endl << "Testing all_stable():" << std::endl;
 
-    for (k = keywords.begin() ; k != keywords.end() ; ++k)
-        std::cout << k->str() << std::endl;
-
+    display_keywords(keywords);
     std::cout << "All stable? " << keywords.all_stable() << std::endl;
 }
 
