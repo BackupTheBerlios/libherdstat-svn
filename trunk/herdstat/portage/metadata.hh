@@ -40,7 +40,7 @@ namespace herdstat {
 namespace portage {
 
     /**
-     * @class metadata
+     * @class metadata metadata.hh herdstat/portage/metadata.hh
      * @brief Represents the data contained in a metadata.xml file.
      */
 
@@ -55,8 +55,14 @@ namespace portage {
              */
             metadata(const std::string &pkg);
 
+            /// Copy constructor.
+            metadata(const metadata& that);
+
             /// Destructor.
             ~metadata();
+
+            /// Copy assignment operator.
+            metadata& operator= (const metadata& that);
 
             /// Is this metadata from a cateogry?
             inline bool is_category() const;

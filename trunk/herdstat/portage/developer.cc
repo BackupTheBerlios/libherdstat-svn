@@ -35,6 +35,13 @@ Developer::Developer()
 {
 }
 /****************************************************************************/
+Developer::Developer(const Developer& that)
+    : _user(), _email(), _name(), _pgpkey(), _joined(), _birth(),
+      _status(), _role(), _location(), _awaymsg(), _away(false), _herds(NULL)
+{
+    *this = that;
+}
+/****************************************************************************/
 Developer::Developer(const std::string &user, const std::string &email,
                      const std::string &name)
     : _user(user), _email(email.empty() ? _user : email),
@@ -47,6 +54,27 @@ Developer::Developer(const std::string &user, const std::string &email,
     std::string::size_type pos = _user.find('@');
     if (pos != std::string::npos)
         _user.erase(pos);
+}
+/****************************************************************************/
+Developer&
+Developer::operator=(const Developer& that)
+{
+    _user = that._user;
+    _email = that._email;
+    _name = that._name;
+    _pgpkey = that._pgpkey;
+    _joined = that._joined;
+    _birth = that._birth;
+    _status = that._status;
+    _role = that._role;
+    _location = that._location;
+    _awaymsg = that._awaymsg;
+    _away = that._away;
+
+    if (that._herds)
+        _herds = new std::vector<std::string>(*that._herds);
+
+    return *this;
 }
 /****************************************************************************/
 Developer::~Developer()

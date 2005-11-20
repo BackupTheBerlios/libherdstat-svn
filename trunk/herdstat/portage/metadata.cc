@@ -39,8 +39,31 @@ metadata::metadata(const std::string &pkg)
 {
 }
 /****************************************************************************/
+metadata::metadata(const metadata& that)
+    : _pkg(), _longdesc(), _cat(false), _herds(NULL), _devs(NULL)
+{
+    *this = that;
+}
+/****************************************************************************/
+metadata&
+metadata::operator=(const metadata& that)
+{
+    _pkg = that._pkg;
+    _longdesc = that._longdesc;
+    _cat = that._cat;
+
+    if (that._herds)
+        _herds = new Herds(*that._herds);
+    if (that._devs)
+        _devs = new Developers(*that._devs);
+
+    return *this;
+}
+/****************************************************************************/
 metadata::~metadata()
 {
+    if (_herds) delete _herds;
+    if (_devs) delete _devs;
 }
 /****************************************************************************/
 } // namespace portage

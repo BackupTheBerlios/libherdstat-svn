@@ -37,6 +37,7 @@
 #include <vector>
 #include <algorithm>
 
+#include <herdstat/util/string.hh>
 #include <herdstat/util/functional.hh>
 #include <herdstat/portage/gentoo_email_address.hh>
 
@@ -44,7 +45,7 @@ namespace herdstat {
 namespace portage {
 
     /**
-     * @class Developer
+     * @class Developer developer.hh herdstat/portage/developer.hh
      * @brief Represents a Gentoo developer.
      */
 
@@ -53,6 +54,9 @@ namespace portage {
         public:
             /// Default constructor.
             Developer();
+
+            /// Copy constructor.
+            Developer(const Developer& that);
 
             /** Constructor.
              * @param user user name.
@@ -65,6 +69,9 @@ namespace portage {
 
             /// Destructor.
             ~Developer();
+
+            /// Copy assignment operator.
+            Developer& operator=(const Developer& that);
 
             /** Implicit conversion to std::string.
              * @returns Developer user name.
@@ -308,7 +315,7 @@ namespace portage {
     inline void Developer::set_away(const bool away) { _away = away; }
 
     /**
-     * @class Developers
+     * @class Developers developer.hh herdstat/portage/developer.hh
      * @brief Developer container.
      */
 
