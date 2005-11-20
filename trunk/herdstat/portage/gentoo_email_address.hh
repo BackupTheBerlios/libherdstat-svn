@@ -38,7 +38,7 @@ namespace herdstat {
 namespace portage {
 
     /**
-     * @class GentooEmailAddress
+     * @class GentooEmailAddress gentoo_email_address.hh herdstat/portage/gentoo_email_address.hh
      * @brief Represents a gentoo.org email address.
      */
 

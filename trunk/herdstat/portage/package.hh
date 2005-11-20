@@ -31,15 +31,19 @@
 #include <herdstat/portage/config.hh>
 #include <herdstat/portage/keywords.hh>
 
-/** Rough estimate of number of packages updated from time to time.
- * Used for reserve()'ing to prevent a sleu of allocations. */
+/** 
+ * @def PKGLIST_RESERVE
+ * @brief Rough estimate of number of packages updated from time to time.  Used
+ * for reserve()'ing to prevent a sleu of allocations.
+ */
+
 #define PKGLIST_RESERVE            10250
 
 namespace herdstat {
 namespace portage {
 
     /**
-     * @class Package
+     * @class Package package.hh herdstat/portage/package.hh
      * @brief Represents a "package" that exists in either PORTDIR or an
      * overlay.
      */

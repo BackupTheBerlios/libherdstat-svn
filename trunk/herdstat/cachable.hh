@@ -37,7 +37,8 @@
 namespace herdstat {
 
     /**
-     * Abstract interface for cachable things.
+     * @class cachable cachable.hh herdstat/cachable.hh
+     * @brief Abstract interface for cachable things.
      */
 
     class cachable : private noncopyable

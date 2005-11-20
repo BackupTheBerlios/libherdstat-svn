@@ -41,7 +41,7 @@ namespace herdstat {
 namespace util {
 
     /**
-     * @class ContainerBase
+     * @class ContainerBase container_base.hh herdstat/util/container_base.hh
      * @brief Base for classes who should act like standard containers.
      */
 
@@ -136,7 +136,7 @@ namespace util {
     }
 
     /**
-     * @class VectorBase
+     * @class VectorBase container_base.hh herdstat/util/container_base.hh
      * @brief Base class template for classes acting like vector<T>.
      */
 
@@ -227,7 +227,7 @@ namespace util {
     }
 
     /**
-     * @class SetBase
+     * @class SetBase container_base.hh herdstat/util/container_base.hh
      * @brief Base class template for classes that act like a set<T>.
      */
 
@@ -311,7 +311,7 @@ namespace util {
     }
 
     /**
-     * @class MapBase
+     * @class MapBase container_base.hh herdstat/util/container_base.hh
      * @brief Base class template for classes that act like a map<K,V>.
      */
 

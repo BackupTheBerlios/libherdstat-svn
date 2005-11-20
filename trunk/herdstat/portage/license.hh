@@ -38,7 +38,7 @@ namespace herdstat {
 namespace portage {
 
     /**
-     * @class License
+     * @class License license.hh herdstat/portage/license.hh
      * @brief Represents a LICENSE string.
      */
 

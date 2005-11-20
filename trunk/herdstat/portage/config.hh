@@ -49,7 +49,7 @@ namespace herdstat {
 namespace portage {
 
     /**
-     * @class config
+     * @class config config.hh herdstat/portage/config.hh
      * @brief Represents the current portage configuration.
      */
 
@@ -114,9 +114,12 @@ namespace portage {
         return (i == _vars.end() ? std::string() : i->second);
     }
 
-    /** Create a local static instance of the config class.
+    /**
+     * @fn GlobalConfig
+     * @brief Create a local static instance of the config class.
      * @returns const reference to the static instance.
      */
+
     inline const config&
     GlobalConfig()
     {

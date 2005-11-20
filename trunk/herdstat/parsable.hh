@@ -37,8 +37,9 @@
 
 namespace herdstat {
 
-    /*
-     * Defines an abstract base class for parsable things.
+    /**
+     * @class parsable parsable.hh herdstat/parsable.hh
+     * @brief Abstract base class for parsable things.
      */
 
     class parsable

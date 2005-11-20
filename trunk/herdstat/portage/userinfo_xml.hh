@@ -39,7 +39,7 @@ namespace herdstat {
 namespace portage {
 
     /**
-     * @class userinfo_xml
+     * @class userinfo_xml userinfo_xml.hh herdstat/portage/userinfo_xml.hh
      * @brief Represents Gentoo's userinfo.xml.
      */
 

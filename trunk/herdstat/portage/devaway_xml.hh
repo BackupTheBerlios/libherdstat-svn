@@ -39,7 +39,7 @@ namespace herdstat {
 namespace portage {
 
     /**
-     * @class devaway_xml
+     * @class devaway_xml devaway_xml.hh herdstat/portage/devaway_xml.hh
      * @brief Represents Gentoo's devaway.xml.
      */
 

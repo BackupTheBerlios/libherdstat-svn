@@ -48,10 +48,13 @@ namespace herdstat {
  */
 namespace util {
 
-    /** Tidy whitespace of the given string.
+    /**
+     * @fn tidy_whitespace
+     * @brief Tidy whitespace of the given string.
      * @param s String object
      * @returns Resulting std::string object.
      */
+
     std::string tidy_whitespace(const std::string &s);
 
     //@{
@@ -62,50 +65,68 @@ namespace util {
     std::string sprintf(const std::string&, va_list);
     //@}
 
-    /** Split string into a vector of strings.
+    /**
+     * @fn split
+     * @brief Split string into a vector of strings.
      * @param s String to split.
      * @param d Delimiter.
      * @param append_empty Append "" if two contiguous delimiters are
      * encountered?
      * @returns Vector of sub-strings.
      */
+
     std::vector<std::string> split(const std::string& s,
                                    const char d = ' ',
                                    bool append_empty = false);
 
-    /** Convert vector of std::strings to one std::string.
+    /**
+     * @fn join
+     * @brief Convert vector of std::strings to one std::string.
      * @param v Vector of std::strings
      * @param d Delimiter.
      * @returns Resulting string object.
      */
+
     std::string join(const std::vector<std::string>& v, const char d = ' ');
 
-    /** Replace any unfriendly characters in the given std::string to their
-     * HTML counterparts.
+    /**
+     * @fn htmlify
+     * @brief Replace any unfriendly characters in the given std::string to
+     * their HTML counterparts.
      * @param s String object.
      * @returns Resulting string object.
      */
+
     std::string htmlify(const std::string& s);
 
-    /** Replace any HTML'ized characters in the given std::string to their
-     * respective counterparts.
+    /**
+     * @fn unhtmlify
+     * @brief Replace any HTML'ized characters in the given std::string to
+     * their respective counterparts.
      * @param s String object.
      * @returns Resulting string object.
      */
+
     std::string unhtmlify(const std::string& s);
 
-    /** Return a copy of the given string with the ASCII color sequences
+    /**
+     * @fn strip_colors
+     * @brief Return a copy of the given string with the ASCII color sequences
      * removed.
      * @param s string object.
      * @returns Resulting string object.
      */
+
     std::string strip_colors(const std::string& s);
 
     /************************************************************************/
-    /** Convert string to all lowercase.
+    /**
+     * @fn lowercase
+     * @brief Convert string to all lowercase.
      * @param s String object.
      * @returns Resulting string object.
      */
+
     inline std::string
     lowercase(const std::string& s)
     {
@@ -115,13 +136,21 @@ namespace util {
         return result;
     }
 
+    /**
+     * @fn lowercase_inplace
+     * @brief Convert string to all lowercase (in place).
+     * @param s String object.
+     */
+
     inline void
     lowercase_inplace(std::string& s)
     {
         std::transform(s.begin(), s.end(), s.begin(), ::tolower);
     }
     /************************************************************************/
-    /** Convert a type to a std::string.
+    /**
+     * @fn stringify
+     * @brief Convert a type to a std::string.
      * @param v Value of type T.
      * @returns A std::string object.
      */
@@ -160,7 +189,9 @@ namespace util {
         return v;
     }
     /************************************************************************/
-    /** Convert a std::string to a type.
+    /**
+     * @fn destringify
+     * @brief Convert a std::string to a type.
      * @param s A std::string object.
      * @returns Value of type T.
      */
@@ -181,6 +212,7 @@ namespace util {
         return v;
     }
 
+    /// destringify specialization for std::vector<std::string>.
     template <>
     inline std::vector<std::string>
     destringify<std::vector<std::string> >(const std::string& s)
@@ -188,6 +220,7 @@ namespace util {
         return split(s);
     }
     /************************************************************************/
+    /// destringify specialization for int
     template <>
     inline int
     destringify<int>(const std::string& s)
@@ -201,6 +234,7 @@ namespace util {
         return result;
     }
     /************************************************************************/
+    /// destringify specialization for long
     template <>
     inline long
     destringify<long>(const std::string& s)
@@ -214,6 +248,7 @@ namespace util {
         return result;
     }
     /************************************************************************/
+    /// destringify specialization for unsigned long
     template <>
     inline unsigned long
     destringify<unsigned long>(const std::string& s)
@@ -227,6 +262,7 @@ namespace util {
         return result;
     }
     /************************************************************************/
+    /// destringify specialization for double
     template <>
     inline double
     destringify<double>(const std::string& s)
@@ -240,6 +276,7 @@ namespace util {
         return result;
     }
     /************************************************************************/
+    /// destringify specialization for float
     template <>
     inline float
     destringify<float>(const std::string& s)
@@ -253,6 +290,7 @@ namespace util {
         return result;
     }
     /************************************************************************/
+    /// destringify specialization for bool
     template <>
     inline bool
     destringify<bool>(const std::string& s)

@@ -42,7 +42,7 @@ namespace herdstat {
 namespace portage {
 
     /**
-     * @class Keyword
+     * @class Keyword keywords.hh herdstat/portage/keywords.hh
      * @brief Represents a single architecture keyword.
      */
     class Keyword
@@ -184,7 +184,7 @@ namespace portage {
     }
 
     /**
-     * @class Keywords
+     * @class Keywords keywords.hh herdstat/portage/keywords.hh
      * @brief Keyword container.
      * Usually used for all keywords for a certain ebuild.
      * Also able to provide a pretty-printed keywords string.
@@ -245,7 +245,7 @@ namespace portage {
     inline const std::string& Keywords::path() const { return _ebuild.path(); }
 
     /**
-     * @struct NewKeyword
+     * @struct NewKeyword keywords.hh herdstat/portage/keywords.hh
      * @brief Function object for instantiating a new Keyword object.
      */
     
@@ -280,7 +280,7 @@ namespace portage {
     }
 
     /**
-     * @class KeywordsMap
+     * @class KeywordsMap keywords.hh herdstat/portage/keywords.hh
      * @brief Maps VersionString objects to Keywords objects.
      */
 

@@ -37,7 +37,8 @@
 namespace herdstat {
 
     /**
-     * Abstract base for fetchable things.
+     * @class fetchable fetchable.hh herdstat/fetchable.hh
+     * @brief Abstract base for fetchable things.
      */
 
     class fetchable

@@ -38,7 +38,7 @@ namespace herdstat {
 namespace portage {
 
     /**
-     * @class Archs
+     * @class Archs archs.hh herdstat/portage/archs.hh
      * @brief Represents a list of portage-recognized architecture keywords
      * (those listed in $PORTDIR/profiles/arch.list).
      */

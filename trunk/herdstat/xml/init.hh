@@ -39,8 +39,9 @@ namespace herdstat {
 namespace xml {
 
     /**
-     * XML initialization object.
-     * Calls underlying libxml2 initializations.
+     * @class Init init.hh herdstat/xml/init.hh
+     * @brief XML initialization object. Calls underlying libxml2
+     * initializations.
      */
 
     class Init : private herdstat::noncopyable
@@ -51,6 +52,12 @@ namespace xml {
 
             ::xml::init _init;
     };
+
+    /**
+     * @fn GlobalInit
+     * @brief Access function for the Init class.
+     * @returns const reference to a static local instance.
+     */
 
     inline const Init&
     GlobalInit(bool validate)

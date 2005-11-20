@@ -41,7 +41,7 @@ namespace herdstat {
 namespace portage {
 
     /**
-     * @class project_xml
+     * @class project_xml project_xml.hh herdstat/portage/project_xml.hh
      * @brief Interface for Gentoo's projectxml-style XML files.
      */
 

@@ -48,9 +48,12 @@ PackageWhich::operator()(const std::vector<Package>& finder_results)
     std::vector<Package>::const_iterator i;
     for (i = finder_results.begin() ; i != finder_results.end() ; ++i)
     {
+        /* see if we've inserted it already */
         std::vector<Package>::iterator p =
             std::find_if(pkgs.begin(), pkgs.end(),
-                std::bind2nd(FullPkgNameEqual(), *i));
+                util::compose_f_gx(
+                    std::bind2nd(std::equal_to<std::string>(), *i),
+                    portage::FullPkgName()));
 
         /* package doesn't exist, so add it */
         if (p == pkgs.end())

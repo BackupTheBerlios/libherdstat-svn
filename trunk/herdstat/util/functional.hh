@@ -41,18 +41,18 @@ namespace herdstat {
 namespace util {
 
     /**
-     * @struct Dereference
+     * @struct Dereference functional.hh herdstat/util/functional.hh
      * @brief Function object that returns a dereferenced pointer to type T.
      */
 
-    struct Dereference
+    template <typename T>
+    struct Dereference : std::unary_function<const T*, T>
     {
-        template <typename T>
         const T& operator()(const T *p) const { return *p; }
     };
 
     /**
-     * @struct First
+     * @struct First functional.hh herdstat/util/functional.hh
      * @brief Returns the 'first' member of a std::pair<K, V>.
      */
 
@@ -64,7 +64,7 @@ namespace util {
     };
 
     /**
-     * @struct Second
+     * @struct Second functional.hh herdstat/util/functional.hh
      * @brief Returns the 'second' member of a std::pair<K, V>.
      */
 
@@ -76,7 +76,7 @@ namespace util {
     };
 
     /**
-     * @struct EmptyFirst
+     * @struct EmptyFirst functional.hh herdstat/util/functional.hh
      * @brief Function object for instantiating a new std::pair<string, T> with
      * the 'first' member as an empty string.
      */
@@ -94,14 +94,14 @@ namespace util {
     };
 
     /**
-     * @struct DeleteAndNullify
+     * @struct DeleteAndNullify functional.hh herdstat/util/functional.hh
      * @brief Function object that deletes the given pointer and sets it to
      * NULL.
      */
 
-    struct DeleteAndNullify
+    template <typename T>
+    struct DeleteAndNullify : std::unary_function<T*, void>
     {
-        template <typename T>
         void operator()(T *p) const
         {
             if (p)
@@ -113,7 +113,7 @@ namespace util {
     };
 
     /**
-     * @struct Appender
+     * @struct Appender functional.hh herdstat/util/functional.hh
      * @brief Function object that calls T::append(const U&).
      * U defaults to T::value_type.
      */
@@ -125,40 +125,40 @@ namespace util {
     };
 
     /**
-     * @struct FileExists
+     * @struct FileExists functional.hh herdstat/util/functional.hh
      * @brief Function object that returns util::file_exists().
      */
 
-    struct FileExists
+    struct FileExists : std::unary_function<std::string, bool>
     {
         bool operator()(const std::string& path) const
         { return file_exists(path); }
     };
 
     /**
-     * @struct IsDir
+     * @struct IsDir functional.hh herdstat/util/functional.hh
      * @brief Function object that returns util::is_dir().
      */
 
-    struct IsDir
+    struct IsDir : std::unary_function<std::string, bool>
     {
         bool operator()(const std::string& path) const
         { return is_dir(path); }
     };
 
     /**
-     * @struct IsFile
+     * @struct IsFile functional.hh herdstat/util/functional.hh
      * @brief Function object that returns util::is_file().
      */
 
-    struct IsFile
+    struct IsFile : std::unary_function<std::string, bool>
     {
         bool operator()(const std::string& path) const
         { return is_file(path); }
     };
 
     /**
-     * @struct regexMatch
+     * @struct regexMatch functional.hh herdstat/util/functional.hh
      * @brief Function object for using Regex class with std algorithms.
      */
 
@@ -169,7 +169,7 @@ namespace util {
     };
 
     /**
-     * @struct patternMatch
+     * @struct patternMatch functional.hh herdstat/util/functional.hh
      * @brief Function object for using globs (pattern matching) with std
      * algorithms.
      */
@@ -187,7 +187,7 @@ namespace util {
      */
 
     /**
-     * @class compose_f_gx_t
+     * @class compose_f_gx_t functional.hh herdstat/util/functional.hh
      * @brief Function object adapter that uses the result of a unary operation
      * as input to another unary operation.
      */
@@ -211,7 +211,11 @@ namespace util {
             Op2 op2;
     };
 
-    /// Helper function for the compose_f_gx_t adapter.
+    /**
+     * @fn compose_f_gx
+     * @brief Helper function for the compose_f_gx_t adapter.
+     */
+
     template <typename Op1, typename Op2>
     inline compose_f_gx_t<Op1, Op2>
     compose_f_gx(const Op1& o1, const Op2& o2)
@@ -220,7 +224,7 @@ namespace util {
     }
 
     /**
-     * @class compose_f_gx_hx_t
+     * @class compose_f_gx_hx_t functional.hh herdstat/util/functional.hh
      * @brief Function object adapter that allows the combination of two
      * criteria logically to formulate a single criterion.  Use this when you
      * want to do something like "greater than 10 and less than 15".
@@ -248,7 +252,11 @@ namespace util {
             Op3 op3;
     };
 
-    /// Helper function for the compose_f_gx_hx_t adapter.
+    /**
+     * @fn compose_f_gx_hx
+     * @brief Helper function for the compose_f_gx_hx_t adapter.
+     */
+
     template <typename Op1, typename Op2, typename Op3>
     inline compose_f_gx_hx_t<Op1, Op2, Op3>
     compose_f_gx_hx(const Op1& o1, const Op2& o2, const Op3& o3)
@@ -257,7 +265,7 @@ namespace util {
     }
 
     /**
-     * @class compose_f_gx_hy_t
+     * @class compose_f_gx_hy_t functional.hh herdstat/util/functional.hh
      * @brief Function object adapter for use when you have two arguments to
      * pass to two different unary predicates (Op2 and Op3).  The results from
      * both are passed to the binary predicate Op1.
@@ -286,7 +294,11 @@ namespace util {
             Op3 op3;
     };
 
-    /// Helper function for the compose_f_gx_hy_t adapter.
+    /**
+     * @fn compose_f_gx_hy
+     * @brief Helper function for the compose_f_gx_hy_t adapter.
+     */
+
     template <typename Op1, typename Op2, typename Op3>
     inline compose_f_gx_hy_t<Op1, Op2, Op3>
     compose_f_gx_hy(const Op1& o1, const Op2& o2, const Op3& o3)

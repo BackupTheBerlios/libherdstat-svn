@@ -42,7 +42,7 @@ namespace herdstat {
 namespace portage {
 
     /**
-     * @class BadVersionSuffix
+     * @class BadVersionSuffix exceptions.hh herdstat/portage/exceptions.hh
      * @brief Bad version suffix exception.
      */
 
@@ -62,7 +62,7 @@ namespace portage {
     };
 
     /**
-     * @class AmbiguousPkg
+     * @class AmbiguousPkg exceptions.hh herdstat/portage/exceptions.hh
      * @brief Ambiguous package name exception.
      */
 
@@ -96,7 +96,7 @@ namespace portage {
     };
 
     /**
-     * @class NonExistentPkg
+     * @class NonExistentPkg exceptions.hh herdstat/portage/exceptions.hh
      * @brief Non-existent package exception.
      */
 
@@ -123,7 +123,7 @@ namespace portage {
     };
 
     /**
-     * @class QAException
+     * @class QAException exceptions.hh herdstat/portage/exceptions.hh
      * @brief Quality Assurance exception.
      */
 
@@ -137,7 +137,7 @@ namespace portage {
     };
 
     /**
-     * @class QAErrnoException
+     * @class QAErrnoException exceptions.hh herdstat/portage/exceptions.hh
      * @brief Quality Assurance (with strerror()) exception.
      */
 
@@ -157,7 +157,7 @@ namespace portage {
     };
 
     /**
-     * @class InvalidKeywordMask
+     * @class InvalidKeywordMask exceptions.hh herdstat/portage/exceptions.hh
      * @brief Exception for invalid mask characters ('~' in ~arch).
      */
 
@@ -176,6 +176,11 @@ namespace portage {
         private:
             const char _mask;
     };
+
+    /**
+     * @class InvalidArch exceptions.hh herdstat/portage/exceptions.hh
+     * @brief Exception for invalid architectures.
+     */
 
     class InvalidArch : public Exception
     {

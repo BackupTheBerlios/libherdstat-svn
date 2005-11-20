@@ -38,9 +38,11 @@ namespace herdstat {
 namespace util {
 
     /**
-     * Like std::transform, but only "transforms" if UnaryPred
-     * returns true.  For times where replace_copy_if is not
-     * appropriate.
+     * @fn transform_if
+     * @brief For each element in the range [first,last) for which UnaryPred
+     * returns true, assign the result of UnaryOp to the given output iterator.
+     * Like std::transform, but only "transforms" if UnaryPred returns true.
+     * For times where std::replace_copy_if is not appropriate.
      */
 
     template <typename InputIterator, typename OutputIterator,
@@ -59,7 +61,10 @@ namespace util {
     }
 
     /**
-     * Like std::copy but only copies if UnaryPred returns true.
+     * @fn copy_if
+     * @brief For each element in the range [first,last) for which UnaryPred
+     * returns true, copy to the given output iterator.  Like std::copy but only
+     * copies if UnaryPred returns true.
      */
 
     template <typename InputIterator, typename OutputIterator,
@@ -78,7 +83,9 @@ namespace util {
     }
 
     /**
-     * Determine whether all elements in the range [first,last) are equal.
+     * @fn all_equal
+     * @brief Determine whether all elements in the range [first,last) are
+     * equal.
      */
 
     template <typename InputIterator>
@@ -92,8 +99,9 @@ namespace util {
     }
 
     /**
-     * Determine whether the return values of UnaryOp run on each in the range
-     * [first,last) are equal.
+     * @fn all_equal
+     * @brief Determine whether the return values of UnaryOp run on each in the
+     * range [first,last) are equal.
      */
 
     template <typename InputIterator, typename UnaryOp>

@@ -40,7 +40,8 @@ namespace herdstat {
 namespace xml {
 
     /**
-     * Abstract SAX2 Content Handler.
+     * @class saxhandler saxparser.hh herdstat/xml/saxparser.hh
+     * @brief Abstract SAX2 Content Handler.
      */
 
     class saxhandler : public ::xml::event_parser
@@ -62,7 +63,8 @@ namespace xml {
     };
 
     /**
-     * SAX2 Parser.
+     * @class saxparser saxparser.hh herdstat/xml/saxparser.hh
+     * @brief SAX2 parser interface.
      */
 
     class saxparser : private noncopyable

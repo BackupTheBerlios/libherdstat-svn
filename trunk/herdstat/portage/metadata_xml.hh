@@ -40,7 +40,7 @@ namespace herdstat {
 namespace portage {
 
     /**
-     * @class metadata_xml
+     * @class metadata_xml metadata_xml.hh herdstat/portage/metadata_xml.hh
      * @brief Interface to Gentoo's metadata.xml files.
      */
 

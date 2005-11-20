@@ -37,7 +37,8 @@
 namespace herdstat {
 
     /**
-     * Represents an email address string.
+     * @class EmailAddress email_address.hh herdstat/email_address.hh
+     * @brief Represents an email address string.
      */
 
     class EmailAddress

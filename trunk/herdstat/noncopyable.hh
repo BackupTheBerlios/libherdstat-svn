@@ -35,7 +35,8 @@
 namespace herdstat {
 
     /**
-     * Base for non-copyable things.
+     * @class noncopyable noncopyable.hh herdstat/noncopyable.hh
+     * @brief Base for non-copyable things.
      */
 
     class noncopyable

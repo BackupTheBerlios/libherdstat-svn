@@ -40,7 +40,7 @@ namespace herdstat {
 namespace portage {
 
     /**
-     * @class Categories
+     * @class Categories categories.hh herdstat/portage/categories.hh
      * @brief Represents a container of package categories.  Contents are only
      * validated if told to do so.  Otherwise, you'll want to make sure an
      * element is valid before using it.

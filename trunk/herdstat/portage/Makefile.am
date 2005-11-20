@@ -7,6 +7,7 @@ cc_sources = config.cc \
 	     categories.cc \
 	     package.cc \
 	     package_list.cc \
+	     package_finder.cc \
 	     package_which.cc \
 	     archs.cc \
 	     keywords.cc \

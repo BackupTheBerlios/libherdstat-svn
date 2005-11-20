@@ -53,20 +53,26 @@
 namespace herdstat {
 namespace util {
 
-    /** Does the specified path exist?
+    /**
+     * @fn file_exists
+     * @brief Does the specified path exist?
      * @param path Path.
      * @returns A boolean value.
      */
+
     inline bool
     file_exists(const std::string& path)
     {
         return (access(path.c_str(), F_OK) == 0);
     }
 
-    /** Is the given path a directory?
+    /**
+     * @fn is_dir
+     * @brief Is the given path a directory?
      * @param p Path.
      * @returns A boolean value.
      */
+
     inline bool
     is_dir(const std::string &p)
     {
@@ -74,16 +80,22 @@ namespace util {
         return ((stat(p.c_str(), &s) == 0) ? S_ISDIR(s.st_mode) : false);
     }
 
-    /** Is the file associated with the given stat structure a directory?
+    /**
+     * @fn is_dir
+     * @brief Is the file associated with the given stat structure a directory?
      * @param s Reference to a struct stat.
      * @returns A boolean value.
      */
+
     inline bool is_dir(const struct stat &s) { return S_ISDIR(s.st_mode); }
 
-    /** Is the given path a regular file?
+    /**
+     * @fn is_file
+     * @brief Is the given path a regular file?
      * @param p Path.
      * @returns A boolean value.
      */
+
     inline bool
     is_file(const std::string &p)
     {
@@ -91,20 +103,25 @@ namespace util {
         return ((stat(p.c_str(), &s) == 0) ? S_ISREG(s.st_mode) : false);
     }
 
-    /** Is the file associated with the given stat structure a regular file?
+    /**
+     * @fn is_file
+     * @brief Is the file associated with the given stat structure a regular file?
      * @param s Reference to a struct stat.
      * @returns A boolean value.
      */
+
     inline bool is_file(const struct stat &s) { return S_ISREG(s.st_mode); }
 
     /** Return the basename of the given path.
      * @param p Path.
      */
+
     std::string basename(const std::string &p);
     
     /** Return the directory name the given path is located in.
      * @param p Path.
      */
+
     std::string dirname(const std::string &p);
 
     /** Chop file extension from the given path.
@@ -112,24 +129,28 @@ namespace util {
      * @param depth Number of period-delimited extensions to chop.
      * @returns A pointer of type char.
      */
+
     const char *chop_fileext(const std::string &p, unsigned short depth = 1);
 
     /** Copy file 'from' to file 'to'.
      * @param from Source location.
      * @param to   Destination location.
      */
+
     void copy_file(const std::string &to, const std::string &from);
 
     /** Move file 'from' to file 'to'.
      * @param from Source location.
      * @param to   Destination location.
      */
+
     void move_file(const std::string &to, const std::string &from);
 
     enum ftype { REGULAR, DIRECTORY, CHARACTER, BLOCK, FIFO, LINK, SOCKET };
 
     /**
-     * A wrapper for struct stat and the stat() system call.
+     * @class Stat file.hh herdstat/util/file.hh
+     * @brief A wrapper for struct stat and the stat() system call.
      */
 
     class Stat : public stat

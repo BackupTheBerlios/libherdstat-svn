@@ -40,7 +40,7 @@ namespace herdstat {
 namespace portage {
 
     /**
-     * @class ebuild
+     * @class ebuild ebuild.hh herdstat/portage/ebuild.hh
      * @brief Represents ebuild variables.
      * This is really identical to util::vars, except it defines
      * do_set_defaults() and inserts variables that should be

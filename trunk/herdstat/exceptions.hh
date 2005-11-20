@@ -58,11 +58,15 @@ namespace herdstat {
     /// exception group for use by libebt.
     class ExceptionTag { };
 
-    /// convenience typedef for backtrace contexts provided by libebt.
+    /**
+     * @typedef BacktraceContext
+     * @brief convenience typedef for backtrace contexts provided by libebt.
+     */
+
     typedef libebt::BacktraceContext<ExceptionTag> BacktraceContext;
 
     /**
-     * @class BaseException
+     * @class BaseException exceptions.hh herdstat/exceptions.hh
      * @brief Base exception class.  All exception classes defined by libherdstat
      * derive from this class.
      */
@@ -73,7 +77,7 @@ namespace herdstat {
     };
 
     /**
-     * @class Exception
+     * @class Exception exceptions.hh herdstat/exceptions.hh
      * @brief Generic exception class.
      */
 
@@ -119,7 +123,7 @@ namespace herdstat {
     };
 
     /**
-     * @class ErrnoException
+     * @class ErrnoException exceptions.hh herdstat/exceptions.hh
      * @brief Exception class for errors where errno is set.
      */
 
@@ -151,7 +155,7 @@ namespace herdstat {
     };
     
     /**
-     * @class FileException
+     * @class FileException exceptions.hh herdstat/exceptions.hh
      * @brief Exception for file-related errors.
      */
 
@@ -174,7 +178,7 @@ namespace herdstat {
     };
 
     /**
-     * @class BadCast
+     * @class BadCast exceptions.hh herdstat/exceptions.hh
      * @brief Exception for bad type casts.
      */
 
@@ -197,7 +201,7 @@ namespace herdstat {
     };
 
     /**
-     * @class BadRegex
+     * @class BadRegex exceptions.hh herdstat/exceptions.hh
      * @brief Exception for regular expression errors.
      */
 
@@ -230,7 +234,7 @@ namespace herdstat {
     };
 
     /**
-     * @class BadDate
+     * @class BadDate exceptions.hh herdstat/exceptions.hh
      * @brief Exception for invalid dates.
      */
 
@@ -253,7 +257,7 @@ namespace herdstat {
     };
 
     /**
-     * @class FetchException
+     * @class FetchException exceptions.hh herdstat/exceptions.hh
      * @brief Exception for fetching errors.
      */
 
@@ -276,7 +280,7 @@ namespace herdstat {
     };
 
     /**
-     * @class MalformedEmail
+     * @class MalformedEmail exceptions.hh herdstat/exceptions.hh
      * @brief Exception for malformed email addresses.
      */
 

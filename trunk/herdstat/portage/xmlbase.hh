@@ -43,7 +43,7 @@ namespace portage {
     class Developer;
 
     /**
-     * @class xmlBase
+     * @class xmlBase xmlbase.hh herdstat/portage/xmlbase.hh
      * @brief Abstract base class for portage-specific XML files.
      */
 

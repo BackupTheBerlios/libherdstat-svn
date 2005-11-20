@@ -34,7 +34,7 @@ namespace herdstat {
 namespace portage {
 
     /**
-     * @class PackageWhich
+     * @class PackageWhich package_which.hh herdstat/portage/package_which.hh
      * @brief Interface for finding the newest ebuild of a package.
      */
 

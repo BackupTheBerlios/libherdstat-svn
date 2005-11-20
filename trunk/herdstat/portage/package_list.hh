@@ -35,7 +35,7 @@ namespace herdstat {
 namespace portage {
 
     /**
-     * @class PackageList
+     * @class PackageList package_list.hh herdstat/portage/package_list.hh
      * @brief Represents a sorted package list of all directories inside valid
      * categories.  Note that for speed reasons, no validation is done (other
      * than checking that it's a directory and it exists), so you should use

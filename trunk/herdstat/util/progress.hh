@@ -36,7 +36,8 @@ namespace herdstat {
 namespace util {
 
     /**
-     * Represents the amount of progress on an operation.
+     * @class Progress progress.hh herdstat/util/progress.hh
+     * @brief Represents the amount of progress on an operation.
      */
 
     class Progress

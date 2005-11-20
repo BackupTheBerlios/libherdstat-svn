@@ -46,7 +46,7 @@ namespace herdstat {
 namespace xml {
 
     /**
-     * @class Document
+     * @class Document document.hh herdstat/xml/document.hh
      * @brief Represents an XML document.
      */
 

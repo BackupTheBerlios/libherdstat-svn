@@ -45,7 +45,7 @@ namespace herdstat {
 namespace util {
 
     /**
-     * @class Regex
+     * @class Regex regex.hh herdstat/util/regex.hh
      * @brief POSIX Regular Expressions interface.
      */
 
@@ -282,7 +282,7 @@ namespace util {
     ///@}
 
     /**
-     * @class RegexMap
+     * @class RegexMap regex.hh herdstat/util/regex.hh
      * @brief Acts like an unsorted map (ie. a vector of uniqie pairs) with
      * Regex object mapped to objects of the specified type.  Provides a few
      * map-compatible member functions such as insert, operator[], and find.

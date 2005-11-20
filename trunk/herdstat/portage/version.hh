@@ -50,7 +50,7 @@ namespace herdstat {
 namespace portage {
 
     /**
-     * @class VersionComponents
+     * @class VersionComponents version.hh herdstat/portage/version.hh
      * @brief Version component (${P}, ${PN}, etc) map.
      */
 
@@ -90,7 +90,7 @@ namespace portage {
     };
 
     /**
-     * @class VersionString
+     * @class VersionString version.hh herdstat/portage/version.hh
      * @brief Represents a single version string.
      */
 
@@ -321,7 +321,7 @@ namespace portage {
     };
 
     /** 
-     * @class Versions
+     * @class Versions version.hh herdstat/portage/version.hh
      * @brief VersionString container.
      * Generally used for all versions of a single package.
      */
@@ -426,7 +426,7 @@ namespace portage {
     }
 
     /**
-     * @class VersionsMap
+     * @class VersionsMap version.hh herdstat/portage/version.hh
      * @brief Template class for mapping VersionString objects to objects of
      * type T.
      */
@@ -437,7 +437,7 @@ namespace portage {
     };
 
     /**
-     * @struct NewVersionStringPair
+     * @struct NewVersionStringPair version.hh herdstat/portage/version.hh
      * @brief Function object for creating a new std::pair<VersionString, T>.
      * Implicit interface assumes T has a constructor that takes a std::string.
      */

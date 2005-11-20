@@ -38,7 +38,7 @@ namespace herdstat {
 namespace portage {
 
     /**
-     * @class Herd
+     * @class Herd herd.hh herdstat/portage/herd.hh
      * @brief Represents a herd.
      * Techically a herd is a group of packages, however here it makes more
      * sense to represent them as a group of developers.
@@ -172,7 +172,7 @@ namespace portage {
     inline void Herd::set_desc(const std::string& desc) { _desc.assign(desc); }
 
     /**
-     * @class Herds
+     * @class Herds herd.hh herdstat/portage/herd.hh
      * @brief Herd container.
      */
 

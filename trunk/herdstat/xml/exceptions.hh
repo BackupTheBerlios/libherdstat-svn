@@ -38,7 +38,8 @@ namespace herdstat {
 namespace xml {
 
     /**
-     * XML Parser exception.
+     * @class ParserException exceptions.hh herdstat/xml/exceptions.hh
+     * @brief XML Parser exception.
      */
 
     class ParserException : public Exception
