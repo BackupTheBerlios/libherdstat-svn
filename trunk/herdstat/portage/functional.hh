@@ -47,6 +47,7 @@ namespace portage {
      * @brief Function object that determines whether the given string is a
      * category name.
      */
+
     struct IsCategory : std::unary_function<std::string, bool>
     {
         bool operator()(const std::string& cat) const
@@ -55,7 +56,8 @@ namespace portage {
 
     /**
      * @struct IsEbuild
-     * @brief Function object that returns is_ebuild(path).
+     * @brief Function object that determines whether the given path is an
+     * ebuild.
      */
 
     struct IsEbuild : std::unary_function<std::string, bool>
@@ -66,7 +68,8 @@ namespace portage {
 
     /**
      * @struct IsPkgDir
-     * @brief Function object that returns is_pkg_dir(path).
+     * @brief Function object that determines whether the given path is a valid
+     * package directory.
      */
 
     struct IsPkgDir : std::unary_function<std::string, bool>
@@ -97,31 +100,6 @@ namespace portage {
     {
         std::string operator()(const Package& pkg) const
         { return pkg.full(); }
-    };
-
-    /**
-     * @struct FullPkgNameLess
-     * @brief Function object for sorting by full package name only (Package
-     * operators sort by name and portdir).
-     */
-    
-    struct FullPkgNameLess : std::binary_function<Package, Package, bool>
-    {
-        bool operator()(const Package& p1, const Package& p2) const
-        { return (p1.full() < p2.full()); }
-    };
-
-    /**
-     * @struct FullPkgNameEqual
-     * @brief Function object for sorting by full package name only (Package
-     * operators sort by name and portdir).
-     */
-
-    struct FullPkgNameEqual
-        : std::binary_function<Package, Package, bool>
-    {
-        bool operator()(const Package& p1, const Package& p2) const
-        { return (p1.full() == p2.full()); }
     };
 
     /**
@@ -185,19 +163,6 @@ namespace portage {
     {
         bool operator()(const Package& pkg) const
         { return is_pkg_dir(pkg.path()); }
-    };
-
-    /**
-     * @struct PackageLivesInOverlay
-     * @brief Function object that determines whether the given Package object
-     * represents a package that exists in an overlay (or technically one whose
-     * portdir member is not the real PORTDIR).
-     */
-
-    struct PackageLivesInOverlay : std::unary_function<Package, bool>
-    {
-        bool operator()(const Package& pkg) const
-        { return pkg.in_overlay(); }
     };
 
 } // namespace portage
