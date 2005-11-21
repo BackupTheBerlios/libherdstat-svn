@@ -35,31 +35,34 @@
 
 namespace herdstat {
 /****************************************************************************/
-Fetcher::Fetcher() : _imp(NULL)
+Fetcher::Fetcher() throw (std::bad_alloc)
+    : _imp(NULL)
 {
     newFetcherImp();
 }
 /****************************************************************************/
-Fetcher::Fetcher(const FetcherOptions& opts) : _imp(NULL)
+Fetcher::Fetcher(const FetcherOptions& opts) throw (std::bad_alloc)
+    : _imp(NULL)
 {
     newFetcherImp();
     _imp->set_options(opts);
 }
 /****************************************************************************/
 Fetcher::Fetcher(const std::string& url, const std::string& path)
+    throw (std::bad_alloc)
     : _imp(NULL)
 {
     newFetcherImp();
     this->operator()(url, path);
 }
 /****************************************************************************/
-Fetcher::~Fetcher()
+Fetcher::~Fetcher() throw()
 {
     if (_imp) delete _imp;
 }
 /****************************************************************************/
 void
-Fetcher::newFetcherImp()
+Fetcher::newFetcherImp() throw (std::bad_alloc)
 {
     if (not _imp)
     {
@@ -73,6 +76,7 @@ Fetcher::newFetcherImp()
 /****************************************************************************/
 void
 Fetcher::operator()(const std::string& url, const std::string& path) const
+    throw (FileException, FetchException)
 {
     BacktraceContext c("Fetcher::operator()("+url+", "+path+")");
 

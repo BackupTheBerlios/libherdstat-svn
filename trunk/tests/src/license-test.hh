@@ -38,7 +38,7 @@ void
 LicenseTest::operator()(const opts_type& opts) const
 {
     assert(not opts.empty());
-    herdstat::portage::ebuild ebuild(opts.front());
+    herdstat::portage::Ebuild ebuild(opts.front());
     herdstat::portage::License license(ebuild["LICENSE"], true);
     std::cout << "License(s): " << license.str() << std::endl;
 }

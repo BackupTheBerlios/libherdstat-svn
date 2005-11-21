@@ -31,7 +31,7 @@
 namespace herdstat {
 namespace portage {
 /****************************************************************************/
-config::config()
+Config::Config()
     : _vars(), _portdir(), _overlays(), _cats(NULL), _archs(NULL)
 {
     /* read default config */
@@ -41,7 +41,7 @@ config::config()
     _vars.read("/etc/make.conf");
     _vars.close();
 
-    util::vars::iterator x;
+    util::Vars::iterator x;
     char *result = NULL;
 
     /* PORTDIR */
@@ -67,7 +67,7 @@ config::config()
     }
 }
 
-config::~config()
+Config::~Config()
 {
     if (_cats) delete _cats;
     if (_archs) delete _archs;

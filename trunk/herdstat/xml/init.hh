@@ -44,7 +44,7 @@ namespace xml {
      * initializations.
      */
 
-    class Init : private herdstat::noncopyable
+    class Init : private Noncopyable
     {
         private:
             friend const Init& GlobalInit(bool validate = false);
@@ -54,8 +54,7 @@ namespace xml {
     };
 
     /**
-     * @fn GlobalInit
-     * @brief Access function for the Init class.
+     * Sole access point for the xml::Init class.
      * @returns const reference to a static local instance.
      */
 

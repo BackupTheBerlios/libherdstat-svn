@@ -47,15 +47,18 @@
 #include <herdstat/util/regex.hh>
 #include <herdstat/util/container_base.hh>
 
-/// Default open mode.
+/**
+ * @def DEFAULT_MODE
+ * @brief Default open mode used when none is specified.
+ */
+
 #define DEFAULT_MODE    std::ios::in
 
 namespace herdstat {
 namespace util {
 
     /**
-     * @fn file_exists
-     * @brief Does the specified path exist?
+     * Does the specified path exist?
      * @param path Path.
      * @returns A boolean value.
      */
@@ -67,8 +70,7 @@ namespace util {
     }
 
     /**
-     * @fn is_dir
-     * @brief Is the given path a directory?
+     * Is the given path a directory?
      * @param p Path.
      * @returns A boolean value.
      */
@@ -81,8 +83,7 @@ namespace util {
     }
 
     /**
-     * @fn is_dir
-     * @brief Is the file associated with the given stat structure a directory?
+     * Is the file associated with the given stat structure a directory?
      * @param s Reference to a struct stat.
      * @returns A boolean value.
      */
@@ -90,8 +91,7 @@ namespace util {
     inline bool is_dir(const struct stat &s) { return S_ISDIR(s.st_mode); }
 
     /**
-     * @fn is_file
-     * @brief Is the given path a regular file?
+     * Is the given path a regular file?
      * @param p Path.
      * @returns A boolean value.
      */
@@ -104,27 +104,29 @@ namespace util {
     }
 
     /**
-     * @fn is_file
-     * @brief Is the file associated with the given stat structure a regular file?
+     * Is the file associated with the given stat structure a regular file?
      * @param s Reference to a struct stat.
      * @returns A boolean value.
      */
 
     inline bool is_file(const struct stat &s) { return S_ISREG(s.st_mode); }
 
-    /** Return the basename of the given path.
+    /**
+     * Return the basename of the given path.
      * @param p Path.
      */
 
     std::string basename(const std::string &p);
     
-    /** Return the directory name the given path is located in.
+    /**
+     * Return the directory name the given path is located in.
      * @param p Path.
      */
 
     std::string dirname(const std::string &p);
 
-    /** Chop file extension from the given path.
+    /**
+     * Chop file extension from the given path.
      * @param p Path.
      * @param depth Number of period-delimited extensions to chop.
      * @returns A pointer of type char.
@@ -132,19 +134,26 @@ namespace util {
 
     const char *chop_fileext(const std::string &p, unsigned short depth = 1);
 
-    /** Copy file 'from' to file 'to'.
+    /**
+     * Copy file 'from' to file 'to'.
      * @param from Source location.
      * @param to   Destination location.
      */
 
     void copy_file(const std::string &to, const std::string &from);
 
-    /** Move file 'from' to file 'to'.
+    /**
+     * Move file 'from' to file 'to'.
      * @param from Source location.
      * @param to   Destination location.
      */
 
     void move_file(const std::string &to, const std::string &from);
+
+    /**
+     * @enum ftype
+     * @brief Denotes file type.
+     */
 
     enum ftype { REGULAR, DIRECTORY, CHARACTER, BLOCK, FIFO, LINK, SOCKET };
 
@@ -205,7 +214,8 @@ namespace util {
     };
 
     /**
-     * Abstract file object.
+     * @class BaseFileObject file.hh herdstat/util/file.hh
+     * @brief Abstract file object.
      */
 
     class BaseFileObject
@@ -269,7 +279,8 @@ namespace util {
     };
 
     /**
-     * Base type for representing regular files.
+     * @class BaseFile file.hh herdstat/util/file.hh
+     * @brief Base type for representing regular files.
      */
 
     class BaseFile : public BaseFileObject
@@ -330,8 +341,9 @@ namespace util {
     };
 
     /**
-     * Represents a regular file using a vector of std::strings
-     * for storing file contents.
+     * @class File file.hh herdstat/util/file.hh
+     * @brief Represents a regular file using a vector of std::string's for
+     * storing file contents.
      */
 
     class File : public BaseFile,
@@ -385,7 +397,8 @@ namespace util {
     };
 
     /**
-     * A directory using a vector of std::string's to represent
+     * @class Directory file.hh herdstat/util/file.hh
+     * @brief A directory using a vector of std::string's to represent
      * directory contents.
      */
 

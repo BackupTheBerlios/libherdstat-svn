@@ -32,31 +32,51 @@
  * @brief Defines the Glob class.
  */
 
+#include <vector>
 #include <string>
 #include <glob.h>
-
-#include <herdstat/util/container_base.hh>
 
 namespace herdstat {
 namespace util {
 
     /**
-     * POSIX glob() interface.  Fills container with all files
-     * matching a glob pattern.
+     * @class Glob glob.hh herdstat/util/glob.hh
+     * @brief Interface to POSIX glob().
      */
 
-    class Glob : public util::VectorBase<std::string>
+    class Glob
     {
         public:
+            /// Default constructor.
+            Glob();
+
             /** Constructor.
-             * @param pattern Glob pattern string.
+             * @param pattern glob pattern string.
+             * @exception ErrnoException
              */
-            Glob(const char *pattern);
+            Glob(const std::string& pattern) throw (ErrnoException);
 
             /// Destructor.
             ~Glob();
 
+            /// Clear glob results.
+            void clear_results() { _results.clear(); }
+
+            /** Get glob results.
+             * @returns const reference to results.
+             */
+            const std::vector<std::string>& results() const { return _results; }
+
+            /** Perform glob search.
+             * @param pattern glob pattern string.
+             * @exception ErrnoException
+             * @returns const reference to results.
+             */
+            const std::vector<std::string>&
+            operator()(const std::string& pattern) throw (ErrnoException);
+
         private:
+            std::vector<std::string> _results;
             glob_t _glob;
     };
 

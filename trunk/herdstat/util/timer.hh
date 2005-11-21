@@ -38,7 +38,8 @@ namespace herdstat {
 namespace util {
 
     /**
-     * Represents a timer.
+     * @class Timer timer.hh herdstat/util/timer.hh
+     * @brief Represents a timer.
      */
 
     class Timer

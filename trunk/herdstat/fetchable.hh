@@ -29,7 +29,7 @@
 
 /**
  * @file herdstat/fetchable.hh
- * @brief Defines the abstract fetchable interface.
+ * @brief Defines the abstract Fetchable interface.
  */
 
 #include <herdstat/fetcher/fetcher.hh>
@@ -37,17 +37,17 @@
 namespace herdstat {
 
     /**
-     * @class fetchable fetchable.hh herdstat/fetchable.hh
+     * @class Fetchable fetchable.hh herdstat/fetchable.hh
      * @brief Abstract base for fetchable things.
      */
 
-    class fetchable
+    class Fetchable
     {
         public:
             /** Fetch our file and save it to the specified path.
              * @param path Path to file.
              */
-            void fetch(const std::string& path = "") const
+            void fetch(const std::string& path = "") const throw (FetchException)
             {
                 if (this->_fetched)
                     return;
@@ -63,9 +63,9 @@ namespace herdstat {
 
         protected:
             /// Default constructor.
-            fetchable() : _fetch(), _fetched(false) { }
+            Fetchable() throw() : _fetch(), _fetched(false) { }
             /// Destructor.
-            virtual ~fetchable() { }
+            virtual ~Fetchable() { }
 
             /** Does the actual fetching.
              * @param path local path to save.

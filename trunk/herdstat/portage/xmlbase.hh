@@ -47,31 +47,36 @@ namespace portage {
      * @brief Abstract base class for portage-specific XML files.
      */
 
-    class xmlBase : public parsable,
-                    protected xml::saxhandler,
-                    private noncopyable
+    class xmlBase : public Parsable,
+                    protected xml::SAXHandler,
+                    private Noncopyable
     {
         public:
             /// Default constructor.
-            xmlBase() : parsable() { }
+            xmlBase() throw() : Parsable() { }
 
             /** Constructor.
              * @param path Path to XML file.
              */
-            xmlBase(const std::string& path) : parsable(path) { }
+            xmlBase(const std::string& path) throw()
+                : Parsable(path) { }
 
             /// Destructor.
-            virtual ~xmlBase() { }
+            virtual ~xmlBase() throw() { }
 
             /** Parse file.
              * @param path Path to XML file (defaults to empty).
+             * @exception FileException, xml::ParserException
              */
-            virtual void parse(const std::string& path = "") = 0;
+            virtual void parse(const std::string& path = "")
+                throw (FileException, xml::ParserException) = 0;
 
             /** Fill Developer object with data relevant to that developer.
              * @param dev Reference to Developer object.
+             * @exception Exception
              */
-            virtual void fill_developer(Developer& dev) const = 0;
+            virtual void fill_developer(Developer& dev) const
+                throw (Exception) = 0;
 
         protected:
             /* SAX2 callbacks */

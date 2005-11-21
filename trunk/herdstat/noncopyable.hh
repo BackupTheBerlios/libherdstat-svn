@@ -29,25 +29,25 @@
 
 /**
  * @file herdstat/noncopyable.hh
- * @brief Defines the noncopyable base class.
+ * @brief Defines the Noncopyable base class.
  */
 
 namespace herdstat {
 
     /**
-     * @class noncopyable noncopyable.hh herdstat/noncopyable.hh
+     * @class Noncopyable noncopyable.hh herdstat/noncopyable.hh
      * @brief Base for non-copyable things.
      */
 
-    class noncopyable
+    class Noncopyable
     {
         protected:
-            noncopyable() { }
-            virtual ~noncopyable() { }
+            Noncopyable() throw() { }
+            virtual ~Noncopyable() { }
 
         private:
-            noncopyable(const noncopyable&);
-            noncopyable &operator= (const noncopyable&);
+            Noncopyable(const Noncopyable&) throw();
+            Noncopyable& operator= (const Noncopyable&) throw();
     };
 
 } // namespace herdstat

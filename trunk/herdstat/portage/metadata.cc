@@ -29,24 +29,24 @@
 namespace herdstat {
 namespace portage {
 /****************************************************************************/
-metadata::metadata()
+Metadata::Metadata()
     : _pkg(), _longdesc(), _cat(false), _herds(NULL), _devs(NULL)
 {
 }
 /****************************************************************************/
-metadata::metadata(const std::string &pkg)
+Metadata::Metadata(const std::string &pkg)
     : _pkg(pkg), _longdesc(), _cat(false), _herds(NULL), _devs(NULL)
 {
 }
 /****************************************************************************/
-metadata::metadata(const metadata& that)
+Metadata::Metadata(const Metadata& that)
     : _pkg(), _longdesc(), _cat(false), _herds(NULL), _devs(NULL)
 {
     *this = that;
 }
 /****************************************************************************/
-metadata&
-metadata::operator=(const metadata& that)
+Metadata&
+Metadata::operator=(const Metadata& that)
 {
     _pkg = that._pkg;
     _longdesc = that._longdesc;
@@ -60,7 +60,7 @@ metadata::operator=(const metadata& that)
     return *this;
 }
 /****************************************************************************/
-metadata::~metadata()
+Metadata::~Metadata()
 {
     if (_herds) delete _herds;
     if (_devs) delete _devs;

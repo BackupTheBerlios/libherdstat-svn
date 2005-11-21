@@ -37,7 +37,8 @@
 namespace herdstat {
 
     /**
-     * Fetcher implementation using wget.
+     * @class WgetFetcher wgetfetcher.hh herdstat/fetcher/wgetfetcher.hh
+     * @brief Fetcher implementation using wget.
      */
 
     class WgetFetcher : public FetcherImp

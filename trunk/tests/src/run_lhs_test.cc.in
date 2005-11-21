@@ -1,5 +1,5 @@
 /*
- * libherdstat -- tests/src/main.cc
+ * libherdstat -- tests/src/run_lhs_test.cc
  * $Id$
  * Copyright (c) 2005 Aaron Walker <ka0ttic@gentoo.org>
  *
@@ -30,23 +30,8 @@
 #include <cstdlib>
 
 #include <herdstat/exceptions.hh>
-
-#include "algo-test.hh"
-#include "container_base-test.hh"
-#include "devaway.xml-test.hh"
-#include "ebuild-test.hh"
-#include "glob-test.hh"
-#include "herds.xml-test.hh"
-#include "license-test.hh"
-#include "keyword-test.hh"
-#include "metadata.xml-test.hh"
-#include "package_finder-test.hh"
-#include "package_list-test.hh"
-#include "package_which-test.hh"
-#include "regex-test.hh"
-#include "string-test.hh"
-#include "userinfo.xml-test.hh"
-#include "version-test.hh"
+#include <herdstat/util/functional.hh>
+@TEST_INCLUDES@
 
 int
 main(int argc, char **argv)
@@ -65,22 +50,7 @@ main(int argc, char **argv)
             std::copy(argv+2, argv+argc, std::back_inserter(opts));
 
         TestsMap tests;
-        tests["algo"]           = new AlgoTest();
-        tests["container_base"] = new ContainerBaseTest();
-        tests["devaway.xml"]    = new DevawayXMLTest();
-        tests["ebuild"]         = new EbuildTest();
-        tests["glob"]           = new GlobTest();
-        tests["herds.xml"]      = new HerdsXMLTest();
-        tests["keyword"]        = new KeywordTest();
-        tests["license"]        = new LicenseTest();
-        tests["metadata.xml"]   = new MetadataXMLTest();
-        tests["package_finder"] = new PackageFinderTest();
-        tests["package_list"]   = new PackageListTest();
-        tests["package_which"]  = new PackageWhichTest();
-        tests["regex"]          = new RegexTest();
-        tests["string"]         = new StringTest();
-        tests["userinfo.xml"]   = new UserinfoXMLTest();
-        tests["version"]        = new VersionTest();
+        @TEST_INSERTS@
 
         TestHandler *test = tests[test_id];
         if (not test)

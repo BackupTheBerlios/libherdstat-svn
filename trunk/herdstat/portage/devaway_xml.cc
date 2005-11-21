@@ -1,5 +1,5 @@
 /*
- * libherdstat -- portage/devaway_xml.cc
+ * libherdstat -- herdstat/portage/devaway_xml.cc
  * $Id$
  * Copyright (c) 2005 Aaron Walker <ka0ttic@gentoo.org>
  *
@@ -33,27 +33,29 @@
 namespace herdstat {
 namespace portage {
 /*** static members *********************************************************/
-const char * const devaway_xml::_local_default = LOCALSTATEDIR"/devaway.xml";
+const char * const DevawayXML::_local_default = LOCALSTATEDIR"/devaway.xml";
 /****************************************************************************/
-devaway_xml::devaway_xml()
+DevawayXML::DevawayXML() throw()
     : xmlBase(), _devs(), in_devaway(false),
       in_dev(false), in_reason(false), _cur_dev()
 {
 }
 /****************************************************************************/
-devaway_xml::devaway_xml(const std::string &path)
+DevawayXML::DevawayXML(const std::string &path)
+    throw (FileException, xml::ParserException)
     : xmlBase(path), _devs(), in_devaway(false),
       in_dev(false), in_reason(false), _cur_dev()
 {
     this->parse();
 }
 /****************************************************************************/
-devaway_xml::~devaway_xml()
+DevawayXML::~DevawayXML() throw()
 {
 }
 /****************************************************************************/
 void
-devaway_xml::parse(const std::string& path)
+DevawayXML::parse(const std::string& path)
+    throw (FileException, xml::ParserException)
 {
     this->timer().start();
 
@@ -62,7 +64,7 @@ devaway_xml::parse(const std::string& path)
     else if (this->path().empty())
         this->set_path(_local_default);
 
-    BacktraceContext c("portage::devaway_xml::parse("+this->path()+")");
+    BacktraceContext c("portage::DevawayXML::parse("+this->path()+")");
 
     if (not util::is_file(this->path()))
         throw FileException(this->path());
@@ -73,12 +75,12 @@ devaway_xml::parse(const std::string& path)
 }
 /****************************************************************************/
 void
-devaway_xml::fill_developer(Developer& dev) const
+DevawayXML::fill_developer(Developer& dev) const throw (Exception)
 {
-    BacktraceContext c("portage::devaway_xml::fill_developer()");
+    BacktraceContext c("portage::DevawayXML::fill_developer()");
 
     if (dev.user().empty())
-        throw Exception("devaway_xml::fill_developer() requires you pass a Developer object with at least the user name filled in");
+        throw Exception("DevawayXML::fill_developer() requires you pass a Developer object with at least the user name filled in");
 
     Developers::const_iterator d = _devs.find(dev);
     if (d != _devs.end())
@@ -89,7 +91,7 @@ devaway_xml::fill_developer(Developer& dev) const
 }
 /****************************************************************************/
 const std::vector<std::string>
-devaway_xml::keys() const
+DevawayXML::keys() const
 {
     std::vector<std::string> v;
     for (Developers::const_iterator i = _devs.begin() ; i != _devs.end() ; ++i)
@@ -101,7 +103,7 @@ devaway_xml::keys() const
 }
 /****************************************************************************/
 bool
-devaway_xml::start_element(const std::string& name, const attrs_type& attrs)
+DevawayXML::start_element(const std::string& name, const attrs_type& attrs)
 {
     if (name == "devaway")
         in_devaway = true;
@@ -124,7 +126,7 @@ devaway_xml::start_element(const std::string& name, const attrs_type& attrs)
 }
 /****************************************************************************/
 bool
-devaway_xml::end_element(const std::string& name)
+DevawayXML::end_element(const std::string& name)
 {
     if (name == "devaway")      in_devaway = false;
     else if (name == "dev")     in_dev = false;
@@ -134,7 +136,7 @@ devaway_xml::end_element(const std::string& name)
 }
 /****************************************************************************/
 bool
-devaway_xml::text(const std::string& text)
+DevawayXML::text(const std::string& text)
 {
     if (in_reason)
         const_cast<Developer&>(*_cur_dev).set_awaymsg(_cur_dev->awaymsg()+text);

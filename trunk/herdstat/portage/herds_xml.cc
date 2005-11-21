@@ -39,9 +39,9 @@
 namespace herdstat {
 namespace portage {
 /*** static members *********************************************************/
-const char * const herds_xml::_local_default = LOCALSTATEDIR"/herds.xml";
+const char * const HerdsXML::_local_default = LOCALSTATEDIR"/herds.xml";
 /****************************************************************************/
-herds_xml::herds_xml()
+HerdsXML::HerdsXML() throw()
     : xmlBase(), _herds(), _cvsdir(), _force_fetch(false), _fetch(),
       in_herd(false), in_herd_name(false),
       in_herd_email(false), in_herd_desc(false), in_maintainer(false),
@@ -51,7 +51,8 @@ herds_xml::herds_xml()
 {
 }
 /****************************************************************************/
-herds_xml::herds_xml(const std::string& path)
+HerdsXML::HerdsXML(const std::string& path)
+    throw (FileException, xml::ParserException)
     : xmlBase(path), _herds(), _cvsdir(), _force_fetch(false), _fetch(),
       in_herd(false), in_herd_name(false), in_herd_email(false),
       in_herd_desc(false), in_maintainer(false), in_maintainer_name(false),
@@ -61,19 +62,20 @@ herds_xml::herds_xml(const std::string& path)
     this->parse();
 }
 /****************************************************************************/
-herds_xml::~herds_xml()
+HerdsXML::~HerdsXML() throw()
 {
 }
 /****************************************************************************/
 void
-herds_xml::parse(const std::string& path)
+HerdsXML::parse(const std::string& path)
+        throw (FileException, xml::ParserException)
 {
     this->timer().start();
 
     if      (not path.empty())      this->set_path(path);
     else if (this->path().empty())  this->set_path(_local_default);
 
-    BacktraceContext c("portage::herds_xml::parse("+this->path()+")");
+    BacktraceContext c("portage::HerdsXML::parse("+this->path()+")");
 
     if (not util::is_file(this->path()))
         throw FileException(this->path());
@@ -84,13 +86,13 @@ herds_xml::parse(const std::string& path)
 }
 /****************************************************************************/
 void
-herds_xml::fill_developer(Developer& dev) const
+HerdsXML::fill_developer(Developer& dev) const throw (Exception)
 {
-    BacktraceContext c("portage::herds_xml::fill_developer()");
+    BacktraceContext c("portage::HerdsXML::fill_developer()");
 
     /* at least the dev's username needs to be present for searching */
     if (dev.user().empty())
-        throw Exception("herds_xml::fill_developer() requires you pass a Developer object with at least the user name filled in");
+        throw Exception("HerdsXML::fill_developer() requires you pass a Developer object with at least the user name filled in");
 
     /* for each herd */
     for (Herds::const_iterator h = _herds.begin() ; h != _herds.end() ; ++h)
@@ -108,7 +110,7 @@ herds_xml::fill_developer(Developer& dev) const
 }
 /****************************************************************************/
 bool
-herds_xml::start_element(const std::string& name, const attrs_type& attrs)
+HerdsXML::start_element(const std::string& name, const attrs_type& attrs)
 {
     if (name == "herd")
         in_herd = true;
@@ -133,7 +135,7 @@ herds_xml::start_element(const std::string& name, const attrs_type& attrs)
 }
 /****************************************************************************/
 bool
-herds_xml::end_element(const std::string& name)
+HerdsXML::end_element(const std::string& name)
 {
     if (name == "herd")
         in_herd = false;
@@ -158,7 +160,7 @@ herds_xml::end_element(const std::string& name)
 }
 /****************************************************************************/
 bool
-herds_xml::text(const std::string& text)
+HerdsXML::text(const std::string& text)
 {
     if (in_herd_name)
         _cur_herd = _herds.insert(Herd(text)).first;
@@ -184,7 +186,7 @@ herds_xml::text(const std::string& text)
 
         try
         {
-            project_xml mp(text, _cvsdir, _force_fetch);
+            ProjectXML mp(text, _cvsdir, _force_fetch);
             const_cast<Herd&>(*_cur_herd).insert(
                 mp.devs().begin(), mp.devs().end());
         }

@@ -54,7 +54,7 @@ DevawayXMLTest::operator()(const opts_type& opts) const
     const std::string& path(opts.front());
     assert(herdstat::util::is_file(path));
     
-    herdstat::portage::devaway_xml devaway;
+    herdstat::portage::DevawayXML devaway;
     devaway.parse(path);
 
     const herdstat::portage::Developers& devs(devaway.devs());

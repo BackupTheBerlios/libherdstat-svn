@@ -34,31 +34,33 @@
 namespace herdstat {
 namespace portage {
 /****************************************************************************/
-metadata_xml::metadata_xml()
-    : parsable(), _data(), in_herd(false), in_maintainer(false),
+MetadataXML::MetadataXML() throw()
+    : Parsable(), _data(), in_herd(false), in_maintainer(false),
       in_email(false), in_name(false), in_desc(false), in_longdesc(false),
       in_en_longdesc(false), _cur_dev()
 {
 }
 /****************************************************************************/
-metadata_xml::metadata_xml(const std::string& path, const std::string& pkg)
-    : parsable(path), _data(pkg), in_herd(false), in_maintainer(false),
+MetadataXML::MetadataXML(const std::string& path, const std::string& pkg)
+    throw (FileException, xml::ParserException)
+    : Parsable(path), _data(pkg), in_herd(false), in_maintainer(false),
       in_email(false), in_name(false), in_desc(false), in_longdesc(false),
       in_en_longdesc(false), _cur_dev()
 {
     this->parse();
 }
 /****************************************************************************/
-metadata_xml::~metadata_xml()
+MetadataXML::~MetadataXML() throw()
 {
 }
 /****************************************************************************/
 void
-metadata_xml::parse(const std::string& path)
+MetadataXML::parse(const std::string& path)
+    throw (FileException, xml::ParserException)
 {
     if (not path.empty()) this->set_path(path);
 
-    BacktraceContext c("portage::metadata_xml::parse("+this->path()+")");
+    BacktraceContext c("portage::MetadataXML::parse("+this->path()+")");
 
     if (not util::file_exists(this->path())) throw FileException(this->path());
     this->parse_file(this->path().c_str());
@@ -68,7 +70,7 @@ metadata_xml::parse(const std::string& path)
 }
 /****************************************************************************/
 bool
-metadata_xml::start_element(const std::string& name, const attrs_type& attrs)
+MetadataXML::start_element(const std::string& name, const attrs_type& attrs)
 {
     if (name == "catmetadata")
         _data.set_category(true);
@@ -104,7 +106,7 @@ metadata_xml::start_element(const std::string& name, const attrs_type& attrs)
 }
 /****************************************************************************/
 bool
-metadata_xml::end_element(const std::string& name)
+MetadataXML::end_element(const std::string& name)
 {
     if (name == "herd")
         in_herd = false;
@@ -125,7 +127,7 @@ metadata_xml::end_element(const std::string& name)
 }
 /****************************************************************************/
 bool
-metadata_xml::text(const std::string& text)
+MetadataXML::text(const std::string& text)
 {
     if (in_herd)
         _data.herds().insert(Herd(text));

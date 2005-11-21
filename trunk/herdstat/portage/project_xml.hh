@@ -41,12 +41,12 @@ namespace herdstat {
 namespace portage {
 
     /**
-     * @class project_xml project_xml.hh herdstat/portage/project_xml.hh
+     * @class ProjectXML project_xml.hh herdstat/portage/project_xml.hh
      * @brief Interface for Gentoo's projectxml-style XML files.
      */
 
-    class project_xml : public xmlBase,
-                        public fetchable
+    class ProjectXML : public xmlBase,
+                        public Fetchable
     {
         public:
             /** Constructor.
@@ -56,20 +56,24 @@ namespace portage {
              * @param cvsdir Path to Gentoo cvs checkout directory.
              * @param force_fetch Whether or not to force fetching of the
              * projectxml file.
+             * @exception FileException, xml::ParserException
              */
-            project_xml(const std::string& path,
-                        const std::string& cvsdir,
-                        bool force_fetch);
+            ProjectXML(const std::string& path,
+                       const std::string& cvsdir, bool force_fetch)
+                throw (FileException, xml::ParserException);
 
             /// Destructor.
-            virtual ~project_xml();
+            virtual ~ProjectXML() throw();
 
             /** Parse projectxml file.
              * @param path Path to projectxml file (defaults to empty).
+             * @exception FileException, xml::ParserException
              */
-            virtual void parse(const std::string& path = "");
+            virtual void parse(const std::string& path = "")
+                throw (FileException, xml::ParserException);
 
-            virtual void fill_developer(Developer& dev) const { }
+            virtual void fill_developer(Developer& dev) const
+                throw (Exception) { }
 
             /// Get Herd.
             inline const Herd& devs() const;
@@ -96,11 +100,11 @@ namespace portage {
             static std::set<std::string> _parsed;
     };
 
-    inline const Herd& project_xml::devs() const { return _devs; }
+    inline const Herd& ProjectXML::devs() const { return _devs; }
 
 } // namespace portage
 } // namespace herdstat
 
-#endif /* _HAVE_PROJECT_XML_HH */
+#endif /* _HAVE_PROJECT_XML.hh */
 
 /* vim: set tw=80 sw=4 fdm=marker et : */

@@ -40,24 +40,25 @@ namespace herdstat {
 namespace util {
 
     /**
-     * Represents a file with variables in the form of VARIABLE=VALUE,
+     * @class Vars vars.hh herdstat/util/vars.hh
+     * @brief Represents a file with variables in the form of VARIABLE=VALUE,
      * stored in key,value pairs.
      */
 
-    class vars : public BaseFile,
+    class Vars : public BaseFile,
                  public MapBase<std::string, std::string>
     {
         public:
             /// Default constructor.
-            vars();
+            Vars();
 
             /** Constructor.
              * @param path Path.
              */
-            vars(const std::string &path);
+            Vars(const std::string &path);
 
             /// Destructor.
-            virtual ~vars();
+            virtual ~Vars();
 
             /** Dump keys/values to specified stream.
              * @param s Output stream.

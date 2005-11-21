@@ -42,15 +42,10 @@
 #include <herdstat/exceptions.hh>
 
 namespace herdstat {
-/**
- * @namespace herdstat::util
- * @brief General-purpose utility classes/functions.
- */
 namespace util {
 
     /**
-     * @fn tidy_whitespace
-     * @brief Tidy whitespace of the given string.
+     * Tidy whitespace of the given string.
      * @param s String object
      * @returns Resulting std::string object.
      */
@@ -66,8 +61,7 @@ namespace util {
     //@}
 
     /**
-     * @fn split
-     * @brief Split string into a vector of strings.
+     * Split string into a vector of strings.
      * @param s String to split.
      * @param d Delimiter.
      * @param append_empty Append "" if two contiguous delimiters are
@@ -80,8 +74,7 @@ namespace util {
                                    bool append_empty = false);
 
     /**
-     * @fn join
-     * @brief Convert vector of std::strings to one std::string.
+     * Convert vector of std::strings to one std::string.
      * @param v Vector of std::strings
      * @param d Delimiter.
      * @returns Resulting string object.
@@ -90,9 +83,8 @@ namespace util {
     std::string join(const std::vector<std::string>& v, const char d = ' ');
 
     /**
-     * @fn htmlify
-     * @brief Replace any unfriendly characters in the given std::string to
-     * their HTML counterparts.
+     * Replace any unfriendly characters in the given std::string to their
+     * HTML counterparts.
      * @param s String object.
      * @returns Resulting string object.
      */
@@ -100,9 +92,8 @@ namespace util {
     std::string htmlify(const std::string& s);
 
     /**
-     * @fn unhtmlify
-     * @brief Replace any HTML'ized characters in the given std::string to
-     * their respective counterparts.
+     * Replace any HTML'ized characters in the given std::string to their
+     * respective counterparts.
      * @param s String object.
      * @returns Resulting string object.
      */
@@ -110,9 +101,7 @@ namespace util {
     std::string unhtmlify(const std::string& s);
 
     /**
-     * @fn strip_colors
-     * @brief Return a copy of the given string with the ASCII color sequences
-     * removed.
+     * Return a copy of the given string with the ASCII color sequences removed.
      * @param s string object.
      * @returns Resulting string object.
      */
@@ -121,8 +110,7 @@ namespace util {
 
     /************************************************************************/
     /**
-     * @fn lowercase
-     * @brief Convert string to all lowercase.
+     * Convert string to all lowercase.
      * @param s String object.
      * @returns Resulting string object.
      */
@@ -137,8 +125,7 @@ namespace util {
     }
 
     /**
-     * @fn lowercase_inplace
-     * @brief Convert string to all lowercase (in place).
+     * Convert string to all lowercase (in place).
      * @param s String object.
      */
 
@@ -149,8 +136,7 @@ namespace util {
     }
     /************************************************************************/
     /**
-     * @fn stringify
-     * @brief Convert a type to a std::string.
+     * Convert a type to a std::string.
      * @param v Value of type T.
      * @returns A std::string object.
      */
@@ -190,8 +176,7 @@ namespace util {
     }
     /************************************************************************/
     /**
-     * @fn destringify
-     * @brief Convert a std::string to a type.
+     * Convert a std::string to a type.
      * @param s A std::string object.
      * @returns Value of type T.
      */

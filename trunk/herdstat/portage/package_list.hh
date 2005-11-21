@@ -27,6 +27,11 @@
 # include "config.h"
 #endif
 
+/**
+ * @file herdstat/portage/package_list.hh
+ * @brief Defines the PackageList class.
+ */
+
 #include <herdstat/util/container_base.hh>
 #include <herdstat/portage/package.hh>
 #include <herdstat/portage/functional.hh>

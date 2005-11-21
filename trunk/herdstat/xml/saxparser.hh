@@ -40,15 +40,15 @@ namespace herdstat {
 namespace xml {
 
     /**
-     * @class saxhandler saxparser.hh herdstat/xml/saxparser.hh
+     * @class SAXHandler saxparser.hh herdstat/xml/saxparser.hh
      * @brief Abstract SAX2 Content Handler.
      */
 
-    class saxhandler : public ::xml::event_parser
+    class SAXHandler : public ::xml::event_parser
     {
         public:
             /// Destructor.
-            virtual ~saxhandler();
+            virtual ~SAXHandler();
 
         protected:
             /// Callback called upon entering an element.
@@ -63,33 +63,34 @@ namespace xml {
     };
 
     /**
-     * @class saxparser saxparser.hh herdstat/xml/saxparser.hh
+     * @class SAXParser saxparser.hh herdstat/xml/saxparser.hh
      * @brief SAX2 parser interface.
      */
 
-    class saxparser : private noncopyable
+    class SAXParser : private Noncopyable
     {
         public:
             /** Constructor.
              * @param h pointer to a saxhandler object.
              */
-            explicit saxparser(saxhandler *h);
+            explicit SAXParser(SAXHandler *h) throw();
 
             /// Destructor.
-            virtual ~saxparser();
+            virtual ~SAXParser() throw();
 
             /** Parse file.
              * @param path Path.
              * @exception ParserException.
              */
-            virtual void parse(const std::string &path) throw (ParserException);
+            virtual void parse(const std::string &path)
+                throw (ParserException);
 
         protected:
-            /// Get pointer to underlying saxhandler object.
-            saxhandler *handler() const { return _handler; }
+            /// Get pointer to underlying SAXHandler object.
+            SAXHandler *handler() const { return _handler; }
 
         private:
-            saxhandler *_handler;
+            SAXHandler *_handler;
     };
 
 } // namespace xml

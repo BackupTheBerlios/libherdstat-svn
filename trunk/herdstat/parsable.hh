@@ -34,34 +34,38 @@
 
 #include <string>
 #include <herdstat/util/timer.hh>
+#include <herdstat/xml/exceptions.hh>
 
 namespace herdstat {
 
     /**
-     * @class parsable parsable.hh herdstat/parsable.hh
+     * @class Parsable parsable.hh herdstat/parsable.hh
      * @brief Abstract base class for parsable things.
      */
 
-    class parsable
+    class Parsable
     {
         public:
             typedef util::Timer timer_type;
 
             /// Default constructor.
-            parsable() : _path(), _timer() { }
+            Parsable() throw() : _path(), _timer() { }
 
             /** Constructor.
              * @param path Path of parsable file.
              */
-            parsable(const std::string& path) : _path(path), _timer() { }
+            Parsable(const std::string& path) throw()
+                : _path(path), _timer() { }
             
             /// Destructor.
-            virtual ~parsable() { }
+            virtual ~Parsable() { }
 
             /** Parse specified file.
              * @param path Path of parsable file (defaults to empty).
+             * @exception FileException, xml::ParserException
              */
-            virtual void parse(const std::string& path = "") = 0;
+            virtual void parse(const std::string& path = "")
+                throw (FileException, xml::ParserException) = 0;
 
             /// Get path of parsable file.
             const std::string &path() const { return _path; }

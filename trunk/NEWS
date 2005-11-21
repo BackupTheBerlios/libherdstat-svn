@@ -14,9 +14,14 @@ ChangeLog file for a more detailed listing of changes/bug fixes.
       of functions has been replaced by the PackageWhich class.  PackageFinder
       is defined in package_finder.hh; PackageWhich in package_which.hh.
     - Added util::all_equal() algorithms.
-    - Renamed portage::version_map => portage::VersionComponents.  Renamed
-      portage::versions => portage::Versions.  Added class template VersionsMap
-      for mapping VersionString's to objects of type T.
+    - Renamed quite a few classes to be consistent with the other classes.
+      version_map => VersionComponents, versions => Versions, version_string =>
+      VersionString, config => Config, parsable => Parsable, fetchable => Fetchable,
+      noncopyable => Noncopyable, herds_xml => HerdsXML, userinfo_xml => UserinfoXML,
+      devaway_xml => DevawayXML, project_xml => ProjectXML, metadata_xml =>
+      MetadataXML, metadata => Metadata, ebuild => Ebuild.
+    - Added class template VersionsMap for mapping VersionString's to objects
+      of type T.
     - Added KeywordsMap class that maps VersionString objects to Keywords
       objects.
     - Added compositional function object adapters compose_f_gx,

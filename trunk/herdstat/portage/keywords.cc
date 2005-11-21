@@ -103,7 +103,7 @@ Keywords::Keywords(const std::string& path)
     this->format();
 }
 /****************************************************************************/
-Keywords::Keywords(const ebuild& e)
+Keywords::Keywords(const Ebuild& e)
     : _ebuild(e), _str()
 {
     this->fill();
@@ -123,7 +123,7 @@ Keywords::assign(const std::string& path)
 }
 /****************************************************************************/
 void
-Keywords::assign(const ebuild& e)
+Keywords::assign(const Ebuild& e)
 {
     _ebuild = e;
     this->fill();
@@ -183,7 +183,7 @@ struct NewPair
         {
             p.second.assign(ebuild);
         }
-        catch (const Exception)
+        catch (const Exception&)
         {
         }
 

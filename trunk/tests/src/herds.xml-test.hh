@@ -50,7 +50,7 @@ HerdsXMLTest::operator()(const opts_type& opts) const
 
     herdstat::xml::GlobalInit();
 
-    herdstat::portage::herds_xml herds_xml;
+    herdstat::portage::HerdsXML herds_xml;
     herds_xml.parse(opts.front());
     const herdstat::portage::Herds& herds(herds_xml.herds());
     assert(not herds.empty());

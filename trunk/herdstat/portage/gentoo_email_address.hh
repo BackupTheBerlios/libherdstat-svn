@@ -58,7 +58,7 @@ namespace portage {
 
         protected:
             /// Parse email address.
-            virtual bool parse(const std::string& email);
+            virtual bool parse(const std::string& email) throw();
     };
 
 } // namespace portage

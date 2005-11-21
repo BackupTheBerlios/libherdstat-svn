@@ -27,6 +27,11 @@
 # include "config.h"
 #endif
 
+/**
+ * @file herdstat/portage/package.hh
+ * @brief Defines the Package class.
+ */
+
 #include <herdstat/util/regex.hh>
 #include <herdstat/portage/config.hh>
 #include <herdstat/portage/keywords.hh>

@@ -35,22 +35,22 @@ namespace portage {
 /*** static members *********************************************************/
 //ebuild::eclass_map ebuild::_eclasses;
 /****************************************************************************/
-ebuild::ebuild()
+Ebuild::Ebuild()
 {
 }
 /****************************************************************************/
-ebuild::ebuild(const std::string &path)
-    : util::vars()
+Ebuild::Ebuild(const std::string &path)
+    : util::Vars()
 {
     this->read(path);
 }
 /****************************************************************************/
-ebuild::~ebuild()
+Ebuild::~Ebuild()
 {
 }
 /****************************************************************************/
 void
-ebuild::assign(const std::string& path)
+Ebuild::assign(const std::string& path)
 {
     if (this->is_open())
         this->close();
@@ -60,7 +60,7 @@ ebuild::assign(const std::string& path)
 }
 /****************************************************************************/
 void
-ebuild::do_set_defaults()
+Ebuild::do_set_defaults()
 {
     /* in case path() is an eclass */
     if (is_ebuild(this->path()))
@@ -73,7 +73,7 @@ ebuild::do_set_defaults()
 }
 /****************************************************************************/
 //void
-//ebuild::do_perform_action_on(const std::string& str)
+//Ebuild::do_perform_action_on(const std::string& str)
 //{
 //    /* perform any inherits */
 //    if (str.find("inherit") != std::string::npos)

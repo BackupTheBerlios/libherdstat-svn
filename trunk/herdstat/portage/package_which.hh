@@ -27,6 +27,11 @@
 # include "config.h"
 #endif
 
+/**
+ * @file herdstat/portage/package_which.hh
+ * @brief Defines the PackageWhich class.
+ */
+
 #include <vector>
 #include <herdstat/portage/package_finder.hh>
 

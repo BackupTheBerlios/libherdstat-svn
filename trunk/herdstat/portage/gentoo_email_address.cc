@@ -46,7 +46,7 @@ GentooEmailAddress::~GentooEmailAddress()
 }
 /****************************************************************************/
 bool
-GentooEmailAddress::parse(const std::string& email)
+GentooEmailAddress::parse(const std::string& email) throw()
 {
     if (not EmailAddress::parse(email))
         this->set_domain("gentoo.org");

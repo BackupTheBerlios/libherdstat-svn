@@ -41,35 +41,40 @@ namespace herdstat {
 namespace portage {
 
     /**
-     * @class herds_xml herds_xml.hh herdstat/portage/herds_xml.hh
+     * @class HerdsXML herds_xml.hh herdstat/portage/herds_xml.hh
      * @brief Interface for Gentoo's herds.xml.
      */
 
-    class herds_xml : public xmlBase
+    class HerdsXML : public xmlBase
     {
         public:
             /// Default constructor.
-            herds_xml();
+            HerdsXML() throw();
 
             /** Constructor.
              * @param path Path to herds.xml.
+             * @exception FileException, xml::ParserException
              */
-            herds_xml(const std::string& path);
+            HerdsXML(const std::string& path)
+                throw (FileException, xml::ParserException);
 
             /// Destructor.
-            virtual ~herds_xml();
+            virtual ~HerdsXML() throw();
 
             /** Parse herds.xml.
              * @param path Path to herds.xml (defaults to empty).
+             * @exception FileException, xml::ParserException
              */
-            virtual void parse(const std::string& path = "");
+            virtual void parse(const std::string& path = "")
+                throw (FileException, xml::ParserException);
 
             /** Fill a Developer object with data we contain relevant to the
              * developer.  At the very least, the Developer's user name must
              * have been set prior to calling this function.
              * @param dev Reference to a Developer object.
+             * @exception Exception
              */
-            virtual void fill_developer(Developer& dev) const;
+            virtual void fill_developer(Developer& dev) const throw (Exception);
 
             /** Set Gentoo CVS checkout directory.  herds.xml as well as
              * projectxml files will be looked for relative to this path.
@@ -126,13 +131,13 @@ namespace portage {
             Herd::iterator  _cur_dev;
     };
 
-    inline herds_xml::operator Herds::container_type() const { return _herds; }
-    inline const Herds& herds_xml::herds() const { return _herds; }
-    inline Herds& herds_xml::herds() { return _herds; }
-    inline bool herds_xml::empty() const { return _herds.empty(); }
-    inline Herds::size_type herds_xml::size() const { return _herds.size(); }
-    inline void herds_xml::set_cvsdir(const std::string& path) { _cvsdir.assign(path); }
-    inline void herds_xml::set_force_fetch(bool v) { _force_fetch = v; }
+    inline HerdsXML::operator Herds::container_type() const { return _herds; }
+    inline const Herds& HerdsXML::herds() const { return _herds; }
+    inline Herds& HerdsXML::herds() { return _herds; }
+    inline bool HerdsXML::empty() const { return _herds.empty(); }
+    inline Herds::size_type HerdsXML::size() const { return _herds.size(); }
+    inline void HerdsXML::set_cvsdir(const std::string& path) { _cvsdir.assign(path); }
+    inline void HerdsXML::set_force_fetch(bool v) { _force_fetch = v; }
 
 } // namespace portage
 } // namespace herdstat

@@ -35,7 +35,8 @@
 namespace herdstat {
 
     /**
-     * Options that determine the fetcher's behavior.
+     * @class FetcherOptions options.hh herdstat/fetcher/options.hh
+     * @brief Options that determine Fetcher's behavior.
      */
 
     class FetcherOptions
@@ -44,10 +45,14 @@ namespace herdstat {
             /// Default constructor.
             FetcherOptions() : _verbose(false), _debug(false) { }
 
+            /// verbose?
             inline bool verbose() const;
+            /// debug?
             inline bool debug() const;
 
+            /// set verbose
             inline void set_verbose(bool v);
+            /// set debug
             inline void set_debug(bool v);
 
         private:

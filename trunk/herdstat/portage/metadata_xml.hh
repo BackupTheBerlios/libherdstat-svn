@@ -40,35 +40,38 @@ namespace herdstat {
 namespace portage {
 
     /**
-     * @class metadata_xml metadata_xml.hh herdstat/portage/metadata_xml.hh
+     * @class MetadataXML metadata_xml.hh herdstat/portage/metadata_xml.hh
      * @brief Interface to Gentoo's metadata.xml files.
      */
 
-    class metadata_xml : public parsable,
-                         protected xml::saxhandler
+    class MetadataXML : public Parsable,
+                        protected xml::SAXHandler
     {
         public:
             /// Default constructor.
-            metadata_xml();
+            MetadataXML() throw();
 
             /** Constructor.
              * @param path Path to metadata.xml.
              * @param pkg Package name for this metadata.xml (defaults to
              * empty).
+             * @exception FileException, xml::ParserException
              */
-            metadata_xml(const std::string& path,
-                         const std::string& pkg = "");
+            MetadataXML(const std::string& path, const std::string& pkg = "")
+                throw (FileException, xml::ParserException);
 
             /// Destructor.
-            virtual ~metadata_xml();
+            virtual ~MetadataXML() throw();
 
             /** Parse metadata.xml.
              * @param path Path to metadata.xml (defaults to empty).
+             * @exception FileException, xml::ParserException
              */
-            virtual void parse(const std::string& path = "");
+            virtual void parse(const std::string& path = "")
+                throw (FileException, xml::ParserException);
 
             /// Get data associated with this metadata.xml.
-            inline const metadata& data() const;
+            inline const Metadata& data() const;
 
             /* for convenience */
             /// Get long description.
@@ -85,7 +88,7 @@ namespace portage {
             virtual bool text(const std::string& text);
 
         private:
-            metadata _data;
+            Metadata _data;
 
             bool in_herd,
                  in_maintainer,
@@ -99,15 +102,15 @@ namespace portage {
             std::string _longdesc;
     };
 
-    inline const metadata& metadata_xml::data() const { return _data; }
-    inline const Herds& metadata_xml::herds() const { return _data.herds(); }
-    inline const Developers&  metadata_xml::devs()  const { return _data.devs(); }
-    inline const std::string& metadata_xml::longdesc() const
+    inline const Metadata& MetadataXML::data() const { return _data; }
+    inline const Herds& MetadataXML::herds() const { return _data.herds(); }
+    inline const Developers&  MetadataXML::devs()  const { return _data.devs(); }
+    inline const std::string& MetadataXML::longdesc() const
     { return _data.longdesc(); }
 
 } // namespace portage
 } // namespace herdstat
 
-#endif /* _HAVE_METADATA_XML_HH */
+#endif /* _HAVE_METADATA_XML.hh */
 
 /* vim: set tw=80 sw=4 fdm=marker et : */

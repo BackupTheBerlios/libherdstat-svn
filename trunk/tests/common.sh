@@ -18,7 +18,7 @@ indent() {
 }
 
 run_test() {
-    local caller="${1}" name="${2}" opts="${3}" rv=0
+    local caller="$(get_caller ${0})" name="${1}" opts="${2}" rv=0
     local actual="${srcdir}/actual/${caller}" expected="${srcdir}/expected/${caller}"
 
     [[ -d ${srcdir}/actual ]] || mkdir ${srcdir}/actual

@@ -39,35 +39,41 @@ namespace herdstat {
 namespace portage {
 
     /**
-     * @class userinfo_xml userinfo_xml.hh herdstat/portage/userinfo_xml.hh
+     * @class UserinfoXML userinfo_xml.hh herdstat/portage/userinfo_xml.hh
      * @brief Represents Gentoo's userinfo.xml.
      */
 
-    class userinfo_xml : public xmlBase
+    class UserinfoXML : public xmlBase
     {
         public:
             /// Default constructor.
-            userinfo_xml();
+            UserinfoXML() throw();
 
             /** Constructor.
              * @param path Path to userinfo.xml.
+             * @exception FileException, xml::ParserException
              */
-            userinfo_xml(const std::string& path);
+            UserinfoXML(const std::string& path)
+                throw (FileException, xml::ParserException);
 
             /// Destructor.
-            virtual ~userinfo_xml();
+            virtual ~UserinfoXML() throw();
 
             /** Parse userinfo.xml.
              * @param path Path to userinfo.xml (defaults to empty).
+             * @exception FileException, xml::ParserException
              */
-            virtual void parse(const std::string& path = "");
+            virtual void parse(const std::string& path = "")
+                throw (FileException, xml::ParserException);
 
             /** Fill a Developer object with data we contain relevant to the
              * developer.  At the very least, the Developer's user name must
              * have been set prior to calling this function.
              * @param dev Reference to a Developer object.
+             * @exception Exception
              */
-            virtual void fill_developer(Developer& dev) const;
+            virtual void fill_developer(Developer& dev) const
+                throw (Exception);
 
             /// Get developers.
             inline const Developers& devs() const;
@@ -102,9 +108,9 @@ namespace portage {
             Developers::iterator _cur_dev;
     };
 
-    inline const Developers& userinfo_xml::devs() const { return _devs; }
-    inline Developers::size_type userinfo_xml::size() const { return _devs.size(); }
-    inline bool userinfo_xml::empty() const { return _devs.empty(); }
+    inline const Developers& UserinfoXML::devs() const { return _devs; }
+    inline Developers::size_type UserinfoXML::size() const { return _devs.size(); }
+    inline bool UserinfoXML::empty() const { return _devs.empty(); }
 
 } // namespace portage
 } // namespace herdstat

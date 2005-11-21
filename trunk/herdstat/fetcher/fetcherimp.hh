@@ -38,7 +38,8 @@
 namespace herdstat {
 
     /**
-     * Base class for different fetcher implementations.
+     * @class FetcherImp fetcherimp.hh herdstat/fetcher/fetcherimp.hh
+     * @brief Base class for different fetcher implementations.
      */
 
     class FetcherImp

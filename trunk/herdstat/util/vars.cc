@@ -35,29 +35,29 @@
 namespace herdstat {
 namespace util {
 /****************************************************************************/
-vars::vars() : _depth(0)
+Vars::Vars() : _depth(0)
 {
 }
 /****************************************************************************/
-vars::vars(const std::string& path)
+Vars::Vars(const std::string& path)
     : BaseFile(path), _depth(0)
 {
     this->read();
 }
 /****************************************************************************/
-vars::~vars()
+Vars::~Vars()
 {
 }
 /****************************************************************************/
 void
-vars::dump(std::ostream& stream) const
+Vars::dump(std::ostream& stream) const
 {
     for (const_iterator i = this->begin() ; i != this->end() ; ++i)
         stream << i->first << "=" << i->second << std::endl;
 }
 /****************************************************************************/
 void
-vars::set_defaults()
+Vars::set_defaults()
 {
     char *result = std::getenv("HOME");
     if (result)
@@ -75,7 +75,7 @@ vars::set_defaults()
 }
 
 void
-vars::strip_ws(std::string& str)
+Vars::strip_ws(std::string& str)
 {
     std::string::size_type pos;
     if ((pos = str.find_first_not_of(" \t")) != std::string::npos)
@@ -85,7 +85,7 @@ vars::strip_ws(std::string& str)
 }
 
 void
-vars::perform_action_on(const std::string& str)
+Vars::perform_action_on(const std::string& str)
 {
     if (str.empty() or str[0] == '#')
         return;
@@ -141,7 +141,7 @@ vars::perform_action_on(const std::string& str)
  * scripts or VARIABLE=value-type configuration files.
  ****************************************************************************/
 void
-vars::do_read()
+Vars::do_read()
 {
     std::string line;
     while (std::getline(this->stream(), line))
@@ -159,7 +159,7 @@ vars::do_read()
  * recursively calling ourselves each time we find another occurrence.
  ****************************************************************************/
 void
-vars::subst(std::string& value)
+Vars::subst(std::string& value)
 {
     std::vector<std::string> vars;
     std::vector<std::string>::iterator v;

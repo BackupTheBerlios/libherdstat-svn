@@ -34,13 +34,14 @@
 namespace herdstat {
 namespace portage {
 /*** static members *********************************************************/
-const char * const project_xml::_baseURL = "http://www.gentoo.org/cgi-bin/viewcvs.cgi/*checkout*/xml/htdocs%s?rev=HEAD&root=gentoo&content-type=text/plain";
-const char * const project_xml::_baseLocal = "%s/gentoo/xml/htdocs/%s";
-std::set<std::string> project_xml::_parsed;
+const char * const ProjectXML::_baseURL = "http://www.gentoo.org/cgi-bin/viewcvs.cgi/*checkout*/xml/htdocs%s?rev=HEAD&root=gentoo&content-type=text/plain";
+const char * const ProjectXML::_baseLocal = "%s/gentoo/xml/htdocs/%s";
+std::set<std::string> ProjectXML::_parsed;
 /****************************************************************************/
-project_xml::project_xml(const std::string& path, const std::string& cvsdir,
+ProjectXML::ProjectXML(const std::string& path, const std::string& cvsdir,
                          bool force_fetch)
-    : xmlBase(), fetchable(), _devs(), _cvsdir(cvsdir), _force_fetch(force_fetch),
+    throw (FileException, xml::ParserException)
+    : xmlBase(), Fetchable(), _devs(), _cvsdir(cvsdir), _force_fetch(force_fetch),
       in_sub(false), in_dev(false), in_task(false), _cur_role()
 {
     if (_cvsdir.empty())
@@ -60,14 +61,14 @@ project_xml::project_xml(const std::string& path, const std::string& cvsdir,
     this->parse();
 }
 /****************************************************************************/
-project_xml::~project_xml()
+ProjectXML::~ProjectXML() throw()
 {
 }
 /****************************************************************************/
 void
-project_xml::do_fetch(const std::string& p) const throw (FetchException)
+ProjectXML::do_fetch(const std::string& p) const throw (FetchException)
 {
-    BacktraceContext c("portage::project_xml::do_fetch("+p+")");
+    BacktraceContext c("portage::ProjectXML::do_fetch("+p+")");
 
     if (not _cvsdir.empty())
         return;
@@ -111,11 +112,12 @@ project_xml::do_fetch(const std::string& p) const throw (FetchException)
 }
 /****************************************************************************/
 void
-project_xml::parse(const std::string& path)
+ProjectXML::parse(const std::string& path)
+    throw (FileException, xml::ParserException)
 {
     if (not path.empty()) this->set_path(path);
 
-    BacktraceContext c("portage::project_xml::parse("+this->path()+")");
+    BacktraceContext c("portage::ProjectXML::parse("+this->path()+")");
 
     if (not util::is_file(this->path()))
         throw FileException(this->path());
@@ -129,7 +131,7 @@ project_xml::parse(const std::string& path)
 }
 /****************************************************************************/
 bool
-project_xml::start_element(const std::string& name, const attrs_type& attrs)
+ProjectXML::start_element(const std::string& name, const attrs_type& attrs)
 {
     if (name == "task")
         in_task = true;
@@ -148,7 +150,7 @@ project_xml::start_element(const std::string& name, const attrs_type& attrs)
             {
                 in_sub = true;
 
-                project_xml mp(pos->second, _cvsdir, _force_fetch);
+                ProjectXML mp(pos->second, _cvsdir, _force_fetch);
                 Herd::const_iterator i;
                 for (i = mp.devs().begin() ; i != mp.devs().end() ; ++i)
                 {
@@ -176,7 +178,7 @@ project_xml::start_element(const std::string& name, const attrs_type& attrs)
 }
 /****************************************************************************/
 bool
-project_xml::end_element(const std::string& name)
+ProjectXML::end_element(const std::string& name)
 {
     if (name == "task")             in_task = false;
     else if (name == "subproject")  in_sub = false;
@@ -185,7 +187,7 @@ project_xml::end_element(const std::string& name)
 }
 /****************************************************************************/
 bool
-project_xml::text(const std::string& text)
+ProjectXML::text(const std::string& text)
 {
     if (in_dev)
     {

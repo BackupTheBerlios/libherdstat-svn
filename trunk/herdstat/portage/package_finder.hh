@@ -27,6 +27,11 @@
 # include "config.h"
 #endif
 
+/**
+ * @file herdstat/portage/package_finder.hh
+ * @brief Defines the PackageFinder class.
+ */
+
 #include <herdstat/util/timer.hh>
 #include <herdstat/util/algorithm.hh>
 #include <herdstat/portage/package_list.hh>

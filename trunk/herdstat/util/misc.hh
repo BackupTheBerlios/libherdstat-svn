@@ -59,7 +59,8 @@ namespace util {
     /// getcwd() wrapper.
     std::string getcwd();
 
-    /** Determine username from email address.
+    /**
+     * Determine username from email address.
      * @param e E-mail address.
      * @returns A std::string object.
      */
@@ -97,7 +98,8 @@ namespace util {
     const std::string get_elapsed_yrs(const std::string& date);
 
     /**
-     * Color map.
+     * @class ColorMap misc.hh herdstat/util/misc.hh
+     * @brief Maps color names to ASCII color sequences.
      */
 
     class ColorMap
@@ -121,7 +123,6 @@ namespace util {
             class cmap : public std::map<color_name_T, std::string>
             {
                 public:
-                    /// Default constructor.  Fills map.
                     cmap()
                     {
                         (*this)[red]     = "\033[0;31m";
@@ -137,7 +138,6 @@ namespace util {
                     }
             };
 
-            /// Internal color map.
             static cmap _cm;
     };
 

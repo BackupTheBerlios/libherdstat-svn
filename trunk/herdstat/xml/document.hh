@@ -39,10 +39,6 @@
 #include <herdstat/xml/saxparser.hh>
 
 namespace herdstat {
-/**
- * @namespace herdstat::xml
- * @brief XML-related classes.
- */
 namespace xml {
 
     /**
@@ -51,42 +47,47 @@ namespace xml {
      */
 
     template <typename H>
-    class Document : public parsable
+    class Document : public Parsable
     {
         public:
             typedef H handler_type;
 
             /// Default constructor.
-            Document();
+            Document() throw();
 
             /** Constructor.
              * @param path Path to XML document.
+             * @exception FileException, ParserException
              */
-            Document(const std::string& path);
+            Document(const std::string& path)
+                throw (FileException, ParserException);
 
             /// Destructor.
-            virtual ~Document();
+            virtual ~Document() throw();
 
             /// Get pointer to underlying handler.
-            H *handler() const { return this->_handler.get(); }
+            H *handler() const throw() { return this->_handler.get(); }
 
             /** Parse file.
              * @param path Path to XML file (defaults to empty).
+             * @exception ParserException
              */
-            virtual void parse(const std::string& path = "");
+            virtual void parse(const std::string& path = "")
+                throw (ParserException);
 
         private:
             const std::auto_ptr<H> _handler;    /* content handler */
     };
 
     template <typename H>
-    Document<H>::Document() : parsable(), _handler(new H()) { }
+    Document<H>::Document() throw() : Parsable(), _handler(new H()) { }
 
     template <typename H>
     Document<H>::Document(const std::string &path)
-        : parsable(path), _handler(new H())
+        throw (FileException, ParserException)
+        : Parsable(path), _handler(new H())
     {
-        BacktraceContext c("xml::Document::Document("+path+")");
+        BacktraceContext c("herdstat::xml::Document::Document("+path+")");
 
         if (not util::is_file(path))
             throw FileException(path);
@@ -95,16 +96,17 @@ namespace xml {
     }
 
     template <typename H>
-    Document<H>::~Document()
+    Document<H>::~Document() throw()
     {
     }
 
     template <typename H>
     void
-    Document<H>::parse(const std::string &path)
+    Document<H>::parse(const std::string &path) throw (ParserException)
     {
         const std::string file(path.empty() ? this->path() : path);
-        saxparser p(this->_handler.get());
+        BacktraceContext c("herdstat::xml::Document::parse("+file+")");
+        SAXParser p(this->_handler.get());
         this->timer().start();
         p.parse(file);
         this->timer().stop();

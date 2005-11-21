@@ -38,22 +38,7 @@
 #include <regex.h>
 #include <libebt/libebt.hh>
 
-/**
- * @namespace herdstat
- * @brief Main namespace all of libherdstat resides in.
- */
-
 namespace herdstat {
-
-    /** @mainpage Main Index
-     *
-     * @section overview Overview
-     *
-     * libherdstat is a C++ library offering interfaces for portage-related
-     * things such as Gentoo-specific XML files, package searching, and
-     * version sorting.  Many general-purpose utility classes/functions are
-     * also offered.
-     */
 
     /// exception group for use by libebt.
     class ExceptionTag { };

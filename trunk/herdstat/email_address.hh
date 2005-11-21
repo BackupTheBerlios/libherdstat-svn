@@ -45,86 +45,87 @@ namespace herdstat {
     {
         public:
             /// Default constructor.
-            EmailAddress();
+            EmailAddress() throw();
 
             /** Constructor.
              * @param email email address string.
+             * @exception MalformedEmail
              */
-            EmailAddress(const std::string& email);
+            EmailAddress(const std::string& email) throw (MalformedEmail);
 
             /** Constructor.
              * @param user user name string.
              * @param domain domain name string.
+             * @exception MalformedEmail
              */
             EmailAddress(const std::string& user,
-                         const std::string& domain);
+                         const std::string& domain) throw (MalformedEmail);
 
             /// Destructor.
             virtual ~EmailAddress();
 
             /// Implicit conversion to std::string.
-            operator std::string() const;
+            inline operator const std::string&() const;
 
             /** Assignment operator.
              * @param email email address string.
+             * @exception MalformedEmail
              * @returns Reference to this.
              */
-            EmailAddress& operator= (const char * const email);
-            EmailAddress& operator= (const std::string& email);
+            inline EmailAddress&
+            operator= (const std::string& email) throw (MalformedEmail);
+
+            /// Clear email address.
+            inline void clear();
 
             /** Assign new email address string.
              * @param email email address string.
+             * @exception MalformedEmail
              */
-            void assign(const char * const email);
-            void assign(const std::string& email);
+            inline void assign(const std::string& email) throw (MalformedEmail);
+            
+            /** Assign a new EmailAddress object.
+             * @param that const reference to another EmailAddress object.
+             */
+            inline void assign(const EmailAddress& that);
 
             /// Get user name.
-            const std::string& user() const;
+            inline const std::string& user() const;
             /// Get domain name.
-            const std::string& domain() const;
+            inline const std::string& domain() const;
             /// Get full email.
-            const std::string& str() const;
+            inline const std::string& str() const;
         
-            /** Set user name.
-             * @param user user name string.
-             */
-            void set_user(const char * const user);
+            /// Set user name.
             void set_user(const std::string& user);
-
-            /** Set domain name.
-             * @param domain domain name string.
-             */
-            void set_domain(const char * const domain);
+            /// Set domain.
             void set_domain(const std::string& domain);
 
         protected:
-            virtual bool parse(const std::string& email);
+            virtual bool parse(const std::string& email) throw();
 
         private:
             void set_email();
             std::string _email, _user, _domain;
     };
 
-    inline EmailAddress::operator std::string() const { return _email; }
-    inline EmailAddress& EmailAddress::operator= (const std::string& email)
-    { this->parse(email); return *this; }
-    inline EmailAddress& EmailAddress::operator= (const char * const email)
-    { this->parse(email); return *this; }
-    inline void EmailAddress::assign(const std::string& email) { this->parse(email); }
-    inline void EmailAddress::assign(const char * const email) { this->parse(email); }
+    inline EmailAddress::operator const std::string&() const { return _email; }
+    inline EmailAddress&
+    EmailAddress::operator= (const std::string& email) throw (MalformedEmail)
+    { if (not this->parse(email)) throw MalformedEmail(email); return *this; }
+    inline void EmailAddress::assign(const std::string& email) throw (MalformedEmail)
+    { if (not this->parse(email)) throw MalformedEmail(email); }
+    inline void EmailAddress::assign(const EmailAddress& that) { *this = that; }
     inline const std::string& EmailAddress::user() const { return _user; }
     inline const std::string& EmailAddress::domain() const { return _domain; }
     inline const std::string& EmailAddress::str() const { return _email; }
-    inline void EmailAddress::set_email()
-    { _email = _user+"@"+_domain; }
+    inline void EmailAddress::set_email() { _email.assign(_user+"@"+_domain); }
     inline void EmailAddress::set_user(const std::string& user)
-    { _user.assign(user); set_email(); }
-    inline void EmailAddress::set_user(const char * const user)
     { _user.assign(user); set_email(); }
     inline void EmailAddress::set_domain(const std::string& domain)
     { _domain.assign(domain); set_email(); }
-    inline void EmailAddress::set_domain(const char * const domain)
-    { _domain.assign(domain); set_email(); }
+    inline void EmailAddress::clear()
+    { _email.clear();_user.clear();_domain.clear(); }
 
 } // namespace herdstat
 

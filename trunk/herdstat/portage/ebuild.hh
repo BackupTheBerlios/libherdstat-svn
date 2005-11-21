@@ -40,26 +40,26 @@ namespace herdstat {
 namespace portage {
 
     /**
-     * @class ebuild ebuild.hh herdstat/portage/ebuild.hh
+     * @class Ebuild ebuild.hh herdstat/portage/ebuild.hh
      * @brief Represents ebuild variables.
      * This is really identical to util::vars, except it defines
      * do_set_defaults() and inserts variables that should be
      * pre-existing (${PN}, ${P}, etc).
      */
 
-    class ebuild : public util::vars
+    class Ebuild : public util::Vars
     {
         public:
             /// Default constructor.
-            ebuild();
+            Ebuild();
 
             /** Constructor.
              * @param path Path to ebuild.
              */
-            ebuild(const std::string &path);
+            Ebuild(const std::string &path);
 
             /// Destructor.
-            virtual ~ebuild();
+            virtual ~Ebuild();
 
             void assign(const std::string& path);
 

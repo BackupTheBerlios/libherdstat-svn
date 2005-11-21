@@ -2,7 +2,8 @@
 
 SUBDIRS = src
 
-tests = string \
+export tests := \
+	string \
 	container_base \
 	glob \
 	regex \
@@ -11,6 +12,7 @@ tests = string \
 	keyword \
 	license \
 	ebuild \
+	email \
 	package_list \
 	package_finder \
 	package_which \

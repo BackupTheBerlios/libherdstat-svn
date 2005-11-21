@@ -204,7 +204,7 @@ namespace portage {
             /** Constructor.
              * @param e Pre-existing ebuild instance
              */
-            Keywords(const ebuild& e);
+            Keywords(const Ebuild& e);
 
             /// Destructor.
             virtual ~Keywords();
@@ -217,7 +217,7 @@ namespace portage {
             /** Assign new ebuild.
              * @param e Pre-existing ebuild instance
              */
-            void assign(const ebuild& e);
+            void assign(const Ebuild& e);
 
             /// Get formatted keywords string.
             inline const std::string& str() const;
@@ -237,23 +237,12 @@ namespace portage {
             /// prepare keywords string
             void format();
 
-            ebuild _ebuild;
+            Ebuild _ebuild;
             std::string _str;
     };
 
     inline const std::string& Keywords::str() const { return _str; }
     inline const std::string& Keywords::path() const { return _ebuild.path(); }
-
-    /**
-     * @struct NewKeyword keywords.hh herdstat/portage/keywords.hh
-     * @brief Function object for instantiating a new Keyword object.
-     */
-    
-    struct NewKeyword
-    {
-        Keyword operator()(const std::string& kw) const
-        { return Keyword(kw); }
-    };
 
     inline bool
     Keywords::all_masked() const

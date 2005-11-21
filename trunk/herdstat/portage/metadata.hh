@@ -40,29 +40,29 @@ namespace herdstat {
 namespace portage {
 
     /**
-     * @class metadata metadata.hh herdstat/portage/metadata.hh
+     * @class Metadata metadata.hh herdstat/portage/metadata.hh
      * @brief Represents the data contained in a metadata.xml file.
      */
 
-    class metadata
+    class Metadata
     {
         public:
             /// Default constructor.
-            metadata();
+            Metadata();
 
             /** Constructor.
              * @param pkg Package name.
              */
-            metadata(const std::string &pkg);
+            Metadata(const std::string &pkg);
 
             /// Copy constructor.
-            metadata(const metadata& that);
+            Metadata(const Metadata& that);
 
             /// Destructor.
-            ~metadata();
+            ~Metadata();
 
             /// Copy assignment operator.
-            metadata& operator= (const metadata& that);
+            Metadata& operator= (const Metadata& that);
 
             /// Is this metadata from a cateogry?
             inline bool is_category() const;
@@ -97,38 +97,38 @@ namespace portage {
             mutable Developers *_devs;
     };
 
-    inline bool metadata::is_category() const { return _cat; }
-    inline const std::string& metadata::pkg() const { return _pkg; }
-    inline const std::string& metadata::name() const { return _pkg; }
-    inline const std::string& metadata::longdesc() const { return _longdesc; }
-    inline void metadata::set_category(bool cat) { _cat = cat; }
-    inline void metadata::set_pkg(const std::string& pkg) { _pkg.assign(pkg); }
-    inline void metadata::set_longdesc(const std::string& longdesc)
+    inline bool Metadata::is_category() const { return _cat; }
+    inline const std::string& Metadata::pkg() const { return _pkg; }
+    inline const std::string& Metadata::name() const { return _pkg; }
+    inline const std::string& Metadata::longdesc() const { return _longdesc; }
+    inline void Metadata::set_category(bool cat) { _cat = cat; }
+    inline void Metadata::set_pkg(const std::string& pkg) { _pkg.assign(pkg); }
+    inline void Metadata::set_longdesc(const std::string& longdesc)
     { _longdesc.assign(longdesc); }
 
     inline const Herds&
-    metadata::herds() const
+    Metadata::herds() const
     {
         if (not _herds) _herds = new Herds();
         return *_herds;
     }
 
     inline const Developers&
-    metadata::devs() const
+    Metadata::devs() const
     {
         if (not _devs) _devs = new Developers();
         return *_devs;
     }
 
     inline Herds&
-    metadata::herds()
+    Metadata::herds()
     {
         if (not _herds) _herds = new Herds();
         return *_herds;
     }
 
     inline Developers&
-    metadata::devs()
+    Metadata::devs()
     {
         if (not _devs) _devs = new Developers();
         return *_devs;

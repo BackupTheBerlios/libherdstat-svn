@@ -4,7 +4,7 @@ include $(top_builddir)/Makefile.am.common
 
 SUBDIRS = util fetcher xml portage
 MAINTAINERCLEANFILES = Makefile.in *~ .loT libherdstat_version.hh
-EXTRA_DIST = libherdstat_version.hh.in
+EXTRA_DIST = libherdstat_version.hh.in doxygen.hh
 
 cc_sources = exceptions.cc \
 	     email_address.cc

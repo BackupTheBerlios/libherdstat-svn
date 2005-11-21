@@ -42,18 +42,14 @@
 #include <herdstat/portage/categories.hh>
 
 namespace herdstat {
-/**
- * @namespace herdstat::portage
- * @brief portage-related classes/functions.
- */
 namespace portage {
 
     /**
-     * @class config config.hh herdstat/portage/config.hh
+     * @class Config config.hh herdstat/portage/config.hh
      * @brief Represents the current portage configuration.
      */
 
-    class config : private noncopyable
+    class Config : private Noncopyable
     {
         public:
             /// Get PORTDIR.
@@ -75,55 +71,54 @@ namespace portage {
 
         private:
             /// Only GlobalConfig() can instantiate this class.
-            friend const config& GlobalConfig();
+            friend const Config& GlobalConfig();
 
             /// Constructor.
-            config();
+            Config();
             /// Destructor.
-            ~config();
+            ~Config();
 
-            util::vars _vars;
+            util::Vars _vars;
             std::string _portdir;
             std::vector<std::string> _overlays;
             mutable Categories *_cats;
             mutable Archs *_archs;
     };
 
-    inline const std::string& config::portdir() const { return _portdir; }
-    inline const std::vector<std::string>& config::overlays() const
+    inline const std::string& Config::portdir() const { return _portdir; }
+    inline const std::vector<std::string>& Config::overlays() const
     { return _overlays; }
 
     inline const Categories&
-    config::categories() const
+    Config::categories() const
     {
         if (not _cats) _cats = new Categories(_portdir);
         return *_cats;
     }
 
     inline const Archs&
-    config::archs() const
+    Config::archs() const
     {
         if (not _archs) _archs = new Archs(_portdir);
         return *_archs;
     }
 
     inline std::string
-    config::operator[] (const std::string& var) const
+    Config::operator[] (const std::string& var) const
     {
-        util::vars::const_iterator i = _vars.find(var);
+        util::Vars::const_iterator i = _vars.find(var);
         return (i == _vars.end() ? std::string() : i->second);
     }
 
     /**
-     * @fn GlobalConfig
-     * @brief Create a local static instance of the config class.
-     * @returns const reference to the static instance.
+     * Sole access point to a portage::config object.
+     * @returns const reference to a local static instance of portage::config.
      */
 
-    inline const config&
+    inline const Config&
     GlobalConfig()
     {
-        static config c;
+        static Config c;
         return c;
     }
 

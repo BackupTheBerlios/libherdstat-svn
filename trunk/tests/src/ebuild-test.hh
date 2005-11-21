@@ -34,7 +34,7 @@ DECLARE_TEST_HANDLER(EbuildTest)
 
 struct DisplayEbuildVars
 {
-    void operator()(const herdstat::portage::ebuild::value_type& v) const
+    void operator()(const herdstat::portage::Ebuild::value_type& v) const
     {
         if (v.first != "HOME")
             std::cout << v.first << " = " << v.second << std::endl;
@@ -45,7 +45,7 @@ void
 EbuildTest::operator()(const opts_type& opts) const
 {
     assert(not opts.empty());
-    const herdstat::portage::ebuild ebuild(opts.front());
+    const herdstat::portage::Ebuild ebuild(opts.front());
     std::for_each(ebuild.begin(), ebuild.end(), DisplayEbuildVars());
 }
 

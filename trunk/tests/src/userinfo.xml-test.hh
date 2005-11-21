@@ -42,7 +42,7 @@ UserinfoXMLTest::operator()(const opts_type& opts) const
     const std::string& path(opts.front());
     const std::string& dev(opts.back());
 
-    herdstat::portage::userinfo_xml userinfo(path);
+    herdstat::portage::UserinfoXML userinfo(path);
     const herdstat::portage::Developers& devs = userinfo.devs();
 
     std::cout << "Size: " << devs.size() << std::endl;

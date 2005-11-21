@@ -38,28 +38,34 @@
 namespace herdstat {
 
     /**
+     * @class Fetcher fetcher.hh herdstat/fetcher/fetcher.hh
      * File fetcher.  This is the interface meant to be used by clients.
      */
 
-    class Fetcher : private noncopyable
+    class Fetcher : private Noncopyable
     {
         public:
-            /// Default constructor.
-            Fetcher();
+            /** Default constructor.
+             * @exception std::bad_alloc
+             */
+            Fetcher() throw(std::bad_alloc);
 
             /** Constructor.
              * @param opts Reference to FetcherOptions object.
+             * @exception std::bad_alloc
              */
-            Fetcher(const FetcherOptions& opts);
+            Fetcher(const FetcherOptions& opts) throw (std::bad_alloc);
 
             /** Constructor.  Fetch url and save to path.
              * @param url URL string.
              * @param path Path to save to.
+             * @exception std::bad_alloc
              */
-            Fetcher(const std::string& url, const std::string& path);
+            Fetcher(const std::string& url, const std::string& path)
+                throw (std::bad_alloc);
 
             /// Destructor.
-            ~Fetcher();
+            ~Fetcher() throw();
 
             /// Get const reference to options object.
             inline const FetcherOptions& options() const;
@@ -69,11 +75,14 @@ namespace herdstat {
             /** Fetch url and save to path.
              * @param url URL string.
              * @param path Path to save to.
+             * @exception FileException, FetchException
              */
-            void operator()(const std::string& url, const std::string& path) const;
+            void operator()(const std::string& url,
+                            const std::string& path) const
+                throw (FileException, FetchException);
 
         private:
-            void newFetcherImp();
+            void newFetcherImp() throw (std::bad_alloc);
             FetcherImp *_imp;
     };
 

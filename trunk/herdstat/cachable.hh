@@ -29,7 +29,7 @@
 
 /**
  * @file herdstat/cachable.hh
- * @brief Defines the cachable abstract class.
+ * @brief Defines the Cachable abstract class.
  */
 
 #include <herdstat/noncopyable.hh>
@@ -37,18 +37,18 @@
 namespace herdstat {
 
     /**
-     * @class cachable cachable.hh herdstat/cachable.hh
+     * @class Cachable cachable.hh herdstat/cachable.hh
      * @brief Abstract interface for cachable things.
      */
 
-    class cachable : private noncopyable
+    class Cachable : private Noncopyable
     {
         public:
             /// Destructor.
-            virtual ~cachable() { }
+            virtual ~Cachable() { }
 
             /** Determine if cache is valid.
-             * @returns True if valid.
+             * @returns Boolean value.
              */
             virtual bool valid() const = 0;
 
@@ -65,7 +65,7 @@ namespace herdstat {
             /** Constructor.
              * @param path Path of cache.
              */
-            cachable(const std::string &path) : _path(path) { }
+            Cachable(const std::string &path) : _path(path) { }
 
             /// Initialize cache.  Default cache logic.
             virtual void logic()
@@ -79,9 +79,7 @@ namespace herdstat {
                 }
             }
 
-            /** Get path of cache.
-             * @returns const reference to std::string.
-             */
+            /// Get path to cache.
             const std::string& path() const { return _path; }
 
         private:

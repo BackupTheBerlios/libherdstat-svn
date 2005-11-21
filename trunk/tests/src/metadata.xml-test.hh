@@ -40,7 +40,7 @@ MetadataXMLTest::operator()(const opts_type& opts) const
 
     herdstat::xml::GlobalInit();
 
-    herdstat::portage::metadata_xml meta(opts.front());
+    herdstat::portage::MetadataXML meta(opts.front());
     const herdstat::portage::Herds& herds(meta.herds());
     const herdstat::portage::Developers& devs(meta.devs());
 

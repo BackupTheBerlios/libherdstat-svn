@@ -1,5 +1,5 @@
 /*
- * libherdstat -- portage/devaway_xml.hh
+ * libherdstat -- herdstat/portage/devaway_xml.hh
  * $Id$
  * Copyright (c) 2005 Aaron Walker <ka0ttic@gentoo.org>
  *
@@ -20,8 +20,8 @@
  * Place, Suite 325, Boston, MA  02111-1257  USA
  */
 
-#ifndef _HAVE_DEVAWAY_XML_HH
-#define _HAVE_DEVAWAY_XML_HH 1
+#ifndef _HAVE_DevawayXML_HH
+#define _HAVE_DevawayXML_HH 1
 
 #ifdef HAVE_CONFIG_H
 # include "config.h"
@@ -39,35 +39,41 @@ namespace herdstat {
 namespace portage {
 
     /**
-     * @class devaway_xml devaway_xml.hh herdstat/portage/devaway_xml.hh
+     * @class DevawayXML devaway_xml.hh herdstat/portage/devaway_xml.hh
      * @brief Represents Gentoo's devaway.xml.
      */
 
-    class devaway_xml : public xmlBase
+    class DevawayXML : public xmlBase
     {
         public:
             /// Default constructor.
-            devaway_xml();
+            DevawayXML() throw();
 
             /** Constructor.
              * @param path Path to devaway.xml.
+             * @exception FileException, xml::ParserException
              */
-            devaway_xml(const std::string& path);
+            DevawayXML(const std::string& path)
+                throw (FileException, xml::ParserException);
             
             /// Destructor.
-            virtual ~devaway_xml();
+            virtual ~DevawayXML() throw();
 
             /** Parse devaway.xml.
              * @param path Path to devaway.xml (defaults to empty).
+             * @exception FileException, xml::ParserException
              */
-            virtual void parse(const std::string& path = "");
+            virtual void parse(const std::string& path = "")
+                throw (FileException, xml::ParserException);
             
             /** Fill a Developer object with data we contain relevant to the
              * developer.  At the very least, the Developer's user name must
              * have been set prior to calling this function.
              * @param dev Reference to a Developer object.
+             * @exception Exception
              */
-            virtual void fill_developer(Developer& dev) const;
+            virtual void fill_developer(Developer& dev) const
+                throw (Exception);
 
             /// Get developers.
             inline const Developers& devs() const;
@@ -90,8 +96,8 @@ namespace portage {
             Developers::iterator _cur_dev;
     };
 
-    inline Developers& devaway_xml::devs() { return _devs; }
-    inline const Developers& devaway_xml::devs() const { return _devs; }
+    inline Developers& DevawayXML::devs() { return _devs; }
+    inline const Developers& DevawayXML::devs() const { return _devs; }
 
 } // namespace portage
 } // namespace herdstat

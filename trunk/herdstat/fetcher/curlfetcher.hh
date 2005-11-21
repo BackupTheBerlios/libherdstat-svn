@@ -37,7 +37,8 @@
 namespace herdstat {
 
     /**
-     * Implement file fetching using libcurl.
+     * @class CurlFetcher curlfetcher.hh herdstat/fetcher/curlfetcher.hh
+     * @brief Implement file fetching using libcurl.
      */
 
     class CurlFetcher : public FetcherImp

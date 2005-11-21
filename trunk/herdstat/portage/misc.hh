@@ -41,28 +41,36 @@
 namespace herdstat {
 namespace portage {
 
-    /** Is the specified path an ebuild?
+    /**
+     * Is the specified path an ebuild?
      * @param path Path.
      * @returns A boolean value.
      */
-    inline bool is_ebuild(const std::string& path)
+
+    inline bool
+    is_ebuild(const std::string& path)
     {
         return (fnmatch("*.ebuild", path.c_str(), 0) == 0);
     }
 
-    /** Is the specified string the name of a category?
+    /**
+     * Is the specified string the name of a category?
      * @param str string.
      * @returns A boolean value.
      */
-    inline bool is_category(const std::string& str)
+
+    inline bool
+    is_category(const std::string& str)
     {
         return GlobalConfig().categories().count(str);
     }
 
-    /** Is the specified path a package directory?
+    /**
+     * Is the specified path a valid package directory?
      * @param path Path.
      * @returns A boolean value.
      */
+
     inline bool
     is_pkg_dir(const std::string& path)
     {
@@ -75,15 +83,23 @@ namespace portage {
                     pkgdir.end(), is_ebuild) != pkgdir.end());
     }
 
-    /** Are we inside a package directory?
+    /**
+     * Are we inside a package directory?
      * @returns A boolean value.
      */
-    inline bool in_pkg_dir() { return is_pkg_dir(util::getcwd()); }
 
-    /** Get category/package from absolute path.
+    inline bool
+    in_pkg_dir()
+    {
+        return is_pkg_dir(util::getcwd());
+    }
+
+    /**
+     * Get category/package from absolute path.
      * @param path Path to package directory.
-     * @returns "cat/pkg" string.
+     * @returns A string in "cat/pkg" form.
      */
+
     inline std::string
     get_pkg_from_path(const std::string& path)
     {

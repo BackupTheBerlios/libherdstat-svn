@@ -283,9 +283,9 @@ namespace util {
 
     /**
      * @class RegexMap regex.hh herdstat/util/regex.hh
-     * @brief Acts like an unsorted map (ie. a vector of uniqie pairs) with
-     * Regex object mapped to objects of the specified type.  Provides a few
-     * map-compatible member functions such as insert, operator[], and find.
+     * @brief Acts like an unsorted map (vector of unique pairs) with Regex
+     * objects mapped to objects of type T.  Provides a few map-compatible
+     * member functions such as insert(), operator[](), and find().
      */
 
     template <typename T>

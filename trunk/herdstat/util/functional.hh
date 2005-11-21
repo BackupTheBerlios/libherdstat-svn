@@ -126,7 +126,7 @@ namespace util {
 
     /**
      * @struct FileExists functional.hh herdstat/util/functional.hh
-     * @brief Function object that returns util::file_exists().
+     * @brief Function object that determines whether the given path exists.
      */
 
     struct FileExists : std::unary_function<std::string, bool>
@@ -137,7 +137,8 @@ namespace util {
 
     /**
      * @struct IsDir functional.hh herdstat/util/functional.hh
-     * @brief Function object that returns util::is_dir().
+     * @brief Function object that determines whether the given path is a
+     * directory.
      */
 
     struct IsDir : std::unary_function<std::string, bool>
@@ -148,7 +149,8 @@ namespace util {
 
     /**
      * @struct IsFile functional.hh herdstat/util/functional.hh
-     * @brief Function object that returns util::is_file().
+     * @brief Function object that determines whether the given path is a
+     * regular file.
      */
 
     struct IsFile : std::unary_function<std::string, bool>
@@ -159,7 +161,8 @@ namespace util {
 
     /**
      * @struct regexMatch functional.hh herdstat/util/functional.hh
-     * @brief Function object for using Regex class with std algorithms.
+     * @brief Function object for determining whether the given string matches
+     * the given util::Regex object.
      */
 
     struct regexMatch : std::binary_function<Regex, std::string, bool>
@@ -170,8 +173,8 @@ namespace util {
 
     /**
      * @struct patternMatch functional.hh herdstat/util/functional.hh
-     * @brief Function object for using globs (pattern matching) with std
-     * algorithms.
+     * @brief Function object for determining whether the given glob pattern
+     * matches the given path.
      */
 
     struct patternMatch : std::binary_function<std::string, std::string, bool>
@@ -182,7 +185,8 @@ namespace util {
     };
 
     ///@{
-    /** Composition function objects as described/implemented in Josuttis'
+    /**
+     * Composition function objects as described/implemented in Josuttis'
      * "The C++ Standard Library - A Tutorial and Reference".
      */
 
@@ -212,8 +216,7 @@ namespace util {
     };
 
     /**
-     * @fn compose_f_gx
-     * @brief Helper function for the compose_f_gx_t adapter.
+     * Helper function for the compose_f_gx_t adapter.
      */
 
     template <typename Op1, typename Op2>
@@ -253,8 +256,7 @@ namespace util {
     };
 
     /**
-     * @fn compose_f_gx_hx
-     * @brief Helper function for the compose_f_gx_hx_t adapter.
+     * Helper function for the compose_f_gx_hx_t adapter.
      */
 
     template <typename Op1, typename Op2, typename Op3>
@@ -295,8 +297,7 @@ namespace util {
     };
 
     /**
-     * @fn compose_f_gx_hy
-     * @brief Helper function for the compose_f_gx_hy_t adapter.
+     * Helper function for the compose_f_gx_hy_t adapter.
      */
 
     template <typename Op1, typename Op2, typename Op3>

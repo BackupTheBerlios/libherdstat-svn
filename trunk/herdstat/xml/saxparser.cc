@@ -29,21 +29,21 @@
 namespace herdstat {
 namespace xml {
 /****************************************************************************/
-saxhandler::~saxhandler()
+SAXHandler::~SAXHandler()
 {
 }
 /****************************************************************************/
-saxparser::saxparser(saxhandler *handler)
+SAXParser::SAXParser(SAXHandler *handler) throw()
     : _handler(handler)
 {
 }
 /****************************************************************************/
-saxparser::~saxparser()
+SAXParser::~SAXParser() throw()
 {
 }
 /****************************************************************************/
 void
-saxparser::parse(const std::string &path) throw (ParserException)
+SAXParser::parse(const std::string &path) throw (ParserException)
 {
     BacktraceContext c("xml::saxparser::parse("+path+")");
 

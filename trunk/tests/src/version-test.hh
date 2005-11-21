@@ -28,6 +28,7 @@
 #endif
 
 #include <herdstat/util/file.hh>
+#include <herdstat/portage/misc.hh>
 #include <herdstat/portage/version.hh>
 #include "test_handler.hh"
 

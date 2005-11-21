@@ -47,12 +47,15 @@ GlobTest::operator()(const opts_type& null) const
     if (chdir(test_data) != 0)
         throw herdstat::ErrnoException("chdir");
 
-    const herdstat::util::Glob results("portdir/*/*/*.ebuild");
+    herdstat::util::Glob glob("portdir/app-lala/*/*.ebuild");
+    glob("portdir/app-misc/foo/*.ebuild");
+    glob("portdir/*/*/*.ebuild");
+    const std::vector<std::string>& results(glob.results());
     std::copy(results.begin(), results.end(),
         std::ostream_iterator<std::string>(std::cout, "\n"));
 
     /* test patternMatch functor */
-    herdstat::util::Glob::size_type n =
+    std::vector<std::string>::size_type n =
         std::count_if(results.begin(), results.end(),
             std::bind2nd(herdstat::util::patternMatch(), "*foo-1.10*"));
     if (n == 0)

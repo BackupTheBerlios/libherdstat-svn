@@ -31,9 +31,9 @@
 namespace herdstat {
 namespace portage {
 /*** static members *********************************************************/
-const char * const userinfo_xml::_local_default = LOCALSTATEDIR"/userinfo.xml";
+const char * const UserinfoXML::_local_default = LOCALSTATEDIR"/userinfo.xml";
 /****************************************************************************/
-userinfo_xml::userinfo_xml()
+UserinfoXML::UserinfoXML() throw()
     : xmlBase(), _devs(), in_user(false), in_firstname(false),
       in_familyname(false), in_pgpkey(false), in_email(false), in_joined(false),
       in_birth(false), in_roles(false), in_status(false), in_location(false),
@@ -41,7 +41,8 @@ userinfo_xml::userinfo_xml()
 {
 }
 /****************************************************************************/
-userinfo_xml::userinfo_xml(const std::string& path)
+UserinfoXML::UserinfoXML(const std::string& path)
+    throw (FileException, xml::ParserException)
     : xmlBase(path), _devs(), in_user(false),
       in_firstname(false), in_familyname(false), in_pgpkey(false),
       in_email(false), in_joined(false), in_birth(false), in_roles(false),
@@ -50,28 +51,29 @@ userinfo_xml::userinfo_xml(const std::string& path)
     this->parse();
 }
 /****************************************************************************/
-userinfo_xml::~userinfo_xml()
+UserinfoXML::~UserinfoXML() throw()
 {
 }
 /****************************************************************************/
 void
-userinfo_xml::parse(const std::string& path)
+UserinfoXML::parse(const std::string& path)
+    throw (FileException, xml::ParserException)
 {
     if (not path.empty()) this->set_path(path);
 
-    BacktraceContext c("portage::userinfo_xml::parse("+this->path()+")");
+    BacktraceContext c("portage::UserinfoXML::parse("+this->path()+")");
 
     if (not util::is_file(this->path())) throw FileException(this->path());
     this->parse_file(this->path().c_str());
 }
 /****************************************************************************/
 void
-userinfo_xml::fill_developer(Developer& dev) const
+UserinfoXML::fill_developer(Developer& dev) const throw (Exception)
 {
-    BacktraceContext c("portage::userinfo_xml::fill_developer()");
+    BacktraceContext c("portage::UserinfoXML::fill_developer()");
 
     if (dev.user().empty())
-        throw Exception("userinfo_xml::fill_developer() requires you pass a Developer object with at least the user name filled in");
+        throw Exception("UserinfoXML::fill_developer() requires you pass a Developer object with at least the user name filled in");
 
     Herd::const_iterator d = _devs.find(dev);
     if (d != _devs.end())
@@ -89,11 +91,11 @@ userinfo_xml::fill_developer(Developer& dev) const
 }
 /****************************************************************************/
 bool
-userinfo_xml::start_element(const std::string& name, const attrs_type& attrs)
+UserinfoXML::start_element(const std::string& name, const attrs_type& attrs)
 {
     if (name == "user")
     {
-        BacktraceContext c("portage::userinfo_xml::start_element("+name+")");
+        BacktraceContext c("portage::UserinfoXML::start_element("+name+")");
 
         attrs_type::const_iterator pos = attrs.find("username");
         if (pos == attrs.end())
@@ -131,7 +133,7 @@ userinfo_xml::start_element(const std::string& name, const attrs_type& attrs)
 }
 /****************************************************************************/
 bool
-userinfo_xml::end_element(const std::string& name)
+UserinfoXML::end_element(const std::string& name)
 {
     if      (name == "user")        in_user = false;
     else if (name == "firstname")   in_firstname = false;
@@ -147,7 +149,7 @@ userinfo_xml::end_element(const std::string& name)
 }
 /****************************************************************************/
 bool
-userinfo_xml::text(const std::string& text)
+UserinfoXML::text(const std::string& text)
 {
     if (in_firstname)
         const_cast<Developer&>(*_cur_dev).set_name(_cur_dev->name() + text);

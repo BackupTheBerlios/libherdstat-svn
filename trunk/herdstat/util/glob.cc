@@ -24,31 +24,54 @@
 # include "config.h"
 #endif
 
+#include <iostream>
 #include <herdstat/exceptions.hh>
 #include <herdstat/util/glob.hh>
 
 namespace herdstat {
 namespace util {
 /****************************************************************************/
-Glob::Glob(const char *pattern) : _glob()
+Glob::Glob()
+    : _results(), _glob()
 {
-    BacktraceContext c("util::Glob::Glob("+std::string(pattern)+")");
 
-    int ret = glob(pattern, GLOB_ERR, NULL, &(this->_glob));
-    if (ret != 0 and ret != GLOB_NOMATCH)
-        throw ErrnoException("glob");
-
-    /* fill results */
-    if (ret != GLOB_NOMATCH)
-    {
-        for (std::size_t i = 0 ; this->_glob.gl_pathv[i] != NULL ; ++i)
-            this->push_back(this->_glob.gl_pathv[i]);
-    }
+}
+/****************************************************************************/
+Glob::Glob(const std::string& pattern) throw (ErrnoException)
+    : _results(), _glob()
+{
+    this->operator()(pattern);
 }
 /****************************************************************************/
 Glob::~Glob()
 {
-    globfree(&(this->_glob));
+}
+/****************************************************************************/
+const std::vector<std::string>&
+Glob::operator()(const std::string& pattern) throw(ErrnoException)
+{
+    BacktraceContext c("herdstat::util::Glob::operator()("+pattern+")");
+
+    int ret = glob(pattern.c_str(), GLOB_ERR, NULL, &_glob);
+    if (ret != 0 and ret != GLOB_NOMATCH)
+        throw ErrnoException("glob");
+
+    /* fill _results */
+    if (ret != GLOB_NOMATCH)
+        std::copy(_glob.gl_pathv, _glob.gl_pathv+_glob.gl_pathc,
+            std::back_inserter(_results));
+
+    globfree(&_glob);
+
+    /* there may be duplicates due to previous calls to operator(). */
+    if (_results.size() > 1)
+    {
+        std::sort(_results.begin(), _results.end());
+        _results.erase(std::unique(_results.begin(), _results.end()),
+            _results.end());
+    }
+
+    return _results;
 }
 /****************************************************************************/
 } // namespace util

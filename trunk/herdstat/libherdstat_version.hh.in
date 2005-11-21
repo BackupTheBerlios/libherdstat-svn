@@ -32,16 +32,32 @@
  * @brief Provides libherdstat version constants.
  */
 
-/// Major version (eg 0.4.1 -> 0)
+/**
+ * @def LIBHERDSTAT_VERSION_MAJOR
+ * @brief Major version (eg 0.4.1 -> 0).
+ */
+
 #define LIBHERDSTAT_VERSION_MAJOR @VERSION_MAJOR@
 
-/// Minor version (eg 0.4.1 -> 4)
+/**
+ * @def LIBHERDSTAT_VERSION_MINOR
+ * @brief Minor version (eg 0.4.1 -> 4).
+ */
+
 #define LIBHERDSTAT_VERSION_MINOR @VERSION_MINOR@
 
-/// Micro version (eg 0.4.1 -> 1)
+/**
+ * @def LIBHERDSTAT_VERSION_MICRO
+ * @brief Micro version (eg 0.4.1 -> 1).
+ */
+
 #define LIBHERDSTAT_VERSION_MICRO @VERSION_MICRO@
 
-/// Version, two digits per part (eg 0.4.1 -> 00401)
+/**
+ * @def LIBHERDSTAT_VERSION
+ * @brief Version, two digits per part (eg 0.4.1 -> 00401)
+ */
+
 #define LIBHERDSTAT_VERSION ((100 * 100 * LIBHERDSTAT_VERSION_MAJOR) \
 	    + (100 * LIBHERDSTAT_VERSION_MICRO) + LIBHERDSTAT_VERSION_MINOR)
 

@@ -43,7 +43,7 @@ namespace herdstat {
 namespace portage {
 
     /**
-     * @struct IsCategory
+     * @struct IsCategory functional.hh herdstat/portage/functional.hh
      * @brief Function object that determines whether the given string is a
      * category name.
      */
@@ -55,7 +55,7 @@ namespace portage {
     };
 
     /**
-     * @struct IsEbuild
+     * @struct IsEbuild functional.hh herdstat/portage/functional.hh
      * @brief Function object that determines whether the given path is an
      * ebuild.
      */
@@ -67,7 +67,7 @@ namespace portage {
     };
 
     /**
-     * @struct IsPkgDir
+     * @struct IsPkgDir functional.hh herdstat/portage/functional.hh
      * @brief Function object that determines whether the given path is a valid
      * package directory.
      */
@@ -79,7 +79,7 @@ namespace portage {
     };
 
     /**
-     * @struct GetPkgFromPath
+     * @struct GetPkgFromPath functional.hh herdstat/portage/functional.hh
      * @brief Function object that returns a "cat/pkg" string given a full
      * path to a package directory.
      */
@@ -91,7 +91,7 @@ namespace portage {
     };
 
     /**
-     * @struct FullPkgName
+     * @struct FullPkgName functional.hh herdstat/portage/functional.hh
      * @brief Function object for explicit conversion from Package to
      * std::string (the category/package string).
      */
@@ -103,7 +103,18 @@ namespace portage {
     };
 
     /**
-     * @struct NewPackage
+     * @struct NewKeyword functional.hh herdstat/portage/functional.hh
+     * @brief Function object for instantiating a new Keyword object.
+     */
+    
+    struct NewKeyword
+    {
+        Keyword operator()(const std::string& kw) const
+        { return Keyword(kw); }
+    };
+
+    /**
+     * @struct NewPackage functional.hh herdstat/portage/functional.hh
      * @brief Function object for instantiating a Package class with the given
      * path (to the package directory) and a portdir (may be an overlay).
      */
@@ -117,7 +128,7 @@ namespace portage {
     };
 
     /**
-     * @struct GetWhichFromPackage
+     * @struct GetWhichFromPackage functional.hh herdstat/portage/functional.hh
      * @brief Function object for retrieving the path to the newest ebuild for
      * the given Package object.
      */
@@ -136,9 +147,9 @@ namespace portage {
     };
 
     /**
-     * @struct PackageMatches
+     * @struct PackageMatches functional.hh herdstat/portage/functional.hh
      * @brief Function object for comparing a Package object with an object of
-     * type T.
+     * type T.  Implicit interface assumes there is an operator== for type T.
      */
 
     template <typename T>
@@ -154,7 +165,7 @@ namespace portage {
     };
 
     /**
-     * @struct PackageIsValid
+     * @struct PackageIsValid functional.hh herdstat/portage/functional.hh
      * @brief Function object for determining whether the given Package object
      * has a valid package directory.
      */
