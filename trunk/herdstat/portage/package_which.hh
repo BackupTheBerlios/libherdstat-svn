@@ -47,10 +47,10 @@ namespace portage {
     {
         public:
             /// Default constructor.
-            PackageWhich();
+            PackageWhich() throw();
 
             /// Destructor.
-            ~PackageWhich();
+            ~PackageWhich() throw();
 
             /// Clear search results.
             void clear_results() { _results.clear(); }

@@ -51,15 +51,15 @@
  */
 
 /**
- * @page ChangeLog
- * @section ChangeLog
+ * @page ChangeLog ChangeLog
+ * @section ChangeLog ChangeLog
  * @verbinclude ChangeLog
  */
 
 /**
- * @page License
- * @section License
- * @verbinclude LICENSE
+ * @page License License
+ * @section License License
+ * @verbinclude COPYING
  */
 
 /**

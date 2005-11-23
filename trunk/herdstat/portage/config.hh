@@ -62,21 +62,26 @@ namespace portage {
              * @returns a copy of the value mapped to the specified variable
              * or an empty string if the value doesn't exist.
              */
-            inline std::string operator[] (const std::string& var) const;
+            inline std::string operator[] (const std::string& var) const throw();
 
-            /// Get categories.
-            inline const Categories& categories() const;
-            /// Get arch keywords.
-            inline const Archs& archs() const;
+            /** Get categories.
+             * @exception FileException
+             */
+            inline const Categories& categories() const throw (FileException);
+            
+            /** Get arch keywords.
+             * @exception FileException
+             */
+            inline const Archs& archs() const throw (FileException);
 
         private:
             /// Only GlobalConfig() can instantiate this class.
-            friend const Config& GlobalConfig();
+            friend const Config& GlobalConfig() throw (FileException);
 
             /// Constructor.
-            Config();
+            Config() throw (FileException);
             /// Destructor.
-            ~Config();
+            ~Config() throw();
 
             util::Vars _vars;
             std::string _portdir;
@@ -90,21 +95,21 @@ namespace portage {
     { return _overlays; }
 
     inline const Categories&
-    Config::categories() const
+    Config::categories() const throw (FileException)
     {
         if (not _cats) _cats = new Categories(_portdir);
         return *_cats;
     }
 
     inline const Archs&
-    Config::archs() const
+    Config::archs() const throw (FileException)
     {
         if (not _archs) _archs = new Archs(_portdir);
         return *_archs;
     }
 
     inline std::string
-    Config::operator[] (const std::string& var) const
+    Config::operator[] (const std::string& var) const throw()
     {
         util::Vars::const_iterator i = _vars.find(var);
         return (i == _vars.end() ? std::string() : i->second);
@@ -112,11 +117,12 @@ namespace portage {
 
     /**
      * Sole access point to a portage::config object.
+     * @exception FileException
      * @returns const reference to a local static instance of portage::config.
      */
 
     inline const Config&
-    GlobalConfig()
+    GlobalConfig() throw (FileException)
     {
         static Config c;
         return c;

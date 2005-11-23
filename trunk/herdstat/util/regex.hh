@@ -39,6 +39,7 @@
 #include <sys/types.h>
 #include <regex.h>
 
+#include <herdstat/exceptions.hh>
 #include <herdstat/util/container_base.hh>
 
 namespace herdstat {
@@ -72,113 +73,121 @@ namespace util {
             static const Eflags noteol;
 
             /// Default constructor.
-            Regex();
+            Regex() throw();
 
-            /// Copy constructor.
-            Regex(const Regex& that);
+            /** Copy constructor.
+             * @exception BadRegex
+             */
+            Regex(const Regex& that) throw (BadRegex);
 
             /** Constructor.
              * @param c CFLAGS.
              * @param e EFLAGS.
              */
-            Regex(int c, int e = 0);
+            Regex(int c, int e = 0) throw();
 
             /** Constructor.
              * @param r regular expression string.
              * @param c CFLAGS.
              * @param e EFLAGS.
+             * @exception BadRegex
              */
-            Regex(const std::string& r, int c = 0, int e = 0);
+            Regex(const std::string& r, int c = 0, int e = 0) throw (BadRegex);
 
             /// Destructor.
-            ~Regex();
+            ~Regex() throw();
 
             /** Assign a new regular expression.
              * @param r regular expression string.
+             * @exception BadRegex
              */
-            void assign(const std::string& r);
+            void assign(const std::string& r) throw (BadRegex);
 
             /** Assign a new regular expression.
              * @param r regular expression string.
              * @param c CFLAGS.
              * @param e EFLAGS.
+             * @exception BadRegex
              */
-            void assign(const std::string& r , int c, int e = 0);
+            void assign(const std::string& r , int c, int e = 0) throw (BadRegex);
 
             /** Assign a new regular expression (no CFLAGS/EFLAGS).
              * @param s regular expression string.
+             * @exception BadRegex
              * @returns a Regex object.
              */
-            inline Regex& operator= (const std::string& s);
+            inline Regex& operator= (const std::string& s) throw (BadRegex);
 
-            /// Copy assignment operator.
-            Regex& operator= (const Regex& that);
+            /** Copy assignment operator.
+             * @exception BadRegex
+             */
+            Regex& operator= (const Regex& that) throw (BadRegex);
 
             /** Determine if this regex matches the specified std::string.
              * @param cmp Comparison string.
              * @returns   A boolean value.
              */
-            inline bool operator== (const std::string& cmp) const;
+            inline bool operator== (const std::string& cmp) const throw();
 
             /** Determine if this regex does not match the specified std::string.
              * @param cmp Comparison string.
              * @returns   A boolean value.
              */
-            inline bool operator!= (const std::string& cmp) const;
+            inline bool operator!= (const std::string& cmp) const throw();
 
             /** Determine if this regex is equal to that regex.  Only compares
              * uncompiled regex strings.
              * @param that const reference to Regex object.
              * @returns A boolean value.
              */
-            inline bool operator== (const Regex& that) const;
+            inline bool operator== (const Regex& that) const throw();
 
             /** Determine if this regex is not equal to that regex.  Only
              * compares uncompiled regex strings.
              * @param that const reference to Regex object.
              * @returns A boolean value.
              */
-            inline bool operator!= (const Regex& that) const;
+            inline bool operator!= (const Regex& that) const throw();
 
             /** Determine if this regex is less than that regex.  Only
              * compares uncompiled regex strings.
              * @param that const reference to Regex object.
              * @returns A boolean value.
              */
-            inline bool operator< (const Regex& that) const;
+            inline bool operator< (const Regex& that) const throw();
 
             /** Determine if this regex is greater than that regex.  Only
              * compares uncompiled regex strings.
              * @param that const reference to Regex object.
              * @returns A boolean value.
              */
-            inline bool operator> (const Regex& that) const;
+            inline bool operator> (const Regex& that) const throw();
 
             /** Get regular expression std::string.
              * @returns A std::string object.
              */
-            inline const std::string& operator()() const;
+            inline const std::string& operator()() const throw();
 
             /** Is this regular expression std::string empty?
              * @returns A boolean value.
              */
-            inline bool empty() const;
+            inline bool empty() const throw();
 
             /// Get CFLAGS.
-            inline int cflags() const;
+            inline int cflags() const throw();
             /// Set CFLAGS.
-            inline void set_cflags(int cflags);
+            inline void set_cflags(int cflags) throw();
 
             /// Get EFLAGS.
-            inline int eflags() const;
+            inline int eflags() const throw();
             /// Set EFLAGS.
-            inline void set_eflags(int eflags);
+            inline void set_eflags(int eflags) throw();
 
         private:
             /// Clean up compiled regex_t
-            void cleanup();
+            void cleanup() throw();
             /// Compile regex.
-            void compile();
+            void compile() throw (BadRegex);
 
             std::string _str;
             bool        _compiled;
@@ -188,80 +197,80 @@ namespace util {
     };
 
     inline Regex&
-    Regex::operator= (const std::string& re)
+    Regex::operator= (const std::string& re) throw (BadRegex)
     {
         this->assign(re);
         return *this;
     }
 
     inline bool
-    Regex::operator== (const std::string& cmp) const
+    Regex::operator== (const std::string& cmp) const throw()
     {
         return (regexec(&_regex, cmp.c_str(), 0, NULL, _eflags) == 0);
     }
 
     inline bool
-    Regex::operator!= (const std::string& cmp) const
+    Regex::operator!= (const std::string& cmp) const throw()
     {
         return not (*this == cmp);
     }
 
     inline bool
-    Regex::operator== (const Regex& that) const
+    Regex::operator== (const Regex& that) const throw()
     {
         return (_str == that._str);
     }
 
     inline bool
-    Regex::operator!= (const Regex& that) const
+    Regex::operator!= (const Regex& that) const throw()
     {
         return (_str != that._str);
     }
 
     inline bool
-    Regex::operator< (const Regex& that) const
+    Regex::operator< (const Regex& that) const throw()
     {
         return (_str < that._str);
     }
 
     inline bool
-    Regex::operator> (const Regex& that) const
+    Regex::operator> (const Regex& that) const throw()
     {
         return (_str > that._str);
     }
 
     inline const std::string&
-    Regex::operator()() const
+    Regex::operator()() const throw()
     {
         return _str;
     }
 
     inline bool
-    Regex::empty() const
+    Regex::empty() const throw()
     {
         return _str.empty();
     }
 
     inline int
-    Regex::cflags() const
+    Regex::cflags() const throw()
     {
         return _cflags;
     }
 
     inline void
-    Regex::set_cflags(int cflags)
+    Regex::set_cflags(int cflags) throw()
     {
         _cflags = cflags;
     }
 
     inline int
-    Regex::eflags() const
+    Regex::eflags() const throw()
     {
         return _eflags;
     }
 
     inline void
-    Regex::set_eflags(int eflags)
+    Regex::set_eflags(int eflags) throw()
     {
         _eflags = eflags;
     }
@@ -269,13 +278,13 @@ namespace util {
     ///@{
     /// Compare a Regex with a std::string on the left-hand side.
     inline bool
-    operator==(const std::string& lhs, const Regex& rhs)
+    operator==(const std::string& lhs, const Regex& rhs) throw()
     {
         return (rhs == lhs);
     }
 
     inline bool
-    operator!=(const std::string& lhs, const Regex& rhs)
+    operator!=(const std::string& lhs, const Regex& rhs) throw()
     {
         return (rhs != lhs);
     }

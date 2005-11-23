@@ -18,7 +18,12 @@ pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = $(pc)
 
 DISTCLEANFILES = ChangeLog TODO $(pc)
-EXTRA_DIST = ChangeLog Makefile.am.common autogen.sh .todo libherdstat.pc.in
+EXTRA_DIST = ChangeLog \
+	Makefile.am.common \
+	autogen.sh \
+	.todo \
+	libherdstat.pc.in \
+	examples
 
 doxygen:
 	$(MAKE) -C doc doxygen

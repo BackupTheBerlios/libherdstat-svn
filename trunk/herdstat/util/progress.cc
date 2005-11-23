@@ -30,12 +30,12 @@
 namespace herdstat {
 namespace util {
 /****************************************************************************/
-Progress::Progress()
+Progress::Progress() throw()
     : _cur(0), _step(0), _started(false)
 {
 }
 /****************************************************************************/
-Progress::~Progress()
+Progress::~Progress() throw()
 {
     if (not this->_started)
         return;
@@ -46,7 +46,7 @@ Progress::~Progress()
 }
 /****************************************************************************/
 void
-Progress::start(unsigned m)
+Progress::start(unsigned m) throw()
 {
     if (this->_started)
         return;

@@ -36,6 +36,7 @@
 #include <herdstat/util/regex.hh>
 #include <herdstat/portage/exceptions.hh>
 #include <herdstat/portage/misc.hh>
+#include <herdstat/portage/ebuild.hh>
 #include <herdstat/portage/config.hh>
 #include <herdstat/portage/package.hh>
 
@@ -100,17 +101,6 @@ namespace portage {
     {
         std::string operator()(const Package& pkg) const
         { return pkg.full(); }
-    };
-
-    /**
-     * @struct NewKeyword functional.hh herdstat/portage/functional.hh
-     * @brief Function object for instantiating a new Keyword object.
-     */
-    
-    struct NewKeyword
-    {
-        Keyword operator()(const std::string& kw) const
-        { return Keyword(kw); }
     };
 
     /**

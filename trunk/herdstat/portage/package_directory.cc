@@ -1,5 +1,5 @@
 /*
- * libherdstat -- herdstat/portage/package_finder.cc
+ * libherdstat -- herdstat/portage/package_directory.cc
  * $Id$
  * Copyright (c) 2005 Aaron Walker <ka0ttic@gentoo.org>
  *
@@ -24,18 +24,42 @@
 # include "config.h"
 #endif
 
-#include <herdstat/portage/package_finder.hh>
+#include <herdstat/portage/package_directory.hh>
 
 namespace herdstat {
 namespace portage {
 /****************************************************************************/
-PackageFinder::PackageFinder(const PackageList& pkglist) throw()
-    : _pkglist(pkglist), _results()
+PackageDirectory::PackageDirectory() throw()
+    : util::Directory(true), _ebuilds(NULL)
 {
 }
 /****************************************************************************/
-PackageFinder::~PackageFinder() throw()
+PackageDirectory::PackageDirectory(const std::string& path)
+    throw (FileException)
+    : util::Directory(path, true), _ebuilds(NULL)
 {
+}
+/****************************************************************************/
+PackageDirectory::PackageDirectory(const PackageDirectory& that)
+    : util::Directory(true), _ebuilds(NULL)
+{
+    *this = that;
+}
+/****************************************************************************/
+PackageDirectory&
+PackageDirectory::operator=(const PackageDirectory& that)
+{
+    util::Directory::operator=(that);
+
+    if (that._ebuilds)
+        _ebuilds = new std::vector<Ebuild>(*that._ebuilds);
+
+    return *this;
+}
+/****************************************************************************/
+PackageDirectory::~PackageDirectory() throw()
+{
+    if (_ebuilds) delete _ebuilds;
 }
 /****************************************************************************/
 } // namespace portage

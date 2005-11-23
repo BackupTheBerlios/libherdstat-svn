@@ -35,17 +35,17 @@ namespace portage {
 /*** static members *********************************************************/
 //ebuild::eclass_map ebuild::_eclasses;
 /****************************************************************************/
-Ebuild::Ebuild()
+Ebuild::Ebuild() throw()
 {
 }
 /****************************************************************************/
-Ebuild::Ebuild(const std::string &path)
+Ebuild::Ebuild(const std::string &path) throw (FileException)
     : util::Vars()
 {
     this->read(path);
 }
 /****************************************************************************/
-Ebuild::~Ebuild()
+Ebuild::~Ebuild() throw()
 {
 }
 /****************************************************************************/

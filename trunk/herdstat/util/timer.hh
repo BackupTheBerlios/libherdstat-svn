@@ -48,13 +48,16 @@ namespace util {
             typedef long size_type;
 
             /// Default constructor.
-            Timer();
+            Timer() throw();
+
+            /// Destructor.
+            ~Timer() throw();
 
             /// Start timer.
-            void start();
+            void start() throw();
 
             /// Stop timer.
-	    void stop();
+	    void stop() throw();
 
             /** Is the timer running?
              * @returns A boolean value.

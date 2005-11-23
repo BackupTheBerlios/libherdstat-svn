@@ -25,31 +25,33 @@
 #endif
 
 #include <herdstat/exceptions.hh>
+#include <herdstat/portage/package_directory.hh>
 #include <herdstat/portage/package.hh>
 
 namespace herdstat {
 namespace portage {
 /****************************************************************************/
 Package::Package()
-    : _name(), _cat(), _dir(), _path(), _kwmap(NULL)
+    : _name(), _cat(), _dir(), _path(), _kwmap(NULL), _pkgdir(NULL)
 {
 }
 /****************************************************************************/
 Package::Package(const Package& that)
-    : _name(), _cat(), _dir(), _path(), _kwmap(NULL)
+    : _name(), _cat(), _dir(), _path(), _kwmap(NULL), _pkgdir(NULL)
 {
     *this = that;
 }
 /****************************************************************************/
 Package::Package(const std::string& name, const std::string& portdir)
-    : _name(), _cat(), _dir(portdir), _path(), _kwmap(NULL)
+    : _name(), _cat(), _dir(portdir), _path(), _kwmap(NULL), _pkgdir(NULL)
 {
     set_name(name);
 }
 /****************************************************************************/
 Package::~Package()
 {
-    if (_kwmap) delete _kwmap;
+    if (_kwmap)  delete _kwmap;
+    if (_pkgdir) delete _pkgdir;
 }
 /****************************************************************************/
 Package&
@@ -63,6 +65,8 @@ Package::operator=(const Package& that)
 
     if (that._kwmap)
         _kwmap = new KeywordsMap(*that._kwmap);
+    if (that._pkgdir)
+        _pkgdir = new PackageDirectory(*that._pkgdir);
 
     return *this;
 }
@@ -91,6 +95,14 @@ Package::set_full(const std::string& full)
     set_name(full.substr(++pos));
     _full.assign(full);
     set_path(_dir+"/"+_full);
+}
+/****************************************************************************/
+const PackageDirectory&
+Package::pkgdir() const
+{
+    if (not _pkgdir)
+        _pkgdir = new PackageDirectory(_path);
+    return *_pkgdir;
 }
 /****************************************************************************/
 } // namespace portage

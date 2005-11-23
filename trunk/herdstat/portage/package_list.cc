@@ -47,7 +47,7 @@ PackageList::PackageList(const std::string& portdir,
         this->fill();
 }
 /****************************************************************************/
-PackageList::~PackageList()
+PackageList::~PackageList() throw()
 {
 }
 /****************************************************************************/

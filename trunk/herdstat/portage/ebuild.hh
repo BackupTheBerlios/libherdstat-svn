@@ -51,16 +51,18 @@ namespace portage {
     {
         public:
             /// Default constructor.
-            Ebuild();
+            Ebuild() throw();
 
             /** Constructor.
              * @param path Path to ebuild.
+             * @exception FileException
              */
-            Ebuild(const std::string &path);
+            Ebuild(const std::string &path) throw (FileException);
 
             /// Destructor.
-            virtual ~Ebuild();
+            virtual ~Ebuild() throw();
 
+            /// Assign a new path.
             void assign(const std::string& path);
 
         protected:

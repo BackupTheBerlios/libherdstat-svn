@@ -49,7 +49,7 @@ struct BothSpaces
 };
 
 std::string
-tidy_whitespace(const std::string &s)
+tidy_whitespace(const std::string &s) throw()
 {
     if (s.empty())
 	return s;
@@ -71,12 +71,15 @@ tidy_whitespace(const std::string &s)
     /* remove any trailing whitespace */
     if ((pos = result.find_last_not_of(" \t")) != std::string::npos)
 	result.erase(++pos);
+
+    if (result == " ")
+        return std::string();
 	
     return result;
 }
 /*****************************************************************************/
 std::string
-sprintf(const char *fmt, ...)
+sprintf(const char *fmt, ...) throw()
 {
     va_list v;
     va_start(v, fmt);
@@ -86,7 +89,7 @@ sprintf(const char *fmt, ...)
 }
 /*****************************************************************************/
 std::string
-sprintf(const char *fmt, va_list v)
+sprintf(const char *fmt, va_list v) throw()
 {
     char *buf;
     vasprintf(&buf, fmt, v);
@@ -96,7 +99,7 @@ sprintf(const char *fmt, va_list v)
 }
 /*****************************************************************************/
 std::string
-sprintf(const std::string& fmt, ...)
+sprintf(const std::string& fmt, ...) throw()
 {
     va_list v;
 #ifdef HAVE_GCC4
@@ -111,7 +114,7 @@ sprintf(const std::string& fmt, ...)
 }
 /*****************************************************************************/
 std::string
-sprintf(const std::string& fmt, va_list v)
+sprintf(const std::string& fmt, va_list v) throw()
 {
     return util::sprintf(fmt.c_str(), v);
 }
@@ -119,7 +122,7 @@ sprintf(const std::string& fmt, va_list v)
  * HTMLify the given std::string (replace any occurrences of &,>,<)               *
  *****************************************************************************/
 std::string
-htmlify(const std::string &str)
+htmlify(const std::string &str) throw()
 {
     std::string result(str);
     std::map<std::string, std::string> sr;
@@ -152,7 +155,7 @@ htmlify(const std::string &str)
  * unHTMLify the given std::string (replace occurrences of &amp;,&gt;,&;lt;       *
  *****************************************************************************/
 std::string
-unhtmlify(const std::string &str)
+unhtmlify(const std::string &str) throw()
 {
     std::string result(str);
     std::map<std::string, std::string> sr;
@@ -185,7 +188,7 @@ unhtmlify(const std::string &str)
  *****************************************************************************/
 std::string
 join(const std::vector<std::string> &v,
-           const std::string::value_type delim)
+           const std::string::value_type delim) throw()
 {
     std::string result;
 
@@ -201,7 +204,7 @@ join(const std::vector<std::string> &v,
 }
 /*****************************************************************************/
 std::vector<std::string>
-split(const std::string& str, const char delim, bool append_empty)
+split(const std::string& str, const char delim, bool append_empty) throw()
 {
     std::vector<std::string> v;
     std::string::size_type pos, lpos = 0;
@@ -226,7 +229,7 @@ split(const std::string& str, const char delim, bool append_empty)
 }
 /*****************************************************************************/
 std::string
-strip_colors(const std::string& str)
+strip_colors(const std::string& str) throw()
 {
     std::string result(str);
     std::string::size_type pos, lpos = 0;

@@ -64,7 +64,7 @@ namespace util {
      */
 
     inline bool
-    file_exists(const std::string& path)
+    file_exists(const std::string& path) throw()
     {
         return (access(path.c_str(), F_OK) == 0);
     }
@@ -76,7 +76,7 @@ namespace util {
      */
 
     inline bool
-    is_dir(const std::string &p)
+    is_dir(const std::string &p) throw()
     {
         struct stat s;
         return ((stat(p.c_str(), &s) == 0) ? S_ISDIR(s.st_mode) : false);
@@ -88,7 +88,11 @@ namespace util {
      * @returns A boolean value.
      */
 
-    inline bool is_dir(const struct stat &s) { return S_ISDIR(s.st_mode); }
+    inline bool
+    is_dir(const struct stat &s) throw()
+    {
+        return S_ISDIR(s.st_mode);
+    }
 
     /**
      * Is the given path a regular file?
@@ -97,7 +101,7 @@ namespace util {
      */
 
     inline bool
-    is_file(const std::string &p)
+    is_file(const std::string &p) throw()
     {
         struct stat s;
         return ((stat(p.c_str(), &s) == 0) ? S_ISREG(s.st_mode) : false);
@@ -109,21 +113,25 @@ namespace util {
      * @returns A boolean value.
      */
 
-    inline bool is_file(const struct stat &s) { return S_ISREG(s.st_mode); }
+    inline bool
+    is_file(const struct stat &s) throw()
+    {
+        return S_ISREG(s.st_mode);
+    }
 
     /**
      * Return the basename of the given path.
      * @param p Path.
      */
 
-    std::string basename(const std::string &p);
+    std::string basename(const std::string &p) throw();
     
     /**
      * Return the directory name the given path is located in.
      * @param p Path.
      */
 
-    std::string dirname(const std::string &p);
+    std::string dirname(const std::string &p) throw();
 
     /**
      * Chop file extension from the given path.
@@ -132,23 +140,28 @@ namespace util {
      * @returns A pointer of type char.
      */
 
-    const char *chop_fileext(const std::string &p, unsigned short depth = 1);
+    const char *chop_fileext(const std::string &p,
+                             unsigned short depth = 1) throw();
 
     /**
      * Copy file 'from' to file 'to'.
      * @param from Source location.
-     * @param to   Destination location.
+     * @param to Destination location.
+     * @exception FileException
      */
 
-    void copy_file(const std::string &to, const std::string &from);
+    void copy_file(const std::string &to, const std::string &from)
+        throw (FileException);
 
     /**
      * Move file 'from' to file 'to'.
      * @param from Source location.
-     * @param to   Destination location.
+     * @param to Destination location.
+     * @exception FileException
      */
 
-    void move_file(const std::string &to, const std::string &from);
+    void move_file(const std::string &to, const std::string &from)
+        throw (FileException);
 
     /**
      * @enum ftype
@@ -174,13 +187,13 @@ namespace util {
             typedef time_t  time_type;
 
             /// Default constructor.
-            Stat();
+            Stat() throw();
 
             /** Constructor.
              * @param p Path.
              * @param opened Has the file associated with this been opened?
              */
-            Stat(const std::string &p, bool opened = false);
+            Stat(const std::string &p, bool opened = false) throw();
 
             device_type device()   const { return this->st_dev; }
             inode_type  inode()    const { return this->st_ino; }
@@ -195,7 +208,7 @@ namespace util {
             ftype       type()     const { return this->_type; }
 
             /// Assign a new path and stat it.
-            void assign(const std::string &p, bool opened = false);
+            void assign(const std::string &p, bool opened = false) throw();
 
             /** Does the file associated with this exist?
              * @returns A boolean value.
@@ -205,7 +218,7 @@ namespace util {
             /** stat() wrapper.
              * @returns A boolean value (exists()).
              */
-            bool operator() ();
+            bool operator()(void) throw();
 
         protected:
             std::string _path;
@@ -222,15 +235,15 @@ namespace util {
     {
         public:
             /// Default constructor.
-            BaseFileObject();
+            BaseFileObject() throw();
 
             /** Constructor.
              * @param path Path.
              */
-            BaseFileObject(const std::string &path);
+            BaseFileObject(const std::string &path) throw();
 
             /// Destructor.
-            virtual ~BaseFileObject();
+            virtual ~BaseFileObject() throw();
 
             /// Get path of file.
             const std::string& path() const { return _stat.path(); }
@@ -251,11 +264,13 @@ namespace util {
              */
             virtual void dump(std::ostream &s) const { }
 
-            /// Open file object.
-            virtual void open()     = 0;
+            /** Open file object.
+             * @exception FileException
+             */
+            virtual void open() throw (FileException) = 0;
 
             /// Close file object.
-            void close();
+            void close() throw();
 
             /// Read file object, filling internal container.
             void read();
@@ -269,7 +284,7 @@ namespace util {
             virtual void do_read() = 0;
 
             /// Close
-            virtual void do_close() = 0;
+            virtual void do_close() throw() = 0;
 
         private:
             /// stat object associated with this file object.
@@ -289,46 +304,56 @@ namespace util {
             typedef std::fstream stream_type;
 
             /// Default constructor.
-            BaseFile();
+            BaseFile() throw();
 
-            /// Copy constructor
-            BaseFile(const BaseFile& that);
+            /** Copy constructor.
+             * @exception FileException
+             */
+            BaseFile(const BaseFile& that) throw (FileException);
 
             /** Constructor.  Opens file.
              * @param path Path to file.
              * @param mode Open mode (defaults to DEFAULT_MODE).
+             * @exception FileException
              */
             BaseFile(const std::string &path,
-                    std::ios_base::openmode mode = DEFAULT_MODE);
+                    std::ios_base::openmode mode = DEFAULT_MODE)
+                throw (FileException);
 
             /// Destructor.  Closes file if opened.
-            virtual ~BaseFile();
+            virtual ~BaseFile() throw();
 
-            /// Copy assignment operator.
-            BaseFile& operator= (const BaseFile& that);
+            /** Copy assignment operator.
+             * @exception FileException
+             */
+            BaseFile& operator= (const BaseFile& that) throw (FileException);
 
             const std::ios_base::openmode& mode() const { return _mode; }
 
-            /// Open file with default open mode.
-            virtual void open();
+            /** Open file with default open mode.
+             * @exception FileException
+             */
+            virtual void open() throw (FileException);
 
             /** Open specified path with specified open mode.
              * @param path Path to file.
              * @param mode Open mode (defaults to DEFAULT_MODE).
+             * @exception FileException
              */
             virtual void open(const char *path,
-                std::ios_base::openmode mode = DEFAULT_MODE);
+                std::ios_base::openmode mode = DEFAULT_MODE) throw (FileException);
 
             /** Open with specified open mode.
              * @param mode Open mode.
+             * @exception FileException
              */
-            virtual void open(std::ios_base::openmode mode);
+            virtual void open(std::ios_base::openmode mode) throw (FileException);
 
         protected:
             void set_mode(std::ios_base::openmode mode) { _mode = mode; }
 
             /// close file
-            virtual void do_close();
+            virtual void do_close() throw();
 
             /// Get stream associated with this.
             stream_type& stream() { assert(_stream); return *_stream; }
@@ -353,12 +378,14 @@ namespace util {
             /** Constructor.  Opens and reads file.
              * @param path Path to file.
              * @param mode Open mode (defaults to DEFAULT_MODE).
+             * @exception FileException
              */
             File(const std::string &path,
-                   std::ios_base::openmode mode = DEFAULT_MODE);
+                   std::ios_base::openmode mode = DEFAULT_MODE)
+                throw (FileException);
 
             /// Destructor.
-            virtual ~File();
+            virtual ~File() throw();
 
             /** File size.
              * @returns An unsigned integer value.
@@ -406,54 +433,69 @@ namespace util {
                        public VectorBase<std::string>
     {
         public:
-            /// Default constructor.
-            Directory();
+            /** Default constructor.
+             * @param recurse Recurse into sub-directories (defaults to false)?
+             */
+            Directory(bool recurse = false) throw();
 
             /** Constructor.  Opens and reads directory.
              * @param path Path.
+             * @param recurse Recurse into sub-directories (defaults to false)?
+             * @exception FileException
              */
-            Directory(const std::string& path);
+            Directory(const std::string& path,
+                      bool recurse = false) throw (FileException);
+
+            /// Copy constructor.
+            Directory(const Directory& that);
 
             /// Destructor. Closes directory if opened.
-            virtual ~Directory();
+            virtual ~Directory() throw();
 
-            /// Open directory.
-            virtual void open();
+            /// Copy assignment operator.
+            Directory& operator= (const Directory& that);
+
+            /** Open directory.
+             * @exception FileException
+             */
+            virtual void open() throw (FileException);
 
             /** Find element with the specified name.
              * @param p Path.
              * @returns An iterator to the element (or end() if not found).
              */
-            iterator find(const value_type& p);
+            iterator find(const value_type& p) throw();
 
             /** Find element that matches the specified regular expression.
              * @param r Reference to a util::Regex object.
              * @returns An iterator to the element (or end() if not found).
              */
-            iterator find(const Regex& r);
+            iterator find(const Regex& r) throw();
 
             /** Find element with the specified name.
              * @param p Path.
              * @returns A const_iterator to the element (or end() if not found).
              */
-            const_iterator find(const value_type& p) const;
+            const_iterator find(const value_type& p) const throw();
 
             /** Find element that matches the specified regular expression.
              * @param r Reference to a util::Regex object.
              * @returns A const_iterator to the element (or end() if not found).
              */
-            const_iterator find(const Regex& r) const;
+            const_iterator find(const Regex& r) const throw();
 
         protected:
             /// Read directory.
             virtual void do_read();
 
             /// Close directory.
-            virtual void do_close();
+            virtual void do_close() throw();
 
         private:
             /// Internal DIR pointer.
             DIR *_dirp;
+            /// Recurse into sub-directories?
+            const bool _recurse;
     };
 
 } // namespace util

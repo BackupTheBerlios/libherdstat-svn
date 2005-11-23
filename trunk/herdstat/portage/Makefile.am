@@ -2,50 +2,54 @@
 
 include $(top_builddir)/Makefile.am.common
 
-cc_sources = config.cc \
-	     version.cc \
-	     categories.cc \
-	     package.cc \
-	     package_list.cc \
-	     package_finder.cc \
-	     package_which.cc \
-	     archs.cc \
-	     keywords.cc \
-	     license.cc \
-	     ebuild.cc \
-	     gentoo_email_address.cc \
-	     developer.cc \
-	     herd.cc \
-	     project_xml.cc \
-	     herds_xml.cc \
-	     metadata.cc \
-	     metadata_xml.cc \
-	     devaway_xml.cc \
-	     userinfo_xml.cc
-hh_sources = exceptions.hh \
-	     misc.hh \
-	     config.hh \
-	     categories.hh \
-	     package.hh \
-	     package_list.hh \
-	     package_finder.hh \
-	     package_which.hh \
-	     version.hh \
-	     archs.hh \
-	     keywords.hh \
-	     license.hh \
-	     ebuild.hh \
-	     gentoo_email_address.hh \
-	     developer.hh \
-	     herd.hh \
-	     functional.hh \
-	     xmlbase.hh \
-	     project_xml.hh \
-	     herds_xml.hh \
-	     metadata.hh \
-	     metadata_xml.hh \
-	     devaway_xml.hh \
-	     userinfo_xml.hh
+cc_sources = \
+	config.cc \
+	version.cc \
+	categories.cc \
+	package.cc \
+	package_list.cc \
+	package_finder.cc \
+	package_which.cc \
+	package_directory.cc \
+	archs.cc \
+	keywords.cc \
+	license.cc \
+	ebuild.cc \
+	gentoo_email_address.cc \
+	developer.cc \
+	herd.cc \
+	project_xml.cc \
+	herds_xml.cc \
+	metadata.cc \
+	metadata_xml.cc \
+	devaway_xml.cc \
+	userinfo_xml.cc
+hh_sources = \
+	exceptions.hh \
+	misc.hh \
+	config.hh \
+	categories.hh \
+	package.hh \
+	package_list.hh \
+	package_finder.hh \
+	package_which.hh \
+	package_directory.hh \
+	version.hh \
+	archs.hh \
+	keywords.hh \
+	license.hh \
+	ebuild.hh \
+	gentoo_email_address.hh \
+	developer.hh \
+	herd.hh \
+	functional.hh \
+	xmlbase.hh \
+	project_xml.hh \
+	herds_xml.hh \
+	metadata.hh \
+	metadata_xml.hh \
+	devaway_xml.hh \
+	userinfo_xml.hh
 
 noinst_LTLIBRARIES = libportage.la
 libportage_la_SOURCES = $(hh_sources) $(cc_sources)

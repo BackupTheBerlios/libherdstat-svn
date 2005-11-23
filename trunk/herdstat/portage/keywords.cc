@@ -30,7 +30,6 @@
 #include <herdstat/util/misc.hh>
 #include <herdstat/util/string.hh>
 #include <herdstat/util/algorithm.hh>
-#include <herdstat/portage/exceptions.hh>
 #include <herdstat/portage/functional.hh>
 #include <herdstat/portage/misc.hh>
 #include <herdstat/portage/config.hh>
@@ -41,22 +40,25 @@ namespace portage {
 /*** static members *********************************************************/
 const char * const Keyword::_valid_masks = "-~";
 /****************************************************************************/
-Keyword::maskc::maskc() : _c('\0')
+Keyword::maskc::maskc() throw()
+    : _c('\0')
 {
 }
 /****************************************************************************/
-Keyword::maskc::maskc(const char mc) : _c('\0')
+Keyword::maskc&
+Keyword::maskc::operator=(const char mc) throw (InvalidKeywordMask)
 {
-    BacktraceContext c("portage::Keyword::maskc::maskc(" + std::string(1, mc) + ")");
+    BacktraceContext c("portage::Keyword::maskc::operator=(" + std::string(1, mc) + ")");
 
     if (std::strchr(_valid_masks, mc) == NULL)
         throw InvalidKeywordMask(mc);
 
     _c = mc;
+    return *this;
 }
 /****************************************************************************/
 bool
-Keyword::maskc::operator< (const maskc& that) const
+Keyword::maskc::operator< (const maskc& that) const throw()
 {
     if (_c == that._c)
         return false;
@@ -71,7 +73,7 @@ Keyword::maskc::operator< (const maskc& that) const
     return false;
 }
 /****************************************************************************/
-Keyword::Keyword(const std::string& kw)
+Keyword::Keyword(const std::string& kw) throw (InvalidKeywordMask, InvalidArch)
     : _valid_archs(GlobalConfig().archs())
 {
     BacktraceContext c("portage::Keyword::Keyword("+kw+")");
@@ -83,7 +85,7 @@ Keyword::Keyword(const std::string& kw)
 }
 /****************************************************************************/
 void
-Keyword::parse(const std::string& kw)
+Keyword::parse(const std::string& kw) throw (InvalidKeywordMask)
 {
     if (std::strchr(_valid_masks, kw[0]))
         _mask = kw[0];
@@ -91,31 +93,31 @@ Keyword::parse(const std::string& kw)
     _arch = (_mask.empty() ? kw : kw.substr(1));
 }
 /****************************************************************************/
-Keywords::Keywords()
+Keywords::Keywords() throw()
     : _ebuild(), _str()
 {
 }
 /****************************************************************************/
-Keywords::Keywords(const std::string& path)
+Keywords::Keywords(const std::string& path) throw (Exception)
     : _ebuild(path), _str()
 {
     this->fill();
     this->format();
 }
 /****************************************************************************/
-Keywords::Keywords(const Ebuild& e)
+Keywords::Keywords(const Ebuild& e) throw (Exception)
     : _ebuild(e), _str()
 {
     this->fill();
     this->format();
 }
 /****************************************************************************/
-Keywords::~Keywords()
+Keywords::~Keywords() throw()
 {
 }
 /****************************************************************************/
 void
-Keywords::assign(const std::string& path)
+Keywords::assign(const std::string& path) throw (Exception)
 {
     _ebuild.read(path);
     this->fill();
@@ -123,7 +125,7 @@ Keywords::assign(const std::string& path)
 }
 /****************************************************************************/
 void
-Keywords::assign(const Ebuild& e)
+Keywords::assign(const Ebuild& e) throw (Exception)
 {
     _ebuild = e;
     this->fill();
@@ -131,7 +133,7 @@ Keywords::assign(const Ebuild& e)
 }
 /****************************************************************************/
 void
-Keywords::fill()
+Keywords::fill() throw (Exception)
 {
     BacktraceContext c("portage::Keywords::fill()");
 
@@ -144,7 +146,7 @@ Keywords::fill()
 }
 /****************************************************************************/
 void
-Keywords::format()
+Keywords::format() throw()
 {
     static util::ColorMap cmap;
 
@@ -191,7 +193,7 @@ struct NewPair
     }
 };
 
-KeywordsMap::KeywordsMap(const std::string& pkgdir)
+KeywordsMap::KeywordsMap(const std::string& pkgdir) throw (Exception)
 {
     BacktraceContext c("portage::KeywordsMap::KeywordsMap("+pkgdir+")");
 
@@ -204,7 +206,7 @@ KeywordsMap::KeywordsMap(const std::string& pkgdir)
         IsEbuild(), NewPair());;
 }
 /****************************************************************************/
-KeywordsMap::~KeywordsMap()
+KeywordsMap::~KeywordsMap() throw()
 {
 }
 /****************************************************************************/

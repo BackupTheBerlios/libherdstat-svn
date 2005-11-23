@@ -44,18 +44,18 @@ namespace util {
     {
 	public:
             /// Default constructor.
-	    Progress();
+	    Progress() throw();
 
             /// Destructor.
-            ~Progress();
+            ~Progress() throw();
 
             /** Start progress.
              * @param m Number of total items to process.
              */
-	    void start(unsigned m);
+	    void start(unsigned m) throw();
 
             /// Increment progress.
-	    inline void operator++ ();
+	    inline void operator++() throw();
 
 	private:
             /// Current progress.
@@ -67,7 +67,7 @@ namespace util {
     };
 
     inline void
-    Progress::operator++ ()
+    Progress::operator++() throw()
     {
         if (not this->_started)
             return;

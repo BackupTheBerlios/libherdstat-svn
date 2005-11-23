@@ -50,14 +50,14 @@ namespace util {
      * @returns Resulting std::string object.
      */
 
-    std::string tidy_whitespace(const std::string &s);
+    std::string tidy_whitespace(const std::string &s) throw();
 
     //@{
     /// sprintf() wrappers
-    std::string sprintf(const char *, ...);
-    std::string sprintf(const char *, va_list);
-    std::string sprintf(const std::string&, ...);
-    std::string sprintf(const std::string&, va_list);
+    std::string sprintf(const char *, ...) throw();
+    std::string sprintf(const char *, va_list) throw();
+    std::string sprintf(const std::string&, ...) throw();
+    std::string sprintf(const std::string&, va_list) throw();
     //@}
 
     /**
@@ -71,7 +71,7 @@ namespace util {
 
     std::vector<std::string> split(const std::string& s,
                                    const char d = ' ',
-                                   bool append_empty = false);
+                                   bool append_empty = false) throw();
 
     /**
      * Convert vector of std::strings to one std::string.
@@ -80,7 +80,8 @@ namespace util {
      * @returns Resulting string object.
      */
 
-    std::string join(const std::vector<std::string>& v, const char d = ' ');
+    std::string join(const std::vector<std::string>& v,
+                     const char d = ' ') throw();
 
     /**
      * Replace any unfriendly characters in the given std::string to their
@@ -89,7 +90,7 @@ namespace util {
      * @returns Resulting string object.
      */
 
-    std::string htmlify(const std::string& s);
+    std::string htmlify(const std::string& s) throw();
 
     /**
      * Replace any HTML'ized characters in the given std::string to their
@@ -98,7 +99,7 @@ namespace util {
      * @returns Resulting string object.
      */
 
-    std::string unhtmlify(const std::string& s);
+    std::string unhtmlify(const std::string& s) throw();
 
     /**
      * Return a copy of the given string with the ASCII color sequences removed.
@@ -106,7 +107,7 @@ namespace util {
      * @returns Resulting string object.
      */
 
-    std::string strip_colors(const std::string& s);
+    std::string strip_colors(const std::string& s) throw();
 
     /************************************************************************/
     /**
@@ -116,7 +117,7 @@ namespace util {
      */
 
     inline std::string
-    lowercase(const std::string& s)
+    lowercase(const std::string& s) throw()
     {
         std::string result;
         std::transform(s.begin(), s.end(),
@@ -130,7 +131,7 @@ namespace util {
      */
 
     inline void
-    lowercase_inplace(std::string& s)
+    lowercase_inplace(std::string& s) throw()
     {
         std::transform(s.begin(), s.end(), s.begin(), ::tolower);
     }
@@ -182,7 +183,7 @@ namespace util {
      */
     template <typename T>
     T
-    destringify(const std::string& s)
+    destringify(const std::string& s) throw (BadCast)
     {
         BacktraceContext c("util::destringify("+s+")");
 
@@ -200,7 +201,7 @@ namespace util {
     /// destringify specialization for std::vector<std::string>.
     template <>
     inline std::vector<std::string>
-    destringify<std::vector<std::string> >(const std::string& s)
+    destringify<std::vector<std::string> >(const std::string& s) throw (BadCast)
     {
         return split(s);
     }
@@ -208,7 +209,7 @@ namespace util {
     /// destringify specialization for int
     template <>
     inline int
-    destringify<int>(const std::string& s)
+    destringify<int>(const std::string& s) throw (BadCast)
     {
         BacktraceContext c("util::destringify<int>("+s+")");
 
@@ -222,7 +223,7 @@ namespace util {
     /// destringify specialization for long
     template <>
     inline long
-    destringify<long>(const std::string& s)
+    destringify<long>(const std::string& s) throw (BadCast)
     {
         BacktraceContext c("util::destringify<long>("+s+")");
 
@@ -236,7 +237,7 @@ namespace util {
     /// destringify specialization for unsigned long
     template <>
     inline unsigned long
-    destringify<unsigned long>(const std::string& s)
+    destringify<unsigned long>(const std::string& s) throw (BadCast)
     {
         BacktraceContext c("util::destringify<unsigned long>("+s+")");
 
@@ -250,7 +251,7 @@ namespace util {
     /// destringify specialization for double
     template <>
     inline double
-    destringify<double>(const std::string& s)
+    destringify<double>(const std::string& s) throw (BadCast)
     {
         BacktraceContext c("util::destringify<double>("+s+")");
 
@@ -264,7 +265,7 @@ namespace util {
     /// destringify specialization for float
     template <>
     inline float
-    destringify<float>(const std::string& s)
+    destringify<float>(const std::string& s) throw (BadCast)
     {
         BacktraceContext c("util::destringify<float>("+s+")");
 
@@ -278,7 +279,7 @@ namespace util {
     /// destringify specialization for bool
     template <>
     inline bool
-    destringify<bool>(const std::string& s)
+    destringify<bool>(const std::string& s) throw (BadCast)
     {
         BacktraceContext c("util::destringify<bool>("+s+")");
 

@@ -34,6 +34,7 @@
 
 #include <string>
 #include <herdstat/util/container_base.hh>
+#include <herdstat/portage/exceptions.hh>
 #include <herdstat/portage/ebuild.hh>
 #include <herdstat/portage/archs.hh>
 #include <herdstat/portage/version.hh>
@@ -50,8 +51,10 @@ namespace portage {
         public:
             /** Constructor.
              * @param kw keyword string.
+             * @exception InvalidKeywordMask, InvalidArch
              */
-            Keyword(const std::string& kw);
+            Keyword(const std::string& kw)
+                throw (InvalidKeywordMask, InvalidArch);
 
             /// Get mask character (or nul byte if empty).
             char mask() const { return _mask; }
@@ -65,35 +68,35 @@ namespace portage {
              * @param that const reference to Keyword
              * @returns Boolean value.
              */
-            inline bool operator< (const Keyword& that) const;
+            inline bool operator< (const Keyword& that) const throw();
 
             /** Is this Keyword greater than that Keyword?
              * @param that const reference to Keyword
              * @returns Boolean value
              */
-            bool operator> (const Keyword& that) const
+            bool operator> (const Keyword& that) const throw()
             { return (that < *this); }
 
             /** Is this Keyword equal to that Keyword?
              * @param that const reference to Keyword
              * @returns Boolean value
              */
-            bool operator==(const Keyword& that) const
+            bool operator==(const Keyword& that) const throw()
             { return ((_mask == that._mask) and (_arch == that._arch)); }
 
             /** Is this Keyword not equal to that Keyword?
              * @param that const reference to Keyword
              * @returns Boolean value
              */
-            bool operator!=(const Keyword& that) const
+            bool operator!=(const Keyword& that) const throw()
             { return (*this != that); }
 
             /// Is this a masked keyword?
-            bool is_masked() const { return _mask == '-'; }
+            bool is_masked() const throw() { return _mask == '-'; }
             /// Is this a testing keyword?
-            bool is_testing() const { return _mask == '~'; }
+            bool is_testing() const throw() { return _mask == '~'; }
             /// Is this a stable keyword?
-            bool is_stable() const { return _mask.empty(); }
+            bool is_stable() const throw() { return _mask.empty(); }
 
         private:
             /**
@@ -104,18 +107,13 @@ namespace portage {
             {
                 public:
                     /// Default constructor.
-                    maskc();
-
-                    /** Constructor.
-                     * @param c mask character
-                     */
-                    maskc(const char c);
+                    maskc() throw();
 
                     /** Assignment operator.
                      * @param c mask character.
+                     * @exception InvalidKeywordMask
                      */
-                    maskc& operator= (const char c)
-                    { _c = c; return *this; }
+                    maskc& operator= (const char c) throw (InvalidKeywordMask);
                     
                     /// Implicit conversion to char
                     operator char() const { return _c; }
@@ -127,38 +125,38 @@ namespace portage {
                      * @param that const reference to maskc
                      * @returns Boolean value
                      */
-                    bool operator< (const maskc& that) const;
+                    bool operator< (const maskc& that) const throw();
 
                     /** Is this maskc greater than that maskc?
                      * @param that const reference to maskc
                      * @returns Boolean value
                      */
-                    bool operator> (const maskc& that) const
+                    bool operator> (const maskc& that) const throw()
                     { return (that < *this); }
 
                     /** Is this maskc equal to that maskc?
                      * @param const reference to maskc
                      * @returns Boolean value
                      */
-                    bool operator==(const maskc& that) const
+                    bool operator==(const maskc& that) const throw()
                     { return (_c == that._c); }
                     
                     /** Is this maskc not equal to that maskc?
                      * @param const reference to maskc
                      * @returns Boolean value
                      */
-                    bool operator!=(const maskc& that) const
+                    bool operator!=(const maskc& that) const throw()
                     { return (*this != that); }
 
                     ///@{
                     /// Compare this with a character.
-                    bool operator< (const char c) const
+                    bool operator< (const char c) const throw()
                     { return (_c < c); }
-                    bool operator> (const char c) const
+                    bool operator> (const char c) const throw()
                     { return (_c > c); }
-                    bool operator==(const char c) const
+                    bool operator==(const char c) const throw()
                     { return (_c == c); }
-                    bool operator!=(const char c) const
+                    bool operator!=(const char c) const throw()
                     { return (_c != c); }
                     ///@}
                 
@@ -167,8 +165,10 @@ namespace portage {
             };
 
 
-            /// parse keyword.
-            void parse(const std::string& kw);
+            /** Parse keyword.
+             * @exception InvalidKeywordMask
+             */
+            void parse(const std::string& kw) throw (InvalidKeywordMask);
 
             std::string _arch;
             maskc _mask;
@@ -177,7 +177,7 @@ namespace portage {
     };
 
     inline bool
-    Keyword::operator< (const Keyword& that) const
+    Keyword::operator< (const Keyword& that) const throw()
     {
         return ((_mask == that._mask) ?
                 (_arch < that._arch) : (_mask < that._mask));
@@ -194,58 +194,62 @@ namespace portage {
     {
         public:
             /// Default constructor.
-            Keywords();
+            Keywords() throw();
 
             /** Constructor.
              * @param path Path to ebuild.
+             * @exception Exception
              */
-            Keywords(const std::string& path);
+            Keywords(const std::string& path) throw (Exception);
 
             /** Constructor.
-             * @param e Pre-existing ebuild instance
+             * @param e Pre-existing ebuild instance.
+             * @exception Exception
              */
-            Keywords(const Ebuild& e);
+            Keywords(const Ebuild& e) throw (Exception);
 
             /// Destructor.
-            virtual ~Keywords();
+            virtual ~Keywords() throw();
 
             /** Assign new ebuild path.
              * @param path Path to ebuild
+             * @exception Exception
              */
-            void assign(const std::string& path);
+            void assign(const std::string& path) throw (Exception);
 
             /** Assign new ebuild.
              * @param e Pre-existing ebuild instance
+             * @exception Exception
              */
-            void assign(const Ebuild& e);
+            void assign(const Ebuild& e) throw (Exception);
 
             /// Get formatted keywords string.
-            inline const std::string& str() const;
+            inline const std::string& str() const throw();
 
             /// Get path to ebuild associated with these keywords.
-            inline const std::string& path() const;
+            inline const std::string& path() const throw();
 
             /// Are all keywords masked?
-            inline bool all_masked() const;
+            inline bool all_masked() const throw();
             /// Are all keywords testing?
-            inline bool all_testing() const;
+            inline bool all_testing() const throw();
             /// Are all keywords stable?
-            inline bool all_stable() const;
+            inline bool all_stable() const throw();
 
         private:
-            void fill();
+            void fill() throw (Exception);
             /// prepare keywords string
-            void format();
+            void format() throw();
 
             Ebuild _ebuild;
             std::string _str;
     };
 
-    inline const std::string& Keywords::str() const { return _str; }
-    inline const std::string& Keywords::path() const { return _ebuild.path(); }
+    inline const std::string& Keywords::str() const throw() { return _str; }
+    inline const std::string& Keywords::path() const throw() { return _ebuild.path(); }
 
     inline bool
-    Keywords::all_masked() const
+    Keywords::all_masked() const throw()
     {
         const difference_type size(this->size());
         return (std::count_if(this->begin(), this->end(),
@@ -253,7 +257,7 @@ namespace portage {
     }
 
     inline bool
-    Keywords::all_testing() const
+    Keywords::all_testing() const throw()
     {
         const difference_type size(this->size());
         return (std::count_if(this->begin(), this->end(),
@@ -261,7 +265,7 @@ namespace portage {
     }
 
     inline bool
-    Keywords::all_stable() const
+    Keywords::all_stable() const throw()
     {
         const difference_type size(this->size());
         return (std::count_if(this->begin(), this->end(),
@@ -279,11 +283,12 @@ namespace portage {
             /** Constructor.  Instantiate/insert a new VersionString/Keywords
              * object for each ebuild in the given package directory.
              * @param pkgdir Package directory.
+             * @exception Exception
              */
-            KeywordsMap(const std::string& pkgdir);
+            KeywordsMap(const std::string& pkgdir) throw (Exception);
 
             /// Destructor.
-            virtual ~KeywordsMap();
+            virtual ~KeywordsMap() throw();
 
             inline const value_type& front() const;
             inline const value_type& back() const;

@@ -29,11 +29,11 @@
 namespace herdstat {
 namespace portage {
 /****************************************************************************/
-PackageWhich::PackageWhich()
+PackageWhich::PackageWhich() throw()
 {
 }
 /****************************************************************************/
-PackageWhich::~PackageWhich()
+PackageWhich::~PackageWhich() throw()
 {
 }
 /****************************************************************************/

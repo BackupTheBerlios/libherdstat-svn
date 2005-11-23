@@ -48,35 +48,45 @@ namespace portage {
             /** Default constructor.
              * @param validate Bail if an invalid license is found?
              */
-            License(bool validate = false);
+            License(bool validate = false) throw();
 
             /** Constructor.
              * @param str License string as found in an ebuild.
              * @param validate Bail if an invalid license is found?
+             * @exception QAException
              */
-            License(const std::string& str, bool validate = false);
+            License(const std::string& str, bool validate = false)
+                throw (QAException);
+
+            /// Destructor.
+            ~License() throw();
 
             /** Assign new license string.
              * @param str License string as found in an ebuild.
              * @param validate Bail if an invalid license is found?
+             * @exception QAException
              */
-            inline void assign(const std::string& str, bool validate = false);
+            inline void assign(const std::string& str,
+                               bool validate = false) throw (QAException);
 
             /// Get license string.
-            inline const std::string& str() const;
+            inline const std::string& str() const throw();
 
             /// Implicit conversion to std::string.
-            inline operator const std::string&() const;
+            inline operator const std::string&() const throw();
 
         private:
-            void parse();
+            /** Parse license string.
+             * @exception QAException
+             */
+            void parse() throw (QAException);
 
             bool _validate;
             std::string _license;
     };
 
     inline void
-    License::assign(const std::string& str, bool validate)
+    License::assign(const std::string& str, bool validate) throw (QAException)
     {
         _validate = validate;
         _license = str;
@@ -84,13 +94,13 @@ namespace portage {
     }
 
     inline const std::string&
-    License::str() const
+    License::str() const throw()
     {
         return _license;
     }
 
     inline License::operator
-    const std::string&() const
+    const std::string&() const throw()
     {
         return _license;
     }

@@ -66,7 +66,7 @@ namespace portage {
                 overlays = std::vector<std::string>(), bool fill = true);
 
             /// Destructor.
-            ~PackageList();
+            ~PackageList() throw();
 
             /// Fill container.
             void fill();

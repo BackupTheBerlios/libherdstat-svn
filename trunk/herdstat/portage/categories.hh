@@ -53,8 +53,13 @@ namespace portage {
             /** Constructor.
              * @param portdir PORTDIR to look in.
              * @param validate Bail if an invalid category is found?
+             * @exception FileException
              */
-            Categories(const std::string& portdir, bool validate = false);
+            Categories(const std::string& portdir,
+                       bool validate = false) throw (FileException);
+
+            /// Destructor.
+            virtual ~Categories() throw();
 
         protected:
             virtual void do_read();

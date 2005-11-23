@@ -48,7 +48,7 @@ namespace util {
     {
         public:
             /// Default constructor.
-            Glob();
+            Glob() throw();
 
             /** Constructor.
              * @param pattern glob pattern string.
@@ -57,7 +57,7 @@ namespace util {
             Glob(const std::string& pattern) throw (ErrnoException);
 
             /// Destructor.
-            ~Glob();
+            ~Glob() throw();
 
             /// Clear glob results.
             void clear_results() { _results.clear(); }

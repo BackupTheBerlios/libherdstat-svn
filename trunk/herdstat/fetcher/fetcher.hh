@@ -33,6 +33,7 @@
  */
 
 #include <herdstat/noncopyable.hh>
+#include <herdstat/exceptions.hh>
 #include <herdstat/fetcher/fetcherimp.hh>
 
 namespace herdstat {
@@ -48,7 +49,7 @@ namespace herdstat {
             /** Default constructor.
              * @exception std::bad_alloc
              */
-            Fetcher() throw(std::bad_alloc);
+            Fetcher() throw (std::bad_alloc);
 
             /** Constructor.
              * @param opts Reference to FetcherOptions object.

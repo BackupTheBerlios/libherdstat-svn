@@ -113,6 +113,20 @@ namespace util {
     };
 
     /**
+     * @struct New functional.hh herdstat/util/functional.hh
+     * @brief Function object template that instaniates an object of type T,
+     * passing an object of type U to its constructor.  U defaults to
+     * std::string.
+     */
+
+    template <typename T, typename U = std::string>
+    struct New : std::unary_function<T, U>
+    {
+        T operator()(const U& u) const
+        { return T(u); }
+    };
+
+    /**
      * @struct Appender functional.hh herdstat/util/functional.hh
      * @brief Function object that calls T::append(const U&).
      * U defaults to T::value_type.
@@ -157,6 +171,28 @@ namespace util {
     {
         bool operator()(const std::string& path) const
         { return is_file(path); }
+    };
+
+    /**
+     * @struct Basename functional.hh herdstat/util/functional.hh
+     * @brief Function object that returns the basename of the given path.
+     */
+
+    struct Basename : std::unary_function<std::string, std::string>
+    {
+        std::string operator()(const std::string& path) const
+        { return util::basename(path); }
+    };
+
+    /**
+     * @struct Dirname functional.hh herdstat/util/functional.hh
+     * @brief Function object that returns the dirname of the given path.
+     */
+
+    struct Dirname : std::unary_function<std::string, std::string>
+    {
+        std::string operator()(const std::string& path) const
+        { return util::dirname(path); }
     };
 
     /**

@@ -38,19 +38,19 @@
 namespace herdstat {
 namespace util {
 /*****************************************************************************/
-Stat::Stat()
+Stat::Stat() throw()
     : _path(), _type(REGULAR), _exists(false), _opened(false)
 {
 }
 /*****************************************************************************/
-Stat::Stat(const std::string &p, bool opened)
+Stat::Stat(const std::string &p, bool opened) throw()
     : _path(p), _type(REGULAR), _exists(false), _opened(opened)
 {
     this->operator()();
 }
 /*****************************************************************************/
 void
-Stat::assign(const std::string &p, bool opened)
+Stat::assign(const std::string &p, bool opened) throw()
 {
     this->_opened = opened;
     this->_path.assign(p);
@@ -58,7 +58,7 @@ Stat::assign(const std::string &p, bool opened)
 }
 /*****************************************************************************/
 bool
-Stat::operator() ()
+Stat::operator()(void) throw()
 {
     BacktraceContext s("herdstat::util::Stat::operator()("+_path+")");
 
@@ -89,22 +89,22 @@ Stat::operator() ()
     return _exists;
 }
 /*****************************************************************************/
-BaseFileObject::BaseFileObject()
+BaseFileObject::BaseFileObject() throw()
     : _stat(), _opened(false)
 {
 }
 /*****************************************************************************/
-BaseFileObject::BaseFileObject(const std::string &path)
+BaseFileObject::BaseFileObject(const std::string &path) throw()
     : _stat(path), _opened(false)
 {
 }
 /*****************************************************************************/
-BaseFileObject::~BaseFileObject()
+BaseFileObject::~BaseFileObject() throw()
 {
 }
 /*****************************************************************************/
 void
-BaseFileObject::close()
+BaseFileObject::close() throw()
 {
     BacktraceContext c("herdstat::util::BaseFileObject::close("+this->path()+")");
 
@@ -137,23 +137,26 @@ BaseFileObject::read(const std::string& path)
     this->do_read();
 }
 /*****************************************************************************/
-BaseFile::BaseFile() : _stream(NULL), _mode(DEFAULT_MODE)
+BaseFile::BaseFile() throw()
+    : _stream(NULL), _mode(DEFAULT_MODE)
 {
 }
 /*****************************************************************************/
-BaseFile::BaseFile(const BaseFile& that) : _stream(NULL), _mode(DEFAULT_MODE)
+BaseFile::BaseFile(const BaseFile& that) throw (FileException)
+    : _stream(NULL), _mode(DEFAULT_MODE)
 {
     *this = that;
 }
 /*****************************************************************************/
 BaseFile::BaseFile(const std::string &path, std::ios_base::openmode mode)
+    throw (FileException)
     : BaseFileObject(path), _stream(NULL), _mode(mode)
 {
     this->open(this->path().c_str(), mode);
 }
 /*****************************************************************************/
 BaseFile&
-BaseFile::operator=(const BaseFile& that)
+BaseFile::operator=(const BaseFile& that) throw (FileException)
 {
     BacktraceContext c("herdstat::util::BaseFile::operator=()");
 
@@ -162,15 +165,12 @@ BaseFile::operator=(const BaseFile& that)
     set_mode(that.mode());
 
     if (that._stream and that._stream->is_open())
-    {
-        const_cast<BaseFile&>(that).close();
         this->open(that.path().c_str(), mode());
-    }
 
     return *this;
 }
 /*****************************************************************************/
-BaseFile::~BaseFile()
+BaseFile::~BaseFile() throw()
 {
     if (this->is_open())
         this->close();
@@ -178,6 +178,7 @@ BaseFile::~BaseFile()
 /*****************************************************************************/
 void
 BaseFile::open(const char *n, std::ios_base::openmode mode)
+    throw (FileException)
 {
     if (this->path() != n)
         this->stat().assign(n);
@@ -206,20 +207,20 @@ BaseFile::open(const char *n, std::ios_base::openmode mode)
 }
 /*****************************************************************************/
 void
-BaseFile::open()
+BaseFile::open() throw (FileException)
 {
     this->open(this->path().c_str(), DEFAULT_MODE);
 }
 /*****************************************************************************/
 void
-BaseFile::open(std::ios_base::openmode mode)
+BaseFile::open(std::ios_base::openmode mode) throw (FileException)
 {
     set_mode(mode);
     this->open(this->path().c_str(), mode);
 }
 /*****************************************************************************/
 void
-BaseFile::do_close()
+BaseFile::do_close() throw()
 {
     if (_stream)
     {
@@ -229,12 +230,13 @@ BaseFile::do_close()
 }
 /*****************************************************************************/
 File::File(const std::string &path, std::ios_base::openmode mode)
+    throw (FileException)
     : BaseFile(path, mode)
 {
     this->read();
 }
 /*****************************************************************************/
-File::~File()
+File::~File() throw()
 {
 }
 /*****************************************************************************/
@@ -281,38 +283,54 @@ File::write()
     this->clear();
 }
 /*****************************************************************************/
-Directory::Directory() : _dirp(NULL)
+Directory::Directory(bool recurse) throw()
+    : _dirp(NULL), _recurse(recurse)
 {
 }
 /*****************************************************************************/
-Directory::Directory(const std::string &path)
-    : BaseFileObject(path), _dirp(NULL)
+Directory::Directory(const std::string &path, bool recurse)
+    throw (FileException)
+    : BaseFileObject(path), _dirp(NULL), _recurse(recurse)
 {
     this->open();
     this->read();
 }
 /*****************************************************************************/
-Directory::~Directory()
+Directory::Directory(const Directory& that)
+    : BaseFileObject(), _dirp(NULL), _recurse(false)
+{
+    *this = that;
+}
+/*****************************************************************************/
+Directory::~Directory() throw()
 {
     if (this->is_open())
         this->close();
 }
 /*****************************************************************************/
-void
-Directory::do_close()
+Directory&
+Directory::operator= (const Directory& that)
 {
-    BacktraceContext c("herdstat::util::Directory::do_close("+this->path()+")");
+    BaseFileObject::operator=(that);
+    const_cast<bool&>(_recurse) = that._recurse;
+    container() = that.container();
 
-#ifdef CLOSEDIR_VOID
-    closedir(_dirp);
-#else /* CLOSEDIR_VOID */
-    if (closedir(_dirp) != 0)
-        throw ErrnoException("closedir: " + this->path());
-#endif /* CLOSEDIR_VOID */
+    if (that.is_open())
+        this->open();
+
+    return *this;
 }
 /*****************************************************************************/
 void
-Directory::open()
+Directory::do_close() throw()
+{
+    BacktraceContext c("herdstat::util::Directory::do_close("+this->path()+")");
+    closedir(_dirp);
+    _dirp = NULL;
+}
+/*****************************************************************************/
+void
+Directory::open() throw (FileException)
 {
     BacktraceContext c("herdstat::util::Directory::open("+this->path()+")");
 
@@ -334,7 +352,7 @@ Directory::do_read()
     BacktraceContext c("herdstat::util::Directory::do_read("+this->path()+")");
 
     struct dirent *d = NULL;
-    while ((d = readdir(this->_dirp)))
+    while ((d = readdir(_dirp)))
     {
         /* skip . and .. */
         if ((std::strcmp(d->d_name, ".") == 0) or
@@ -342,25 +360,32 @@ Directory::do_read()
             continue;
 
         this->push_back(this->path() + "/" + d->d_name);
+
+        /* recurse into sub-directories */
+        if (_recurse and util::is_dir(this->back()))
+        {
+            Directory dir(this->back());
+            this->insert(this->end(), dir.begin(), dir.end());
+        }
     }
 }
 /*****************************************************************************/
 Directory::iterator
-Directory::find(const std::string &base)
+Directory::find(const std::string &base) throw()
 {
     const std::string path(this->path()+"/"+base);
     return std::find(this->begin(), this->end(), path);
 }
 /*****************************************************************************/
 Directory::const_iterator
-Directory::find(const std::string &base) const
+Directory::find(const std::string &base) const throw()
 {
     const std::string path(this->path()+"/"+base);
     return std::find(this->begin(), this->end(), path);
 }
 /*****************************************************************************/
 Directory::iterator
-Directory::find(const Regex& regex)
+Directory::find(const Regex& regex) throw()
 {
     return std::find_if(this->begin(), this->end(),
         std::bind1st(regexMatch(), regex));
@@ -368,7 +393,7 @@ Directory::find(const Regex& regex)
 
 /*****************************************************************************/
 Directory::const_iterator
-Directory::find(const Regex& regex) const
+Directory::find(const Regex& regex) const throw()
 {
     return std::find_if(this->begin(), this->end(),
         std::bind1st(regexMatch(), regex));
@@ -377,7 +402,7 @@ Directory::find(const Regex& regex) const
  * general purpose file-related functions                                    *
  *****************************************************************************/
 std::string
-basename(const std::string& path)
+basename(const std::string& path) throw()
 {
     std::string result(path);
     std::string::size_type pos;
@@ -393,7 +418,7 @@ basename(const std::string& path)
 }
 /*****************************************************************************/
 std::string
-dirname(const std::string& path)
+dirname(const std::string& path) throw()
 {
     std::string result(path);
     std::string::size_type pos;
@@ -411,7 +436,7 @@ dirname(const std::string& path)
 }
 /*****************************************************************************/
 const char *
-chop_fileext(const std::string& path, unsigned short depth)
+chop_fileext(const std::string& path, unsigned short depth) throw()
 {
     BacktraceContext c("herdstat::util::chop_fileext("+path+")");
 
@@ -428,7 +453,7 @@ chop_fileext(const std::string& path, unsigned short depth)
 }
 /*****************************************************************************/
 void
-copy_file(const std::string& from, const std::string& to)
+copy_file(const std::string& from, const std::string& to) throw (FileException)
 {
     BacktraceContext c("herdstat::util::copy_file("+from+", "+to+")");
 
@@ -451,7 +476,7 @@ copy_file(const std::string& from, const std::string& to)
 }
 /*****************************************************************************/
 void
-move_file(const std::string& from, const std::string& to)
+move_file(const std::string& from, const std::string& to) throw (FileException)
 {
     BacktraceContext c("herdstat::util::move_file("+from+", "+to+")");
     copy_file(from, to);

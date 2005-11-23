@@ -39,6 +39,7 @@ namespace herdstat {
 namespace portage {
 /****************************************************************************/
 Categories::Categories(const std::string& portdir, bool validate)
+    throw (FileException)
     : util::BaseFile(), _portdir(portdir),
       _validate(validate)
 {
@@ -48,6 +49,10 @@ Categories::Categories(const std::string& portdir, bool validate)
 
     this->open((_portdir+CATEGORIES).c_str(), std::ios::in);
     this->read();
+}
+/****************************************************************************/
+Categories::~Categories() throw()
+{
 }
 /****************************************************************************/
 // for QA - bails if given category does not exist

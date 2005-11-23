@@ -50,10 +50,10 @@ namespace portage {
             /** Constructor.
              * @param pkglist const reference to a PackageList object.
              */
-            PackageFinder(const PackageList& pkglist);
+            PackageFinder(const PackageList& pkglist) throw();
 
             /// Destructor.
-            ~PackageFinder();
+            ~PackageFinder() throw();
 
             /// Clear search results.
             void clear_results() { _results.clear(); }

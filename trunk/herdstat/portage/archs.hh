@@ -49,8 +49,12 @@ namespace portage {
         public:
             /** Constructor.
              * @param portdir PORTDIR
+             * @exception FileException
              */
-            Archs(const std::string& portdir);
+            Archs(const std::string& portdir) throw (FileException);
+
+            /// Destructor.
+            virtual ~Archs() throw();
 
         protected:
             /// Read arch.list.

@@ -34,19 +34,24 @@
 namespace herdstat {
 namespace portage {
 /****************************************************************************/
-License::License(bool validate)
+License::License(bool validate) throw()
     : _validate(validate), _license()
 {
 }
 /****************************************************************************/
 License::License(const std::string& str, bool validate)
+    throw (QAException)
     : _validate(validate), _license(str)
 {
     this->parse();
 }
 /****************************************************************************/
+License::~License() throw()
+{
+}
+/****************************************************************************/
 void
-License::parse()
+License::parse() throw (QAException)
 {
     BacktraceContext c("portage::License::parse("+_license+")");
 

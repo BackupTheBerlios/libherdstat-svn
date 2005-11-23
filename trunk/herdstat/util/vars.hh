@@ -50,15 +50,16 @@ namespace util {
     {
         public:
             /// Default constructor.
-            Vars();
+            Vars() throw();
 
             /** Constructor.
              * @param path Path.
+             * @exception FileException
              */
-            Vars(const std::string &path);
+            Vars(const std::string &path) throw (FileException);
 
             /// Destructor.
-            virtual ~Vars();
+            virtual ~Vars() throw();
 
             /** Dump keys/values to specified stream.
              * @param s Output stream.

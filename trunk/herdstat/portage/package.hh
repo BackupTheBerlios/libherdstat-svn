@@ -47,6 +47,8 @@
 namespace herdstat {
 namespace portage {
 
+    class PackageDirectory;
+
     /**
      * @class Package package.hh herdstat/portage/package.hh
      * @brief Represents a "package" that exists in either PORTDIR or an
@@ -109,6 +111,9 @@ namespace portage {
             /// Get a KeywordsMap object for each ebuild of this package.
             inline const KeywordsMap& keywords() const;
 
+            /// Get a PackageDirectory object for this package.
+            const PackageDirectory& pkgdir() const;
+
             ///@{
             /** Compare that Package to this Package.
              * Compares the full category/package string and portdir.
@@ -146,6 +151,7 @@ namespace portage {
             std::string _full;
             std::string _path;
             mutable KeywordsMap *_kwmap;
+            mutable PackageDirectory *_pkgdir;
     };
 
     inline Package::operator const std::string&() const { return _full; }
@@ -156,7 +162,8 @@ namespace portage {
     inline const std::string& Package::full() const { return _full; }
     inline void Package::set_portdir(const std::string& dir) { _dir.assign(dir); }
     inline void Package::set_path(const std::string& path) { _path.assign(path); }
-    inline const std::string& Package::path() const { return _path; }
+    inline const std::string& Package::path() const
+    { assert(not _path.empty()); return _path; }
 
     inline bool Package::in_overlay() const
     {

@@ -4,6 +4,8 @@ SUBDIRS = src
 
 export tests := \
 	string \
+	file \
+	vars \
 	container_base \
 	glob \
 	regex \
@@ -16,6 +18,7 @@ export tests := \
 	package_list \
 	package_finder \
 	package_which \
+	package_directory \
 	herds.xml \
 	devaway.xml \
 	userinfo.xml \

@@ -30,12 +30,17 @@
 namespace herdstat {
 namespace util {
 /****************************************************************************/
-Timer::Timer() : _begin(), _end(), _elapsed(0), _running(false)
+Timer::Timer() throw()
+    : _begin(), _end(), _elapsed(0), _running(false)
+{
+}
+/****************************************************************************/
+Timer::~Timer() throw()
 {
 }
 /****************************************************************************/
 void
-Timer::start()
+Timer::start() throw()
 {
     if (this->_running)
         return;
@@ -46,7 +51,7 @@ Timer::start()
 }
 /****************************************************************************/
 void
-Timer::stop()
+Timer::stop() throw()
 {
     if (not this->_running)
         return;

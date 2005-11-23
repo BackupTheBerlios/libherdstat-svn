@@ -51,6 +51,7 @@ class TestHandler
     class x : public TestHandler \
     { \
         public: \
+                virtual ~x() { } \
                 virtual void operator()(const opts_type&) const; \
     };
 

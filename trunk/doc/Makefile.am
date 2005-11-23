@@ -1,6 +1,6 @@
 CLEANFILES = $(VERSION)/html/* $(VERSION)/man/*/*
 MAINTAINERCLEANFILES = Makefile.in Doxyfile *~
-EXTRA_DIST = Doxyfile.in
+EXTRA_DIST = Doxyfile.in header.html footer.html doxygen.css
 
 doxygen: Doxyfile
 	@rm -fr $(VERSION)

@@ -1,5 +1,5 @@
 /*
- * libherdstat -- tests/src/ebuild-test.hh
+ * libherdstat -- tests/src/vars-test.hh
  * $Id$
  * Copyright (c) 2005 Aaron Walker <ka0ttic@gentoo.org>
  *
@@ -20,39 +20,43 @@
  * Place, Suite 325, Boston, MA  02111-1257  USA
  */
 
-#ifndef _HAVE_SRC_EBUILD_TEST_HH
-#define _HAVE_SRC_EBUILD_TEST_HH 1
+#ifndef _HAVE_SRC_VARS_TEST_HH
+#define _HAVE_SRC_VARS_TEST_HH 1
 
 #ifdef HAVE_CONFIG_H
 # include "config.h"
 #endif
 
-#include <herdstat/portage/ebuild.hh>
-#include "vars-test.hh" /* for ShowVarAndVal */
+#include <herdstat/util/vars.hh>
 #include "test_handler.hh"
 
-DECLARE_TEST_HANDLER(EbuildTest)
+DECLARE_TEST_HANDLER(VarsTest)
 
-struct ShowEbuild
-    : std::binary_function<herdstat::portage::Ebuild, std::string, void>
+struct ShowVarAndVal
 {
-    void operator()(const herdstat::portage::Ebuild& ebuild,
-                    const std::string& portdir) const
+    void operator()(const std::pair<const std::string, std::string>& v) const
     {
-        std::cout << "Showing ebuild variables for '"
-            << ebuild.path().substr(portdir.length()+1) << "'." << std::endl;
-        std::for_each(ebuild.begin(), ebuild.end(), ShowVarAndVal());
+        if (v.first != "HOME")
+            std::cout << "  Variable '" << v.first << "' has a value of '"
+                << v.second << "'." << std::endl;
     }
 };
 
 void
-EbuildTest::operator()(const opts_type& opts) const
+VarsTest::operator()(const opts_type& opts) const
 {
     assert(not opts.empty());
-    const herdstat::portage::Ebuild ebuild(opts.front());
-    std::for_each(ebuild.begin(), ebuild.end(), ShowVarAndVal());
+    const std::string& path(opts.front());
+    assert(herdstat::util::is_file(path));
+
+    const std::string& portdir(herdstat::portage::GlobalConfig().portdir());
+
+    std::cout << "Testing util::Vars(" << path.substr(portdir.length()+1)
+        << "):" << std::endl;
+    herdstat::util::Vars vars(path);
+    std::for_each(vars.begin(), vars.end(), ShowVarAndVal());
 }
 
-#endif /* _HAVE_SRC_EBUILD_TEST_HH */
+#endif /* _HAVE_SRC_VARS_TEST_HH */
 
 /* vim: set tw=80 sw=4 fdm=marker et : */
