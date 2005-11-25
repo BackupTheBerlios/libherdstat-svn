@@ -37,15 +37,69 @@
  *
  * @section overview Overview
  *
- * libherdstat is a C++ library offering interfaces for portage-related
- * things such as Gentoo-specific XML files, package searching, and
- * version sorting.  Many general-purpose utility classes/functions are
- * also offered.
+ * libherdstat is a C++ library that provides interfaces for things such as:
+ * - Gentoo-specific XML files such as herds.xml (herdstat::portage::HerdsXML),
+ *   userinfo.xml (herdstat::portage::UserinfoXML),
+ *   devaway.xml (herdstat::portage::DevawayXML), and metadata.xml
+ *   (herdstat::portage::MetadataXML).
+ * - Portage configuration (herdstat::portage::Config).
+ * - Portage package searching (herdstat::portage::PackageFinder).
+ * - Developer/Herd containers (herdstat::portage::Developer,
+ *   herdstat::portage::Developers, herdstat::portage::Herd,
+ *   herdstat::portage::Herds).
+ * - Version strings (herdstat::portage::VersionString,
+ *   herdstat::portage::Versions, herdstat::portage::VersionsMap).
+ * - Keyword strings (herdstat::portage::Keyword,
+ *   herdstat::portage::Keywords, herdstat::portage::KeywordsMap).
+ * - Ebuild LICENSE parsing (herdstat::portage::License).
+ * - Portage-related functional objects for use with standard algorithms
+ *   (herdstat/portage/functional.hh).
+ * - File fetching (herdstat::Fetcher).
+ * - POSIX regular expressions (herdstat::util::Regex).
+ * - POSIX pattern matching (herdstat::util::Glob).
+ * - Directory iterators (herdstat::util::Directory).
+ * - Simple progress meter (herdstat::util::Progress).
+ * - String manipulation utilities (herdstat/util/string.hh).
+ * - General purpose algorithms (herdstat/util/algorithms.hh) and functional
+ *   objects (herdstat/util/functional.hh).
+ * - Even more.
+ *
+ *
+ * @section usage Usage
+ *
+ * To link your application with libherdstat, use the provided pkg-config file
+ * via the pkg-config application:
+ *
+ * @verbatim
+$ g++ myapp.cc -o myapp `pkg-config --libs --cflags libherdstat-MAJOR_VERSION.MINOR_VERSION`
+@endverbatim
+ *
+ * Where MAJOR_VERSION and MINOR_VERSION are libherdstat's major and minor
+ * version number, respectively.  For example, with libherdstat-0.2.0, you'd use
+ * 'libherdstat-0.2'.
+ *
+ * If your application uses GNU autoconf, you can use the PKG_CHECK_MODULES
+ * macro provided by the pkg-config application.
+ *
+ * @verbatim
+PKG_CHECK_MODULES(libherdstat, libherdstat-0.2 >= 0.2.5)
+@endverbatim
+ * 
+ * See the pkg-config(1) manual page for more detailed usage information.
+ *
+ * @section examples Examples
+ *
+ * Since libherdstat provides a multitude of interfaces for various things, it's
+ * not feasable to provide a single example (for that, see the <a
+ * href="http://developer.berlios.de/projects/herdstat/">herdstat</a>
+ * application).  Instead, we provide individual examples for each major
+ * interface.  See the documentation for the particular interface for example
+ * code or the examples/ directory provided in the distribution tarball.
  */
 
 /**
  * @page Authors Authors
- * @section Authors
+ * @section Authors Authors
  * 
  * libherdstat was written by Aaron Walker <ka0ttic@gentoo.org>.
  */
