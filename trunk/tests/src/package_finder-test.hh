@@ -53,7 +53,7 @@ PackageFinderTest::operator()(const opts_type& null) const
     {
         std::cerr << "  libfoo is ambiguous, matches are:" << std::endl;
         std::vector<std::string>::const_iterator i;
-        for (i = e.packages.begin() ; i != e.packages.end() ; ++i)
+        for (i = e.packages().begin() ; i != e.packages().end() ; ++i)
             std::cerr << "    " << *i << std::endl;
     }
 
@@ -64,8 +64,7 @@ PackageFinderTest::operator()(const opts_type& null) const
         find("pfft");
         assert(results.size() == 1);
         const herdstat::portage::Package& result(results.front());
-        std::cout << "  " << result.category() << "/" << result.name()
-            << std::endl;
+        std::cout << "  " << result.full() << std::endl;
     }
 
     {
