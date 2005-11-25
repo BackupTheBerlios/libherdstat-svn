@@ -120,30 +120,6 @@ namespace util {
     }
 
     /**
-     * Return the basename of the given path.
-     * @param p Path.
-     */
-
-    std::string basename(const std::string &p) throw();
-    
-    /**
-     * Return the directory name the given path is located in.
-     * @param p Path.
-     */
-
-    std::string dirname(const std::string &p) throw();
-
-    /**
-     * Chop file extension from the given path.
-     * @param p Path.
-     * @param depth Number of period-delimited extensions to chop.
-     * @returns A pointer of type char.
-     */
-
-    const char *chop_fileext(const std::string &p,
-                             unsigned short depth = 1) throw();
-
-    /**
      * Copy file 'from' to file 'to'.
      * @param from Source location.
      * @param to Destination location.

@@ -401,57 +401,6 @@ Directory::find(const Regex& regex) const throw()
 /*****************************************************************************
  * general purpose file-related functions                                    *
  *****************************************************************************/
-std::string
-basename(const std::string& path) throw()
-{
-    std::string result(path);
-    std::string::size_type pos;
-
-    /* chop all trailing /'s */
-    while (result[result.length() - 1] == '/' and result.length() > 1)
-	result.erase(result.length() - 1);
-
-    if ((pos = result.rfind('/')) != std::string::npos)
-	result = result.substr(pos + 1);
-
-    return ( result.empty() ? std::string("/") : result );
-}
-/*****************************************************************************/
-std::string
-dirname(const std::string& path) throw()
-{
-    std::string result(path);
-    std::string::size_type pos;
-
-    /* chop all trailing /'s */
-    while (result[result.length() - 1] == '/' and result.length() > 1)
-	result.erase(result.length() - 1);
-
-    if ((pos = result.rfind('/')) != std::string::npos)
-        result.erase(pos);
-    else
-        result.assign(".");
-
-    return ( result.empty() ? std::string("/") : result );
-}
-/*****************************************************************************/
-const char *
-chop_fileext(const std::string& path, unsigned short depth) throw()
-{
-    BacktraceContext c("herdstat::util::chop_fileext("+path+")");
-
-    std::string result(path);
-
-    for (; depth > 0 ; --depth)
-    {
-        std::string::size_type pos = result.rfind('.');
-        if (pos != std::string::npos)
-            result = result.substr(0, pos);
-    }
-
-    return result.c_str();
-}
-/*****************************************************************************/
 void
 copy_file(const std::string& from, const std::string& to) throw (FileException)
 {
@@ -462,17 +411,22 @@ copy_file(const std::string& from, const std::string& to) throw (FileException)
 	throw FileException(to);
 
     std::ifstream ffrom(from.c_str());
-    std::ofstream fto(to.c_str());
-
     if (not ffrom)
 	throw FileException(from);
+
+    std::ofstream fto(to.c_str());
     if (not fto)
 	throw FileException(to);
 
     /* read from ffrom and write to fto */
+
+//    std::copy(std::istream_iterator<std::string>(ffrom),
+//              std::istream_iterator<std::string>(),
+//              std::ostream_iterator<std::string>(fto, "\n"));
+
     std::string line;
     while (std::getline(ffrom, line))
-	fto << line << std::endl;
+        fto << line << std::endl;
 }
 /*****************************************************************************/
 void

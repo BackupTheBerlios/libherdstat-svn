@@ -45,12 +45,38 @@ namespace herdstat {
 namespace util {
 
     /**
+     * Return the basename of the given path.
+     * @param path path string.
+     * @returns basename of given path.
+     */
+
+    std::string basename(const std::string& path) throw();
+    
+    /**
+     * Return the dirname of the given path.
+     * @param path path string.
+     * @returns Directory the given path is located in.
+     */
+
+    std::string dirname(const std::string& path) throw();
+
+    /**
+     * Chop file extension from the given path.
+     * @param path Path.
+     * @param depth Number of period-delimited extensions to chop.
+     * @returns A pointer of type char.
+     */
+
+    const char *chop_fileext(const std::string& path,
+                             unsigned short depth = 1) throw();
+
+    /**
      * Tidy whitespace of the given string.
      * @param s String object
      * @returns Resulting std::string object.
      */
 
-    std::string tidy_whitespace(const std::string &s) throw();
+    std::string tidy_whitespace(const std::string& s) throw();
 
     //@{
     /// sprintf() wrappers

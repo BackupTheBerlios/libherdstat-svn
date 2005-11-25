@@ -39,6 +39,57 @@
 
 namespace herdstat {
 namespace util {
+/*****************************************************************************/
+std::string
+basename(const std::string& path) throw()
+{
+    std::string result(path);
+    std::string::size_type pos;
+
+    /* chop all trailing /'s */
+    while (result[result.length() - 1] == '/' and result.length() > 1)
+	result.erase(result.length() - 1);
+
+    if ((pos = result.rfind('/')) != std::string::npos)
+	result = result.substr(pos + 1);
+
+    return ( result.empty() ? std::string("/") : result );
+}
+/*****************************************************************************/
+std::string
+dirname(const std::string& path) throw()
+{
+    std::string result(path);
+    std::string::size_type pos;
+
+    /* chop all trailing /'s */
+    while (result[result.length() - 1] == '/' and result.length() > 1)
+	result.erase(result.length() - 1);
+
+    if ((pos = result.rfind('/')) != std::string::npos)
+        result.erase(pos);
+    else
+        result.assign(".");
+
+    return ( result.empty() ? std::string("/") : result );
+}
+/*****************************************************************************/
+const char *
+chop_fileext(const std::string& path, unsigned short depth) throw()
+{
+    BacktraceContext c("herdstat::util::chop_fileext("+path+")");
+
+    std::string result(path);
+
+    for (; depth > 0 ; --depth)
+    {
+        std::string::size_type pos = result.rfind('.');
+        if (pos != std::string::npos)
+            result = result.substr(0, pos);
+    }
+
+    return result.c_str();
+}
 /*****************************************************************************
  * Clean up the whitespace of the given string.                              *
  *****************************************************************************/
