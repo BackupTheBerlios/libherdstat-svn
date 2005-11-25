@@ -49,16 +49,9 @@ namespace portage {
     class BadVersionSuffix : public Exception
     {
         public:
-            BadVersionSuffix() { }
-            BadVersionSuffix(const char *msg) : Exception(msg) { }
-            BadVersionSuffix(const std::string &msg) : Exception(msg) { }
-            virtual ~BadVersionSuffix() throw() { }
-            virtual const char *what() const throw()
-            {
-                std::string s("Invalid version suffix: ");
-                s += this->message();
-                return s.c_str();
-            }
+            BadVersionSuffix(const std::string &msg) throw();
+            virtual ~BadVersionSuffix() throw();
+            virtual const char *what() const throw();
     };
 
     /**
@@ -69,30 +62,23 @@ namespace portage {
     class AmbiguousPkg : public Exception
     {
         public:
-            AmbiguousPkg() : packages() { }
-            AmbiguousPkg(const std::vector<std::string> &v)
-                : packages(v) { }
+            AmbiguousPkg(const std::vector<std::string>& pkgs) throw();
             template <typename InputIterator>
-            AmbiguousPkg(InputIterator first, InputIterator last)
-                : packages(first, last) { }
-            virtual ~AmbiguousPkg() throw() { }
+            AmbiguousPkg(InputIterator first, InputIterator last) throw()
+                : _name(), _packages(first, last) { _set_name(*first); }
+            virtual ~AmbiguousPkg() throw();
 
-            virtual const std::string name() const
-            {
-                std::string s;
-                if (not this->packages.empty())
-                {
-                    std::string::size_type pos = this->packages.front().find('/');
-                    if (pos == std::string::npos)
-                        s = this->packages.front();
-                    else
-                        s = this->packages.front().substr(pos + 1);
-                }
-                return s;
-            }
+            const std::string& name() const throw() { return _name; }
+            const std::vector<std::string>& packages() const throw()
+            { return _packages; }
 
+        private:
+            void _set_name(const std::string& name) throw();
+
+            /// Ambiguous name.
+            std::string _name;
             /// Vector of possible matches.
-            const std::vector<std::string> packages;
+            const std::vector<std::string> _packages;
     };
 
     /**
@@ -103,23 +89,13 @@ namespace portage {
     class NonExistentPkg : public Exception
     {
         public:
-            NonExistentPkg() : regex(false) { }
-            NonExistentPkg(const char *msg) : Exception(msg), regex(false) { }
-            NonExistentPkg(const std::string &msg) : Exception(msg), regex(false) { }
-            NonExistentPkg(const util::Regex& re)  : Exception(re()), regex(true) { }
-            virtual ~NonExistentPkg() throw() { }
-            virtual const char *what() const throw()
-            {
-                if (regex)
-                    return (std::string("Failed to find any packages matching '") +
-                            this->message() + "'.").c_str();
-
-                return (std::string(this->message()) +
-                        " doesn't seem to exist.").c_str();
-            }
-
+            NonExistentPkg(const std::string &msg) throw();
+            NonExistentPkg(const util::Regex& re) throw();
+            virtual ~NonExistentPkg() throw();
+            virtual const char *what() const throw();
+        
         private:
-            const bool regex;
+            const bool _regex;
     };
 
     /**
@@ -130,10 +106,8 @@ namespace portage {
     class QAException : public Exception
     {
         public:
-            QAException() { }
-            QAException(const char *msg) : Exception(msg) { }
-            QAException(const std::string &msg) : Exception(msg) { }
-            virtual ~QAException() throw() { }
+            QAException(const std::string &msg) throw();
+            virtual ~QAException() throw();
     };
 
     /**
@@ -144,16 +118,9 @@ namespace portage {
     class QAErrnoException : public ErrnoException
     {
         public:
-            QAErrnoException() { }
-            QAErrnoException(const char *msg) : ErrnoException(msg) { }
-            QAErrnoException(const std::string &msg) : ErrnoException(msg) { }
-            virtual ~QAErrnoException() throw() { }
-            virtual const char *what() const throw()
-            {
-                std::string s("QA Violation: ");
-                s += ErrnoException::what();
-                return s.c_str();
-            }
+            QAErrnoException(const std::string &msg) throw();
+            virtual ~QAErrnoException() throw();
+            virtual const char *what() const throw();
     };
 
     /**
@@ -164,14 +131,9 @@ namespace portage {
     class InvalidKeywordMask : public Exception
     {
         public:
-            InvalidKeywordMask(const char c) : _mask(c) { }
-            virtual ~InvalidKeywordMask() throw() { }
-            virtual const char *what() const throw()
-            {
-                std::string s("Invalid keyword mask character '");
-                s += _mask + "'.";
-                return s.c_str();
-            }
+            InvalidKeywordMask(const char c) throw();
+            virtual ~InvalidKeywordMask() throw();
+            virtual const char *what() const throw();
 
         private:
             const char _mask;
@@ -185,14 +147,9 @@ namespace portage {
     class InvalidArch : public Exception
     {
         public:
-            InvalidArch(const std::string& arch) : Exception(arch) { }
-            virtual ~InvalidArch() throw() { }
-            virtual const char *what() const throw()
-            {
-                std::string s("Invalid arch '");
-                s += std::string(this->message()) + "'.";
-                return s.c_str();
-            }
+            InvalidArch(const std::string& arch) throw();
+            virtual ~InvalidArch() throw();
+            virtual const char *what() const throw();
     };
 
 } // namespace portage
