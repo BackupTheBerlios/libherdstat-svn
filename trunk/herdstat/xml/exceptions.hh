@@ -45,13 +45,13 @@ namespace xml {
     class ParserException : public Exception
     {
         public:
-            ParserException() : _file(), _error() { }
-            ParserException(const std::string &f, const std::string &e)
+            ParserException() throw() : _file(), _error() { }
+            ParserException(const std::string &f, const std::string &e) throw()
                 : _file(f), _error(e) { }
             virtual ~ParserException() throw() { }
 
-            virtual const std::string& file() const { return _file; }
-            virtual const std::string& error() const { return _error; }
+            virtual const std::string& file() const throw() { return _file; }
+            virtual const std::string& error() const throw() { return _error; }
 
         private:
             std::string _file, _error;

@@ -40,7 +40,7 @@
 
 namespace herdstat {
 
-    /// exception group for use by libebt.
+    /// %Exception group for use by libebt.
     class ExceptionTag { };
 
     /**
@@ -239,29 +239,6 @@ namespace herdstat {
 
             /// Destructor.
             virtual ~BadDate() throw() { }
-    };
-
-    /**
-     * @class FetchException exceptions.hh herdstat/exceptions.hh
-     * @brief Exception for fetching errors.
-     */
-
-    class FetchException : public Exception
-    {
-        public:
-            /// Default constructor.
-            FetchException() throw();
-
-            //@{
-            /** Constructor.
-             * @param msg Error message.
-             */
-            FetchException(const char *msg) throw();
-            FetchException(const std::string& msg) throw();
-            //@}
-            
-            /// Destructor.
-            virtual ~FetchException() throw() { }
     };
 
     /**

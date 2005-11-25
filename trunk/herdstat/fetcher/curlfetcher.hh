@@ -44,19 +44,27 @@ namespace herdstat {
     class CurlFetcher : public FetcherImp
     {
         public:
-            /// Default constructor.
-            CurlFetcher();
-
             /// Destructor.
-            virtual ~CurlFetcher();
+            virtual ~CurlFetcher() throw();
 
             /** Fetch URL and save to path.
              * @param url URL string.
              * @param path Path.
+             * @exception FileException
              * @returns False if fetching failed.
              */
             virtual bool fetch(const std::string& url,
-                               const std::string& path) const;
+                               const std::string& path) const
+                throw (FileException);
+
+        private:
+            /// Only Fetcher can instantiate this class.
+            friend class Fetcher;
+
+            /** Constructor.
+             * @param opts const reference to a FetcherOptions object.
+             */
+            CurlFetcher(const FetcherOptions& opts) throw();
     };
 
 } // namespace herdstat

@@ -2,7 +2,8 @@
 # $Id: configure.ac 246 2005-04-26 12:03:53Z ka0ttic $
 
 AC_PREREQ(2.59)
-AC_INIT([herdstat/exceptions.hh])
+AC_INIT(libherdstat, [0.2.0], [ka0ttic@gentoo.org])
+AC_CONFIG_SRCDIR([herdstat/exceptions.hh])
 AC_CONFIG_AUX_DIR(config)
 
 # release versioning
@@ -72,6 +73,12 @@ else
     AC_MSG_RESULT(no)
 fi
 
+AC_PATH_PROGS(_WGET, wget)
+if test x$_WGET = "x"; then
+    AC_MSG_ERROR([wget is required])
+fi
+AC_DEFINE_UNQUOTED(WGET, "$_WGET", [wget location])
+
 AC_LANG([C++])
 AC_PROG_CXX
 AC_PROG_MAKE_SET
@@ -96,6 +103,9 @@ if test x$gccver = "x4" ; then
     AC_DEFINE_UNQUOTED(HAVE_GCC4, 1, [GCC Version 4])
 fi
 
+dnl Optional headers
+AC_CHECK_HEADERS(getopt.h)
+
 dnl Required headers
 AC_HEADER_STDC
 AC_HEADER_TIME(,
@@ -108,9 +118,8 @@ AC_CHECK_HEADERS(glob.h,,
     [AC_MSG_ERROR([glob.h is required])])
 AC_CHECK_HEADERS(fnmatch.h,,
     [AC_MSG_ERROR([fnmatch.h is required])])
-
-dnl Optional headers
-AC_CHECK_HEADERS(getopt.h)
+AC_CHECK_HEADERS(libebt/libebt.hh,,
+    AC_MSG_ERROR([libebt/libebt.hh is required]))
 
 dnl Required functions
 AC_FUNC_CLOSEDIR_VOID
@@ -133,42 +142,28 @@ AC_CHECK_FUNCS(vasprintf,,
 
 dnl Optional functions
 
-dnl Required libs
-AC_MSG_CHECKING([fetch method])
+dnl Optional libs
+AC_MSG_CHECKING([whether to build the libcurl fetcher interface])
 AC_ARG_WITH(curl,
-    AC_HELP_STRING([--with-curl],[Use libcurl for fetching]),
+    AC_HELP_STRING([--with-curl],[Build libcurl fetcher interface]),
     [WITH_CURL=$withval],[WITH_CURL=yes])
+AC_MSG_RESULT([$WITH_CURL])
 
 if test "$WITH_CURL" = "yes" ; then
-    AC_MSG_RESULT([libcurl])
-    AC_CHECK_LIB(curl, curl_easy_init, [CURL_LIBS="-lcurl"])
-    AC_CHECK_HEADERS([curl/curl.h])
-
-    if ! test -z "$CURL_LIBS" ; then
-	AC_DEFINE(FETCH_METHOD_CURL, 1, [Use libcurl for fetching])
-    fi
+    AC_CHECK_LIB(curl, curl_easy_init, [CURL_LIBS="-lcurl"],
+	AC_MSG_ERROR([curl support enabled but libcurl not found]))
+    AC_CHECK_HEADERS([curl/curl.h],,
+	AC_MSG_ERROR([curl support enabled but curl/curl.h not found]))
+    AC_DEFINE_UNQUOTED(HAVE_LIBCURL, 1, [Build libcurl interface])
 fi
-    
-if test "$WITH_CURL" != "yes" -o -z "$CURL_LIBS" ; then
-    AC_MSG_RESULT([wget])
-    AC_PATH_PROGS(_WGET, wget)
-    if test x$_WGET = "x"; then
-	AC_MSG_ERROR([wget is required])
-    fi
-    AC_DEFINE_UNQUOTED(WGET, "$_WGET", [wget location])
-    AC_DEFINE(FETCH_METHOD_WGET, 1, [Use wget for fetching])
-fi
-
 AC_SUBST(CURL_LIBS)
 
+dnl Required libs
 PKG_PROG_PKG_CONFIG
 PKG_CHECK_MODULES(xmlwrapp, xmlwrapp >= 0.5.0,
     [xmlwrapp_LIBS="-lxmlwrapp -lxslt -lxml2 -lz -lm"],
     [AC_MSG_ERROR([xmlwrapp is required])])
 AC_SUBST(xmlwrapp_LIBS)
-
-AC_CHECK_HEADERS(libebt/libebt.hh,,
-    AC_MSG_ERROR([libebt/libebt.hh is required]))
 
 AM_CONFIG_HEADER(config.h)
 AC_OUTPUT(Makefile

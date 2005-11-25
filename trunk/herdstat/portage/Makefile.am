@@ -3,6 +3,7 @@
 include $(top_builddir)/Makefile.am.common
 
 cc_sources = \
+	exceptions.cc \
 	config.cc \
 	version.cc \
 	categories.cc \

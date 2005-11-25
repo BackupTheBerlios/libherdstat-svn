@@ -45,30 +45,30 @@ namespace herdstat {
     class FetcherImp
     {
         public:
-            /// Default constructor.
-            FetcherImp() { }
-
             /// Destructor.
-            virtual ~FetcherImp() { }
-
-            /// Get const reference to options.
-            inline const FetcherOptions& options() const;
-            /// Set options.
-            inline void set_options(const FetcherOptions& o);
+            virtual ~FetcherImp() throw() { }
 
             /** Fetch url and save to path.
              * @param url URL string.
              * @param path Path to file.
+             * @exception FileException
+             * @returns False if fetching failed.
              */
             virtual bool fetch(const std::string& url,
-                               const std::string& path) const = 0;
+                               const std::string& path) const
+                throw (FileException) = 0;
+
+        protected:
+            /// Constructor.
+            FetcherImp(const FetcherOptions& opts) throw()
+                : _opts(opts) { }
+
+            /// Get const reference to our FetcherOptions object.
+            const FetcherOptions& options() const { return _opts; }
 
         private:
-            FetcherOptions _opts;
+            const FetcherOptions& _opts;
     };
-
-    inline const FetcherOptions& FetcherImp::options() const { return _opts; }
-    inline void FetcherImp::set_options(const FetcherOptions& o) { _opts = o; }
 
 } // namespace herdstat
 

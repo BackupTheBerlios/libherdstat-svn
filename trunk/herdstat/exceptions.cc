@@ -207,20 +207,6 @@ BadDate::BadDate(const std::string& msg) throw()
 {
 }
 
-FetchException::FetchException() throw()
-{
-}
-
-FetchException::FetchException(const char *msg) throw()
-    : Exception(msg)
-{
-}
-
-FetchException::FetchException(const std::string& msg) throw()
-    : Exception(msg)
-{
-}
-
 MalformedEmail::MalformedEmail() throw()
 {
 }

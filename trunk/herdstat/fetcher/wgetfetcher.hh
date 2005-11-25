@@ -44,18 +44,25 @@ namespace herdstat {
     class WgetFetcher : public FetcherImp
     {
         public:
-            /// Default constructor.
-            WgetFetcher();
-
             /// Destructor.
-            virtual ~WgetFetcher();
+            virtual ~WgetFetcher() throw();
 
             /** Save url to path.
              * @param url URL string.
              * @param path Path to file.
+             * @exception FileException
+             * @returns False if fetching failed.
              */
             virtual bool fetch(const std::string& url,
-                               const std::string& path) const;
+                               const std::string& path) const
+                throw (FileException);
+
+        private:
+            /// Only Fetcher can instantiate this class.
+            friend class Fetcher;
+
+            /// Constructor.
+            WgetFetcher(const FetcherOptions& opts) throw();
     };
 
 } // namespace herdstat

@@ -34,6 +34,7 @@
 
 #include <functional>
 #include <fnmatch.h>
+#include <herdstat/util/string.hh>
 #include <herdstat/util/file.hh>
 #include <herdstat/util/regex.hh>
 

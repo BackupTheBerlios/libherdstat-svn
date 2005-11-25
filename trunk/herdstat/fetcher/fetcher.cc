@@ -27,68 +27,74 @@
 #include <iostream>
 #include <unistd.h>
 
-#include <herdstat/exceptions.hh>
-#include <herdstat/util/file.hh>
+#include <herdstat/util/string.hh>
+#include <herdstat/util/functional.hh>
 #include <herdstat/fetcher/curlfetcher.hh>
 #include <herdstat/fetcher/wgetfetcher.hh>
 #include <herdstat/fetcher/fetcher.hh>
 
 namespace herdstat {
 /****************************************************************************/
-Fetcher::Fetcher() throw (std::bad_alloc)
-    : _imp(NULL)
+Fetcher::Fetcher() throw()
+    : _opts(), _impmap()
 {
-    newFetcherImp();
+    _init_imps();
 }
 /****************************************************************************/
-Fetcher::Fetcher(const FetcherOptions& opts) throw (std::bad_alloc)
-    : _imp(NULL)
+Fetcher::Fetcher(const FetcherOptions& opts) throw()
+    : _opts(opts), _impmap()
 {
-    newFetcherImp();
-    _imp->set_options(opts);
+    _init_imps();
 }
 /****************************************************************************/
 Fetcher::Fetcher(const std::string& url, const std::string& path)
-    throw (std::bad_alloc)
-    : _imp(NULL)
+    throw (FileException, FetchException, UnimplementedFetchMethod)
+    : _opts()
 {
-    newFetcherImp();
+    _init_imps();
     this->operator()(url, path);
 }
 /****************************************************************************/
 Fetcher::~Fetcher() throw()
 {
-    if (_imp) delete _imp;
+    std::for_each(_impmap.begin(), _impmap.end(),
+        util::compose_f_gx(
+            util::DeleteAndNullify<FetcherImp>(),
+            util::Second<std::map<std::string, FetcherImp *>::value_type>()));
 }
 /****************************************************************************/
 void
-Fetcher::newFetcherImp() throw (std::bad_alloc)
+Fetcher::_init_imps()
 {
-    if (not _imp)
+    if (_impmap.empty())
     {
-#ifdef FETCH_METHOD_CURL
-        _imp = new CurlFetcher;
-#else
-        _imp = new WgetFetcher;
+#ifdef HAVE_LIBCURL
+        _impmap.insert(std::make_pair("curl", new CurlFetcher(_opts)));
 #endif
+        _impmap.insert(std::make_pair("wget", new WgetFetcher(_opts)));
     }
 }
 /****************************************************************************/
 void
 Fetcher::operator()(const std::string& url, const std::string& path) const
-    throw (FileException, FetchException)
+    throw (FileException, FetchException, UnimplementedFetchMethod)
 {
     BacktraceContext c("Fetcher::operator()("+url+", "+path+")");
+    assert(not _opts.implementation().empty());
 
-    /* ensure we have write access to the directory */
+    FetcherImp *imp = _impmap[_opts.implementation()];
+    if (not imp)
+        throw UnimplementedFetchMethod(_opts.implementation());
+
+    /* make sure we have write access to the directory */
     const char * const dir = util::dirname(path).c_str();
     if (access(dir, W_OK) != 0)
         throw FileException(dir);
 
-    if (_imp->options().verbose())
+    if (_opts.verbose())
         std::cerr << "Fetching " << url << std::endl;
 
-    if (not _imp->fetch(url, path))
+    if (not imp->fetch(url, path))
         throw FetchException();
 }
 /****************************************************************************/

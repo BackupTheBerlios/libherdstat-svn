@@ -26,36 +26,34 @@
 
 #include <cstdlib>
 #include <herdstat/util/string.hh>
+#include <herdstat/fetcher/exceptions.hh>
 #include <herdstat/fetcher/wgetfetcher.hh>
 
 namespace herdstat {
-
-WgetFetcher::WgetFetcher()
+/****************************************************************************/
+WgetFetcher::WgetFetcher(const FetcherOptions& opts) throw()
+    : FetcherImp(opts)
 {
 }
-
-WgetFetcher::~WgetFetcher()
+/****************************************************************************/
+WgetFetcher::~WgetFetcher() throw()
 {
 }
-
+/****************************************************************************/
 bool
 WgetFetcher::fetch(const std::string& url, const std::string& path) const
+    throw (FileException)
 {
     BacktraceContext c("WgetFetcher::fetch("+url+", "+path+")");
 
-#ifdef FETCH_METHOD_WGET
     std::string opts("-r -t3 -T15");
     opts += (options().verbose() ? " -v" : " -q");
 
     return (std::system(util::sprintf("%s %s -O %s '%s'", WGET,
                 opts.c_str(), path.c_str(),
                 url.c_str()).c_str()) == EXIT_SUCCESS);
-#else
-    throw Exception("WgetFetcher::fetch() called, but wget support is not enabled.");
-    return false;
-#endif
 }
-
+/****************************************************************************/
 } // namespace herdstat
 
 /* vim: set tw=80 sw=4 fdm=marker et : */

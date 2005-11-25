@@ -1,5 +1,5 @@
 /*
- * libherdstat -- fetcher/options.hh
+ * libherdstat -- herdstat/fetcher/options.hh
  * $Id$
  * Copyright (c) 2005 Aaron Walker <ka0ttic@gentoo.org>
  *
@@ -20,8 +20,8 @@
  * Place, Suite 325, Boston, MA  02111-1257  USA
  */
 
-#ifndef _HAVE_OPTIONS_HH
-#define _HAVE_OPTIONS_HH 1
+#ifndef _HAVE_FETCHER_OPTIONS_HH
+#define _HAVE_FETCHER_OPTIONS_HH 1
 
 #ifdef HAVE_CONFIG_H
 # include "config.h"
@@ -31,6 +31,14 @@
  * @file herdstat/fetcher/options.hh
  * @brief Defines the FetcherOptions class.
  */
+
+#include <string>
+
+/**
+ * @def DEFAULT_FETCH_METHOD
+ * @brief Default fetcher implementation to use.
+ */
+#define DEFAULT_FETCH_METHOD    "wget"
 
 namespace herdstat {
 
@@ -42,14 +50,22 @@ namespace herdstat {
     class FetcherOptions
     {
         public:
-            /// Default constructor.
-            FetcherOptions() : _verbose(false), _debug(false) { }
+            /** Constructor.
+             * @param imp Fetcher implementation to use (defaults to
+             * DEFAULT_FETCH_METHOD).
+             */
+            FetcherOptions(const std::string& imp = DEFAULT_FETCH_METHOD) throw()
+                : _verbose(false), _debug(false), _imp(imp) { }
 
+            /// Get fetcher implementation name.
+            inline const std::string& implementation() const;
             /// verbose?
             inline bool verbose() const;
             /// debug?
             inline bool debug() const;
 
+            /// Set fetcher implementation name.
+            inline void set_implementation(const std::string& imp);
             /// set verbose
             inline void set_verbose(bool v);
             /// set debug
@@ -58,15 +74,20 @@ namespace herdstat {
         private:
             bool _verbose;
             bool _debug;
+            std::string _imp;
     };
 
+    inline const std::string& FetcherOptions::implementation() const
+    { return _imp; }
     inline bool FetcherOptions::verbose() const { return _verbose; }
     inline bool FetcherOptions::debug() const { return _debug; }
+    inline void FetcherOptions::set_implementation(const std::string& imp)
+    { _imp = imp; }
     inline void FetcherOptions::set_verbose(bool v) { _verbose = v; }
     inline void FetcherOptions::set_debug(bool v) { _debug = v; }
 
 } // namespace herdstat
 
-#endif /* _HAVE_OPTIONS_HH */
+#endif /* _HAVE_FETCHER_OPTIONS_HH */
 
 /* vim: set tw=80 sw=4 fdm=marker et : */

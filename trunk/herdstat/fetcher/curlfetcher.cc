@@ -24,32 +24,34 @@
 # include "config.h"
 #endif
 
-#ifdef FETCH_METHOD_CURL
+#ifdef HAVE_LIBCURL
 # include <cstdlib>
 # include <cstdio>
 # include <cassert>
 # include <curl/curl.h>
 #endif
 
-#include <herdstat/exceptions.hh>
+#include <herdstat/fetcher/exceptions.hh>
 #include <herdstat/fetcher/curlfetcher.hh>
 
 namespace herdstat {
 /****************************************************************************/
-CurlFetcher::CurlFetcher()
+CurlFetcher::CurlFetcher(const FetcherOptions& opts) throw()
+    : FetcherImp(opts)
 {
 }
 /****************************************************************************/
-CurlFetcher::~CurlFetcher()
+CurlFetcher::~CurlFetcher() throw()
 {
 }
 /****************************************************************************/
 bool
 CurlFetcher::fetch(const std::string& url, const std::string& path) const
+    throw (FileException)
 {
     BacktraceContext c("CurlFetcher::fetch("+url+", "+path+")");
 
-#ifdef FETCH_METHOD_CURL
+#ifdef HAVE_LIBCURL
     FILE *fp = NULL;
     bool result = true;
 
@@ -89,9 +91,7 @@ CurlFetcher::fetch(const std::string& url, const std::string& path) const
     curl_easy_cleanup(handle);
 
     return result;
-
 #else
-    throw Exception("CurlFetcher::fetch() called, but curl support has not been enabled.");
     return false;
 #endif
 }

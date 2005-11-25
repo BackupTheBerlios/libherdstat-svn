@@ -2,15 +2,19 @@
 
 include $(top_builddir)/Makefile.am.common
 
-cc_sources = wgetfetcher.cc \
-	     curlfetcher.cc \
-	     fetcher.cc
+cc_sources = \
+	exceptions.cc \
+	wgetfetcher.cc \
+	curlfetcher.cc \
+	fetcher.cc
 
-hh_sources = options.hh \
-	     fetcherimp.hh \
-	     wgetfetcher.hh \
-	     curlfetcher.hh \
-	     fetcher.hh
+hh_sources = \
+	exceptions.hh \
+	options.hh \
+	fetcherimp.hh \
+	wgetfetcher.hh \
+	curlfetcher.hh \
+	fetcher.hh
 
 noinst_LTLIBRARIES = libfetcher.la
 libfetcher_la_SOURCES = $(hh_sources) $(cc_sources)
