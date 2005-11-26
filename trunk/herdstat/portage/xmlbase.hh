@@ -64,26 +64,12 @@ namespace portage {
             /// Destructor.
             virtual ~xmlBase() throw() { }
 
-            /** Parse file.
-             * @param path Path to XML file (defaults to empty).
-             * @exception FileException, xml::ParserException
-             */
-            virtual void parse(const std::string& path = "")
-                throw (FileException, xml::ParserException) = 0;
-
             /** Fill Developer object with data relevant to that developer.
              * @param dev Reference to Developer object.
              * @exception Exception
              */
             virtual void fill_developer(Developer& dev) const
                 throw (Exception) = 0;
-
-        protected:
-            /* SAX2 callbacks */
-            virtual bool start_element(const std::string& name,
-                                       const attrs_type&  attrs) = 0;
-            virtual bool end_element(const std::string& name) = 0;
-            virtual bool text(const std::string& text) = 0;
     };
 
 } // namespace portage
