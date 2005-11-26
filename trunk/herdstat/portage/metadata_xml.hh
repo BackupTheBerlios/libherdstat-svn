@@ -63,13 +63,6 @@ namespace portage {
             /// Destructor.
             virtual ~MetadataXML() throw();
 
-            /** Parse metadata.xml.
-             * @param path Path to metadata.xml (defaults to empty).
-             * @exception FileException, xml::ParserException
-             */
-            virtual void parse(const std::string& path = "")
-                throw (FileException, xml::ParserException);
-
             /// Get data associated with this metadata.xml.
             inline const Metadata& data() const;
 
@@ -82,6 +75,13 @@ namespace portage {
             inline const Developers&  devs()  const;
 
         protected:
+            /** Parse metadata.xml.
+             * @param path Path to metadata.xml (defaults to empty).
+             * @exception FileException, xml::ParserException
+             */
+            virtual void do_parse(const std::string& path = "")
+                throw (FileException, xml::ParserException);
+
             virtual bool start_element(const std::string& name,
                                        const attrs_type& attrs);
             virtual bool end_element(const std::string& name);

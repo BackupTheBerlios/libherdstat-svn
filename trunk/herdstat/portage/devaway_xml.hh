@@ -59,13 +59,6 @@ namespace portage {
             /// Destructor.
             virtual ~DevawayXML() throw();
 
-            /** Parse devaway.xml.
-             * @param path Path to devaway.xml (defaults to empty).
-             * @exception FileException, xml::ParserException
-             */
-            virtual void parse(const std::string& path = "")
-                throw (FileException, xml::ParserException);
-            
             /** Fill a Developer object with data we contain relevant to the
              * developer.  At the very least, the Developer's user name must
              * have been set prior to calling this function.
@@ -84,11 +77,20 @@ namespace portage {
             const std::vector<std::string> keys() const;
 
         protected:
+            /** Parse devaway.xml.
+             * @param path Path to devaway.xml (defaults to empty).
+             * @exception FileException, xml::ParserException
+             */
+            virtual void do_parse(const std::string& path = "")
+                throw (FileException, xml::ParserException);
+
+            ///@{
+            /// SAX2 Callbacks
             virtual bool start_element(const std::string& name,
                                        const attrs_type& attrs);
             virtual bool end_element(const std::string& name);
             virtual bool text(const std::string& text);
-
+            ///@}
         private:
             Developers _devs;
             static const char * const _local_default;

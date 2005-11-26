@@ -39,45 +39,74 @@ namespace herdstat {
     /**
      * @class Fetchable fetchable.hh herdstat/fetchable.hh
      * @brief Abstract base for fetchable things.
+     *
+     * The Fetchable base class is used to describe objects as being
+     * "fetchable".  Derivatives define their own do_fetch virtual function that
+     * uses the _fetch object (obtained via the fetcher() member function) to
+     * fetch the needed file(s).
+     *
+     * @section example Example
+     *
+     * Below is an example application that uses the Fetchable base class to
+     * describe an RSS feed as being fetchable.  The RSSFeed class defines the
+     * do_fetch virtual to fetch the RSS feed.
+     *
+     * @include fetchable/rss_feed.hh
+     *
+     * Defines the RSSFeed and RSSFeedEntry interfaces.
+     *
+     * @include fetchable/rss_feed.cc
+     *
+     * Defines the RSSFeed and RSSFeedEntry implementations.
+     *
+     * @include fetchable/main.cc
+     *
+     * Defines main().
      */
 
     class Fetchable
     {
         public:
+            /// Destructor.
+            virtual ~Fetchable() { }
+
             /** Fetch our file and save it to the specified path.
              * @param path Path to file.
+             * @exception FetchException
              */
-            void fetch(const std::string& path = "") const throw (FetchException)
-            {
-                if (this->_fetched)
-                    return;
-                this->do_fetch(path);
-                this->_fetched = true;
-            }
+            inline void fetch(const std::string& path = "") const
+                throw (FetchException);
 
             /// Have we already fetch()'d?
             bool fetched() const { return _fetched; }
 
-            /// Return fetcher.
-            const Fetcher& fetcher() const { return _fetch; }
-
         protected:
             /// Default constructor.
             Fetchable() throw() : _fetch(), _fetched(false) { }
-            /// Destructor.
-            virtual ~Fetchable() { }
+
+            /// Return fetcher.
+            const Fetcher& fetcher() const { return _fetch; }
 
             /** Does the actual fetching.
              * @param path local path to save.
+             * @exception FetchException
              */
             virtual void do_fetch(const std::string& path = "") const
                 throw (FetchException) = 0;
 
-            mutable Fetcher _fetch;
-
         private:
+            mutable Fetcher _fetch;
             mutable bool _fetched;
     };
+
+    inline void
+    Fetchable::fetch(const std::string& path) const throw (FetchException)
+    {
+        if (_fetched)
+            return;
+        do_fetch(path);
+        _fetched = true;
+    }
 
 } // namespace herdstat
 

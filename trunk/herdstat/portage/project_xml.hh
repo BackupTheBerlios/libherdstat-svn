@@ -65,13 +65,6 @@ namespace portage {
             /// Destructor.
             virtual ~ProjectXML() throw();
 
-            /** Parse projectxml file.
-             * @param path Path to projectxml file (defaults to empty).
-             * @exception FileException, xml::ParserException
-             */
-            virtual void parse(const std::string& path = "")
-                throw (FileException, xml::ParserException);
-
             virtual void fill_developer(Developer& dev) const
                 throw (Exception) { }
 
@@ -79,13 +72,27 @@ namespace portage {
             inline const Herd& devs() const;
 
         protected:
+            /** Parse projectxml file.
+             * @param path Path to projectxml file (defaults to empty).
+             * @exception FileException, xml::ParserException
+             */
+            virtual void do_parse(const std::string& path = "")
+                throw (FileException, xml::ParserException);
+
+            /** Fetch projectxml file.
+             * @param path Path to projectxml file (defaults to empty).
+             * @exception FetchException
+             */
+            virtual void do_fetch(const std::string& path = "") const
+                throw (FetchException);
+
+            ///@{
+            /// SAX2 Callbacks
             virtual bool start_element(const std::string& name,
                                        const attrs_type&  attrs);
             virtual bool end_element(const std::string& name);
             virtual bool text(const std::string& text);
-
-            virtual void do_fetch(const std::string& path = "") const
-                throw (FetchException);
+            ///@}
 
         private:
             Herd _devs;

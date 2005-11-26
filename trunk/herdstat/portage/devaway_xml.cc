@@ -54,7 +54,7 @@ DevawayXML::~DevawayXML() throw()
 }
 /****************************************************************************/
 void
-DevawayXML::parse(const std::string& path)
+DevawayXML::do_parse(const std::string& path)
     throw (FileException, xml::ParserException)
 {
     this->timer().start();

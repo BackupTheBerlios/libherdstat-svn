@@ -55,7 +55,7 @@ MetadataXML::~MetadataXML() throw()
 }
 /****************************************************************************/
 void
-MetadataXML::parse(const std::string& path)
+MetadataXML::do_parse(const std::string& path)
     throw (FileException, xml::ParserException)
 {
     if (not path.empty()) this->set_path(path);

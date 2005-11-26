@@ -79,7 +79,8 @@ $ g++ myapp.cc -o myapp `pkg-config --libs --cflags libherdstat-MAJOR_VERSION.MI
  * 'libherdstat-0.2'.
  *
  * If your application uses GNU autoconf, you can use the PKG_CHECK_MODULES
- * macro provided by the pkg-config application.
+ * macro provided by the pkg-config application in your application's
+ * configure.ac:
  *
  * @verbatim
 PKG_CHECK_MODULES(libherdstat, libherdstat-0.2 >= 0.2.5)

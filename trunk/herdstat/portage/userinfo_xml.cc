@@ -56,7 +56,7 @@ UserinfoXML::~UserinfoXML() throw()
 }
 /****************************************************************************/
 void
-UserinfoXML::parse(const std::string& path)
+UserinfoXML::do_parse(const std::string& path)
     throw (FileException, xml::ParserException)
 {
     if (not path.empty()) this->set_path(path);

@@ -86,7 +86,8 @@ ProjectXML::do_fetch(const std::string& p) const throw (FetchException)
             if (mps.exists())
                 util::copy_file(this->path(), this->path()+".bak");
 
-            _fetch(url, this->path());
+            const Fetcher& fetcher(this->fetcher());
+            fetcher(url, this->path());
 
             if (not mps() or (mps.size() == 0))
                 throw FetchException();
@@ -112,7 +113,7 @@ ProjectXML::do_fetch(const std::string& p) const throw (FetchException)
 }
 /****************************************************************************/
 void
-ProjectXML::parse(const std::string& path)
+ProjectXML::do_parse(const std::string& path)
     throw (FileException, xml::ParserException)
 {
     if (not path.empty()) this->set_path(path);

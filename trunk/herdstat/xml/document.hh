@@ -68,12 +68,13 @@ namespace xml {
             /// Get pointer to underlying handler.
             H *handler() const throw() { return this->_handler.get(); }
 
+        protected:
             /** Parse file.
              * @param path Path to XML file (defaults to empty).
-             * @exception ParserException
+             * @exception FileException, ParserException
              */
-            virtual void parse(const std::string& path = "")
-                throw (ParserException);
+            virtual void do_parse(const std::string& path = "")
+                throw (FileException, ParserException);
 
         private:
             const std::auto_ptr<H> _handler;    /* content handler */
@@ -102,7 +103,8 @@ namespace xml {
 
     template <typename H>
     void
-    Document<H>::parse(const std::string &path) throw (ParserException)
+    Document<H>::do_parse(const std::string &path)
+        throw (FileException, ParserException)
     {
         const std::string file(path.empty() ? this->path() : path);
         BacktraceContext c("herdstat::xml::Document::parse("+file+")");

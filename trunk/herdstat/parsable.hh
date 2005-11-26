@@ -41,6 +41,28 @@ namespace herdstat {
     /**
      * @class Parsable parsable.hh herdstat/parsable.hh
      * @brief Abstract base class for parsable things.
+     *
+     * The Parsable base class is used to describe objects as being
+     * "parsable".  Derivatives define their own do_parse virtual function that
+     * calls the parse_file() member function.
+     *
+     * @section example Example
+     *
+     * Below is an example application that uses the Parsable base class to
+     * describe an RSS feed as being parsable.  The RSSFeed class defines the
+     * do_parse virtual to parse the RSS feed.
+     *
+     * @include fetchable/rss_feed.hh
+     *
+     * Defines the RSSFeed and RSSFeedEntry interfaces.
+     *
+     * @include fetchable/rss_feed.cc
+     *
+     * Defines the RSSFeed and RSSFeedEntry implementations.
+     *
+     * @include fetchable/main.cc
+     *
+     * Defines main().
      */
 
     class Parsable
@@ -49,13 +71,13 @@ namespace herdstat {
             typedef util::Timer timer_type;
 
             /// Default constructor.
-            Parsable() throw() : _path(), _timer() { }
+            Parsable() throw() : _parsed(false), _path(), _timer() { }
 
             /** Constructor.
              * @param path Path of parsable file.
              */
             Parsable(const std::string& path) throw()
-                : _path(path), _timer() { }
+                : _parsed(false), _path(path), _timer() { }
             
             /// Destructor.
             virtual ~Parsable() { }
@@ -64,15 +86,23 @@ namespace herdstat {
              * @param path Path of parsable file (defaults to empty).
              * @exception FileException, xml::ParserException
              */
-            virtual void parse(const std::string& path = "")
-                throw (FileException, xml::ParserException) = 0;
+            inline void parse(const std::string& path = "")
+                throw (FileException, xml::ParserException);
 
+            /// Have we already parsed?
+            bool parsed() const { return _parsed; }
             /// Get path of parsable file.
             const std::string &path() const { return _path; }
             /// Get elapsed time it took to parse.
             timer_type::size_type elapsed() const { return _timer.elapsed(); }
 
         protected:
+            /** Do the actual parsing.
+             * @exception FileException, xml::ParserException
+             */
+            virtual void do_parse(const std::string& path = "")
+                throw (FileException, xml::ParserException) = 0;
+
             /** Set path of parsable file.
              * @param path Path of parsable file.
              */
@@ -82,9 +112,19 @@ namespace herdstat {
             timer_type& timer() { return _timer; }
 
         private:
+            bool _parsed;
             mutable std::string _path;
             timer_type  _timer;
     };
+
+    inline void
+    Parsable::parse(const std::string& path)
+        throw (FileException, xml::ParserException)
+    {
+        if (_parsed) return;
+        do_parse(path);
+        _parsed = true;
+    }
 
 } // namespace herdstat
 

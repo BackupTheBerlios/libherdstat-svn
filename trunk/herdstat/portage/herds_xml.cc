@@ -67,7 +67,7 @@ HerdsXML::~HerdsXML() throw()
 }
 /****************************************************************************/
 void
-HerdsXML::parse(const std::string& path)
+HerdsXML::do_parse(const std::string& path)
         throw (FileException, xml::ParserException)
 {
     this->timer().start();
