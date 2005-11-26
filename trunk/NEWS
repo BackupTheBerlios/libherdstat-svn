@@ -31,6 +31,11 @@ ChangeLog file for a more detailed listing of changes/bug fixes.
       can be easily accomplished using other function objects and these new
       compositional adapters (eg instead of using util::FirstEqual we can now
       use compose_f_gx with std::equal_to and util::First).
+    - Fetcher revamping.  Fetcher implementation is now choosable at run-time.
+      Added FetcherImpMap which maps implementation names to FetcherImp
+      pointers.  The Fetcher class allows passing a FetcherImpMap instance upon
+      construction, so now, not only can the user choose which implementation to
+      use, s(he) can also add their own concrete FetcherImp derivatives.
 
     Implementation Changes:
     - The following class members are now implemented as pointers and

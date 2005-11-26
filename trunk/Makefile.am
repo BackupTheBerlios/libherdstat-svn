@@ -2,7 +2,7 @@
 #
 AUTOMAKE_OPTIONS = 1.8 dist-bzip2 no-dist-gzip
 
-SUBDIRS = doc herdstat tests
+SUBDIRS = doc herdstat examples tests
 
 MAINTAINERCLEANFILES = aclocal.m4 \
 		       configure \
@@ -22,8 +22,7 @@ EXTRA_DIST = ChangeLog \
 	Makefile.am.common \
 	autogen.sh \
 	.todo \
-	libherdstat.pc.in \
-	examples
+	libherdstat.pc.in
 
 doxygen:
 	$(MAKE) -C doc doxygen

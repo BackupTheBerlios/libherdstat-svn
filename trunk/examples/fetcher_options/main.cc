@@ -3,6 +3,7 @@
 #endif
 
 #include <iostream>
+#include <string>
 #include <cstdlib>
 #include <herdstat/fetcher/fetcher.hh>
 
@@ -11,23 +12,38 @@ using namespace herdstat;
 int
 main(int argc, char **argv)
 {
-	if (argc != 3)
+	FetcherOptions opts;
+	std::string url, path;
+	opts.set_verbose(true);
+
+	if (argc == 3)
+	{
+		url.assign(argv[1]);
+		path.assign(argv[2]);
+	}
+	else if (argc == 4)
+	{
+		opts.set_implementation(argv[1]);
+		url.assign(argv[2]);
+		path.assign(argv[3]);
+	}
+	else
 	{
 		std::cerr
-		    << "usage: fetcher <url> <path>"
+		    << "usage: fetcher_options <implementation (default: wget)> <url> <path>"
 		    << std::endl;
 		return EXIT_FAILURE;
 	}
 
 	try
 	{
-		Fetcher fetch;
-		fetch(argv[1], argv[2]);
+		Fetcher fetch(opts);
+		fetch(url, path);
 	}
 	catch (const FetchException& e)
 	{
-		std::cerr << "Failed to save '" << argv[1] << "' to '"
-		    << argv[2] << "." << std::endl;
+		std::cerr << "Failed to save '" << url << "' to '"
+		    << path << "." << std::endl;
 		return EXIT_FAILURE;
 	}
 	catch (const BaseException& e)

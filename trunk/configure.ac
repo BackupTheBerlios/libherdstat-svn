@@ -58,6 +58,14 @@ if test x"$TEST_DATA" = "xfoo" ; then
 fi
 AC_SUBST(TEST_DATA)
 
+dnl --enable-examples
+AC_MSG_CHECKING([whether to build examples])
+AC_ARG_ENABLE(examples,
+    AC_HELP_STRING([--enable-examples],[Build examples]),
+    [enable_examples=$enableval],[enable_examples=yes])
+AC_MSG_RESULT([$enable_examples])
+AM_CONDITIONAL(BUILD_EXAMPLES, test x$enable_examples != "xno")
+
 dnl --enable-debug
 AC_MSG_CHECKING([whether to enable debugging code/flags])
 AC_ARG_ENABLE(debug,
@@ -169,6 +177,12 @@ AM_CONFIG_HEADER(config.h)
 AC_OUTPUT(Makefile
 	  doc/Makefile
           doc/Doxyfile
+	  examples/Makefile
+	  examples/fetcher/Makefile
+	  examples/fetcherimp/Makefile
+	  examples/fetcher_options/Makefile
+	  examples/fetchable/Makefile
+	  examples/herds.xml/Makefile
 	  herdstat/Makefile
 	  herdstat/libherdstat_version.hh
 	  herdstat/util/Makefile
