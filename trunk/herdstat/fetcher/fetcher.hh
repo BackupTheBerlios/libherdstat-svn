@@ -32,28 +32,34 @@
  * @brief Defines the Fetcher interface.
  */
 
-#include <map>
 #include <herdstat/noncopyable.hh>
 #include <herdstat/fetcher/exceptions.hh>
 #include <herdstat/fetcher/options.hh>
+#include <herdstat/fetcher/impmap.hh>
 
 namespace herdstat {
-
-    class FetcherImp;
 
     /**
      * @class Fetcher fetcher.hh herdstat/fetcher/fetcher.hh
      * @brief File fetcher.
-     * @see Fetchable
-     */
-
-    /**
+     *
      * @section example Example
      *
-     * Below is an example on using the Fetcher class.  It simply uses the
-     * specified implementation to save the specified URL to the specified path.
+     * Below is an example showing the most simple usage of the Fetcher class.
+     * It uses the default options and default fetcher implementation.
      *
      * @include fetcher/main.cc
+     *
+     * Below is another example that shows how to use the FetcherOptions class
+     * in conjunction with the Fetcher class.  This example allows the choosing
+     * of the fetcher implementation at run-time.
+     *
+     * @include fetcher_options/main.cc
+     *
+     * Below is another example of using the Fetcher class.  It uses the
+     * FetcherImpMap class to provide a user-defined fetcher implementation.
+     *
+     * @include fetcherimp/main.cc
      */
 
     class Fetcher : private Noncopyable
@@ -63,16 +69,26 @@ namespace herdstat {
             Fetcher() throw();
 
             /** Constructor.
-             * @param opts const reference to FetcherOptions object.
+             * @param opts const reference to a FetcherOptions object.
              */
             Fetcher(const FetcherOptions& opts) throw();
+
+            /** Constructor.
+             * @param impmap const reference to a user provided implementation
+             * map.
+             * @param opts const reference to a FetcherOptions object.
+             */
+            Fetcher(const FetcherImpMap& impmap,
+                    const FetcherOptions& opts = FetcherOptions()) throw();
 
             /** Constructor.  Fetch url and save to path.
              * @param url URL string.
              * @param path Path to save to.
+             * @param opts const reference to a FetcherOptions objects.
              * @exception FileException, FetchException, UnimplementedFetchMethod
              */
-            Fetcher(const std::string& url, const std::string& path)
+            Fetcher(const std::string& url, const std::string& path,
+                    const FetcherOptions& opts = FetcherOptions())
                 throw (FileException, FetchException, UnimplementedFetchMethod);
 
             /// Destructor.
@@ -93,12 +109,8 @@ namespace herdstat {
                 throw (FileException, FetchException, UnimplementedFetchMethod);
 
         private:
-            /// initialize _impmap.
-            void _init_imps();
-
             FetcherOptions _opts;
-            // mutable so we can use operator[] in a const function
-            mutable std::map<std::string, FetcherImp *> _impmap;
+            FetcherImpMap _impmap;
     };
 
 } // namespace herdstat

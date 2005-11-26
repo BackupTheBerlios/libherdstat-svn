@@ -28,51 +28,38 @@
 #include <unistd.h>
 
 #include <herdstat/util/string.hh>
-#include <herdstat/util/functional.hh>
-#include <herdstat/fetcher/curlfetcher.hh>
-#include <herdstat/fetcher/wgetfetcher.hh>
+#include <herdstat/fetcher/fetcherimp.hh>
 #include <herdstat/fetcher/fetcher.hh>
 
 namespace herdstat {
 /****************************************************************************/
 Fetcher::Fetcher() throw()
-    : _opts(), _impmap()
+    : _opts(), _impmap(_opts)
 {
-    _init_imps();
+}
+/****************************************************************************/
+Fetcher::Fetcher(const FetcherImpMap& impmap, const FetcherOptions& opts)
+    throw()
+    : _opts(opts), _impmap(impmap)
+{
 }
 /****************************************************************************/
 Fetcher::Fetcher(const FetcherOptions& opts) throw()
-    : _opts(opts), _impmap()
+    : _opts(opts), _impmap(opts)
 {
-    _init_imps();
 }
 /****************************************************************************/
-Fetcher::Fetcher(const std::string& url, const std::string& path)
+Fetcher::Fetcher(const std::string& url,
+                 const std::string& path,
+                 const FetcherOptions& opts)
     throw (FileException, FetchException, UnimplementedFetchMethod)
-    : _opts()
+    : _opts(opts), _impmap(opts)
 {
-    _init_imps();
     this->operator()(url, path);
 }
 /****************************************************************************/
 Fetcher::~Fetcher() throw()
 {
-    std::for_each(_impmap.begin(), _impmap.end(),
-        util::compose_f_gx(
-            util::DeleteAndNullify<FetcherImp>(),
-            util::Second<std::map<std::string, FetcherImp *>::value_type>()));
-}
-/****************************************************************************/
-void
-Fetcher::_init_imps()
-{
-    if (_impmap.empty())
-    {
-#ifdef HAVE_LIBCURL
-        _impmap.insert(std::make_pair("curl", new CurlFetcher(_opts)));
-#endif
-        _impmap.insert(std::make_pair("wget", new WgetFetcher(_opts)));
-    }
 }
 /****************************************************************************/
 void
@@ -82,7 +69,14 @@ Fetcher::operator()(const std::string& url, const std::string& path) const
     BacktraceContext c("Fetcher::operator()("+url+", "+path+")");
     assert(not _opts.implementation().empty());
 
-    FetcherImp *imp = _impmap[_opts.implementation()];
+    std::cerr << "_opts.implementation() == '" << _opts.implementation()
+        << "'." << std::endl;
+    std::cerr << "FetcherImpMap contents: " << std::endl;
+    FetcherImpMap::const_iterator i;
+    for (i = _impmap.begin() ; i != _impmap.end() ; ++i)
+        std::cerr << "imp: " << i->first << std::endl;
+
+    const FetcherImp * const imp = _impmap[_opts.implementation()];
     if (not imp)
         throw UnimplementedFetchMethod(_opts.implementation());
 

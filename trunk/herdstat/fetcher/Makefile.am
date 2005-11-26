@@ -6,6 +6,7 @@ cc_sources = \
 	exceptions.cc \
 	wgetfetcher.cc \
 	curlfetcher.cc \
+	impmap.cc \
 	fetcher.cc
 
 hh_sources = \
@@ -14,6 +15,7 @@ hh_sources = \
 	fetcherimp.hh \
 	wgetfetcher.hh \
 	curlfetcher.hh \
+	impmap.hh \
 	fetcher.hh
 
 noinst_LTLIBRARIES = libfetcher.la

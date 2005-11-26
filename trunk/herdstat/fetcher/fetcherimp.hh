@@ -33,6 +33,7 @@
  */
 
 #include <string>
+#include <herdstat/exceptions.hh>
 #include <herdstat/fetcher/options.hh>
 
 namespace herdstat {

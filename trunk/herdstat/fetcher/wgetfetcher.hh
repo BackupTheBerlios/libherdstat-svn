@@ -58,8 +58,8 @@ namespace herdstat {
                 throw (FileException);
 
         private:
-            /// Only Fetcher can instantiate this class.
-            friend class Fetcher;
+            /// Only FetcherImpMap can instantiate this class.
+            friend class FetcherImpMap;
 
             /// Constructor.
             WgetFetcher(const FetcherOptions& opts) throw();

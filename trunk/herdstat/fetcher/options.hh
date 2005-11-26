@@ -45,6 +45,13 @@ namespace herdstat {
     /**
      * @class FetcherOptions options.hh herdstat/fetcher/options.hh
      * @brief Options that determine Fetcher's behavior.
+     *
+     * @section example Example
+     *
+     * Below is an example of using the FetcherOptions class in conjunction with
+     * the Fetcher class.
+     *
+     * @include fetcher_options/main.cc
      */
 
     class FetcherOptions
