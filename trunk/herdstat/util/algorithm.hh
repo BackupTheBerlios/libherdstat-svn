@@ -42,6 +42,24 @@ namespace util {
      * returns true, assign the result of UnaryOp to the given output iterator.
      * Like std::transform, but only "transforms" if UnaryPred returns true.
      * For times where std::replace_copy_if is not appropriate.
+     *
+     * @section example Example
+     *
+     * Below is a simple example of using transform_if:
+     *
+@code
+std::vector<int> v1, v2;
+v1.push_back(1);
+v1.push_back(10);
+v1.push_back(199);
+v1.push_back(666);
+util::transform_if(v1.begin(), v1.end(),
+    std::back_inserter(v2),
+    std::bind2nd(std::greater<int>(), 10),
+    std::bind2nd(std::plus<int>(), 5));
+@endcode
+     * The above code snippet can be read as "for each element in v1 that is
+     * greater than 10, add 5 to it and insert it into v2".
      */
 
     template <typename InputIterator, typename OutputIterator,
@@ -63,6 +81,20 @@ namespace util {
      * For each element in the range [first,last) for which UnaryPred returns
      * true, copy to the given output iterator.  Like std::copy but only copies
      * if UnaryPred returns true.
+     *
+     * @section example Example
+     *
+     * Below is a simple example of using copy_if:
+@code
+std::vector<std::string> paths, files;
+paths.push_back("/path/to/some/file");
+paths.push_back("/path/to/some/other/file");
+paths.push_back("/path/to/some/directory");
+util::copy_if(paths.begin(), paths.end(),
+    std::back_inserter(files), util::IsFile());
+@endcode
+     * The above code snippet can be read as "for each element in the paths
+     * vector, if it's a valid file, insert it into the files vector".
      */
 
     template <typename InputIterator, typename OutputIterator,

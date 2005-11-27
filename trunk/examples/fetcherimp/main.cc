@@ -7,20 +7,18 @@
 #include <herdstat/fetcher/fetcherimp.hh>
 #include <herdstat/fetcher/fetcher.hh>
 
-using namespace herdstat;
-
-class MyFetcherImp : public FetcherImp
+class MyFetcherImp : public herdstat::FetcherImp
 {
 	public:
-		MyFetcherImp(const FetcherOptions& opts) throw();
+		MyFetcherImp(const herdstat::FetcherOptions& opts) throw();
 		virtual ~MyFetcherImp() throw();
 		virtual bool fetch(const std::string& url,
 			           const std::string& path) const
-			throw (FileException);
+			throw (herdstat::FileException);
 };
 
-MyFetcherImp::MyFetcherImp(const FetcherOptions& opts) throw()
-	: FetcherImp(opts)
+MyFetcherImp::MyFetcherImp(const herdstat::FetcherOptions& opts) throw()
+	: herdstat::FetcherImp(opts)
 {
 }
 
@@ -30,7 +28,7 @@ MyFetcherImp::~MyFetcherImp() throw()
 
 bool
 MyFetcherImp::fetch(const std::string& url, const std::string& path) const
-	throw (FileException)
+	throw (herdstat::FileException)
 {
 	/* a real FetcherImp derivative would
 	 * obviously actually fetch the file.
@@ -56,22 +54,22 @@ main(int argc, char **argv)
 
 	try
 	{
-		FetcherOptions opts;
+		herdstat::FetcherOptions opts;
 		opts.set_implementation("my_fetcher");
 
-		FetcherImpMap imps(opts);
+		herdstat::FetcherImpMap imps(opts);
 		imps.insert<MyFetcherImp>("my_fetcher");
 
-		Fetcher fetch(imps, opts);
+		herdstat::Fetcher fetch(imps, opts);
 		fetch(url, path);
 	}
-	catch (const FetchException& e)
+	catch (const herdstat::FetchException& e)
 	{
 		std::cerr << "Failed to save '" << url << "' to '"
 		    << path << "." << std::endl;
 		return EXIT_FAILURE;
 	}
-	catch (const BaseException& e)
+	catch (const herdstat::BaseException& e)
 	{
 		std::cerr << "Oops!\n  * " << e.backtrace(":\n	* ")
 		    << e.what() << std::endl;

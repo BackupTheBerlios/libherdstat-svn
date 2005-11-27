@@ -29,13 +29,13 @@
 namespace herdstat {
 namespace portage {
 /****************************************************************************/
-Herd::Herd()
+Herd::Herd() throw()
     : Developers(), _name(), _email(), _desc()
 {
 }
 /****************************************************************************/
 Herd::Herd(const std::string &name,
-           const std::string &email, const std::string &desc)
+           const std::string &email, const std::string &desc) throw()
     : Developers(), _name(name), _email(email.empty() ? name : email),
       _desc(desc)
 {
@@ -47,35 +47,35 @@ Herd::Herd(const std::string &name,
         _name.erase(pos);
 }
 /****************************************************************************/
-Herd::Herd(const container_type& v)
+Herd::Herd(const container_type& v) throw()
     : Developers(v), _name(), _email(), _desc()
 {
 }
 /****************************************************************************/
-Herd::Herd(const std::vector<std::string>& devs)
+Herd::Herd(const std::vector<std::string>& devs) throw()
     : Developers(devs), _name(), _email(), _desc()
 {
 }
 /****************************************************************************/
-Herd::~Herd()
+Herd::~Herd() throw()
 {
 }
 /****************************************************************************/
-Herds::Herds()
+Herds::Herds() throw()
 {
 }
 /****************************************************************************/
-Herds::Herds(const container_type& v)
+Herds::Herds(const container_type& v) throw()
 {
     *this = v;
 }
 /****************************************************************************/
-Herds::~Herds()
+Herds::~Herds() throw()
 {
 }
 /****************************************************************************/
 Herds&
-Herds::operator= (const std::vector<std::string>& herds)
+Herds::operator= (const std::vector<std::string>& herds) throw()
 {
     this->clear();
     
@@ -87,7 +87,7 @@ Herds::operator= (const std::vector<std::string>& herds)
 }
 /****************************************************************************/
 Herds&
-Herds::operator= (const container_type& v)
+Herds::operator= (const container_type& v) throw()
 {
     this->clear();
     this->insert(v.begin(), v.end());
@@ -95,7 +95,7 @@ Herds::operator= (const container_type& v)
 }
 /****************************************************************************/
 Herds::operator
-std::vector<std::string>() const
+std::vector<std::string>() const throw()
 {
     std::vector<std::string> v;
     std::transform(this->begin(), this->end(),

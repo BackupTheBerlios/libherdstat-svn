@@ -55,6 +55,8 @@ namespace xml {
 
     /**
      * Sole access point for the xml::Init class.
+     * This function <b>MUST</b> be called before using any of libherdstat's
+     * XML-related classes.
      * @returns const reference to a static local instance.
      */
 

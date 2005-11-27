@@ -28,24 +28,25 @@
 #include <unistd.h>
 
 #include <herdstat/util/string.hh>
+#include <herdstat/util/functional.hh>
 #include <herdstat/fetcher/fetcherimp.hh>
 #include <herdstat/fetcher/fetcher.hh>
 
 namespace herdstat {
 /****************************************************************************/
 Fetcher::Fetcher() throw()
-    : _opts(), _impmap(_opts)
+    : _opts(), _impmap(_opts), _copied_impmap(false)
 {
 }
 /****************************************************************************/
 Fetcher::Fetcher(const FetcherImpMap& impmap, const FetcherOptions& opts)
     throw()
-    : _opts(opts), _impmap(impmap)
+    : _opts(opts), _impmap(impmap), _copied_impmap(true)
 {
 }
 /****************************************************************************/
 Fetcher::Fetcher(const FetcherOptions& opts) throw()
-    : _opts(opts), _impmap(opts)
+    : _opts(opts), _impmap(opts), _copied_impmap(false)
 {
 }
 /****************************************************************************/
@@ -53,13 +54,19 @@ Fetcher::Fetcher(const std::string& url,
                  const std::string& path,
                  const FetcherOptions& opts)
     throw (FileException, FetchException, UnimplementedFetchMethod)
-    : _opts(opts), _impmap(opts)
+    : _opts(opts), _impmap(opts), _copied_impmap(false)
 {
     this->operator()(url, path);
 }
 /****************************************************************************/
 Fetcher::~Fetcher() throw()
 {
+    /* only free _impmap memory if we created it */
+    if (not _copied_impmap)
+        std::for_each(_impmap.begin(), _impmap.end(),
+            util::compose_f_gx(
+                util::DeleteAndNullify<FetcherImp>(),
+                util::Second<FetcherImpMap::value_type>()));
 }
 /****************************************************************************/
 void

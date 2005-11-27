@@ -364,7 +364,7 @@ Directory::do_read()
         /* recurse into sub-directories */
         if (_recurse and util::is_dir(this->back()))
         {
-            Directory dir(this->back());
+            Directory dir(this->back(), true);
             this->insert(this->end(), dir.begin(), dir.end());
         }
     }

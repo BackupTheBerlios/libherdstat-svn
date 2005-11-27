@@ -54,7 +54,7 @@ namespace util {
 
     /**
      * @struct First functional.hh herdstat/util/functional.hh
-     * @brief Returns the 'first' member of a std::pair<K, V>.
+     * @brief Returns the 'first' member of an instance of type T.
      */
 
     template <typename T>
@@ -66,7 +66,10 @@ namespace util {
 
     /**
      * @struct Second functional.hh herdstat/util/functional.hh
-     * @brief Returns the 'second' member of a std::pair<K, V>.
+     * @brief Returns the 'second' member of an instance of type T.
+     *
+     * @section example Example
+     * @see util::compose_f_gx for an example of using util::Second.
      */
 
     template <typename T>
@@ -97,7 +100,21 @@ namespace util {
     /**
      * @struct DeleteAndNullify functional.hh herdstat/util/functional.hh
      * @brief Function object that deletes the given pointer and sets it to
-     * NULL.
+     * NULL.  This function object is adaptable meaning the template argument
+     * must be explicitly specified.
+     *
+     * @section example Example
+     *
+     * Below is a simple example of using DeleteAndNullify to 'delete' all
+     * members in a container:
+     *
+@code
+std::vector<Foo *> foov;
+...
+std::for_each(foov.begin(), foov.end(), util::DeleteAndNullify<Foo>());
+@endcode
+     * @see util::compose_f_gx for a slightly more complex example of using
+     * DeleteAndNullify.
      */
 
     template <typename T>
@@ -118,6 +135,22 @@ namespace util {
      * @brief Function object template that instaniates an object of type T,
      * passing an object of type U to its constructor.  U defaults to
      * std::string.
+     *
+     * @section example Example
+     *
+     * Below is a simple example of using the New function object:
+@code
+std::vector<std::string> paths;
+...
+std::vector<portage::Ebuild> ebuilds;
+util::transform_if(paths.begin(), paths.end(),
+    std::back_inserter(ebuilds), portage::IsEbuild(),
+    util::New<Ebuild>());
+@endcode
+     * The above code snippet can be read as "for each element in paths, if it's
+     * an ebuild (portage::IsEbuild returns true), instantiate a new
+     * portage::Ebuild object passing the paths element as it's constructor
+     * argument, and insert the resulting object into the ebuilds vector".
      */
 
     template <typename T, typename U = std::string>
@@ -200,6 +233,20 @@ namespace util {
      * @struct regexMatch functional.hh herdstat/util/functional.hh
      * @brief Function object for determining whether the given string matches
      * the given util::Regex object.
+     *
+     * @section example Example
+     *
+     * Below is a simple example of using the util::regexMatch function object:
+     *
+@code
+std::vector<std::string> v, results;
+...
+util::copy_if(v.begin(), v.end(),
+    std::back_inserter(results),
+    std::bind1st(util::regexMatch(), "foo$"));
+@endcode
+     * The above code snippet can be read as "for each element in v, if it
+     * matches the regular expression 'foo$', insert it into results".
      */
 
     struct regexMatch : std::binary_function<Regex, std::string, bool>
@@ -212,6 +259,9 @@ namespace util {
      * @struct patternMatch functional.hh herdstat/util/functional.hh
      * @brief Function object for determining whether the given glob pattern
      * matches the given path.
+     *
+     * @section example Example
+     * @see util::compose_f_gx_hx for an example of using util::patternMatch.
      */
 
     struct patternMatch : std::binary_function<std::string, std::string, bool>
@@ -254,6 +304,22 @@ namespace util {
 
     /**
      * Helper function for the compose_f_gx_t adapter.
+     *
+     * @section example Example
+     *
+     * Below is an example of using compose_f_gx:
+@code
+typedef std::map<std::string, Foo *> foomap;
+foomap fm;
+...
+std::for_each(fm.begin(), fm.end(),
+    util::compose_f_gx(
+        util::DeleteAndNullify<Foo>(),
+        util::Second<foomap::value_type>()));
+@endcode
+     * The above code snippet can be read as "for each element in fm, take the
+     * return value of the util::Second function object and pass it to
+     * DeleteAndNullify.  Basically, delete the 'second' member of each element".
      */
 
     template <typename Op1, typename Op2>
@@ -294,6 +360,23 @@ namespace util {
 
     /**
      * Helper function for the compose_f_gx_hx_t adapter.
+     *
+     * @section example Example
+     *
+     * Below is a simple example of using compose_f_gx_hx:
+     *
+@code
+std::vector<std::string> paths, results;
+...
+util::copy_if(paths.begin(), paths.end(),
+    std::back_inserter(results),
+    util::compose_f_gx_hx(
+        std::logical_and<bool>(),
+            std::bind2nd(util::patternMatch(), "*foo*"),
+            util::IsFile()));
+@endcode
+     * The above code snippet can be read as "for each element in paths, if it
+     * matches the pattern '*foo*' and is a valid file, insert it into results".
      */
 
     template <typename Op1, typename Op2, typename Op3>
@@ -335,6 +418,29 @@ namespace util {
 
     /**
      * Helper function for the compose_f_gx_hy_t adapter.
+     *
+     * @section example Example
+     *
+     * Below is a simple example of using compose_f_gx_hy:
+@code
+typedef std::vector<std::pair<std::string, std::string> > spvec;
+spvec v;
+...
+std::sort(v.begin(), v.end(),
+    util::compose_f_gx_hy(
+        std::less<std::string>(),
+        util::Second<spvec::value_type>(),
+        util::Second<spvec::value_type>()));
+v.erase(std::unique(v.begin(), v.end(),
+    util::compose_f_gx_hy(
+        std::equal_to<std::string>(),
+        util::Second<spvec::value_type>(),
+        util::Second<spvec::value_type>()), v.end()));
+@endcode
+     * The above code snippet can be read as "sort all elements in v by
+     * comparing the 'second' members of subsequent elements via std::less
+     * and then erasing all duplicates (where a duplicate is determined by
+     * comparing the 'second' member of subsequent elements via std::equal)."
      */
 
     template <typename Op1, typename Op2, typename Op3>

@@ -62,10 +62,10 @@ namespace herdstat {
                          const std::string& domain) throw (MalformedEmail);
 
             /// Destructor.
-            virtual ~EmailAddress();
+            virtual ~EmailAddress() throw();
 
             /// Implicit conversion to std::string.
-            inline operator const std::string&() const;
+            inline operator const std::string&() const throw();
 
             /** Assignment operator.
              * @param email email address string.
@@ -76,7 +76,7 @@ namespace herdstat {
             operator= (const std::string& email) throw (MalformedEmail);
 
             /// Clear email address.
-            inline void clear();
+            inline void clear() throw();
 
             /** Assign new email address string.
              * @param email email address string.
@@ -86,45 +86,48 @@ namespace herdstat {
             
             /** Assign a new EmailAddress object.
              * @param that const reference to another EmailAddress object.
+             * @exception MalformedEmail
              */
-            inline void assign(const EmailAddress& that);
+            inline void assign(const EmailAddress& that) throw (MalformedEmail);
 
             /// Get user name.
-            inline const std::string& user() const;
+            inline const std::string& user() const throw();
             /// Get domain name.
-            inline const std::string& domain() const;
+            inline const std::string& domain() const throw();
             /// Get full email.
-            inline const std::string& str() const;
+            inline const std::string& str() const throw();
         
             /// Set user name.
-            void set_user(const std::string& user);
+            void set_user(const std::string& user) throw();
             /// Set domain.
-            void set_domain(const std::string& domain);
+            void set_domain(const std::string& domain) throw();
 
         protected:
             virtual bool parse(const std::string& email) throw();
 
         private:
-            void set_email();
+            void set_email() throw();
             std::string _email, _user, _domain;
     };
 
-    inline EmailAddress::operator const std::string&() const { return _email; }
+    inline EmailAddress::operator const std::string&() const throw()
+    { return _email; }
     inline EmailAddress&
     EmailAddress::operator= (const std::string& email) throw (MalformedEmail)
     { if (not this->parse(email)) throw MalformedEmail(email); return *this; }
     inline void EmailAddress::assign(const std::string& email) throw (MalformedEmail)
     { if (not this->parse(email)) throw MalformedEmail(email); }
-    inline void EmailAddress::assign(const EmailAddress& that) { *this = that; }
-    inline const std::string& EmailAddress::user() const { return _user; }
-    inline const std::string& EmailAddress::domain() const { return _domain; }
-    inline const std::string& EmailAddress::str() const { return _email; }
-    inline void EmailAddress::set_email() { _email.assign(_user+"@"+_domain); }
-    inline void EmailAddress::set_user(const std::string& user)
+    inline void EmailAddress::assign(const EmailAddress& that) throw (MalformedEmail)
+    { *this = that; }
+    inline const std::string& EmailAddress::user() const throw() { return _user; }
+    inline const std::string& EmailAddress::domain() const throw() { return _domain; }
+    inline const std::string& EmailAddress::str() const throw() { return _email; }
+    inline void EmailAddress::set_email() throw() { _email.assign(_user+"@"+_domain); }
+    inline void EmailAddress::set_user(const std::string& user) throw()
     { _user.assign(user); set_email(); }
-    inline void EmailAddress::set_domain(const std::string& domain)
+    inline void EmailAddress::set_domain(const std::string& domain) throw()
     { _domain.assign(domain); set_email(); }
-    inline void EmailAddress::clear()
+    inline void EmailAddress::clear() throw()
     { _email.clear();_user.clear();_domain.clear(); }
 
 } // namespace herdstat

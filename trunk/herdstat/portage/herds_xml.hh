@@ -43,6 +43,14 @@ namespace portage {
     /**
      * @class HerdsXML herds_xml.hh herdstat/portage/herds_xml.hh
      * @brief Interface for Gentoo's herds.xml.
+     *
+     * @section example Example
+     *
+     * Below is an example on using the HerdsXML class.  After parsing herds.xml
+     * (either via the parse() member or via the constructor that takes a path),
+     * you may get the underlying Herds container via the herds() member.
+     *
+     * @include herds.xml/main.cc
      */
 
     class HerdsXML : public xmlBase

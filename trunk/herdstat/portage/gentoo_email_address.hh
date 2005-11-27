@@ -39,22 +39,23 @@ namespace portage {
 
     /**
      * @class GentooEmailAddress gentoo_email_address.hh herdstat/portage/gentoo_email_address.hh
-     * @brief Represents a gentoo.org email address.
+     * @brief A gentoo.org EmailAddress.
      */
 
     class GentooEmailAddress : public EmailAddress
     {
         public:
             /// Default constructor.
-            GentooEmailAddress();
+            GentooEmailAddress() throw();
 
             /** Constructor.
              * @param email email address string.
+             * @exception MalformedEmail
              */
-            GentooEmailAddress(const std::string& email);
+            GentooEmailAddress(const std::string& email) throw (MalformedEmail);
 
             /// Destructor.
-            virtual ~GentooEmailAddress();
+            virtual ~GentooEmailAddress() throw();
 
         protected:
             /// Parse email address.

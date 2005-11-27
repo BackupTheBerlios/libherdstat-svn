@@ -42,6 +42,12 @@ namespace portage {
     /**
      * @class PackageFinder package_finder.hh herdstat/portage/package_finder.hh
      * @brief Interface for portage package searching.
+     *
+     * @section example Example
+     *
+     * Below is a simple example of using the PackageFinder class:
+     *
+     * @include package_finder/main.cc
      */
 
     class PackageFinder

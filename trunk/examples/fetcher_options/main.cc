@@ -7,12 +7,10 @@
 #include <cstdlib>
 #include <herdstat/fetcher/fetcher.hh>
 
-using namespace herdstat;
-
 int
 main(int argc, char **argv)
 {
-	FetcherOptions opts;
+	herdstat::FetcherOptions opts;
 	std::string url, path;
 	opts.set_verbose(true);
 
@@ -37,16 +35,16 @@ main(int argc, char **argv)
 
 	try
 	{
-		Fetcher fetch(opts);
+		herdstat::Fetcher fetch(opts);
 		fetch(url, path);
 	}
-	catch (const FetchException& e)
+	catch (const herdstat::FetchException& e)
 	{
 		std::cerr << "Failed to save '" << url << "' to '"
 		    << path << "." << std::endl;
 		return EXIT_FAILURE;
 	}
-	catch (const BaseException& e)
+	catch (const herdstat::BaseException& e)
 	{
 		std::cerr << "Oops!\n  * " << e.backtrace(":\n	* ")
 		    << e.what() << std::endl;

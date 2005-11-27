@@ -8,10 +8,6 @@
 #include <herdstat/xml/init.hh>
 #include <herdstat/portage/herds_xml.hh>
 
-using namespace herdstat;
-using namespace herdstat::xml;
-using namespace herdstat::portage;
-
 int
 main(int argc, char **argv)
 {
@@ -26,32 +22,33 @@ main(int argc, char **argv)
 		/// Initialize underlying libxml2 things.
 		herdstat::xml::GlobalInit();
 
-		HerdsXML herds_xml(argv[1]);
-		const Herds& herds(herds_xml.herds());
+		herdstat::portage::HerdsXML herds_xml(argv[1]);
+		const herdstat::portage::Herds& herds(herds_xml.herds());
 
 		/// Display all herd names.
 		std::cout << "All herd names: " << std::endl;
 		std::transform(herds.begin(), herds.end(),
 			std::ostream_iterator<std::string>(std::cout, " "),
-			std::mem_fun_ref(&Herd::name));
-		std::cout << std::endl;
+			std::mem_fun_ref(&herdstat::portage::Herd::name));
+		std::cout << std::endl << std::endl;
 
 		/// fill the developer object with info herds.xml knows about
-		Developer dev("ka0ttic");
+		herdstat::portage::Developer dev("ka0ttic");
 		herds_xml.fill_developer(dev);
 
 		std::cout << "Info for developer 'ka0ttic':" << std::endl
 			  << "Name:  " << dev.name() << std::endl
 			  << "Email: " << dev.email() << std::endl
-			  << "Herds: " << util::join(dev.herds(), ',') << std::endl;
+			  << "Herds: "
+			  << herdstat::util::join(dev.herds(), ',') << std::endl;
 	}
-	catch (const ParserException& e)
+	catch (const herdstat::xml::ParserException& e)
 	{
 		std::cerr << "Error parsing " << e.file() << ": "
 		    << e.error() << std::endl;
 		return EXIT_FAILURE;
 	}
-	catch (const BaseException& e)
+	catch (const herdstat::BaseException& e)
 	{
 		std::cerr << "Oops!\n  * " << e.backtrace(":\n	* ")
 		    << e.what() << std::endl;

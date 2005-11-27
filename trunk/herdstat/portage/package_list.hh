@@ -46,6 +46,13 @@ namespace portage {
      * than checking that it's a directory and it exists), so you should use
      * the portage::is_pkg_dir() function or the portage::IsPkgDir() function
      * object to validate an element before using it.
+     *
+     * @section usage Usage
+     *
+     * Use PackageList as you would any std::vector.
+     *
+     * @section example Example
+     * @see portage::PackageFinder for an example of using portage::PackageList.
      */
 
     class PackageList : public util::VectorBase<Package>
@@ -79,7 +86,7 @@ namespace portage {
             inline bool has_package(const Package& pkg) const;
             ///@}
 
-            /// Implicit conversion to const vector<Package>&
+            /// Implicit conversion to const std::vector<Package>&
             operator const container_type&() const { return this->container(); }
 
         private:

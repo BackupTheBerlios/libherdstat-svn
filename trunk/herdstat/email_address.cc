@@ -49,7 +49,7 @@ EmailAddress::EmailAddress(const std::string& user,
         throw MalformedEmail(_email);
 }
 /****************************************************************************/
-EmailAddress::~EmailAddress()
+EmailAddress::~EmailAddress() throw()
 {
 }
 /****************************************************************************/

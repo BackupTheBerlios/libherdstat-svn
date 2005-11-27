@@ -9,11 +9,9 @@
 
 #include "rss_feed.hh"
 
-using namespace herdstat;
-using namespace herdstat::xml;
-
 RSSFeed::RSSFeed(const std::string& url) throw()
-    : Fetchable(), Parsable(), SAXHandler(), _url(url), _entries(),
+    : herdstat::Fetchable(), herdstat::Parsable(), herdstat::xml::SAXHandler(),
+      _url(url), _entries(),
       _desc(), _lang(), _creator(), in_main_title(false), in_main_desc(false),
       in_lang(false), in_creator(false), in_date(false), in_item(false),
       in_link(false), in_subject(false), in_body(false), in_desc(false),
@@ -27,21 +25,23 @@ RSSFeed::~RSSFeed() throw()
 
 void
 RSSFeed::do_fetch(const std::string& path) const
-    throw (FetchException)
+    throw (herdstat::FetchException)
 {
-	const Fetcher& fetcher(this->fetcher());
-	const std::string file(path.empty() ? util::basename(_url) : path);
+	const herdstat::Fetcher& fetcher(this->fetcher());
+	const std::string file(path.empty() ?
+				herdstat::util::basename(_url) : path);
 	fetcher(_url, file);
 }
 
 void
 RSSFeed::do_parse(const std::string& path)
-    throw (FileException, ParserException)
+    throw (herdstat::FileException, herdstat::xml::ParserException)
 {
-	const std::string file(path.empty() ? util::basename(_url) : path);
+	const std::string file(path.empty() ?
+			herdstat::util::basename(_url) : path);
 
-	if (not util::is_file(file))
-		throw FileException(file);
+	if (not herdstat::util::is_file(file))
+		throw herdstat::FileException(file);
 
 	this->parse_file(file.c_str());
 }

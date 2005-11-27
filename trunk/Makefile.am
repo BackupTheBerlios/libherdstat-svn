@@ -56,7 +56,7 @@ ChangeLog: clitimestamp
 	@rm clitimestamp
 
 $(pc):
-	@SED@   -e "s|\@prefix\@|$(prefix)|g" \
+	@@SED@   -e "s|\@prefix\@|$(prefix)|g" \
 		-e "s|\@exec_prefix\@|$(exec_prefix)|g" \
 		-e "s|\@libdir\@|$(libdir)|g" \
 		-e "s|\@includedir\@|$(includedir)|g" \

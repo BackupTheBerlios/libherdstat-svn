@@ -39,6 +39,15 @@ namespace herdstat {
     /**
      * @class Cachable cachable.hh herdstat/cachable.hh
      * @brief Abstract interface for cachable things.
+     *
+     * @section example Example
+     *
+     * Below is a simple example of using the Cachable base class.  Upon first
+     * invocation, the below application caches the location of every
+     * metadata.xml in the specified PORTDIR in a file called metadata_list.txt.
+     * Upon subsequent invocations, it will simply load metadata_list.txt.
+     *
+     * @include cachable/main.cc
      */
 
     class Cachable : private Noncopyable
@@ -48,7 +57,7 @@ namespace herdstat {
             virtual ~Cachable() { }
 
             /** Determine if cache is valid.
-             * @returns Boolean value.
+             * @returns true if cache is valid.
              */
             virtual bool valid() const = 0;
 
@@ -60,6 +69,9 @@ namespace herdstat {
 
             /// Dump cache.
             virtual void dump() = 0;
+
+            /// Get path to cache.
+            const std::string& path() const { return _path; }
 
         protected:
             /** Constructor.
@@ -78,9 +90,6 @@ namespace herdstat {
                     this->dump();
                 }
             }
-
-            /// Get path to cache.
-            const std::string& path() const { return _path; }
 
         private:
             const std::string _path;

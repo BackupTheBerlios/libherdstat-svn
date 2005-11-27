@@ -11,4 +11,4 @@ EXTRA_DIST = mk_run_lhs_test.sh run_lhs_test.cc.in
 CLEANFILES = run_lhs_test.cc
 
 run_lhs_test.cc: run_lhs_test.cc.in $(test_headers)
-	$(srcdir)/mk_run_lhs_test.sh run_lhs_test.cc.in $(test_headers)
+	@$(srcdir)/mk_run_lhs_test.sh run_lhs_test.cc.in $(test_headers)

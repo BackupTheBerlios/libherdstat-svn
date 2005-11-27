@@ -6,8 +6,6 @@
 #include <cstdlib>
 #include <herdstat/fetcher/fetcher.hh>
 
-using namespace herdstat;
-
 int
 main(int argc, char **argv)
 {
@@ -21,16 +19,16 @@ main(int argc, char **argv)
 
 	try
 	{
-		Fetcher fetch;
+		herdstat::Fetcher fetch;
 		fetch(argv[1], argv[2]);
 	}
-	catch (const FetchException& e)
+	catch (const herdstat::FetchException& e)
 	{
 		std::cerr << "Failed to save '" << argv[1] << "' to '"
 		    << argv[2] << "." << std::endl;
 		return EXIT_FAILURE;
 	}
-	catch (const BaseException& e)
+	catch (const herdstat::BaseException& e)
 	{
 		std::cerr << "Oops!\n  * " << e.backtrace(":\n	* ")
 		    << e.what() << std::endl;

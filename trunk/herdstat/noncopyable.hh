@@ -36,7 +36,13 @@ namespace herdstat {
 
     /**
      * @class Noncopyable noncopyable.hh herdstat/noncopyable.hh
-     * @brief Base for non-copyable things.
+     * @brief Base class for noncopyable things.  Declares copy constructor and
+     * copy assignment operator private.
+     *
+     * @section usage Usage
+     *
+     * Simple inherit (privately) from the Noncopyable class.  Any code
+     * attempting to copy or assign (operator=) should fail to compile.
      */
 
     class Noncopyable

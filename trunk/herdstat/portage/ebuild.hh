@@ -42,9 +42,15 @@ namespace portage {
     /**
      * @class Ebuild ebuild.hh herdstat/portage/ebuild.hh
      * @brief Represents ebuild variables.
-     * This is really identical to util::vars, except it defines
+     * This is really identical to util::Vars, except it defines
      * do_set_defaults() and inserts variables that should be
      * pre-existing (${PN}, ${P}, etc).
+     *
+     * @section example Example
+     *
+     * The example for util::Vars applies equally for the Ebuild class.
+     *
+     * @see util::Vars
      */
 
     class Ebuild : public util::Vars

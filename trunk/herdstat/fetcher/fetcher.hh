@@ -75,7 +75,8 @@ namespace herdstat {
 
             /** Constructor.
              * @param impmap const reference to a user provided implementation
-             * map.
+             * map (note that caller is responsible for free'ing all of the
+             * map's members).
              * @param opts const reference to a FetcherOptions object.
              */
             Fetcher(const FetcherImpMap& impmap,
@@ -111,6 +112,7 @@ namespace herdstat {
         private:
             FetcherOptions _opts;
             FetcherImpMap _impmap;
+            const bool _copied_impmap;
     };
 
 } // namespace herdstat

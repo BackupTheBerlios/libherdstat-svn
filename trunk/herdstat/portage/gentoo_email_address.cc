@@ -30,18 +30,19 @@
 namespace herdstat {
 namespace portage {
 /****************************************************************************/
-GentooEmailAddress::GentooEmailAddress()
+GentooEmailAddress::GentooEmailAddress() throw()
     : EmailAddress()
 {
 }
 /****************************************************************************/
 GentooEmailAddress::GentooEmailAddress(const std::string& email)
+    throw(MalformedEmail)
     : EmailAddress()
 {
     this->assign(email);
 }
 /****************************************************************************/
-GentooEmailAddress::~GentooEmailAddress()
+GentooEmailAddress::~GentooEmailAddress() throw()
 {
 }
 /****************************************************************************/

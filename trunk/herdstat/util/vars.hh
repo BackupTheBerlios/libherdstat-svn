@@ -42,7 +42,15 @@ namespace util {
     /**
      * @class Vars vars.hh herdstat/util/vars.hh
      * @brief Represents a file with variables in the form of VARIABLE=VALUE,
-     * stored in key,value pairs.
+     * stored in key,value pairs.  Does extremely simple variable substitution.
+     *
+     * @section example Example
+     *
+     * Below is an example showing a simple usage of the Vars class.  It simply
+     * parses the specified file showing each variable's value (assuming the
+     * file you specify contains variable assignments).
+     *
+     * @include vars/main.cc
      */
 
     class Vars : public BaseFile,

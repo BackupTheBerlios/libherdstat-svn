@@ -183,6 +183,9 @@ AC_OUTPUT(Makefile
 	  examples/fetcher_options/Makefile
 	  examples/fetchable/Makefile
 	  examples/herds.xml/Makefile
+	  examples/vars/Makefile
+	  examples/cachable/Makefile
+	  examples/package_finder/Makefile
 	  herdstat/Makefile
 	  herdstat/libherdstat_version.hh
 	  herdstat/util/Makefile

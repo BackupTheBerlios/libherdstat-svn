@@ -7,9 +7,6 @@
 #include <herdstat/xml/init.hh>
 #include "rss_feed.hh"
 
-using namespace herdstat;
-using namespace herdstat::xml;
-
 int
 main(int argc, char **argv)
 {
@@ -29,19 +26,19 @@ main(int argc, char **argv)
 		feed.parse();
 		feed.display(std::cout);
 	}
-	catch (const FetchException& e)
+	catch (const herdstat::FetchException& e)
 	{
 		std::cerr << "Failed to fetch RSS feed: "
 			<< argv[1] << std::endl;
 		return EXIT_FAILURE;
 	}
-	catch (const ParserException& e)
+	catch (const herdstat::xml::ParserException& e)
 	{
 		std::cerr << "Error parsing RSS feed "
 			<< e.file() << ": " << e.error() << std::endl;
 		return EXIT_FAILURE;
 	}
-	catch (const BaseException& e)
+	catch (const herdstat::BaseException& e)
 	{
 		std::cerr << "Oops!\n  * " << e.backtrace(":\n	* ")
 		    << e.what() << std::endl;
