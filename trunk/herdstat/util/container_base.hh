@@ -43,13 +43,80 @@ namespace util {
     /**
      * @class ContainerBase container_base.hh herdstat/util/container_base.hh
      * @brief Base for classes who should act like standard containers.
+     *
+     * @section overview Overview
+     *
+     * The ContainerBase family of class templates are meant to be used as base
+     * classes for objects that want to mimic the interface of standard
+     * containers.  Why not just inherit from the standard container itself you
+     * may ask?  Because standard containers were not designed to be base
+     * classes and thus do not declare their destructors virtual.  Using these
+     * templates work around this because they don't inherit from the containers
+     * but instead just wrap them.
+     *
+     * None of these classes are meant to be used standalone, thus
+     * the reason why their constructors are declared protected.
+     *
+     * @section usage Usage
+     *
+     * To use the ContainerBase family of class templates, simply inherit from
+     * the appropriate ContainerBase derivative.  For example, if your class
+     * needs to mimic a std::vector<std::string>, you'd have it inherit from
+     * VectorBase<std::string>.
+     *
+     * There may be some cases in which the underlying container itself is
+     * needed (iterators won't do).  Using an insert iterator inside the class
+     * that is inheriting from a ContainerBase derivative, is one example.  In
+     * these cases, you can use the container() member function, which returns a
+     * reference to the underlying container.  See the example below to see it
+     * in action.
+     *
+     * @section example Example
+     *
+     * Below is a simple example of using VectorBase to mimic a std::vector:
+     *
+@code
+class Foo : public herdstat::util::VectorBase<std::string>
+{
+    public:
+        Foo(const container_type& c)
+            : herdstat::util::VectorBase<std::string>(c) { }
+
+        bool is_foo() const;
+        void bar();
+
+    private:
+        template <typename InputIterator>
+        void fill_container(InputIterator first, InputIterator last);
+};
+
+template <typename InputIterator>
+void
+Foo::fill_container(InputIterator first, InputIterator last)
+{
+    std::transform(first, last,
+        std::back_inserter(this->container()),
+        std::bind2nd(std::plus<std::string>(), "!"));
+}
+...
+Foo v;
+v.push_back("foo");
+v.push_back("bar");
+v.insert(v.end(),
+    std::istream_iterator<std::string>(stream),
+    std::istream_iterator<std::string>());
+@endcode
+     *
      */
 
     template <typename C>
     class ContainerBase
     {
         public:
+            /// underlying container type.
             typedef C container_type;
+            ///@{
+            /// container_type type fowards
             typedef typename container_type::iterator iterator;
             typedef typename container_type::const_iterator const_iterator;
             typedef typename container_type::reverse_iterator reverse_iterator;
@@ -59,21 +126,7 @@ namespace util {
             typedef typename container_type::value_type value_type;
             typedef typename container_type::size_type size_type;
             typedef typename container_type::difference_type difference_type;
-
-            /// Default constructor.
-            ContainerBase();
-
-            /** Constructor.
-             * @param c const reference to container_type.
-             */
-            explicit ContainerBase(const container_type& c);
-
-            /** Constructor.  Initialize with range [begin,end).
-             * @param begin Beginning iterator.
-             * @param end Ending iterator.
-             */
-            template <typename In>
-            ContainerBase(In begin, In end);
+            ///@}
 
             /// Destructor.
             virtual ~ContainerBase();
@@ -102,6 +155,21 @@ namespace util {
             //@}
     
         protected:
+            /// Default constructor.
+            ContainerBase();
+
+            /** Constructor.
+             * @param c const reference to container_type.
+             */
+            explicit ContainerBase(const container_type& c);
+
+            /** Constructor.  Initialize with range [begin,end).
+             * @param begin Beginning iterator.
+             * @param end Ending iterator.
+             */
+            template <typename In>
+            ContainerBase(In begin, In end);
+
             //@{
             /// For derived classes to use when the container itself is needed.
             container_type& container() { return _c; }
@@ -138,6 +206,7 @@ namespace util {
     /**
      * @class VectorBase container_base.hh herdstat/util/container_base.hh
      * @brief Base class template for classes acting like vector<T>.
+     * @see ContainerBase documentation.
      */
 
     template <typename T>
@@ -151,11 +220,6 @@ namespace util {
             typedef typename container_type::value_type value_type;
             typedef typename container_type::iterator iterator;
             typedef typename container_type::const_iterator const_iterator;
-
-            VectorBase();
-            VectorBase(const container_type& c);
-            template <typename In>
-            VectorBase(In begin, In end);
 
             virtual ~VectorBase();
 
@@ -201,6 +265,12 @@ namespace util {
             template <typename In>
             void insert(iterator pos, In begin, In end)
             { this->container().insert(pos, begin, end); }
+
+        protected:
+            VectorBase();
+            VectorBase(const container_type& c);
+            template <typename In>
+            VectorBase(In begin, In end);
     };
 
     template <typename T>
@@ -229,6 +299,7 @@ namespace util {
     /**
      * @class SetBase container_base.hh herdstat/util/container_base.hh
      * @brief Base class template for classes that act like a set<T>.
+     * @see ContainerBase documentation.
      */
 
     template <typename T, typename Compare = std::less<T> >
@@ -245,11 +316,6 @@ namespace util {
             typedef value_type key_type;
             typedef Compare key_compare;
             typedef Compare value_compare;
-
-            SetBase();
-            SetBase(const container_type& c);
-            template <class In>
-            SetBase(In begin, In end);
 
             virtual ~SetBase();
 
@@ -285,6 +351,12 @@ namespace util {
             { return this->container().upper_bound(k); }
             std::pair<iterator, iterator> equal_range(const key_type& k) const
             { return this->container().equal_range(k); }
+
+        protected:
+            SetBase();
+            SetBase(const container_type& c);
+            template <class In>
+            SetBase(In begin, In end);
     };
 
     template <typename T, typename Compare>
@@ -313,6 +385,7 @@ namespace util {
     /**
      * @class MapBase container_base.hh herdstat/util/container_base.hh
      * @brief Base class template for classes that act like a map<K,V>.
+     * @see ContainerBase documentation.
      */
 
     template <typename K, typename V, typename Compare = std::less<K> >
@@ -330,11 +403,6 @@ namespace util {
             typedef V mapped_type;
             typedef Compare key_compare;
             typedef typename container_type::value_compare value_compare;
-
-            MapBase();
-            MapBase(const container_type& c);
-            template <typename In>
-            MapBase(In begin, In end);
 
             virtual ~MapBase();
 
@@ -381,6 +449,12 @@ namespace util {
             std::pair<const_iterator, const_iterator>
             equal_range(const key_type& k) const
             { return this->container().equal_range(k); }
+
+        protected:
+            MapBase();
+            MapBase(const container_type& c);
+            template <typename In>
+            MapBase(In begin, In end);
     };
 
     template <typename K, typename V, typename Compare>
