@@ -53,7 +53,7 @@ v1.push_back(1);
 v1.push_back(10);
 v1.push_back(199);
 v1.push_back(666);
-util::transform_if(v1.begin(), v1.end(),
+herdstat::util::transform_if(v1.begin(), v1.end(),
     std::back_inserter(v2),
     std::bind2nd(std::greater<int>(), 10),
     std::bind2nd(std::plus<int>(), 5));
@@ -90,8 +90,8 @@ std::vector<std::string> paths, files;
 paths.push_back("/path/to/some/file");
 paths.push_back("/path/to/some/other/file");
 paths.push_back("/path/to/some/directory");
-util::copy_if(paths.begin(), paths.end(),
-    std::back_inserter(files), util::IsFile());
+herdstat::util::copy_if(paths.begin(), paths.end(),
+    std::back_inserter(files), herdstat::util::IsFile());
 @endcode
      * The above code snippet can be read as "for each element in the paths
      * vector, if it's a valid file, insert it into the files vector".

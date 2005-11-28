@@ -48,7 +48,8 @@ namespace portage {
      *
      * Below is an example on using the HerdsXML class.  After parsing herds.xml
      * (either via the parse() member or via the constructor that takes a path),
-     * you may get the underlying Herds container via the herds() member.
+     * you may get the underlying portage::Herds container via the herds()
+     * member.
      *
      * @include herds.xml/main.cc
      */

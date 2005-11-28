@@ -42,6 +42,30 @@ namespace util {
     /**
      * @class Glob glob.hh herdstat/util/glob.hh
      * @brief Interface to POSIX glob().
+     *
+     * @section example Example
+     *
+     * Below is a simple example of using the Glob class:
+     *
+@code
+const herdstat::util::Glob glob("*foo*");
+const std::vector<std::string>& results(glob.results());
+std::copy(glob.begin(), glob.end(),
+    std::ostream_iterator<std::string>(std::cout, "\n"));
+@endcode
+     *
+     * Another example, using successive operator()() calls:
+     *
+@code
+herdstat::util::Glob glob;
+glob("*foo*");
+std::copy(glob.results().begin(), glob.results().end(),
+    std::ostream_iterator<std::string>(std::cout, "\n"));
+glob.clear_results();
+glob("*.ebuild");
+std::copy(glob.results().begin(), glob.results().end(),
+    std::ostream_iterator<std::string>(std::cout, "\n"));
+@endcode
      */
 
     class Glob

@@ -40,6 +40,41 @@ namespace portage {
     /**
      * @class License license.hh herdstat/portage/license.hh
      * @brief Represents a LICENSE string.
+     *
+     * @section overview Overview
+     *
+     * Every ebuild declares a LICENSE variable (except maybe those that inherit
+     * an eclass that declares the variable).  In most cases a single license is
+     * declared and nothing special is needed in order to parse it.  However,
+     * there are some ebuilds that use weird syntax like:
+     *
+@verbatim
+LICENSE="|| ( GPL-2 BSD )"
+@endverbatim
+     *
+     * Using the License class, you can easily turn that into a space-delimited
+     * license string (available via the str() member).
+     *
+     * @section usage Usage
+     *
+     * Simply construct a License instance with a license string as found in an
+     * ebuild.  The easiest way of doing this is by using the portage::Ebuild
+     * class and selecting the LICENSE variable via
+     * portage::Ebuild::operator[]().
+     *
+     * By passing 'true' to the License constructor's 'validate' argument, the
+     * License class will throw a portage::QAException if it encounters a
+     * license that does not exist in ${PORTDIR}/licenses.
+     *
+     * @section example Example
+     *
+     * Below is a simple example of using the License class:
+     *
+@code
+herdstat::portage::Ebuild ebuild("/path/to/ebuild");
+herdstat::portage::License license(ebuild["LICENSE"], true);
+std::cout << "License(s): " << license.str() << std::endl;
+@endcode
      */
 
     class License

@@ -46,6 +46,7 @@ namespace portage {
      * @class Keyword keywords.hh herdstat/portage/keywords.hh
      * @brief Represents a single architecture keyword.
      */
+
     class Keyword
     {
         public:
@@ -186,8 +187,32 @@ namespace portage {
     /**
      * @class Keywords keywords.hh herdstat/portage/keywords.hh
      * @brief Keyword container.
-     * Usually used for all keywords for a certain ebuild.
-     * Also able to provide a pretty-printed keywords string.
+     *
+     * @section overview Overview
+     *
+     * Every ebuild defines a KEYWORDS variable that contains a list of
+     * architecture "keywords" that the package is known to work/not work with.
+     *
+     * The Keywords class was designed to hold all keywords from a given ebuild,
+     * however it can also be used in a more generic sense as a general
+     * portage::Keyword container.
+     *
+     * The Keywords class uses portage::Keyword::operator<() to sort keywords
+     * from least to greatest.  A masked Keyword ('-') is considered less than a
+     * testing Keyword ('~'), which is considered less than a stable keyword (no
+     * mask character).  Keywords with the same mask character are then sorted
+     * by std::string::operator<().
+     *
+     * @section usage Usage
+     *
+     * The Keywords class has the same public interface as a std::set.
+     *
+     * You can use the all_* member functions to determine if all the keywords
+     * have the respective mask type (eg all_masked() returns true if all
+     * keywords are masked with the '-' character).
+     *
+     * You can use the str() member function to get a pretty colored keywords
+     * string.
      */
 
     class Keywords : public util::SetBase<Keyword>

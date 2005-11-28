@@ -40,6 +40,20 @@ namespace util {
     /**
      * @class Timer timer.hh herdstat/util/timer.hh
      * @brief Represents a timer.
+     *
+     * @section example Example
+     *
+     * Below is a simple example of using the Timer class:
+     *
+@code
+herdstat::util::Timer timer;
+timer.start();
+...
+timer.stop();
+std::cout << "Took " << timer.elapsed()
+    << "ms to perform something." << std::endl;
+@endcode
+     *
      */
 
     class Timer
@@ -64,7 +78,7 @@ namespace util {
              */
             inline bool is_running() const;
 
-            /** How long has the timer been running?
+            /** Get elapsed time (in milliseconds).
              * @returns An long integer value.
              */
             inline size_type elapsed() const;

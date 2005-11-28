@@ -42,6 +42,14 @@ namespace portage {
     /**
      * @class MetadataXML metadata_xml.hh herdstat/portage/metadata_xml.hh
      * @brief Interface to Gentoo's metadata.xml files.
+     *
+     * @section usage Usage
+     *
+     * Usage of the MetadataXML class is identical to that of the
+     * portage::HerdsXML class with the exception that the underlying data is
+     * stored in a portage::Metadata object (accessible via the data() member).
+     *
+     * @see portage::HerdsXML documentation.
      */
 
     class MetadataXML : public Parsable,

@@ -41,6 +41,10 @@ namespace portage {
      * @class Archs archs.hh herdstat/portage/archs.hh
      * @brief Represents a list of portage-recognized architecture keywords
      * (those listed in $PORTDIR/profiles/arch.list).
+     *
+     * @section usage Usage
+     *
+     * Use the Archs class like you would any std::set<std::string>.
      */
 
     class Archs : public util::SetBase<std::string>,

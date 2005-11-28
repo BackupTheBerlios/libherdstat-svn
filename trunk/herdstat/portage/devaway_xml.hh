@@ -41,6 +41,15 @@ namespace portage {
     /**
      * @class DevawayXML devaway_xml.hh herdstat/portage/devaway_xml.hh
      * @brief Represents Gentoo's devaway.xml.
+     *
+     * @section usage Usage
+     *
+     * Usage of the DevawayXML class is identical to that of the
+     * portage::HerdsXML class with the exception that the underlying data is
+     * stored in a portage::Developers object (accessible via the devs()
+     * member).
+     *
+     * @see portage::HerdsXML documentation.
      */
 
     class DevawayXML : public xmlBase
@@ -91,6 +100,7 @@ namespace portage {
             virtual bool end_element(const std::string& name);
             virtual bool text(const std::string& text);
             ///@}
+
         private:
             Developers _devs;
             static const char * const _local_default;

@@ -47,7 +47,52 @@ namespace util {
 
     /**
      * @class Regex regex.hh herdstat/util/regex.hh
-     * @brief POSIX Regular Expressions interface.
+     * @brief POSIX regular expressions interface.
+     *
+     * @section usage Usage
+     *
+     * The Regex class is extremely simple to use.  Simply construct the Regex
+     * object with a regular expression (or use the assign() member).  To
+     * compare the regular expression against a string to see if it matches,
+     * just use the built-in operator==().  Likewise you can use operator!=()
+     * to see if it doesn't match.  Keep in mind that when specifying the
+     * regular expression string, you may need to do some additional escaping.
+     * For example, if you want to use a literal '.' in a regular expression,
+     * you'll need to use '\\.' rather than the usual '\.'.
+     *
+     * @section example Example
+     *
+     * Below is a simple example of using the Regex class:
+     *
+@code
+std::string str;
+...
+const herdstat::util::Regex regex("^s.*l$", herdstat::util::Regex::icase);
+if (str == regex)
+{
+    ...
+}
+@endcode
+     *
+     * Below is another example of using the Regex class to construct an
+     * extended regular expression:
+     *
+@code
+std::string str;
+...
+const herdstat::util::Regex regex("^\\.(dep|lib)s",
+    herdstat::util::Regex::icase|herdstat::util::Regex::extended);
+if (str == regex)
+{
+    ...
+}
+@endcode
+     *
+     * More often than not, you will have a container of strings in which you
+     * want to pull out all strings that match a certain regular expression.  In
+     * these cases you'll want to use the herdstat::util::regexMatch function
+     * object in addition to an algorithm.
+     * @see util::regexMatch for an example on it's usage.
      */
 
     class Regex

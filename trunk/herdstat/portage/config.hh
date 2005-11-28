@@ -47,6 +47,39 @@ namespace portage {
     /**
      * @class Config config.hh herdstat/portage/config.hh
      * @brief Represents the current portage configuration.
+     *
+     * @section overview Overview
+     *
+     * The Config class gets the current portage configuration by first reading
+     * /etc/make.globals (to get the default values) and then reading
+     * /etc/make.conf.  Any variables set in the latter will override any set in
+     * the former.
+     *
+     * @section usage Usage
+     *
+     * The Config class is a singleton, meaning it is guaranteed that there will
+     * never be more than one instance at any one time.  We do this by making
+     * the constructors private and declaring the function GlobalConfig() a
+     * friend of the Config class.  GlobalConfig() creates a local static
+     * instance of the Config class and then returns a const reference to it.
+     * Using the GlobalConfig() function is the <em>only</em> way to access a
+     * Config object.  This prevents the overhead of reading
+     * make.conf/make.globals (and other files that it reads) more than
+     * necessary.
+     *
+     * As stated in the previous section, the Config class stores variables and
+     * their values as found in make.conf/make.globals.  The values to these
+     * variables can be retrieved via the operator[]() member.
+     *
+     * @section example Example
+     *
+     * Below is a simple example of using the Config class:
+     *
+@code
+const portage::Config& config(portage::GlobalConfig());
+const std::string distdir(config["DISTDIR"]);
+@endcode
+     *
      */
 
     class Config : private Noncopyable
@@ -116,9 +149,10 @@ namespace portage {
     }
 
     /**
-     * Sole access point to a portage::config object.
+     * Sole access point to the Config class.
      * @exception FileException
      * @returns const reference to a local static instance of portage::config.
+     * @see Config for an example of using the returned Config instance.
      */
 
     inline const Config&

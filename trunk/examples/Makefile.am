@@ -12,3 +12,4 @@ export examples = \
 
 SUBDIRS = $(examples)
 MAINTAINERCLEANFILES = Makefile.in *~
+EXTRA_DIST = Makefile.am.common

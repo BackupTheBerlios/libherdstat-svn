@@ -44,6 +44,21 @@ namespace portage {
      * @brief Represents a container of package categories.  Contents are only
      * validated if told to do so.  Otherwise, you'll want to make sure an
      * element is valid before using it.
+     *
+     * @section overview Overview
+     *
+     * The Categories class contains a unique list of portage package
+     * categories.  It reads the categories file located in the specified
+     * PORTDIR (PORTDIR/profiles/categories) as well as the user-defined
+     * categories file in /etc/portage/categories.
+     *
+     * If 'true' is passed to the Categories constructor's 'validate' argument,
+     * a portage::QAException will be thrown if an invalid (eg it doesn't
+     * exist) category is encountered.
+     *
+     * @section usage Usage
+     *
+     * Use the Categories class as you would any std::set<std::string>.
      */
 
     class Categories : public util::SetBase<std::string>,

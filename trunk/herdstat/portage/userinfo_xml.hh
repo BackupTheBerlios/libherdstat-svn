@@ -41,6 +41,15 @@ namespace portage {
     /**
      * @class UserinfoXML userinfo_xml.hh herdstat/portage/userinfo_xml.hh
      * @brief Represents Gentoo's userinfo.xml.
+     *
+     * @section usage Usage
+     *
+     * Usage of the UserinfoXML class is identical to that of the
+     * portage::HerdsXML class with the exception that the underlying data is
+     * stored in a portage::Developers object (accessible via the devs()
+     * member).
+     *
+     * @see portage::HerdsXML documentation.
      */
 
     class UserinfoXML : public xmlBase

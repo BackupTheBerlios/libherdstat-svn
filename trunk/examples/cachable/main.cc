@@ -11,6 +11,7 @@
 
 #include <herdstat/cachable.hh>
 #include <herdstat/util/file.hh>
+#include <herdstat/util/glob.hh>
 #include <herdstat/util/algorithm.hh>
 #include <herdstat/util/functional.hh>
 #include <herdstat/util/container_base.hh>
@@ -46,18 +47,21 @@ MetadataList::~MetadataList()
 bool
 MetadataList::valid() const
 {
-	/* it's valid if it exists. */
+	/* It's valid if it exists.  Realistically, most caches expire, so more
+	 * often than not you'd have some kind of check here to see if the cache
+	 * is expired, returning false if so */
 	return herdstat::util::is_file(this->path());
 }
 
 void
 MetadataList::fill()
 {
-	/* copy file names ending in 'metadata.xml' to our container */
-	const herdstat::util::Directory portdir(_portdir, true);
-	herdstat::util::copy_if(portdir.begin(), portdir.end(),
-		std::back_inserter(this->container()),
-		std::bind2nd(herdstat::util::patternMatch(), "*/metadata.xml"));
+	herdstat::util::Glob glob;
+	glob(_portdir+"/*/metadata.xml");
+	glob(_portdir+"/*/*/metadata.xml");
+	this->insert(this->end(),
+		glob.results().begin(),
+		glob.results().end());
 }
 
 void

@@ -111,7 +111,8 @@ namespace util {
 @code
 std::vector<Foo *> foov;
 ...
-std::for_each(foov.begin(), foov.end(), util::DeleteAndNullify<Foo>());
+std::for_each(foov.begin(), foov.end(),
+    herdstat::util::DeleteAndNullify<Foo>());
 @endcode
      * @see util::compose_f_gx for a slightly more complex example of using
      * DeleteAndNullify.
@@ -142,10 +143,10 @@ std::for_each(foov.begin(), foov.end(), util::DeleteAndNullify<Foo>());
 @code
 std::vector<std::string> paths;
 ...
-std::vector<portage::Ebuild> ebuilds;
-util::transform_if(paths.begin(), paths.end(),
-    std::back_inserter(ebuilds), portage::IsEbuild(),
-    util::New<Ebuild>());
+std::vector<herdstat::portage::Ebuild> ebuilds;
+herdstat::util::transform_if(paths.begin(), paths.end(),
+    std::back_inserter(ebuilds), herdstat::portage::IsEbuild(),
+    herdstat::util::New<Ebuild>());
 @endcode
      * The above code snippet can be read as "for each element in paths, if it's
      * an ebuild (portage::IsEbuild returns true), instantiate a new
@@ -241,9 +242,9 @@ util::transform_if(paths.begin(), paths.end(),
 @code
 std::vector<std::string> v, results;
 ...
-util::copy_if(v.begin(), v.end(),
+herdstat::util::copy_if(v.begin(), v.end(),
     std::back_inserter(results),
-    std::bind1st(util::regexMatch(), "foo$"));
+    std::bind1st(herdstat::util::regexMatch(), "foo$"));
 @endcode
      * The above code snippet can be read as "for each element in v, if it
      * matches the regular expression 'foo$', insert it into results".
@@ -313,13 +314,14 @@ typedef std::map<std::string, Foo *> foomap;
 foomap fm;
 ...
 std::for_each(fm.begin(), fm.end(),
-    util::compose_f_gx(
-        util::DeleteAndNullify<Foo>(),
-        util::Second<foomap::value_type>()));
+    herdstat::util::compose_f_gx(
+        herdstat::util::DeleteAndNullify<Foo>(),
+        herdstat::util::Second<foomap::value_type>()));
 @endcode
      * The above code snippet can be read as "for each element in fm, take the
      * return value of the util::Second function object and pass it to
-     * DeleteAndNullify.  Basically, delete the 'second' member of each element".
+     * util::DeleteAndNullify.  Basically, delete the 'second' member of each
+     * element".
      */
 
     template <typename Op1, typename Op2>
@@ -368,12 +370,12 @@ std::for_each(fm.begin(), fm.end(),
 @code
 std::vector<std::string> paths, results;
 ...
-util::copy_if(paths.begin(), paths.end(),
+herdstat::util::copy_if(paths.begin(), paths.end(),
     std::back_inserter(results),
-    util::compose_f_gx_hx(
+    herdstat::util::compose_f_gx_hx(
         std::logical_and<bool>(),
-            std::bind2nd(util::patternMatch(), "*foo*"),
-            util::IsFile()));
+            std::bind2nd(herdstat::util::patternMatch(), "*foo*"),
+            herdstat::util::IsFile()));
 @endcode
      * The above code snippet can be read as "for each element in paths, if it
      * matches the pattern '*foo*' and is a valid file, insert it into results".
@@ -427,15 +429,15 @@ typedef std::vector<std::pair<std::string, std::string> > spvec;
 spvec v;
 ...
 std::sort(v.begin(), v.end(),
-    util::compose_f_gx_hy(
+    herdstat::util::compose_f_gx_hy(
         std::less<std::string>(),
-        util::Second<spvec::value_type>(),
-        util::Second<spvec::value_type>()));
+        herdstat::util::Second<spvec::value_type>(),
+        herdstat::util::Second<spvec::value_type>()));
 v.erase(std::unique(v.begin(), v.end(),
-    util::compose_f_gx_hy(
+    herdstat::util::compose_f_gx_hy(
         std::equal_to<std::string>(),
-        util::Second<spvec::value_type>(),
-        util::Second<spvec::value_type>()), v.end()));
+        herdstat::util::Second<spvec::value_type>(),
+        herdstat::util::Second<spvec::value_type>()), v.end()));
 @endcode
      * The above code snippet can be read as "sort all elements in v by
      * comparing the 'second' members of subsequent elements via std::less

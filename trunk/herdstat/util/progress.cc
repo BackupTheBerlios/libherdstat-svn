@@ -37,22 +37,23 @@ Progress::Progress() throw()
 /****************************************************************************/
 Progress::~Progress() throw()
 {
-    if (not this->_started)
-        return;
-
-    /* sometimes we're off by one and it ends at 99% */
-    while (this->_cur < 100.0)
-        this->operator++();
+    if (not _started) return;
+    /* sometimes the user has to use an estimate as the value
+     * passed to start(), so we may not have gotten to 100 yet. */
+    while (_cur < 100.0) this->operator++();
 }
 /****************************************************************************/
 void
-Progress::start(unsigned m) throw()
+Progress::start(unsigned total, const std::string& title) throw()
 {
-    if (this->_started)
-        return;
+    if (_started) return;
+    _started = true;
+    
+    _step = 100.0 / total;
 
-    this->_started = true;
-    this->_step = 100.0 / m;
+    if (not title.empty())
+        std::printf("%s: ", title.c_str());
+
     std::printf("  0%%");
 }
 /****************************************************************************/
