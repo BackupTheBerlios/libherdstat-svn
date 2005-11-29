@@ -54,12 +54,41 @@
 #define LIBHERDSTAT_VERSION_MICRO @VERSION_MICRO@
 
 /**
+ * @def LIBHERDSTAT_VERSION_STRING
+ * @brief Full version string with delimiters.
+ */
+
+#define LIBHERDSTAT_VERSION_STRING \
+            LIBHERDSTAT_VERSION_MAJOR"."LIBHERDSTAT_VERSION_MINOR"."LIBHERDSTAT_VERSION_MICRO
+
+/**
  * @def LIBHERDSTAT_VERSION
  * @brief Version, two digits per part (eg 0.4.1 -> 00401)
  */
 
 #define LIBHERDSTAT_VERSION ((100 * 100 * LIBHERDSTAT_VERSION_MAJOR) \
 	    + (100 * LIBHERDSTAT_VERSION_MINOR) + LIBHERDSTAT_VERSION_MICRO)
+
+/**
+ * @def LIBHERDSTAT_BUILD_CXX
+ * @brief C++ compiler used at build time.
+ */
+
+#define LIBHERDSTAT_BUILD_CXX @CXX@
+
+/**
+ * @def LIBHERDSTAT_BUILD_CXXFLAGS
+ * @brief CXXFLAGS used at build time.
+ */
+
+#define LIBHERDSTAT_BUILD_CXXFLAGS @CXXFLAGS@
+
+/**
+ * @def LIBHERDSTAT_BUILD_LDFLAGS
+ * @brief LDFLAGS used at build time.
+ */
+
+#define LIBHERDSTAT_BUILD_LDFLAGS @LDFLAGS@
 
 #endif /* _HAVE_HERDSTAT_LIBHERDSTAT_VERSION_HH */
 
