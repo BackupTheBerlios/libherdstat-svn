@@ -32,7 +32,7 @@
  * @brief Defines the interface for Gentoo's devaway.xml.
  */
 
-#include <herdstat/portage/xmlbase.hh>
+#include <herdstat/portage/data_source.hh>
 #include <herdstat/portage/developer.hh>
 
 namespace herdstat {
@@ -52,7 +52,7 @@ namespace portage {
      * @see portage::HerdsXML documentation.
      */
 
-    class DevawayXML : public xmlBase
+    class DevawayXML : public DataSource
     {
         public:
             /// Default constructor.

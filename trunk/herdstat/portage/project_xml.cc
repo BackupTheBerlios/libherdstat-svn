@@ -41,7 +41,7 @@ std::set<std::string> ProjectXML::_parsed;
 ProjectXML::ProjectXML(const std::string& path, const std::string& cvsdir,
                          bool force_fetch)
     throw (FileException, xml::ParserException)
-    : xmlBase(), Fetchable(), _devs(), _cvsdir(cvsdir), _force_fetch(force_fetch),
+    : _devs(), _cvsdir(cvsdir), _force_fetch(force_fetch),
       in_sub(false), in_dev(false), in_task(false), _cur_role()
 {
     if (_cvsdir.empty())

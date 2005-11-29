@@ -32,7 +32,7 @@
  * @brief Defines the interface to Gentoo's userinfo.xml.
  */
 
-#include <herdstat/portage/xmlbase.hh>
+#include <herdstat/portage/data_source.hh>
 #include <herdstat/portage/herd.hh>
 
 namespace herdstat {
@@ -52,7 +52,7 @@ namespace portage {
      * @see portage::HerdsXML documentation.
      */
 
-    class UserinfoXML : public xmlBase
+    class UserinfoXML : public DataSource
     {
         public:
             /// Default constructor.

@@ -36,14 +36,14 @@ namespace portage {
 const char * const DevawayXML::_local_default = LOCALSTATEDIR"/devaway.xml";
 /****************************************************************************/
 DevawayXML::DevawayXML() throw()
-    : xmlBase(), _devs(), in_devaway(false),
+    : DataSource(), _devs(), in_devaway(false),
       in_dev(false), in_reason(false), _cur_dev()
 {
 }
 /****************************************************************************/
 DevawayXML::DevawayXML(const std::string &path)
     throw (FileException, xml::ParserException)
-    : xmlBase(path), _devs(), in_devaway(false),
+    : DataSource(path), _devs(), in_devaway(false),
       in_dev(false), in_reason(false), _cur_dev()
 {
     this->parse();

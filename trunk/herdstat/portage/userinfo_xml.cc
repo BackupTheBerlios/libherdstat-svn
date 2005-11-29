@@ -34,7 +34,7 @@ namespace portage {
 const char * const UserinfoXML::_local_default = LOCALSTATEDIR"/userinfo.xml";
 /****************************************************************************/
 UserinfoXML::UserinfoXML() throw()
-    : xmlBase(), _devs(), in_user(false), in_firstname(false),
+    : DataSource(), _devs(), in_user(false), in_firstname(false),
       in_familyname(false), in_pgpkey(false), in_email(false), in_joined(false),
       in_birth(false), in_roles(false), in_status(false), in_location(false),
       _cur_dev()
@@ -43,7 +43,7 @@ UserinfoXML::UserinfoXML() throw()
 /****************************************************************************/
 UserinfoXML::UserinfoXML(const std::string& path)
     throw (FileException, xml::ParserException)
-    : xmlBase(path), _devs(), in_user(false),
+    : DataSource(path), _devs(), in_user(false),
       in_firstname(false), in_familyname(false), in_pgpkey(false),
       in_email(false), in_joined(false), in_birth(false), in_roles(false),
       in_status(false), in_location(false), _cur_dev()

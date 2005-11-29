@@ -42,7 +42,7 @@ namespace portage {
 const char * const HerdsXML::_local_default = LOCALSTATEDIR"/herds.xml";
 /****************************************************************************/
 HerdsXML::HerdsXML() throw()
-    : xmlBase(), _herds(), _cvsdir(), _force_fetch(false), _fetch(),
+    : DataSource(), _herds(), _cvsdir(), _force_fetch(false), _fetch(),
       in_herd(false), in_herd_name(false),
       in_herd_email(false), in_herd_desc(false), in_maintainer(false),
       in_maintainer_name(false), in_maintainer_email(false),
@@ -53,7 +53,7 @@ HerdsXML::HerdsXML() throw()
 /****************************************************************************/
 HerdsXML::HerdsXML(const std::string& path)
     throw (FileException, xml::ParserException)
-    : xmlBase(path), _herds(), _cvsdir(), _force_fetch(false), _fetch(),
+    : DataSource(path), _herds(), _cvsdir(), _force_fetch(false), _fetch(),
       in_herd(false), in_herd_name(false), in_herd_email(false),
       in_herd_desc(false), in_maintainer(false), in_maintainer_name(false),
       in_maintainer_email(false), in_maintainer_role(false), in_maintaining_prj(false),

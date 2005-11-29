@@ -33,8 +33,10 @@
  */
 
 #include <set>
+#include <herdstat/noncopyable.hh>
 #include <herdstat/fetchable.hh>
-#include <herdstat/portage/xmlbase.hh>
+#include <herdstat/parsable.hh>
+#include <herdstat/xml/saxparser.hh>
 #include <herdstat/portage/herd.hh>
 
 namespace herdstat {
@@ -53,8 +55,10 @@ namespace portage {
      * @see portage::HerdsXML documentation.
      */
 
-    class ProjectXML : public xmlBase,
-                        public Fetchable
+    class ProjectXML : public Parsable,
+                       public Fetchable,
+                       protected xml::SAXHandler,
+                       private Noncopyable
     {
         public:
             /** Constructor.
@@ -72,9 +76,6 @@ namespace portage {
 
             /// Destructor.
             virtual ~ProjectXML() throw();
-
-            virtual void fill_developer(Developer& dev) const
-                throw (Exception) { }
 
             /// Get Herd.
             inline const Herd& devs() const;

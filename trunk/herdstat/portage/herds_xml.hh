@@ -34,7 +34,7 @@
 
 #include <algorithm>
 #include <herdstat/fetcher/fetcher.hh>
-#include <herdstat/portage/xmlbase.hh>
+#include <herdstat/portage/data_source.hh>
 #include <herdstat/portage/herd.hh>
 
 namespace herdstat {
@@ -54,7 +54,7 @@ namespace portage {
      * @include herds.xml/main.cc
      */
 
-    class HerdsXML : public xmlBase
+    class HerdsXML : public DataSource
     {
         public:
             /// Default constructor.
