@@ -4,6 +4,7 @@ include $(top_builddir)/Makefile.am.common
 
 cc_sources = \
 	exceptions.cc \
+	options.cc \
 	wgetfetcher.cc \
 	curlfetcher.cc \
 	impmap.cc \

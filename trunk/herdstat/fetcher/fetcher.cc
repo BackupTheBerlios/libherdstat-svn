@@ -73,19 +73,17 @@ void
 Fetcher::operator()(const std::string& url, const std::string& path) const
     throw (FileException, FetchException, UnimplementedFetchMethod)
 {
-    BacktraceContext c("Fetcher::operator()("+url+", "+path+")");
+    BacktraceContext c("herdstat::Fetcher::operator()("+url+", "+path+")");
     assert(not _opts.implementation().empty());
-
-    std::cerr << "_opts.implementation() == '" << _opts.implementation()
-        << "'." << std::endl;
-    std::cerr << "FetcherImpMap contents: " << std::endl;
-    FetcherImpMap::const_iterator i;
-    for (i = _impmap.begin() ; i != _impmap.end() ; ++i)
-        std::cerr << "imp: " << i->first << std::endl;
 
     const FetcherImp * const imp = _impmap[_opts.implementation()];
     if (not imp)
         throw UnimplementedFetchMethod(_opts.implementation());
+
+#ifdef DEBUG
+    std::cerr << "Using fetcher implementation '"
+        << _opts.implementation() << "'." << std::endl;
+#endif
 
     /* make sure we have write access to the directory */
     const char * const dir = util::dirname(path).c_str();

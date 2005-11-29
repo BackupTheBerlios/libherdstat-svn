@@ -57,12 +57,20 @@ namespace herdstat {
     class FetcherOptions
     {
         public:
-            /** Constructor.
-             * @param imp Fetcher implementation to use (defaults to
-             * DEFAULT_FETCH_METHOD).
+            /** Default constructor.
+             * Fetcher implementation is set to the value of the environment
+             * variable HERDSTAT_FETCH_METHOD (if set).  Otherwise the value of
+             * the DEFAULT_FETCH_METHOD define is used.
              */
-            FetcherOptions(const std::string& imp = DEFAULT_FETCH_METHOD) throw()
-                : _verbose(false), _debug(false), _imp(imp) { }
+            FetcherOptions() throw();
+
+            /** Constructor.
+             * @param imp Fetcher implementation to use.
+             */
+            FetcherOptions(const std::string& imp) throw();
+
+            /// Destructor.
+            ~FetcherOptions() throw();
 
             /// Get fetcher implementation name.
             inline const std::string& implementation() const;
