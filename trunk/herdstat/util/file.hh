@@ -401,8 +401,46 @@ namespace util {
 
     /**
      * @class Directory file.hh herdstat/util/file.hh
-     * @brief A directory using a vector of std::string's to represent
+     * @brief Represents a directory, using a std::vector<std::string> to store
      * directory contents.
+     *
+     * @section usage Usage
+     *
+     * Use the Directory class like you would a std::vector<std::string>.  If
+     * you pass 'true' to the constructor's 'recurse' argument, the Directory
+     * class will recurse into sub-directories, inserting it's contents as well.
+     *
+     * @section example Example
+     *
+     * Below is a simple example of using the Directory class:
+     *
+@code
+const herdstat::util::Directory dir("/usr/portage/dev-cpp/libherdstat");
+std::vector<std::string> ebuilds;
+herdstat::util::copy_if(dir.begin(), dir.end(),
+    std::back_inserter(ebuilds),
+    herdstat::portage::IsEbuild());
+@endcode
+     *
+     * The above code snippet can be read as "For each item in the directory
+     * /usr/portage/dev-cpp/libherdstat, if it's an ebuild, insert it into the
+     * ebuilds vector".
+     *
+     * Below is another simple example that shows how to use the find() member:
+     *
+@code
+const herdstat::util::Directory dir("/usr/portage/dev-cpp/libherdstat");
+herdstat::util::Directory::const_iterator i = dir.find("metadata.xml");
+if (i != dir.end())
+    std::cout << "Path to libherdstat's metadata.xml: " << *i << std::endl;
+@endcode
+     *
+     * The find() member is different from most other find() members in that it
+     * doesn't do a literal search.  The strings that the Directory class
+     * contains are full paths, so a literal search would not work if we were to
+     * find("metadata.xml") like in the above example.  The Directory class'
+     * find() member searches the basename() of each member for the specified
+     * string.
      */
 
     class Directory  : public BaseFileObject,

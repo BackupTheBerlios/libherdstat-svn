@@ -130,7 +130,6 @@ AC_CHECK_HEADERS(libebt/libebt.hh,,
     AC_MSG_ERROR([libebt/libebt.hh is required]))
 
 dnl Required functions
-AC_FUNC_CLOSEDIR_VOID
 AC_CHECK_FUNCS(gettimeofday,,
     [AC_MSG_ERROR([gettimeofday is required])])
 AC_CHECK_FUNCS(regcomp,,
@@ -186,6 +185,8 @@ AC_OUTPUT(Makefile
 	  examples/vars/Makefile
 	  examples/cachable/Makefile
 	  examples/package_finder/Makefile
+	  examples/versions/Makefile
+	  examples/version_components/Makefile
 	  herdstat/Makefile
 	  herdstat/libherdstat_version.hh
 	  herdstat/util/Makefile

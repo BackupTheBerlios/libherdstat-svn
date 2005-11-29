@@ -44,7 +44,7 @@ hh_sources = \
 	developer.hh \
 	herd.hh \
 	functional.hh \
-	xmlbase.hh \
+	data_source.hh \
 	project_xml.hh \
 	herds_xml.hh \
 	metadata.hh \

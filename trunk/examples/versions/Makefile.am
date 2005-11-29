@@ -2,10 +2,9 @@
 
 include $(top_builddir)/examples/Makefile.am.common
 
-CLEANFILES = *.txt
 MAINTAINERCLEANFILES = Makefile.in *~
 
 if BUILD_EXAMPLES
-noinst_PROGRAMS = metadata_list
-metadata_list_SOURCES = main.cc
+noinst_PROGRAMS = versions
+versions_SOURCES = main.cc
 endif

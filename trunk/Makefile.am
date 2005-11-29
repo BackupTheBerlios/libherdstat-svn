@@ -4,14 +4,17 @@ AUTOMAKE_OPTIONS = 1.8 dist-bzip2 no-dist-gzip
 
 SUBDIRS = doc herdstat examples tests
 
-MAINTAINERCLEANFILES = aclocal.m4 \
-		       configure \
-		       Makefile.in \
-		       config/* \
-		       config.h.in \
-		       stamp-h.in \
-		       html/*/*.html \
-		       *~
+MAINTAINERCLEANFILES = \
+	INSTALL \
+	COPYING \
+	aclocal.m4 \
+	configure \
+	Makefile.in \
+	config/* \
+	config.h.in \
+	stamp-h.in \
+	html/*/*.html \
+	*~
 
 pc = $(PACKAGE)-$(VERSION_MAJOR).$(VERSION_MINOR).pc
 pkgconfigdir = $(libdir)/pkgconfig

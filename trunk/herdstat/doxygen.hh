@@ -93,9 +93,12 @@ PKG_CHECK_MODULES(libherdstat, libherdstat-0.2 >= 0.2.5)
  * Since libherdstat provides a multitude of interfaces for various things, it's
  * not feasable to provide a single example (for that, see the <a
  * href="http://developer.berlios.de/projects/herdstat/">herdstat</a>
- * application).  Instead, we provide individual examples for each major
+ * application).
+ *
+ * Instead, we provide individual examples for each major
  * interface.  See the documentation for the particular interface for example
  * code or the examples/ directory provided in the distribution tarball.
+ * The smaller classes/functions only include small code snippets.
  */
 
 /**

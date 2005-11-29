@@ -40,8 +40,17 @@ namespace portage {
     /**
      * @class Herd herd.hh herdstat/portage/herd.hh
      * @brief Represents a herd.
+     *
+     * @section overview Overview
+     *
      * Techically a herd is a group of packages, however here it makes more
-     * sense to represent them as a group of Developer's.
+     * sense to represent them as a group of Developer objects.  The Herd class
+     * derives from the Developers class since it is a Developer container.  The
+     * only difference between the two is that a Herd represents a group of
+     * related developers.  Unlike Developers, a Herd has a name, a description,
+     * and an email address.
+     *
+     * @see Developers for additional documentation.
      */
 
     class Herd : public Developers
@@ -51,9 +60,9 @@ namespace portage {
             Herd() throw();
 
             /** Constructor.
-             * @param name Herd name.
-             * @param email Herd email address.
-             * @param desc Herd description.
+             * @param name %Herd name.
+             * @param email %Herd email address.
+             * @param desc %Herd description.
              */
             Herd(const std::string &name,
                  const std::string &email = "",
@@ -174,6 +183,10 @@ namespace portage {
     /**
      * @class Herds herd.hh herdstat/portage/herd.hh
      * @brief Herd container.
+     *
+     * @section usage Usage
+     *
+     * Use the Herds class like you would a std::set<Herd>.
      */
 
     class Herds : public util::SetBase<Herd>

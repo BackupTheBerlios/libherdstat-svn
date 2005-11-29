@@ -8,7 +8,9 @@ export examples = \
 	herds.xml \
 	cachable \
 	vars \
-	package_finder
+	package_finder \
+	versions \
+	version_components
 
 SUBDIRS = $(examples)
 MAINTAINERCLEANFILES = Makefile.in *~

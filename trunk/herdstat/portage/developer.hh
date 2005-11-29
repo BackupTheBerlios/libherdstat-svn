@@ -29,7 +29,7 @@
 
 /**
  * @file herdstat/portage/developer.hh
- * @brief Defines the Developer/Developers classes.
+ * @brief Defines the Developer/Developers interfaces.
  */
 
 #include <string>
@@ -47,6 +47,22 @@ namespace portage {
     /**
      * @class Developer developer.hh herdstat/portage/developer.hh
      * @brief Represents a Gentoo developer.
+     *
+     * @section overview Overview
+     *
+     * The Developer class encapsulates information about an individual Gentoo
+     * developer.
+     *
+     * Unfortunately, the data that this class is capable of holding is not
+     * available from a single source, but rather several different sources
+     * (herds.xml, userinfo.xml, etc).  For this reason, it's not feasable for
+     * all the data to be filled in upon construction of a Developer object.
+     * Instead, all of the classes that represent the respective sources (any
+     * portage::DataSource derivative) provide a member function,
+     * fill_developer(), that fills a Developer object with the information
+     * available in that data source that is relevant to the specified
+     * Developer.  Thus, in order to have a complete Developer object, you must
+     * call fill_developer() for each data source.
      */
 
     class Developer
@@ -317,6 +333,29 @@ namespace portage {
     /**
      * @class Developers developer.hh herdstat/portage/developer.hh
      * @brief Developer container.
+     *
+     * @section usage Usage
+     *
+     * Use the Developers class like you would a std::set<Developer>.
+     *
+     * @section example Example
+     *
+     * Below is a simple example of using the Developers class:
+     *
+@code
+herdstat::portage::UserinfoXML userinfo_xml("/path/to/userinfo.xml");
+const herdstat::portage::Developers& devs(userinfo_xml.devs());
+herdstat::util::transform_if(devs.begin(), devs.end(),
+    std::ostream_iterator<std::string>(std::cout, "\n"),
+    herdstat::util::compose_f_gx(
+        std::bind1st(herdstat::util::regexMatch(), "^k"),
+        std::mem_fun_ref(&herdstat::portage::Developer::user)),
+    std::mem_fun_ref(&herdstat::portage::Developer::name));
+@endcode
+     * 
+     * The above code snippet can be read as "parse userinfo.xml and then
+     * display the full name of each developer whose username matches the
+     * regular expression '^k'".
      */
 
     class Developers : public util::SetBase<Developer>

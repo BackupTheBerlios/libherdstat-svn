@@ -52,6 +52,25 @@ namespace portage {
     /**
      * @class VersionComponents version.hh herdstat/portage/version.hh
      * @brief Version component (${P}, ${PN}, etc) map.
+     *
+     * @section overview Overview
+     *
+     * For each ebuild, portage defines some preset variables based on the
+     * ebuild's file name.  For a complete list of these variables, see the
+     * ebuild(5) manual page.  The VersionComponents class maps these variables
+     * names to their respective values for the given ebuild.
+     *
+     * @section usage Usage
+     *
+     * Use the VersionComponents class like you would a std::map<std::string,
+     * std::string>.
+     *
+     * @section example Example
+     *
+     * Below is a small example of using the VersionComponents class:
+     *
+     * @include version_components/main.cc
+     *
      */
 
     class VersionComponents : public util::MapBase<std::string, std::string>
@@ -91,7 +110,32 @@ namespace portage {
 
     /**
      * @class VersionString version.hh herdstat/portage/version.hh
-     * @brief Represents a single version string.
+     * @brief Represents a version string corresponding to the given ebuild.
+     *
+     * @section overview Overview
+     *
+     * A VersionString instance by itself is not all that useful.  It doesn't do
+     * any version parsing (it uses VersionComponents for that).  It's main
+     * purpose is version sorting via the comparison operators (operator<(),
+     * etc).  These comparison operators do real portage-style version sorting.
+     *
+     * @section example Example
+     *
+     * Below is a simple example of using the VersionString class:
+     *
+@code
+herdstat::portage::VersionString v1("/path/to/foo-1.0.ebuild");
+herdstat::portage::VersionString v2("/path/to/foo-1.2.ebuild");
+if (v1 < v2)
+{
+    ...
+}
+const herdstat::portage::VersionComponents& vc(v1.components());
+...
+std::cout << v1.str() << std::endl;
+@endcode
+     *
+     * @see Versions for a more common VersionString usage example.
      */
 
     class VersionString
@@ -323,7 +367,16 @@ namespace portage {
     /** 
      * @class Versions version.hh herdstat/portage/version.hh
      * @brief VersionString container.
+     *
+     * @section overview Overview
+     *
      * Generally used for all versions of a single package.
+     *
+     * @section example Example
+     *
+     * Below is a simple example of using the Versions class:
+     *
+     * @include versions/main.cc
      */
 
     class Versions : public util::SetBase<VersionString>
