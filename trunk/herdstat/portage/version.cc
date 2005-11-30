@@ -40,43 +40,108 @@
 #include <herdstat/portage/exceptions.hh>
 #include <herdstat/portage/version.hh>
 
+struct SuffixLess : std::binary_function<std::string, std::string, bool>
+{
+    /* s1 < s2? */
+    bool operator()(const std::string& s1, const std::string& s2) const
+    {
+        if (s1 == s2)  return false;
+        if (s1 == "p") return false;
+        if (s2 == "p") return true;
+
+        /* except for "p", they are already
+         * sorted by std::string::operator< */
+        return (s1 < s2);
+    }
+};
+
+class ValidSuffixes
+{
+    public:
+        typedef std::vector<std::string> container_type;
+        typedef container_type::value_type value_type;
+        typedef container_type::const_iterator const_iterator;
+
+        /* for testing against return value of find() */
+        const_iterator end() const
+        {
+            return _s.end();
+        }
+
+        /* get location of v or end() if it doesn't exist */
+        const_iterator find(const value_type& v) const
+        {
+            std::pair<const_iterator, const_iterator> p =
+                std::equal_range(_s.begin(), _s.end(), v, SuffixLess());
+            return (p.first == p.second ? _s.end() : p.first);
+        }
+        
+        /* does v exist? */
+        bool count(const value_type& v) const
+        {
+            return std::binary_search(_s.begin(), _s.end(), v, SuffixLess());
+        }
+
+    private:
+        friend const ValidSuffixes& GlobalValidSuffixes();
+
+        ValidSuffixes()
+        {
+            const char * const suffixes[] = {"alpha","beta","pre","rc","p"};
+            _s.assign(suffixes, suffixes+(sizeof(suffixes)/sizeof(suffixes[0])));
+        }
+
+        container_type _s;
+};
+
+const ValidSuffixes&
+GlobalValidSuffixes()
+{
+    static ValidSuffixes s;
+    return s;
+}
+
 namespace herdstat {
 namespace portage {
-/*** static members *********************************************************/
-std::vector<std::string> VersionString::suffix::_suffixes;
 /****************************************************************************/
-VersionComponents::VersionComponents()
+VersionComponents::VersionComponents() throw()
 {
 }
 /****************************************************************************/
-VersionComponents::VersionComponents(const std::string &path)
+VersionComponents::VersionComponents(const std::string &path) throw()
     : _verstr(util::chop_fileext(util::basename(path)))
 {
     this->parse();
 }
 /****************************************************************************/
+VersionComponents::~VersionComponents() throw()
+{
+}
+/****************************************************************************/
 void
-VersionComponents::assign(const std::string& path)
+VersionComponents::assign(const std::string& path) throw()
 {
     _verstr.assign(util::chop_fileext(util::basename(path)));
-    this->clear();
+    _vmap.clear();
     this->parse();
 }
 /****************************************************************************/
 void
-VersionComponents::parse()
+VersionComponents::parse() throw()
 {
     /* append -r0 if necessary */
-    std::string::size_type pos = this->_verstr.rfind("-r0");
+    std::string::size_type pos = _verstr.rfind("-r0");
     if (pos == std::string::npos)
     {
-        pos = this->_verstr.rfind("-r");
-        if ((pos == std::string::npos) or (((pos+2) <= this->_verstr.size()) and
-            not std::isdigit(this->_verstr.at(pos+2))))
-            this->_verstr.append("-r0");
+        if (((pos = _verstr.rfind("-r")) == std::string::npos) or
+            (((pos+2) <= _verstr.size()) and 
+             not std::isdigit(_verstr.at(pos+2))))
+        {
+            _verstr.append("-r0");
+        }
     }
 
-    std::vector<std::string> parts(util::split(this->_verstr, '-'));
+    std::vector<std::string> parts(util::split(_verstr, '-'));
 
     /* If parts > 3, ${PN} contains a '-' */
     if (parts.size() > 3)
@@ -95,115 +160,100 @@ VersionComponents::parse()
     assert(parts.size() == 3);
 
     /* fill our map with the components */
-    std::pair<iterator, bool> pn = this->insert(value_type("PN", parts[0]));
-    std::pair<iterator, bool> pv = this->insert(value_type("PV", parts[1]));
-    std::pair<iterator, bool> pr = this->insert(value_type("PR", parts[2]));
+    std::pair<iterator, bool> pn = _vmap.insert(value_type("PN", parts[0]));
+    std::pair<iterator, bool> pv = _vmap.insert(value_type("PV", parts[1]));
+    std::pair<iterator, bool> pr = _vmap.insert(value_type("PR", parts[2]));
     assert(pn.second and pv.second and pr.second);
-    this->insert(value_type("P", pn.first->second+"-"+pv.first->second));
-    std::pair<iterator, bool> pvr = this->insert(value_type("PVR",
+    _vmap.insert(value_type("P", pn.first->second+"-"+pv.first->second));
+    std::pair<iterator, bool> pvr = _vmap.insert(value_type("PVR",
         pv.first->second+"-"+pr.first->second));
-    this->insert(value_type("PF", pn.first->second+"-"+pvr.first->second));
+    _vmap.insert(value_type("PF", pn.first->second+"-"+pvr.first->second));
 
     /* remove $PN from _verstr */
-    _verstr.erase(0, (*this)["PN"].length()+1); /* +1 for the '-' after ${PN} */
+    _verstr.erase(0, _vmap["PN"].length()+1); /* +1 for the '-' after ${PN} */
 }
 /*****************************************************************************
  * suffix                                                                  *
  *****************************************************************************/
-VersionString::suffix::suffix()
+VersionString::suffix::suffix() throw()
 {
 }
 
-VersionString::suffix::suffix(const std::string& pvr)
+VersionString::suffix::suffix(const std::string& pvr) throw()
 {
     this->parse(pvr);
 }
 
 void
-VersionString::suffix::parse(const std::string &pvr) const
+VersionString::suffix::parse(const std::string &pvr) const throw()
 {
-    this->_suffix.clear();
-    this->_suffix_ver.clear();
-
-    /* valid suffixes (in order) */
-    if (this->_suffixes.empty())
-    {
-        this->_suffixes.push_back("alpha");
-        this->_suffixes.push_back("beta");
-        this->_suffixes.push_back("pre");
-        this->_suffixes.push_back("rc");
-        this->_suffixes.push_back("p");
-    }
-
-    this->_suffix.assign(pvr);
+    _suffix_ver.clear();
+    _suffix.assign(pvr);
 
     /* chop revision */
-    std::string::size_type pos = this->_suffix.rfind("-r");
+    std::string::size_type pos = _suffix.rfind("-r");
     if (pos != std::string::npos)
-        this->_suffix.erase(pos);
+        _suffix.erase(pos);
 
     /* get suffix */
-    pos = this->_suffix.rfind('_');
+    pos = _suffix.rfind('_');
     if (pos != std::string::npos)
     {
-        this->_suffix.erase(0, pos+1);
+        _suffix.erase(0, pos+1);
 
         /* get suffix version */
-        pos = this->_suffix.find_first_of("0123456789");
+        pos = _suffix.find_first_of("0123456789");
         if (pos != std::string::npos)
         {
-            this->_suffix_ver = this->_suffix.substr(pos);
-            this->_suffix.erase(pos);
+            _suffix_ver = _suffix.substr(pos);
+            _suffix.erase(pos);
         }
 
-        /* is suffix valid? */
-        if (std::find(_suffixes.begin(), _suffixes.end(),
-                    _suffix) == _suffixes.end())
-            this->_suffix.clear();
+        /* ignore invalid suffixes */
+        if (not GlobalValidSuffixes().count(_suffix))
+            _suffix.clear();
     }
     else
-        this->_suffix.clear();
+        _suffix.clear();
 }
 /*****************************************************************************
  * Is this suffix less than that suffix?                                     *
  *****************************************************************************/
 bool
-VersionString::suffix::operator< (const suffix& that) const
+VersionString::suffix::operator< (const suffix& that) const throw()
 {
-    std::vector<std::string>::iterator ti, si;
+    const ValidSuffixes& suffixes(GlobalValidSuffixes());
+    ValidSuffixes::const_iterator ti, si;
 
-    ti = std::find(this->_suffixes.begin(), this->_suffixes.end(),
-        this->str());
-    si = std::find(this->_suffixes.begin(), this->_suffixes.end(),
-        that.str());
+    ti = suffixes.find(_suffix);
+    si = suffixes.find(that._suffix);
 
     /* both have a suffix */
-    if ((ti != this->_suffixes.end()) and (si != this->_suffixes.end()))
+    if ((ti != suffixes.end()) and (si != suffixes.end()))
     {
         /* same suffix, so compare suffix version */
         if (ti == si)
         {
-            if (not this->version().empty() and not that.version().empty())
-                return ( util::destringify<unsigned long>(this->version()) <
-                         util::destringify<unsigned long>(that.version()) );
-            else if (this->version().empty() and that.version().empty())
+            if (not _suffix_ver.empty() and not that._suffix_ver.empty())
+                return ( util::destringify<unsigned long>(_suffix_ver) <
+                         util::destringify<unsigned long>(that._suffix_ver) );
+            else if (_suffix_ver.empty() and that._suffix_ver.empty())
                 return true;
             else
-                return ( that.version().empty() ? false : true );
+                return not that._suffix_ver.empty();
         }
 
         return ti < si;
     }
 
     /* that has no suffix */
-    else if (ti != this->_suffixes.end())
+    else if (ti != suffixes.end())
         /* only the 'p' suffix is > than no suffix */
-        return (*ti == "p" ? false : true);
-    
+        return not (*ti == "p");
     /* this has no suffix */
-    else if (si != this->_suffixes.end())
+    else if (si != suffixes.end())
         /* only the 'p' suffix is > than no suffix */
-        return (*si == "p" ? true : false);
+        return (*si == "p");
 
     return false;
 }
@@ -211,33 +261,32 @@ VersionString::suffix::operator< (const suffix& that) const
  * Is this suffix equal to that suffix?                                      *
  *****************************************************************************/
 bool
-VersionString::suffix::operator== (const suffix& that) const
+VersionString::suffix::operator== (const suffix& that) const throw()
 {
-    std::vector<std::string>::iterator ti, si;
+    const ValidSuffixes& suffixes(GlobalValidSuffixes());
+    ValidSuffixes::const_iterator ti, si;
 
-    ti = std::find(this->_suffixes.begin(), this->_suffixes.end(),
-        this->str());
-    si = std::find(this->_suffixes.begin(), this->_suffixes.end(),
-        that.str());
+    ti = suffixes.find(_suffix);
+    si = suffixes.find(that._suffix);
 
     /* both have a suffix */
-    if ((ti != this->_suffixes.end()) and (si != this->_suffixes.end()))
+    if ((ti != suffixes.end()) and (si != suffixes.end()))
     {
         /* same suffix, so compare suffix version */
         if (ti == si)
         {
-            if (not this->version().empty() and not that.version().empty())
-                return ( util::destringify<unsigned long>(this->version()) ==
-                         util::destringify<unsigned long>(that.version()) );
-            else if (this->version().empty() and that.version().empty())
+            if (not _suffix_ver.empty() and not that._suffix_ver.empty())
+                return ( util::destringify<unsigned long>(_suffix_ver) ==
+                         util::destringify<unsigned long>(that._suffix_ver) );
+            else if (_suffix_ver.empty() and that._suffix_ver.empty())
                 return true;
             else
-                return ( that.version().empty() ? false : true );
+                return not that._suffix_ver.empty();
         }
 
         return ti == si;
     }
-    else if ((ti != this->_suffixes.end()) or (si != this->_suffixes.end()))
+    else if ((ti != suffixes.end()) or (si != suffixes.end()))
         return false;
 
     return true;
@@ -245,41 +294,39 @@ VersionString::suffix::operator== (const suffix& that) const
 /*****************************************************************************
  * nosuffix                                                                *
  *****************************************************************************/
-VersionString::nosuffix::nosuffix()
+VersionString::nosuffix::nosuffix() throw()
 {
 }
 
-VersionString::nosuffix::nosuffix(const std::string& pv)
+VersionString::nosuffix::nosuffix(const std::string& pv) throw()
 {
     this->parse(pv);
 }
 
 void
-VersionString::nosuffix::parse(const std::string& pv) const
+VersionString::nosuffix::parse(const std::string& pv) const throw()
 {
-    this->_version.clear();
-    this->_extra.clear();
-
-    this->_version.assign(pv);
+    _extra.clear();
+    _version.assign(pv);
 
     /* strip suffix */
-    std::string::size_type pos = this->_version.find('_');
+    std::string::size_type pos = _version.find('_');
     if (pos != std::string::npos)
-        this->_version.erase(pos);
+        _version.erase(pos);
 
     /* find first non-digit */
-    pos = this->_version.find_first_not_of("0123456789.");
+    pos = _version.find_first_not_of("0123456789.");
     if (pos != std::string::npos)
     {
-        this->_extra = this->_version.substr(pos);
-        this->_version.erase(pos);
+        _extra = _version.substr(pos);
+        _version.erase(pos);
     }
 }
 /*****************************************************************************
  * Is this version (minus suffix) less that that version (minus suffix)?     *
  *****************************************************************************/
 bool
-VersionString::nosuffix::operator< (const nosuffix& that) const
+VersionString::nosuffix::operator< (const nosuffix& that) const throw()
 {
     bool differ = false;
     bool result = false;
@@ -287,11 +334,11 @@ VersionString::nosuffix::operator< (const nosuffix& that) const
     /* std::string comparison should be sufficient for == */
     if (*this == that)
         return false;
-    else if (this->_version == that._version)
-        return this->_extra < that._extra;
+    else if (_version == that._version)
+        return _extra < that._extra;
 
-    std::vector<std::string> thisparts = util::split(this->_version, '.');
-    std::vector<std::string> thatparts = util::split(that._version, '.');
+    std::vector<std::string> thisparts(util::split(_version, '.'));
+    std::vector<std::string> thatparts(util::split(that._version, '.'));
     std::vector<std::string>::size_type stoppos =
         std::min<std::vector<std::string>::size_type>(thisparts.size(),
                                                        thatparts.size());
@@ -328,7 +375,7 @@ VersionString::nosuffix::operator< (const nosuffix& that) const
     }
 
     if (not differ)
-        return thisparts.size() <= thatparts.size();
+        return (thisparts.size() <= thatparts.size());
 
     return result;
 }
@@ -336,45 +383,44 @@ VersionString::nosuffix::operator< (const nosuffix& that) const
  * Is this version (minus suffix) equal to that version (minus suffix)?      *
  *****************************************************************************/
 bool
-VersionString::nosuffix::operator== (const nosuffix& that) const
+VersionString::nosuffix::operator== (const nosuffix& that) const throw()
 {
     /* std::string comparison should be sufficient for == */
-    return ((this->_version == that._version) and
-            (this->_extra   == that._extra));
+    return ((_version == that._version) and
+            (_extra   == that._extra));
 }
 /*****************************************************************************
  * VersionString                                                             *
  *****************************************************************************/
-VersionString::VersionString()
+VersionString::VersionString() throw()
     : _ebuild(), _v(), _verstr(), _suffix(), _version()
 {
 }
 
-VersionString::VersionString(const std::string& path)
+VersionString::VersionString(const std::string& path) throw()
     : _ebuild(path), _v(path), _verstr(_v.version()),
       _suffix(_v["PVR"]), _version(_v["PV"])
 {
 }
 
-VersionString::VersionString(const VersionString& that)
+VersionString::VersionString(const VersionString& that) throw()
 {
     *this = that;
 }
 
 VersionString&
-VersionString::operator=(const VersionString& that)
+VersionString::operator=(const VersionString& that) throw()
 {
     const_cast<std::string&>(_ebuild) = that._ebuild;
     const_cast<VersionComponents&>(_v) = that._v;
     const_cast<std::string&>(_verstr) = that._verstr;
     const_cast<suffix&>(_suffix) = that._suffix;
     const_cast<nosuffix&>(_version) = that._version;
-
     return *this;
 }
 
 void
-VersionString::assign(const std::string& path)
+VersionString::assign(const std::string& path) throw()
 {
     _ebuild.assign(path);
     _v.assign(path);
@@ -383,10 +429,10 @@ VersionString::assign(const std::string& path)
     _version.assign(_v["PV"]);
 }
 /*****************************************************************************
- * Display full version std::string (as portage would).                           *
+ * Display full version std::string (as portage would).                      *
  *****************************************************************************/
 std::string
-VersionString::str() const
+VersionString::str() const throw()
 {
     /* chop -r0 if necessary */
     std::string::size_type pos = _verstr.rfind("-r0");
@@ -399,55 +445,45 @@ VersionString::str() const
  * Is this version less than that version?                                   *
  *****************************************************************************/
 bool
-VersionString::operator< (const VersionString& that) const
+VersionString::operator< (const VersionString& that) const throw()
 {
-    if (this->_version < that._version)
+    if (_version < that._version)
         return true;
-    else if (this->_version == that._version)
+    else if (_version == that._version)
     {
-        if (this->_suffix < that._suffix)
+        if (_suffix < that._suffix)
             return true;
-        else if (this->_suffix == that._suffix)
+        else if (_suffix == that._suffix)
         {
             unsigned long thisrev =
-                util::destringify<unsigned long>(this->_v["PR"].substr(1).c_str());
+                util::destringify<unsigned long>(_v["PR"].substr(1));
             unsigned long thatrev =
-                util::destringify<unsigned long>(that._v["PR"].substr(1).c_str());
-            return thisrev <= thatrev;
+                util::destringify<unsigned long>(that._v["PR"].substr(1));
+            return (thisrev <= thatrev);
         }
     }
 
     return false;
 }
 /*****************************************************************************
- * Is this version equal to that version?                                    *
- *****************************************************************************/
-bool
-VersionString::operator== (const VersionString& that) const
-{
-    return ( (this->_version == that._version) and
-             (this->_suffix == that._suffix) and
-             (this->_v["PR"] == that._v["PR"]) );
-}
-/*****************************************************************************
  * versions                                                                *
  *****************************************************************************/
-Versions::Versions()
+Versions::Versions() throw()
 {
 }
 
-Versions::Versions(const std::string& path)
+Versions::Versions(const std::string& path) throw()
 {
     this->assign(path);
 }
 
-Versions::Versions(const std::vector<std::string>& paths)
+Versions::Versions(const std::vector<std::string>& paths) throw()
 {
     std::for_each(paths.begin(), paths.end(),
         std::bind2nd(util::Appender<Versions, std::string>(), this));
 }
 
-Versions::~Versions()
+Versions::~Versions() throw()
 {
 }
 /*****************************************************************************
@@ -455,7 +491,7 @@ Versions::~Versions()
  * each ebuild found.  clear()'s container first.                            *
  *****************************************************************************/
 void
-Versions::assign(const std::string& path)
+Versions::assign(const std::string& path) throw()
 {
     this->clear();
 
@@ -470,7 +506,7 @@ Versions::assign(const std::string& path)
  * Same as assign() but does not call clear().                               *
  *****************************************************************************/
 void
-Versions::append(const std::string& path)
+Versions::append(const std::string& path) throw()
 {
     const util::Directory pkgdir(path);
     util::copy_if(pkgdir.begin(), pkgdir.end(),

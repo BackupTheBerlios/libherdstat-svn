@@ -62,51 +62,82 @@ namespace portage {
      *
      * @section usage Usage
      *
-     * Use the VersionComponents class like you would a std::map<std::string,
-     * std::string>.
+     * Instantiate VersionComponents with the path to an ebuild (or use the
+     * assign() member) and then access the variables with operator[]().  You
+     * can also use the iterators to iterate over the elements if you desire.
      *
      * @section example Example
      *
-     * Below is a small example of using the VersionComponents class:
+     * Below is a simple example of using the VersionComponents class:
      *
      * @include version_components/main.cc
-     *
      */
 
-    class VersionComponents : public util::MapBase<std::string, std::string>
+    class VersionComponents
     {
         public:
+            typedef std::map<std::string, std::string> container_type;
+            typedef container_type::iterator iterator;
+            typedef container_type::const_iterator const_iterator;
+            typedef container_type::size_type size_type;
+            typedef container_type::value_type value_type;
+            typedef container_type::key_type key_type;
+            typedef container_type::mapped_type mapped_type;
+
             /// Default constructor.
-            VersionComponents();
+            VersionComponents() throw();
 
             /** Constructor.
              * @param path Path to ebuild.
              */
-            VersionComponents(const std::string& path);
+            VersionComponents(const std::string& path) throw();
+
+            /// Destructor.
+            ~VersionComponents() throw();
 
             /** Assign new path.
              * @param path Path to ebuild.
              */
-            void assign(const std::string& path);
+            void assign(const std::string& path) throw();
 
-            /** Get value mapped to given key.
-             * @returns copy of value mapped to key.
+            /** Get value mapped to given version component.
+             * @param key version component (P, PN, etc).
+             * @returns const reference to value mapped to @p key.
              */
-            const std::string operator[](const std::string& key) const
-            {
-                const_iterator i = this->find(key);
-                return (i == this->end() ? "" : i->second);
-            }
+            inline const mapped_type& operator[](const key_type& key) const throw();
+
+            ///@{
+            /// container_type subset
+            const_iterator begin() const { return _vmap.begin(); }
+            const_iterator end() const { return _vmap.end(); }
+            size_type size() const { return _vmap.size(); }
+            bool empty() const { return _vmap.empty(); }
+            const_iterator find(const key_type& key) const
+            { return _vmap.find(key); }
+            ///@}
 
             /// Get version string.
-            const std::string& version() const { return _verstr; }
+            inline const std::string& version() const throw();
 
         private:
             /// Parse version string and insert components into map.
-            void parse();
+            void parse() throw();
 
             std::string _verstr;
+            mutable container_type _vmap;
     };
+
+    inline const VersionComponents::mapped_type&
+    VersionComponents::operator[](const key_type& key) const throw()
+    {
+        return _vmap[key];
+    }
+
+    inline const std::string&
+    VersionComponents::version() const throw()
+    {
+        return _verstr;
+    }
 
     /**
      * @class VersionString version.hh herdstat/portage/version.hh
@@ -142,74 +173,58 @@ std::cout << v1.str() << std::endl;
     {
         public:
             /// Default constructor.
-            VersionString();
+            VersionString() throw();
 
             /** Constructor.
              * @param path Path to ebuild.
              */
-            VersionString(const std::string &path);
+            VersionString(const std::string &path) throw();
 
             /// Copy constructor.
-            VersionString(const VersionString& that);
+            VersionString(const VersionString& that) throw();
 
             /// Copy assignment operator.
-            VersionString& operator=(const VersionString& that);
+            VersionString& operator=(const VersionString& that) throw();
 
             /// Get version string.
-            std::string str() const;
+            std::string str() const throw();
 
             /** Assign a new path.
              * @param path Path to ebuild.
              */
-            void assign(const std::string& path);
+            void assign(const std::string& path) throw();
 
             /// Implicit conversion to std::string.
-            operator std::string() const { return this->str(); }
+            operator std::string() const throw() { return this->str(); }
 
             /** Get version string (minus the suffix).
              * @returns String object.
              */
-            const std::string &version() const { return this->_version(); }
+            const std::string& version() const throw() { return _version(); }
 
             /** Get path to ebuild for this version.
              * @returns String object.
              */
-            const std::string &ebuild() const { return this->_ebuild; }
+            const std::string& ebuild() const throw() { return _ebuild; }
 
             /** Get version component map for this version string.
              * @returns Reference to version_map object.
              */
-            const VersionComponents& components() const { return this->_v; }
+            const VersionComponents& components() const throw() { return _v; }
 
-            /** Determine whether given VersionString object is less
-             * than this one.
-             * @param that Reference to a VersionString object.
-             * @returns    A boolean value.
-             */
-            bool operator< (const VersionString& that) const;
-
-            /** Determine whether given VersionString object is greater
-             * than this one.
-             * @param that Reference to a VersionString object.
-             * @returns    A boolean value.
-             */
-            bool operator> (const VersionString& that) const
+            ///@{
+            /// Compare this VersionString against that VersionString.
+            bool operator< (const VersionString& that) const throw();
+            inline bool operator<=(const VersionString& that) const throw()
+            { return not (*this > that); }
+            inline bool operator> (const VersionString& that) const throw()
             { return (that < *this); }
-
-            /** Determine whether given VersionString object is equal
-             * to this one.
-             * @param that Reference to a VersionString object.
-             * @returns    A boolean value.
-             */
-            bool operator==(const VersionString& that) const;
-
-            /** Determine whether given VersionString object is not equal
-             * to this one.
-             * @param that Reference to a VersionString object.
-             * @returns    A boolean value.
-             */
-            bool operator!=(const VersionString& that) const
+            inline bool operator>=(const VersionString& that) const throw()
+            { return not (*this < that); }
+            inline bool operator==(const VersionString& that) const throw();
+            inline bool operator!=(const VersionString& that) const throw()
             { return not (*this == that); }
+            ///@}
 
         private:
             /**
@@ -221,64 +236,48 @@ std::cout << v1.str() << std::endl;
             {
                 public:
                     /// Default constructor.
-                    suffix();
+                    suffix() throw();
 
                     /** Constructor.
                      * @param pvr PVR string object (version+revision).
                      */
-                    suffix(const std::string &pvr);
+                    suffix(const std::string& pvr) throw();
 
                     /** Assign a new suffix.
                      * @param pvr PVR string object (version+revision).
                      */
-                    void assign(const std::string& pvr)
+                    void assign(const std::string& pvr) throw()
                     { this->parse(pvr); }
 
                     /** Get suffix string.
                      * @returns String object.
                      */
-                    const std::string& str() const { return this->_suffix; }
+                    const std::string& str() const throw() { return _suffix; }
 
                     /** Get suffix version string.
                      * @returns String object.
                      */
-                    const std::string& version() const
-                    { return this->_suffix_ver; }
+                    const std::string& version() const throw()
+                    { return _suffix_ver; }
 
-                    /** Determine whether that suffix is less than this suffix.
-                     * @param that Reference to a suffix object.
-                     * @returns    A boolean value.
-                     */
-                    bool operator< (const suffix& that) const;
-
-                    /** Determine whether that suffix is greater than this
-                     * suffix.
-                     * @param that Reference to a suffix object.
-                     * @returns    A boolean value.
-                     */
-                    bool operator> (const suffix& that) const
+                    ///@{
+                    /// Compare this suffix against that suffix.
+                    bool operator< (const suffix& that) const throw();
+                    bool operator<=(const suffix& that) const throw()
+                    { return not (*this > that); }
+                    bool operator> (const suffix& that) const throw()
                     { return (that < *this); }
-                    
-                    /** Determine whether that suffix is equal to this suffix.
-                     * @param that Reference to a suffix object.
-                     * @returns    A boolean value.
-                     */
-                    bool operator== (const suffix& that) const;
-                    
-                    /** Determine whether that suffix is not equal to this
-                     * suffix.
-                     * @param that Reference to a suffix object.
-                     * @returns    A boolean value.
-                     */
-                    bool operator!= (const suffix& that) const
+                    bool operator>=(const suffix& that) const throw()
+                    { return not (*this < that); }
+                    bool operator== (const suffix& that) const throw();
+                    bool operator!= (const suffix& that) const throw()
                     { return not (*this == that); }
+                    ///@}
 
                 private:
                     /// Parse ${PVR}
-                    void parse(const std::string &pvr) const;
+                    void parse(const std::string &pvr) const throw();
 
-                    /// Valid suffixes.
-                    static std::vector<std::string> _suffixes;
                     /// Suffix std::string.
                     mutable std::string _suffix;
                     /// Suffix version std::string.
@@ -293,58 +292,38 @@ std::cout << v1.str() << std::endl;
             class nosuffix
             {
                 public:
-                    nosuffix();
+                    nosuffix() throw();
 
                     /** Constructor.
                      * @param pv PV string object.
                      */
-                    nosuffix(const std::string &pv);
+                    nosuffix(const std::string& pv) throw();
 
                     /** Assign a new $PV.
                      * @param pv PV string object.
                      */
-                    void assign(const std::string& pv)
+                    void assign(const std::string& pv) throw()
                     { this->parse(pv); }
 
                     /** Get version string minus suffix.
                      * @returns String object.
                      */
-                    const std::string& operator() () const
-                    { return this->_version; }
+                    const std::string& operator() () const throw()
+                    { return _version; }
 
-                    /** Determine whether that nosuffix is less than this
-                     * nosuffix.
-                     * @param that Reference to a nosuffix object.
-                     * @returns    A boolean value.
-                     */
-                    bool operator< (const nosuffix& that) const;
-
-                    /** Determine whether that nosuffix is greater than this
-                     * nosuffix.
-                     * @param that Reference to a nosuffix object.
-                     * @returns    A boolean value.
-                     */
-                    bool operator> (const nosuffix& that) const
+                    ///@{
+                    /// Compare this nosuffix against that nosuffix.
+                    bool operator< (const nosuffix& that) const throw();
+                    bool operator> (const nosuffix& that) const throw()
                     { return (that < *this); }
-
-                    /** Determine whether that nosuffix is equal to this
-                     * nosuffix.
-                     * @param that Reference to a nosuffix object.
-                     * @returns    A boolean value.
-                     */
-                    bool operator== (const nosuffix& that) const;
-
-                    /** Determine whether that nosuffix is not equal to this
-                     * nosuffix.
-                     * @param that Reference to a nosuffix object.
-                     * @returns    A boolean value.
-                     */
-                    bool operator!= (const nosuffix& that) const
+                    bool operator== (const nosuffix& that) const throw();
+                    bool operator!= (const nosuffix& that) const throw()
                     { return not (*this == that); }
+                    ///@}
 
                 private:
                     /// Parse ${PV}.
-                    void parse(const std::string& pv) const;
+                    void parse(const std::string& pv) const throw();
 
                     /// Version string (minus suffix).
                     mutable std::string _version;
@@ -364,9 +343,17 @@ std::cout << v1.str() << std::endl;
             mutable nosuffix _version;
     };
 
+    inline bool
+    VersionString::operator==(const VersionString& that) const throw()
+    {
+        return ( (_version == that._version) and
+                 (_suffix  == that._suffix)  and
+                 (_v["PR"] == that._v["PR"]) );
+    }
+
     /** 
      * @class Versions version.hh herdstat/portage/version.hh
-     * @brief VersionString container.
+     * @brief Sorted VersionString container.
      *
      * @section overview Overview
      *
@@ -374,7 +361,8 @@ std::cout << v1.str() << std::endl;
      *
      * @section example Example
      *
-     * Below is a simple example of using the Versions class:
+     * Below is a simple example of using the Versions class to show properly
+     * sorted versions of the given package:
      *
      * @include versions/main.cc
      */
@@ -383,95 +371,95 @@ std::cout << v1.str() << std::endl;
     {
         public:
             /// Default constructor.
-            Versions();
+            Versions() throw();
 
             /** Constructor.  Instantiate VersionString objects for each
              * ebuild existing in the specified package directory.
              * @param path Path to package directory.
              */
-            Versions(const std::string &path);
+            Versions(const std::string &path) throw();
 
             /** Constructor.  Instantiate VersionString objects for each
              * ebuild existing in each element (package directories).
              * @param v Vector of package directory paths.
              */
-            Versions(const std::vector<std::string> &v);
+            Versions(const std::vector<std::string>& v) throw();
 
             /// Destructor.
-            virtual ~Versions();
+            virtual ~Versions() throw();
 
             /// Get first VersionString.
-            inline const VersionString& front() const;
+            inline const VersionString& front() const throw();
             /// Get last VersionString.
-            inline const VersionString& back() const;
+            inline const VersionString& back() const throw();
 
             //@{
             /** Find version string using ebuild matching path.
              * @param path Ebuild path.
              * @returns iterator to first match or end() if no match.
              */
-            inline iterator find(const std::string& path);
-            inline const_iterator find(const std::string& path) const;
+            inline iterator find(const std::string& path) throw();
+            inline const_iterator find(const std::string& path) const throw();
             //@}
 
             /** Insert given VersionString.
              * @param v const reference to VersionString.
              * @returns True if insertion was successful.
              */
-            inline bool insert(const VersionString& v);
+            inline bool insert(const VersionString& v) throw();
 
             /** Instantiate and insert a VersionString object with the
              * specified path.
              * @param p Path.
              * @returns True if insertion was successful.
              */
-            inline bool insert(const std::string &p);
+            inline bool insert(const std::string& p) throw();
 
             /** Assign a new package directory clearing any previously
              * contained VersionString instances.
              * @param p Path to package directory.
              */
-            void assign(const std::string &p);
+            void assign(const std::string& p) throw();
 
             /** Append a new package directory.
              * @param p Path to package directory.
              */
-            void append(const std::string &p);
+            void append(const std::string& p) throw();
     };
 
     inline Versions::iterator
-    Versions::find(const std::string& p)
+    Versions::find(const std::string& p) throw()
     {
         return this->find(VersionString(p));
     }
 
     inline Versions::const_iterator
-    Versions::find(const std::string& p) const
+    Versions::find(const std::string& p) const throw()
     {
         return this->find(VersionString(p));
     }
 
     inline bool
-    Versions::insert(const std::string& path)
+    Versions::insert(const std::string& path) throw()
     {
         return util::SetBase<VersionString>::insert(VersionString(path)).second;
     }
 
     inline bool
-    Versions::insert(const VersionString& v)
+    Versions::insert(const VersionString& v) throw()
     {
         return util::SetBase<VersionString>::insert(v).second;
     }
 
     inline const VersionString&
-    Versions::front() const
+    Versions::front() const throw()
     {
         assert(not this->empty());
         return *(this->begin());
     }
 
     inline const VersionString&
-    Versions::back() const
+    Versions::back() const throw()
     {
         assert(not this->empty());
         const_iterator i = this->end();
@@ -482,11 +470,14 @@ std::cout << v1.str() << std::endl;
      * @class VersionsMap version.hh herdstat/portage/version.hh
      * @brief Template class for mapping VersionString objects to objects of
      * type T.
+     * @see KeywordsMap for an example of using the VersionsMap class template.
      */
 
     template <typename T>
     class VersionsMap : public util::MapBase<VersionString, T>
     {
+        public:
+            virtual ~VersionsMap() throw() { }
     };
 
     /**
