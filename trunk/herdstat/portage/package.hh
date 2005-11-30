@@ -34,6 +34,7 @@
 
 #include <herdstat/util/regex.hh>
 #include <herdstat/portage/config.hh>
+#include <herdstat/portage/ebuild.hh>
 #include <herdstat/portage/keywords.hh>
 
 /** 
@@ -237,7 +238,11 @@ namespace portage {
     }
 
     ///@{
-    /// For comparing a Package with a std::string on the left hand side.
+    /** Comparison operators for when a Package is on the right hand side.
+     * @param lhs const reference to a package name string.
+     * @param rhs const reference to a Package object.
+     * @returns A boolean value.
+     */
     inline bool
     operator< (const std::string& lhs, const Package& rhs)
     {
@@ -270,6 +275,24 @@ namespace portage {
 
     inline bool
     operator!=(const std::string& lhs, const Package& rhs)
+    {
+        return (lhs != rhs.full());
+    }
+    ///@}
+
+    ///@{
+    /** Comparison operators for when a Package is on the right hand side.
+     * @param lhs const reference to a util::Regex object.
+     * @param rhs const reference to a Package object.
+     */
+    inline bool
+    operator==(const util::Regex& lhs, const Package& rhs)
+    {
+        return (lhs == rhs.full());
+    }
+
+    inline bool
+    operator!=(const util::Regex& lhs, const Package& rhs)
     {
         return (lhs != rhs.full());
     }

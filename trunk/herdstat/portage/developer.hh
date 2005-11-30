@@ -94,95 +94,44 @@ namespace portage {
              */
             inline operator std::string() const throw();
 
-            /** Determine if this developer is equal to that developer.
-             * @param user user name.
-             * @returns True if user name is equivelent.
-             */
-            inline bool operator== (const std::string& user) const throw();
 
-            /** Determine if this developer is equal to that developer.
-             * @param dev const reference to Developer object.
-             * @returns True if user name is equivelent.
+            ///@{
+            /** Compare this Developer against that Developer.
+             * Only compares user() members.
+             * @param dev const reference to another Developer object.
+             * @returns A boolean value.
              */
             inline bool operator== (const Developer& dev) const throw();
+            inline bool operator!= (const Developer& dev) const throw();
+            inline bool operator>  (const Developer& dev) const throw();
+            inline bool operator>= (const Developer& dev) const throw();
+            inline bool operator<  (const Developer& dev) const throw();
+            inline bool operator<= (const Developer& dev) const throw();
+            ///@}
 
-            /** Determine if this developer is equal to that developer.
-             * @param re const reference to a Regex object
-             * @returns True if regex matches our user name.
+            ///@{
+            /** Compare this Developer against the given string.
+             * Only compares the string against the user() member.
+             * @param user user name.
+             * @returns A boolean value.
+             */
+            inline bool operator== (const std::string& user) const throw();
+            inline bool operator!= (const std::string& user) const throw();
+            inline bool operator<  (const std::string& user) const throw();
+            inline bool operator<= (const std::string& user) const throw();
+            inline bool operator>  (const std::string& user) const throw();
+            inline bool operator>= (const std::string& user) const throw();
+            ///@}
+            
+            ///@{
+            /** Compare this Developer against the given regular expression.
+             * Only compares the regex against the user() member.
+             * @param re const reference to a util::Regex object.
+             * @returns A boolean value.
              */
             inline bool operator== (const util::Regex& re) const throw();
-
-            /** Determine if this developer is not equal to that developer.
-             * @param user user name.
-             * @returns True if user name is not equivelent.
-             */
-            inline bool operator!= (const std::string& user) const throw();
-
-            /** Determine if this developer is not equal to that developer.
-             * @param dev const reference to Developer object.
-             * @returns True if user name is not equivelent.
-             */
-            inline bool operator!= (const Developer& dev) const throw();
-
-            /** Determine if this developer is not equal to that developer.
-             * @param re const reference to a Regex object
-             * @returns True if regex does not match our user name.
-             */
             inline bool operator!= (const util::Regex& re) const throw();
-
-            /** Determine if this developer is greater than that developer.
-             * @param user user name.
-             * @returns True if our user name is greater than user.
-             */
-            inline bool operator>  (const std::string& user) const throw();
-
-            /** Determine if this developer is greater than that developer.
-             * @param dev const reference to Developer object.
-             * @returns True if our user name is greater than their user name.
-             */
-            inline bool operator>  (const Developer& dev) const throw();
-
-            /** Determine if this developer is greater than or equal to that
-             * developer.
-             * @param user user name.
-             * @returns True if our user name is greater than or equal to user.
-             */
-            inline bool operator>= (const std::string& user) const throw();
-
-            /** Determine if this developer is greater than or equal to that
-             * developer.
-             * @param dev const reference to Developer object.
-             * @returns True if our user name is greater than or equal to their
-             * user name.
-             */
-            inline bool operator>= (const Developer& dev) const throw();
-
-            /** Determine if this developer is less than that developer.
-             * @param user user name.
-             * @returns True if our user name is less than user.
-             */
-            inline bool operator<  (const std::string& user) const throw();
-
-            /** Determine if this developer is less than that developer.
-             * @param dev const reference to Developer object.
-             * @returns True if our user name is less than their user name.
-             */
-            inline bool operator<  (const Developer& dev) const throw();
-
-            /** Determine if this developer is less than or equal to that
-             * developer.
-             * @param user user name.
-             * @returns True if our user name is less than or equal to user.
-             */
-            inline bool operator<= (const std::string& user) const throw();
-
-            /** Determine if this developer is less than or equal to that
-             * developer.
-             * @param dev const reference to Developer object.
-             * @returns True if our user name is less than or equal to their
-             * user name.
-             */
-            inline bool operator<= (const Developer& dev) const throw();
+            ///@}
 
             /// Get user name.
             inline const std::string& user() const throw();
@@ -330,6 +279,70 @@ namespace portage {
     }
     inline void Developer::set_away(const bool away) throw() { _away = away; }
 
+    ///@{
+    /** Comparison operators for when a Developer object is on the right hand
+     * side.
+     * @param lhs const reference to a user name string.
+     * @param rhs const reference to a Developer object.
+     * @returns A boolean value.
+     */
+    inline bool
+    operator==(const std::string& lhs, const Developer& rhs)
+    {
+        return (rhs == lhs);
+    }
+
+    inline bool
+    operator!=(const std::string& lhs, const Developer& rhs)
+    {
+        return (rhs != lhs);
+    }
+
+    inline bool
+    operator< (const std::string& lhs, const Developer& rhs)
+    {
+        return (rhs > lhs);
+    }
+
+    inline bool
+    operator<=(const std::string& lhs, const Developer& rhs)
+    {
+        return (rhs >= lhs);
+    }
+
+    inline bool
+    operator> (const std::string& lhs, const Developer& rhs)
+    {
+        return (rhs < lhs);
+    }
+
+    inline bool
+    operator>=(const std::string& lhs, const Developer& rhs)
+    {
+        return (rhs <= lhs);
+    }
+    ///@}
+
+    ///@{
+    /** Comparison operators for when a Developer object is on the right hand
+     * side.
+     * @param lhs const reference to a util::Regex object.
+     * @param rhs const reference to a Developer object.
+     * @returns A boolean value.
+     */
+    inline bool
+    operator==(const util::Regex& lhs, const Developer& rhs)
+    {
+        return (rhs == lhs);
+    }
+
+    inline bool
+    operator!=(const util::Regex& lhs, const Developer& rhs)
+    {
+        return (rhs != lhs);
+    }
+    ///@}
+
     /**
      * @class Developers developer.hh herdstat/portage/developer.hh
      * @brief Developer container.
@@ -365,7 +378,7 @@ herdstat::util::transform_if(devs.begin(), devs.end(),
             Developers() throw();
 
             /** Constructor. Assign a container_type.
-             * @param v A reference to a container_type.
+             * @param v const reference to a container_type.
              */
             Developers(const container_type& v) throw();
 
@@ -378,6 +391,8 @@ herdstat::util::transform_if(devs.begin(), devs.end(),
             /// Destructor.
             virtual ~Developers() throw();
 
+            /// Implicit conversion to underlying container (std::set<Developer).
+            inline operator const container_type&() const throw();
             /// Implicit conversion to std::vector<std::string>.
             operator std::vector<std::string>() const throw();
 
@@ -413,6 +428,12 @@ herdstat::util::transform_if(devs.begin(), devs.end(),
             inline iterator find(const util::Regex &regex) throw();
             inline const_iterator find(const util::Regex& regex) const throw();
     };
+
+    inline Developers::operator
+    const Developers::container_type&() const throw()
+    {
+        return this->container();
+    }
 
     inline Developers::iterator Developers::find(const std::string& dev) throw()
     { return util::SetBase<Developer>::find(Developer(dev)); }

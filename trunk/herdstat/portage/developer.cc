@@ -49,8 +49,7 @@ Developer::Developer(const std::string &user, const std::string &email,
       _role(), _location(), _awaymsg(), _away(false), _herds(NULL)
 {
     /* chop everything after '@' if the caller
-     * gave an email addy instead of the user name.
-     */
+     * gave an email addy instead of the user name. */
     std::string::size_type pos = _user.find('@');
     if (pos != std::string::npos)
         _user.erase(pos);

@@ -45,6 +45,18 @@ namespace portage {
     /**
      * @class Keyword keywords.hh herdstat/portage/keywords.hh
      * @brief Represents a single architecture keyword.
+     *
+     * @section usage Usage
+     *
+     * Simply instantiate with a keyword string (eg "~mips").  You can get that
+     * same string later using the str() member.  You can get the architecture
+     * using the arch() member.  You can get the mask character with the mask()
+     * member.  If there is no mask character (meaning it's a stable keyword),
+     * the mask() member returns the nul byte ('\\0').  For convenience, the
+     * member functions is_stable(), is_testing(), and is_masked() are provided.
+     * These functios simply test the mask character for the respective mask
+     * type.  For sorting purposes, comparison operators such as operator<()
+     * are provided.
      */
 
     class Keyword

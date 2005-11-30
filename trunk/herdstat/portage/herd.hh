@@ -91,7 +91,7 @@ namespace portage {
             inline operator std::string() const throw();
 
             //@{
-            /** Determine equivelance of this herd compared to that herd name.
+            /** Determine equivalence of this herd compared to that herd name.
              * @param name herd name.
              * @returns Boolean value.
              */
@@ -104,7 +104,7 @@ namespace portage {
             //@}
 
             //@{
-            /** Determine equivelance of this herd compared to that herd.
+            /** Determine equivalence of this herd compared to that herd.
              * @param herd const reference to another Herd object.
              * @returns Boolean value.
              */
@@ -117,7 +117,7 @@ namespace portage {
             //@}
 
             //@{
-            /** Determine equivelance of this herd compared to the regex.
+            /** Determine equivalence of this herd compared to the regex.
              * @param re const reference to a Regex object.
              * @returns Boolean value.
              */
@@ -180,6 +180,68 @@ namespace portage {
     inline void Herd::set_email(const std::string& email) throw() { _email.assign(email); }
     inline void Herd::set_desc(const std::string& desc) throw() { _desc.assign(desc); }
 
+    ///@{
+    /** Comparison operators for when a Herd object is on the right hand side.
+     * @param lhs const reference to a herd name string.
+     * @param rhs const reference to a Herd object.
+     * @returns A boolean value.
+     */
+    inline bool
+    operator==(const std::string& lhs, const Herd& rhs)
+    {
+        return (rhs == lhs);
+    }
+
+    inline bool
+    operator!=(const std::string& lhs, const Herd& rhs)
+    {
+        return (rhs != lhs);
+    }
+
+    inline bool
+    operator< (const std::string& lhs, const Herd& rhs)
+    {
+        return (rhs > lhs);
+    }
+
+    inline bool
+    operator<=(const std::string& lhs, const Herd& rhs)
+    {
+        return (rhs >= lhs);
+    }
+
+    inline bool
+    operator> (const std::string& lhs, const Herd& rhs)
+    {
+        return (rhs < lhs);
+    }
+
+    inline bool
+    operator>=(const std::string& lhs, const Herd& rhs)
+    {
+        return (rhs <= lhs);
+    }
+    ///@}
+    
+    ///@{
+    /** Comparison operators for when a Herd object is on the right hand side.
+     * @param lhs const reference to a util::Regex object.
+     * @param rhs const reference to a Herd object.
+     * @returns A boolean value.
+     */
+    inline bool
+    operator==(const util::Regex& lhs, const Herd& rhs)
+    {
+        return (rhs == lhs);
+    }
+
+    inline bool
+    operator!=(const util::Regex& lhs, const Herd& rhs)
+    {
+        return (rhs != lhs);
+    }
+    ///@}
+
     /**
      * @class Herds herd.hh herdstat/portage/herd.hh
      * @brief Herd container.
@@ -187,6 +249,28 @@ namespace portage {
      * @section usage Usage
      *
      * Use the Herds class like you would a std::set<Herd>.
+     *
+     * @section example Example
+     *
+     * Below is a simple example of using the Herds class:
+     *
+@code
+herdstat::portage::Herd h1("netmon");
+herdstat::portage::Herd h2("cpp");
+herdstat::portage::Herds herds;
+herds.insert(h1);
+herds.insert(h2);
+...
+std::vector<herdstat::portage::Herd> other_herds;
+...
+herds.insert(other_herds.begin(), other_herds.end());
+...
+std::cout << "Herds(" << herds.size() << "):" << std::endl;
+std::transform(herds.begin(), herds.end(),
+    std::ostream_iterator<std::string>(std::cout, " "),
+    std::mem_fun_ref(&herdstat::portage::Herd::name));
+@endcode
+     *
      */
 
     class Herds : public util::SetBase<Herd>
@@ -203,8 +287,8 @@ namespace portage {
             /// Destructor.
             ~Herds() throw();
 
-            /// Implicit conversion to container_type.
-            inline operator container_type() const throw();
+            /// Implicit conversion to underlying container (std::set<Herd>).
+            inline operator const container_type&() const throw();
             /// Implicit conversion to std::vector<std::string>.
             operator std::vector<std::string>() const throw();
 
@@ -221,28 +305,43 @@ namespace portage {
              */
             Herds& operator= (const std::vector<std::string>& v) throw();
 
+            ///@{
+            /** Get reference to element at front of container (the "least"
+             * element as determined by std::less<Herd>).
+             */
             inline value_type& front() throw();
             inline const value_type& front() const throw();
+            ///@}
+            
+            ///@{
+            /** Get reference to element at back of container (the "greatest"
+             * element as determined by std::less<Herd>).
+             */
             inline value_type& back() throw();
             inline const value_type& back() const throw();
+            ///@}
 
+            ///@{
             /** Find herd with given herd name.
              * @param herd Herd name.
              * @returns iterator to first match or end() if no match.
              */
             inline iterator find(const std::string& herd) throw();
             inline const_iterator find(const std::string& herd) const throw();
+            ///@}
 
+            ///@{
             /** Find herd with name matching given regular expression.
              * @param regex Regular expression.
              * @returns iterator to first match or end() if no match.
              */
             inline iterator find(const util::Regex& regex) throw();
             inline const_iterator find(const util::Regex& regex) const throw();
+            ///@}
     };
 
     inline Herds::operator
-    Herds::container_type() const throw()
+    const Herds::container_type&() const throw()
     {
         return this->container();
     }
