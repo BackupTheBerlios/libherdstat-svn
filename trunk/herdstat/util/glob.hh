@@ -84,12 +84,12 @@ std::copy(glob.results().begin(), glob.results().end(),
             ~Glob() throw();
 
             /// Clear glob results.
-            void clear_results() { _results.clear(); }
+            inline void clear_results();
 
             /** Get glob results.
              * @returns const reference to results.
              */
-            const std::vector<std::string>& results() const { return _results; }
+            inline const std::vector<std::string>& results() const;
 
             /** Perform glob search.
              * @param pattern glob pattern string.
@@ -103,6 +103,18 @@ std::copy(glob.results().begin(), glob.results().end(),
             std::vector<std::string> _results;
             glob_t _glob;
     };
+
+    inline void
+    Glob::clear_results()
+    {
+        _results.clear();
+    }
+
+    inline const std::vector<std::string>&
+    Glob::results() const
+    {
+        return _results;
+    }
 
 } // namespace util
 } // namespace herdstat

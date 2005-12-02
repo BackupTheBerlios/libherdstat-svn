@@ -49,7 +49,7 @@ namespace util {
     template <typename T>
     struct Dereference : std::unary_function<const T*, T>
     {
-        const T& operator()(const T *p) const { return *p; }
+        inline const T& operator()(const T *p) const { return *p; }
     };
 
     /**
@@ -60,7 +60,7 @@ namespace util {
     template <typename T>
     struct First : std::unary_function<T, typename T::first_type>
     {
-        const typename T::first_type&
+        inline const typename T::first_type&
         operator()(const T& v) const { return v.first; }
     };
 
@@ -75,7 +75,7 @@ namespace util {
     template <typename T>
     struct Second : std::unary_function<T, typename T::second_type>
     {
-        const typename T::second_type&
+        inline const typename T::second_type&
         operator()(const T& v) const { return v.second; }
     };
 
@@ -88,11 +88,11 @@ namespace util {
     struct EmptyFirst
     {
         template <typename T>
-        std::pair<std::string, T> operator()(const T& v) const
+        inline std::pair<std::string, T> operator()(const T& v) const
         { return std::pair<std::string, T>("", v); }
 
         template <typename T>
-        std::pair<std::string, T>
+        inline std::pair<std::string, T>
         operator()(const std::pair<std::string, T>& v) const
         { return std::pair<std::string, T>("", v.second); }
     };
@@ -121,7 +121,7 @@ std::for_each(foov.begin(), foov.end(),
     template <typename T>
     struct DeleteAndNullify : std::unary_function<T*, void>
     {
-        void operator()(T *p) const
+        inline void operator()(T *p) const
         {
             if (p)
             {
@@ -157,7 +157,7 @@ herdstat::util::transform_if(paths.begin(), paths.end(),
     template <typename T, typename U = std::string>
     struct New : std::unary_function<T, U>
     {
-        T operator()(const U& u) const
+        inline T operator()(const U& u) const
         { return T(u); }
     };
 
@@ -170,7 +170,10 @@ herdstat::util::transform_if(paths.begin(), paths.end(),
     template <typename T, typename U = typename T::value_type>
     struct Appender : std::binary_function<U, T* const, void>
     {
-        void operator()(const U& u, T * const v) const { v->append(u); }
+        inline void operator()(const U& u, T * const v) const
+        {
+            v->append(u);
+        }
     };
 
     /**
@@ -180,8 +183,10 @@ herdstat::util::transform_if(paths.begin(), paths.end(),
 
     struct FileExists : std::unary_function<std::string, bool>
     {
-        bool operator()(const std::string& path) const
-        { return file_exists(path); }
+        inline bool operator()(const std::string& path) const
+        {
+            return file_exists(path);
+        }
     };
 
     /**
@@ -192,8 +197,10 @@ herdstat::util::transform_if(paths.begin(), paths.end(),
 
     struct IsDir : std::unary_function<std::string, bool>
     {
-        bool operator()(const std::string& path) const
-        { return is_dir(path); }
+        inline bool operator()(const std::string& path) const
+        {
+            return is_dir(path);
+        }
     };
 
     /**
@@ -204,8 +211,10 @@ herdstat::util::transform_if(paths.begin(), paths.end(),
 
     struct IsFile : std::unary_function<std::string, bool>
     {
-        bool operator()(const std::string& path) const
-        { return is_file(path); }
+        inline bool operator()(const std::string& path) const
+        {
+            return is_file(path);
+        }
     };
 
     /**
@@ -215,8 +224,10 @@ herdstat::util::transform_if(paths.begin(), paths.end(),
 
     struct Basename : std::unary_function<std::string, std::string>
     {
-        std::string operator()(const std::string& path) const
-        { return util::basename(path); }
+        inline std::string operator()(const std::string& path) const
+        {
+            return util::basename(path);
+        }
     };
 
     /**
@@ -226,8 +237,10 @@ herdstat::util::transform_if(paths.begin(), paths.end(),
 
     struct Dirname : std::unary_function<std::string, std::string>
     {
-        std::string operator()(const std::string& path) const
-        { return util::dirname(path); }
+        inline std::string operator()(const std::string& path) const
+        {
+            return util::dirname(path);
+        }
     };
 
     /**
@@ -252,8 +265,10 @@ herdstat::util::copy_if(v.begin(), v.end(),
 
     struct regexMatch : std::binary_function<Regex, std::string, bool>
     {
-        bool operator() (const Regex &re, const std::string& s) const
-        { return (re == s); }
+        inline bool operator()(const Regex &re, const std::string& s) const
+        {
+            return (re == s);
+        }
     };
 
     /**
@@ -267,9 +282,11 @@ herdstat::util::copy_if(v.begin(), v.end(),
 
     struct patternMatch : std::binary_function<std::string, std::string, bool>
     {
-        bool operator() (const std::string& path,
-                         const std::string& pattern) const
-        { return (fnmatch(pattern.c_str(), path.c_str(), 0) == 0); }
+        inline bool operator() (const std::string& path,
+                                const std::string& pattern) const
+        {
+            return (fnmatch(pattern.c_str(), path.c_str(), 0) == 0);
+        }
     };
 
     ///@{
@@ -291,10 +308,10 @@ herdstat::util::copy_if(v.begin(), v.end(),
     {
         public:
             /// Constructor.
-            compose_f_gx_t(const Op1& o1, const Op2& o2)
+            inline compose_f_gx_t(const Op1& o1, const Op2& o2)
                 : op1(o1), op2(o2) { }
 
-            typename Op1::result_type
+            inline typename Op1::result_type
             operator()(const typename Op2::argument_type& x) const
             { return op1(op2(x)); }
 
@@ -345,10 +362,10 @@ std::for_each(fm.begin(), fm.end(),
     {
         public:
             /// Constructor.
-            compose_f_gx_hx_t(const Op1& o1, const Op2& o2, const Op3& o3)
+            inline compose_f_gx_hx_t(const Op1& o1, const Op2& o2, const Op3& o3)
                 : op1(o1), op2(o2), op3(o3) { }
 
-            typename Op1::result_type
+            inline typename Op1::result_type
             operator()(const typename Op2::argument_type& x) const
             {
                 return op1(op2(x), op3(x));
@@ -402,10 +419,10 @@ herdstat::util::copy_if(paths.begin(), paths.end(),
                                typename Op1::result_type>
     {
         public:
-            compose_f_gx_hy_t(const Op1& o1, const Op2& o2, const Op3& o3)
+            inline compose_f_gx_hy_t(const Op1& o1, const Op2& o2, const Op3& o3)
                 : op1(o1), op2(o2), op3(o3) { }
 
-            typename Op1::result_type
+            inline typename Op1::result_type
             operator()(const typename Op2::argument_type& x,
                        const typename Op3::argument_type& y) const
             {

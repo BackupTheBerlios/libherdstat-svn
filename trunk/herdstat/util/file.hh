@@ -171,17 +171,17 @@ namespace util {
              */
             Stat(const std::string &p, bool opened = false) throw();
 
-            device_type device()   const { return this->st_dev; }
-            inode_type  inode()    const { return this->st_ino; }
-            mode_type   mode()     const { return this->st_mode; }
-            uid_type    uid()      const { return this->st_uid; }
-            gid_type    gid()      const { return this->st_gid; }
-            size_type   size()     const { return this->st_size; }
-            time_type   atime()    const { return this->st_atime; }
-            time_type   mtime()    const { return this->st_mtime; }
-            time_type   ctime()    const { return this->st_ctime; }
-            const std::string& path()    const { return this->_path; }
-            ftype       type()     const { return this->_type; }
+            inline device_type device()      const { return this->st_dev; }
+            inline inode_type  inode()       const { return this->st_ino; }
+            inline mode_type   mode()        const { return this->st_mode; }
+            inline uid_type    uid()         const { return this->st_uid; }
+            inline gid_type    gid()         const { return this->st_gid; }
+            inline size_type   size()        const { return this->st_size; }
+            inline time_type   atime()       const { return this->st_atime; }
+            inline time_type   mtime()       const { return this->st_mtime; }
+            inline time_type   ctime()       const { return this->st_ctime; }
+            inline const std::string& path() const { return this->_path; }
+            inline ftype       type()        const { return this->_type; }
 
             /// Assign a new path and stat it.
             void assign(const std::string &p, bool opened = false) throw();
@@ -189,7 +189,7 @@ namespace util {
             /** Does the file associated with this exist?
              * @returns A boolean value.
              */
-            bool exists() const { return this->_exists; }
+            inline bool exists() const { return _exists; }
 
             /** stat() wrapper.
              * @returns A boolean value (exists()).
@@ -222,18 +222,18 @@ namespace util {
             virtual ~BaseFileObject() throw();
 
             /// Get path of file.
-            const std::string& path() const { return _stat.path(); }
+            inline const std::string& path() const { return _stat.path(); }
             /// Set path of file.
-            void set_path(const std::string& path) { _stat.assign(path); }
+            inline void set_path(const std::string& path) { _stat.assign(path); }
             /// Get reference to stat member.
-            Stat& stat() { return _stat; }
+            inline Stat& stat() { return _stat; }
             /// Get const reference to stat member.
-            const Stat& stat() const { return _stat; }
+            inline const Stat& stat() const { return _stat; }
 
             /** Has this file object been opened?
              * @returns A boolean value.
              */
-            bool is_open() const { return _opened; }
+            inline bool is_open() const { return _opened; }
 
             /** Dump our internal contents to disk.
              * @param s Output stream.
@@ -254,7 +254,7 @@ namespace util {
 
         protected:
             /// Manually override whether this file is opened or not.
-            void set_open(const bool opened) { _opened = opened; }
+            inline void set_open(const bool opened) { _opened = opened; }
 
             /// Read file object, filling internal container.
             virtual void do_read() = 0;
@@ -304,7 +304,8 @@ namespace util {
              */
             BaseFile& operator= (const BaseFile& that) throw (FileException);
 
-            const std::ios_base::openmode& mode() const { return _mode; }
+            /// Get open mode.
+            inline const std::ios_base::openmode& mode() const { return _mode; }
 
             /** Open file with default open mode.
              * @exception FileException
@@ -326,13 +327,13 @@ namespace util {
             virtual void open(std::ios_base::openmode mode) throw (FileException);
 
         protected:
-            void set_mode(std::ios_base::openmode mode) { _mode = mode; }
+            inline void set_mode(std::ios_base::openmode mode) { _mode = mode; }
 
             /// close file
             virtual void do_close() throw();
 
             /// Get stream associated with this.
-            stream_type& stream() { assert(_stream); return *_stream; }
+            inline stream_type& stream() { assert(_stream); return *_stream; }
 
         private:
             /// stream associated with this.
@@ -366,12 +367,12 @@ namespace util {
             /** File size.
              * @returns An unsigned integer value.
              */
-            Stat::size_type filesize() const { return this->stat().size(); }
+            inline Stat::size_type filesize() const { return this->stat().size(); }
 
             /** Internal buffer size (number of lines in file).
              * @returns An unsigned integer value.
              */
-            size_type bufsize() const { return this->size(); }
+            inline size_type bufsize() const { return this->size(); }
 
             /** Determine if two files are equal.
              * @param f File object.
@@ -383,7 +384,7 @@ namespace util {
              * @param f File object.
              * @returns A boolean value.
              */
-            bool operator!= (const File &f) const
+            inline bool operator!= (const File &f) const
             { return not (*this == f); }
 
             /** Dump internal container to specified stream.

@@ -81,7 +81,7 @@ std::cout << "Took " << timer.elapsed()
             /** Get elapsed time (in milliseconds).
              * @returns An long integer value.
              */
-            inline size_type elapsed() const;
+            inline const size_type& elapsed() const;
 
             /// Reset elapsed value.
             inline void reset();
@@ -95,19 +95,19 @@ std::cout << "Took " << timer.elapsed()
     inline bool
     Timer::is_running() const
     {
-        return this->_running;
+        return _running;
     }
 
-    inline Timer::size_type
+    inline const Timer::size_type&
     Timer::elapsed() const
     {
-        return this->_elapsed;
+        return _elapsed;
     }
 
     inline void
     Timer::reset()
     {
-        this->_elapsed = 0;
+        _elapsed = 0;
     }
 
 } // namespace util

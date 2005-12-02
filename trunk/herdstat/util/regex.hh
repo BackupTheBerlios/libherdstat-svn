@@ -208,10 +208,11 @@ if (str == regex)
              */
             inline bool operator> (const Regex& that) const throw();
 
-            /** Get regular expression std::string.
-             * @returns A std::string object.
-             */
-            inline const std::string& operator()() const throw();
+            /// Get regular expression string.
+            inline const std::string& operator()() const throw() { return _str; }
+
+            /// Get regular expression string.
+            inline const std::string& str() const throw() { return _str; }
 
             /** Is this regular expression std::string empty?
              * @returns A boolean value.
@@ -282,12 +283,6 @@ if (str == regex)
     Regex::operator> (const Regex& that) const throw()
     {
         return (_str > that._str);
-    }
-
-    inline const std::string&
-    Regex::operator()() const throw()
-    {
-        return _str;
     }
 
     inline bool

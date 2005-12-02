@@ -134,24 +134,24 @@ v.insert(v.end(),
             //@{
             /// Operations common among all standard containers.
 
-            container_type& operator= (const container_type& c)
+            inline container_type& operator= (const container_type& c)
             { this->swap(c); }
 
-            iterator begin() { return _c.begin(); }
-            const_iterator begin() const { return _c.begin(); }
-            iterator end() { return _c.end(); }
-            const_iterator end() const { return _c.end(); }
-            reverse_iterator rbegin() { return _c.rbegin(); }
-            const_reverse_iterator rbegin() const { return _c.rbegin(); }
-            reverse_iterator rend() { return _c.rend(); }
-            const_reverse_iterator rend() const { return _c.rend(); }
+            inline iterator begin() { return _c.begin(); }
+            inline const_iterator begin() const { return _c.begin(); }
+            inline iterator end() { return _c.end(); }
+            inline const_iterator end() const { return _c.end(); }
+            inline reverse_iterator rbegin() { return _c.rbegin(); }
+            inline const_reverse_iterator rbegin() const { return _c.rbegin(); }
+            inline reverse_iterator rend() { return _c.rend(); }
+            inline const_reverse_iterator rend() const { return _c.rend(); }
 
-            size_type size() const { return _c.size(); }
-            size_type max_size() const { return _c.max_size(); }
+            inline size_type size() const { return _c.size(); }
+            inline size_type max_size() const { return _c.max_size(); }
 
-            bool empty() const { return _c.empty(); }
-            void clear() { _c.clear(); }
-            void swap(const container_type& c) { _c.swap(c); }
+            inline bool empty() const { return _c.empty(); }
+            inline void clear() { _c.clear(); }
+            inline void swap(const container_type& c) { _c.swap(c); }
             //@}
     
         protected:
@@ -172,8 +172,8 @@ v.insert(v.end(),
 
             //@{
             /// For derived classes to use when the container itself is needed.
-            container_type& container() { return _c; }
-            const container_type& container() const { return _c; }
+            inline container_type& container() { return _c; }
+            inline const container_type& container() const { return _c; }
             //@}
 
         private:
@@ -224,46 +224,46 @@ v.insert(v.end(),
             virtual ~VectorBase();
 
             template <typename In>
-            void assign(In begin, In end)
+            inline void assign(In begin, In end)
             { this->container().assign(begin, end); }
 
-            void assign(size_type n, const value_type& v)
+            inline void assign(size_type n, const value_type& v)
             { this->container().assign(n, v); }
 
-            void resize(size_type sz, value_type c = value_type())
+            inline void resize(size_type sz, value_type c = value_type())
             { this->container().resize(sz, c); }
 
-            size_type capacity() const { return this->container().capacity(); }
+            inline size_type capacity() const { return this->container().capacity(); }
 
-            void reserve(size_type n) { this->container().reserve(n); }
+            inline void reserve(size_type n) { this->container().reserve(n); }
 
-            value_type& operator[](size_type n)
+            inline value_type& operator[](size_type n)
             { return (this->container())[n]; }
-            const value_type& operator[](size_type n) const
+            inline const value_type& operator[](size_type n) const
             { return (this->container())[n]; }
-            const value_type& at(size_type n) { return this->container().at(n); }
+            inline const value_type& at(size_type n) { return this->container().at(n); }
 
-            value_type& front() { return this->container().front(); }
-            const value_type& front() const { return this->container().front(); }
-            value_type& back() { return this->container().back(); }
-            const value_type& back() const { return this->container().back(); }
+            inline value_type& front() { return this->container().front(); }
+            inline const value_type& front() const { return this->container().front(); }
+            inline value_type& back() { return this->container().back(); }
+            inline const value_type& back() const { return this->container().back(); }
 
-            void push_back(const value_type& v)
+            inline void push_back(const value_type& v)
             { this->container().push_back(v); }
-            void pop_back() { this->container().pop_back(); }
+            inline void pop_back() { this->container().pop_back(); }
 
-            iterator insert(iterator pos, const value_type& v)
+            inline iterator insert(iterator pos, const value_type& v)
             { return this->container().insert(pos, v); }
 
-            void insert(iterator pos, size_type n, const value_type& v)
+            inline void insert(iterator pos, size_type n, const value_type& v)
             { this->container().insert(pos, n, v); }
 
-            iterator erase(iterator pos) { return this->container().erase(pos); }
-            iterator erase(iterator begin, iterator end)
+            inline iterator erase(iterator pos) { return this->container().erase(pos); }
+            inline iterator erase(iterator begin, iterator end)
             { return this->container().erase(begin, end); }
 
             template <typename In>
-            void insert(iterator pos, In begin, In end)
+            inline void insert(iterator pos, In begin, In end)
             { this->container().insert(pos, begin, end); }
 
         protected:
@@ -319,37 +319,37 @@ v.insert(v.end(),
 
             virtual ~SetBase();
 
-            std::pair<iterator, bool> insert(const value_type& v)
+            inline std::pair<iterator, bool> insert(const value_type& v)
             { return this->container().insert(v); }
-            iterator insert(iterator hintpos, const value_type& v)
+            inline iterator insert(iterator hintpos, const value_type& v)
             { return this->container().insert(hintpos, v); }
             template <typename In>
-            void insert(In begin, In end)
+            inline void insert(In begin, In end)
             { this->container().insert(begin, end); }
 
-            void erase(iterator pos) { this->container().erase(pos); }
-            size_type erase(const key_type& k)
+            inline void erase(iterator pos) { this->container().erase(pos); }
+            inline size_type erase(const key_type& k)
             { return this->container().erase(k); }
-            void erase(iterator begin, iterator end)
+            inline void erase(iterator begin, iterator end)
             { this->container().erase(begin, end); }
 
-            key_compare key_comp() const
+            inline key_compare key_comp() const
             { return this->container().key_comp(); }
-            value_compare value_comp() const
+            inline value_compare value_comp() const
             { return this->container().value_comp(); }
 
-            iterator find(const key_type& k)
+            inline iterator find(const key_type& k)
             { return this->container().find(k); }
-            const_iterator find(const key_type& k) const
+            inline const_iterator find(const key_type& k) const
             { return this->container().find(k); }
-            size_type count(const key_type& k) const
+            inline size_type count(const key_type& k) const
             { return this->container().count(k); }
 
-            iterator lower_bound(const key_type& k) const
+            inline iterator lower_bound(const key_type& k) const
             { return this->container().lower_bound(k); }
-            iterator upper_bound(const key_type& k) const
+            inline iterator upper_bound(const key_type& k) const
             { return this->container().upper_bound(k); }
-            std::pair<iterator, iterator> equal_range(const key_type& k) const
+            inline std::pair<iterator, iterator> equal_range(const key_type& k) const
             { return this->container().equal_range(k); }
 
         protected:
@@ -406,47 +406,47 @@ v.insert(v.end(),
 
             virtual ~MapBase();
 
-            mapped_type& operator[](const key_type& k)
+            inline mapped_type& operator[](const key_type& k)
             { return (this->container())[k]; }
 
-            std::pair<iterator, bool> insert(const value_type& v)
+            inline std::pair<iterator, bool> insert(const value_type& v)
             { return this->container().insert(v); }
-            iterator insert(iterator hintpos, const value_type& v)
+            inline iterator insert(iterator hintpos, const value_type& v)
             { return this->container().insert(hintpos, v); }
             template <typename In>
-            void insert(In begin, In end)
+            inline void insert(In begin, In end)
             { this->container().insert(begin, end); }
 
-            void erase(iterator pos) { this->container().erase(pos); }
-            size_type erase(const key_type& k)
+            inline void erase(iterator pos) { this->container().erase(pos); }
+            inline size_type erase(const key_type& k)
             { return this->container().erase(k); }
-            void erase(iterator begin, iterator end)
+            inline void erase(iterator begin, iterator end)
             { this->container().erase(begin, end); }
 
-            key_compare key_comp() const
+            inline key_compare key_comp() const
             { return this->container().key_comp(); }
-            value_compare value_comp() const
+            inline value_compare value_comp() const
             { return this->container().value_comp(); }
 
-            iterator find(const key_type& k)
+            inline iterator find(const key_type& k)
             { return this->container().find(k); }
-            const_iterator find(const key_type& k) const
+            inline const_iterator find(const key_type& k) const
             { return this->container().find(k); }
 
-            size_type count(const key_type& k) const
+            inline size_type count(const key_type& k) const
             { return this->container().count(k); }
 
-            iterator lower_bound(const key_type& k)
+            inline iterator lower_bound(const key_type& k)
             { return this->container().lower_bound(k); }
-            const_iterator lower_bound(const key_type& k) const
+            inline const_iterator lower_bound(const key_type& k) const
             { return this->container().lower_bound(k); }
-            iterator upper_bound(const key_type& k)
+            inline iterator upper_bound(const key_type& k)
             { return this->container().upper_bound(k); }
-            const_iterator upper_bound(const key_type& k) const
+            inline const_iterator upper_bound(const key_type& k) const
             { return this->container().upper_bound(k); }
-            std::pair<iterator, iterator> equal_range(const key_type& k)
+            inline std::pair<iterator, iterator> equal_range(const key_type& k)
             { return this->container().equal_range(k); }
-            std::pair<const_iterator, const_iterator>
+            inline std::pair<const_iterator, const_iterator>
             equal_range(const key_type& k) const
             { return this->container().equal_range(k); }
 

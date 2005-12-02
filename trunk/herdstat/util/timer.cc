@@ -42,28 +42,23 @@ Timer::~Timer() throw()
 void
 Timer::start() throw()
 {
-    if (this->_running)
-        return;
-
-    gettimeofday(&(this->_begin), NULL);
-    
-    this->_running = true;
+    if (_running) return;
+    _running = true;
+    gettimeofday(&_begin, NULL);
 }
 /****************************************************************************/
 void
 Timer::stop() throw()
 {
-    if (not this->_running)
-        return;
+    if (not _running) return;
+    _running = false;
 
-    gettimeofday(&(this->_end), NULL);
-    size_type tmp(this->_elapsed);
-    this->_elapsed = this->_end.tv_sec - this->_begin.tv_sec;
-    this->_elapsed *= 1000;
-    this->_elapsed += (this->_end.tv_usec - this->_begin.tv_usec) / 1000;
-    this->_elapsed += tmp;
-
-    this->_running = false;
+    gettimeofday(&_end, NULL);
+    size_type tmp(_elapsed);
+    _elapsed = _end.tv_sec - _begin.tv_sec;
+    _elapsed *= 1000;
+    _elapsed += (_end.tv_usec - _begin.tv_usec) / 1000;
+    _elapsed += tmp;
 }
 /****************************************************************************/
 } // namespace util
