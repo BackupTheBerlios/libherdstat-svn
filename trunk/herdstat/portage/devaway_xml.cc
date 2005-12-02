@@ -136,7 +136,7 @@ DevawayXML::end_element(const std::string& name)
 }
 /****************************************************************************/
 bool
-DevawayXML::text(const std::string& text)
+DevawayXML::do_text(const std::string& text)
 {
     if (in_reason)
         const_cast<Developer&>(*_cur_dev).set_awaymsg(_cur_dev->awaymsg()+text);

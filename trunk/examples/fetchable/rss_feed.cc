@@ -80,7 +80,7 @@ RSSFeed::end_element(const std::string& name)
 }
 
 bool
-RSSFeed::text(const std::string& str)
+RSSFeed::do_text(const std::string& str)
 {
 	/* ... */
 	return true;

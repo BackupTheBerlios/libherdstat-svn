@@ -100,7 +100,7 @@ namespace portage {
             virtual bool start_element(const std::string& name,
                                        const attrs_type&  attrs);
             virtual bool end_element(const std::string& name);
-            virtual bool text(const std::string& text);
+            virtual bool do_text(const std::string& text);
             ///@}
 
         private:

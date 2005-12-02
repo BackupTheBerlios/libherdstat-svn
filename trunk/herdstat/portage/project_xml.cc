@@ -188,7 +188,7 @@ ProjectXML::end_element(const std::string& name)
 }
 /****************************************************************************/
 bool
-ProjectXML::text(const std::string& text)
+ProjectXML::do_text(const std::string& text)
 {
     if (in_dev)
     {

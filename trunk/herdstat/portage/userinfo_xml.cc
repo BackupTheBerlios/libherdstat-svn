@@ -149,7 +149,7 @@ UserinfoXML::end_element(const std::string& name)
 }
 /****************************************************************************/
 bool
-UserinfoXML::text(const std::string& text)
+UserinfoXML::do_text(const std::string& text)
 {
     if (in_firstname)
         const_cast<Developer&>(*_cur_dev).set_name(_cur_dev->name() + text);

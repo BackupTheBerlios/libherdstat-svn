@@ -24,6 +24,7 @@
 # include "config.h"
 #endif
 
+#include <herdstat/util/string.hh>
 #include <herdstat/xml/saxparser.hh>
 
 namespace herdstat {
@@ -31,6 +32,15 @@ namespace xml {
 /****************************************************************************/
 SAXHandler::~SAXHandler()
 {
+}
+/****************************************************************************/
+bool
+SAXHandler::text(const std::string& str)
+{
+    if (not util::is_all_whitespace(str))
+        return do_text(str);
+
+    return true;
 }
 /****************************************************************************/
 SAXParser::SAXParser(SAXHandler *handler) throw()

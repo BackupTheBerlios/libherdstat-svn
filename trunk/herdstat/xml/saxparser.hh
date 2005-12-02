@@ -58,8 +58,12 @@ namespace xml {
             /// Callback called upon exiting an element.
             virtual bool end_element(const std::string &) = 0;
 
+            /** Callback called upon encountering the text of an element (does
+             * some common operations and then calls do_text()). */
+            virtual bool text(const std::string& str);
+
             /// Callback called upon encountering the text of an element.
-            virtual bool text(const std::string &) = 0;
+            virtual bool do_text(const std::string& str) = 0;
     };
 
     /**

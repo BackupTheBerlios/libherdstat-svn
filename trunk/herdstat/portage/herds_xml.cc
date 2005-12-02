@@ -160,7 +160,7 @@ HerdsXML::end_element(const std::string& name)
 }
 /****************************************************************************/
 bool
-HerdsXML::text(const std::string& text)
+HerdsXML::do_text(const std::string& text)
 {
     if (in_herd_name)
         _cur_herd = _herds.insert(Herd(text)).first;

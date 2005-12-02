@@ -84,7 +84,7 @@ class RSSFeed : public herdstat::Fetchable,
 		/// SAX2 callbacks
 		virtual bool start_element(const std::string&, const attrs_type&);
 		virtual bool end_element(const std::string&);
-		virtual bool text(const std::string&);
+		virtual bool do_text(const std::string&);
 	        ///@}
 
 	private:

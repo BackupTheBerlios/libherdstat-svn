@@ -127,7 +127,7 @@ MetadataXML::end_element(const std::string& name)
 }
 /****************************************************************************/
 bool
-MetadataXML::text(const std::string& text)
+MetadataXML::do_text(const std::string& text)
 {
     if (in_herd)
         _data.herds().insert(Herd(text));
