@@ -35,7 +35,7 @@
 #include <string>
 #include <map>
 
-enum color_name_T
+enum ASCIIColor
 {
     red,
     green,
@@ -105,40 +105,24 @@ namespace util {
     class ColorMap
     {
         public:
-            /** Access color string associated with the given color type.
-             * @param c Color type (color_name_T).
+            /// Constructor.
+            ColorMap() throw();
+
+            /** Get color string associated with the given color type.
+             * @param c Color type (ASCIIColor).
              * @returns The associated string object.
              */
-            std::string& operator[](color_name_T c)
-            { return this->_cm[c]; }
+            inline const std::string& operator[](ASCIIColor c) const
+            { return _cm[c]; }
 
             /** Access color string associated with the given color name.
              * @param s Color name.
              * @returns The associated string object.
              */
-            std::string& operator[](const std::string &s);
+            const std::string& operator[](const std::string& s) const;
 
         private:
-            /// Internal color map.
-            class cmap : public std::map<color_name_T, std::string>
-            {
-                public:
-                    cmap()
-                    {
-                        (*this)[red]     = "\033[0;31m";
-                        (*this)[green]   = "\033[0;32m";
-                        (*this)[blue]    = "\033[1;34m";
-                        (*this)[yellow]  = "\033[1;33m";
-                        (*this)[orange]  = "\033[0;33m";
-                        (*this)[magenta] = "\033[1;35m";
-                        (*this)[cyan]    = "\033[1;36m";
-                        (*this)[black]   = "\033[0;30m";
-                        (*this)[white]   = "\033[0;1m";
-                        (*this)[none]    = "\033[00m";
-                    }
-            };
-
-            static cmap _cm;
+            mutable std::map<ASCIIColor, std::string>& _cm;
     };
 
 } // namespace util

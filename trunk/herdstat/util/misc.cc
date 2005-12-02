@@ -38,22 +38,52 @@
 
 namespace herdstat {
 namespace util {
-/** static members **********************************************************/
-ColorMap::cmap ColorMap::_cm;
 /****************************************************************************/
-std::string&
-ColorMap::operator[] (const std::string& color)
+std::map<ASCIIColor, std::string>&
+MakeColorMap()
 {
-    if (color == "red") return (*this)[red];
-    else if (color == "green") return (*this)[green];
-    else if (color == "blue") return (*this)[blue];
-    else if (color == "yellow") return (*this)[yellow];
-    else if (color == "orange") return (*this)[orange];
-    else if (color == "magenta") return (*this)[magenta];
-    else if (color == "cyan") return (*this)[cyan];
-    else if (color == "black") return (*this)[black];
-    else if (color == "white") return (*this)[white];
-    else return (*this)[none];
+    static std::map<ASCIIColor, std::string> m;
+    if (m.empty())
+    {
+#define INSERT_COLOR(x,y) m.insert(std::make_pair(x, y))
+
+        INSERT_COLOR(red,     "\033[0;31m");
+        INSERT_COLOR(green,   "\033[0;32m");
+        INSERT_COLOR(blue,    "\033[1;34m");
+        INSERT_COLOR(yellow,  "\033[1;33m");
+        INSERT_COLOR(orange,  "\033[0;33m");
+        INSERT_COLOR(magenta, "\033[1;35m");
+        INSERT_COLOR(cyan,    "\033[1;36m");
+        INSERT_COLOR(black,   "\033[0;30m");
+        INSERT_COLOR(white,   "\033[0;1m");
+        INSERT_COLOR(none,    "\033[00m");
+
+#undef INSERT_COLOR
+
+    }
+
+    return m;
+}
+
+ColorMap::ColorMap() throw()
+    : _cm(MakeColorMap())
+{
+}
+
+const std::string&
+ColorMap::operator[] (const std::string& color) const
+{
+    if (color == "red") return _cm[red];
+    else if (color == "green") return _cm[green];
+    else if (color == "blue") return _cm[blue];
+    else if (color == "yellow") return _cm[yellow];
+    else if (color == "orange") return _cm[orange];
+    else if (color == "magenta") return _cm[magenta];
+    else if (color == "cyan") return _cm[cyan];
+    else if (color == "black") return _cm[black];
+    else if (color == "white") return _cm[white];
+    
+    return _cm[none];
 }
 /****************************************************************************/
 void
