@@ -65,37 +65,36 @@ namespace portage {
             void clear_results() { _results.clear(); }
             /// Get search results.
             const std::vector<Package>& results() const { return _results; }
+            /// Get elapsed search time.
+            const util::Timer::size_type& elapsed() const
+            { return _timer.elapsed(); }
 
             /** Perform search on the given criteria.
              * @param v const reference to either a std::string or a
              * util::Regex.
-             * @param timer pointer to a util::Timer instance (defaults to
-             * NULL).
              * @returns const reference to search results.
              */
             template <typename T>
             const std::vector<Package>&
-            operator()(const T& v, util::Timer *timer = NULL)
-                throw (NonExistentPkg);
+            operator()(const T& v) throw (NonExistentPkg);
 
             const std::vector<Package>&
-            operator()(const char * const v, util::Timer *timer = NULL)
-                throw (NonExistentPkg)
-            { return operator()(std::string(v), timer); }
+            operator()(const char * const v) throw (NonExistentPkg)
+            { return operator()(std::string(v)); }
 
         private:
             const PackageList& _pkglist;
             std::vector<Package> _results;
+            util::Timer _timer;
     };
 
     template <typename T>
     const std::vector<Package>&
-    PackageFinder::operator()(const T& v, util::Timer *timer) throw (NonExistentPkg)
+    PackageFinder::operator()(const T& v) throw (NonExistentPkg)
     {
         BacktraceContext c("herdstat::portage::PackageFinder::operator()");
 
-        if (timer and not timer->is_running())
-            timer->start();
+        _timer.start();
 
         /* copy those packages in _pkglist that
          *      a) match the given criteria (v), and
@@ -108,8 +107,7 @@ namespace portage {
                     std::bind2nd(PackageMatches<T>(), v),
                     PackageIsValid()));
 
-        if (timer)
-            timer->stop();
+        _timer.stop();
 
         if (_results.empty())
             throw NonExistentPkg(v);

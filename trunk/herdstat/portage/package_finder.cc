@@ -30,7 +30,7 @@ namespace herdstat {
 namespace portage {
 /****************************************************************************/
 PackageFinder::PackageFinder(const PackageList& pkglist) throw()
-    : _pkglist(pkglist), _results()
+    : _pkglist(pkglist), _results(), _timer()
 {
 }
 /****************************************************************************/
