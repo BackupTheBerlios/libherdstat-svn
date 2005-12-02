@@ -90,12 +90,10 @@ chop_fileext(const std::string& path, unsigned short depth) throw()
 
     return result.c_str();
 }
-/*****************************************************************************
- * Clean up the whitespace of the given string.                              *
- *****************************************************************************/
+/*****************************************************************************/
 struct BothSpaces
 {
-    bool operator()(char c1, char c2) const
+    bool operator()(const char& c1, const char& c2) const
     { return (std::isspace(c1) and std::isspace(c2)); }
 };
 
@@ -169,74 +167,7 @@ sprintf(const std::string& fmt, va_list v) throw()
 {
     return util::sprintf(fmt.c_str(), v);
 }
-/*****************************************************************************
- * HTMLify the given std::string (replace any occurrences of &,>,<)               *
- *****************************************************************************/
-std::string
-htmlify(const std::string &str) throw()
-{
-    std::string result(str);
-    std::map<std::string, std::string> sr;
-    std::map<std::string, std::string>::iterator i, e;
-    sr["&"] = "&amp;";
-    sr[">"] = "&gt;";
-    sr["<"] = "&lt;";
-
-    i = sr.begin(), e = sr.end();
-    for (; i != e ; ++i)
-    {
-	std::string::size_type pos, lpos = 0;
-	while (true)
-	{
-	    pos = result.find(i->first, lpos);
-	    if (pos == std::string::npos)
-		break;
-
-	    if (result.substr(pos, pos + i->second.length()) == i->second)
-		result.replace(pos, i->first.length(), i->second, 0,
-		    i->second.length());
-
-	    lpos = ++pos;
-	}
-    }
-
-    return result;
-}
-/*****************************************************************************
- * unHTMLify the given std::string (replace occurrences of &amp;,&gt;,&;lt;       *
- *****************************************************************************/
-std::string
-unhtmlify(const std::string &str) throw()
-{
-    std::string result(str);
-    std::map<std::string, std::string> sr;
-    std::map<std::string, std::string>::iterator i, e;
-    sr["&amp;"] = "&";
-    sr["&gt;"] = ">";
-    sr["&lt;"] = "<";
-
-    i = sr.begin(), e = sr.end();
-    for (; i != e ; ++i)
-    {
-	std::string::size_type pos, lpos = 0;
-	while (true)
-	{
-	    pos = result.find(i->first, lpos);
-	    if (pos == std::string::npos)
-		break;
-
-	    result.replace(pos, i->first.length(), i->second,
-		0, i->second.length());
-
-	    lpos = ++pos;
-	}
-    }
-
-    return result;
-}
-/*****************************************************************************
- * Convert a vector of std::string to one std::string.                                 *
- *****************************************************************************/
+/*****************************************************************************/
 std::string
 join(const std::vector<std::string> &v,
            const std::string::value_type delim) throw()

@@ -41,6 +41,8 @@ Testing util::File for each file in the previous util::Directory:
     		<email>ka0ttic@gentoo.org</email>
     		<name>Aaron Walker</name>
     	</maintainer>
+    	<longdescription>
+    	</longdescription>
     </pkgmetadata>
  File 'app-misc/foo/foo-1.0e.ebuild' is empty.
  File 'app-misc/foo/foo-1.0a_p1.ebuild' is empty.
@@ -88,6 +90,8 @@ Testing util::File for each file in the previous util::Directory:
     		<email>ka0ttic@gentoo.org</email>
     		<name>Aaron Walker</name>
     	</maintainer>
+    	<longdescription>
+    	</longdescription>
     </pkgmetadata>
  File 'app-misc/foo/foo-1.0e.ebuild' is empty.
  File 'app-misc/foo/foo-1.0a_p1.ebuild' is empty.

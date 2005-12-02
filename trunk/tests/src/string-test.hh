@@ -62,9 +62,6 @@ StringTest::operator()(const opts_type& null) const
         << herdstat::util::destringify<float>("4.29") << std::endl
         << herdstat::util::destringify<bool>("false") << std::endl;
 
-    /* util::unhtmlify */
-    std::cout << herdstat::util::unhtmlify("&lt;jedi mind trick>") << std::endl;
-
     /* util::strip_colors */
     const std::string c("This is a \033[0;31mtest\033[00m");
     std::cout << c << std::endl;

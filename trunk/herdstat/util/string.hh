@@ -47,7 +47,7 @@ namespace util {
     /**
      * Return the basename of the given path.
      * @param path path string.
-     * @returns basename of given path.
+     * @returns basename of @p path.
      */
 
     std::string basename(const std::string& path) throw();
@@ -55,16 +55,16 @@ namespace util {
     /**
      * Return the dirname of the given path.
      * @param path path string.
-     * @returns Directory the given path is located in.
+     * @returns directory that @p path is located in.
      */
 
     std::string dirname(const std::string& path) throw();
 
     /**
      * Chop file extension from the given path.
-     * @param path Path.
+     * @param path path string.
      * @param depth Number of period-delimited extensions to chop.
-     * @returns A pointer of type char.
+     * @returns Resulting string.
      */
 
     const char *chop_fileext(const std::string& path,
@@ -110,24 +110,6 @@ namespace util {
                      const char d = ' ') throw();
 
     /**
-     * Replace any unfriendly characters in the given std::string to their
-     * HTML counterparts.
-     * @param s String object.
-     * @returns Resulting string object.
-     */
-
-    std::string htmlify(const std::string& s) throw();
-
-    /**
-     * Replace any HTML'ized characters in the given std::string to their
-     * respective counterparts.
-     * @param s String object.
-     * @returns Resulting string object.
-     */
-
-    std::string unhtmlify(const std::string& s) throw();
-
-    /**
      * Return a copy of the given string with the ASCII color sequences removed.
      * @param s string object.
      * @returns Resulting string object.
@@ -135,7 +117,19 @@ namespace util {
 
     std::string strip_colors(const std::string& s) throw();
 
-    /************************************************************************/
+    /**
+     * Determine if all characters in the given string are whitespace.
+     * @param s string.
+     * @returns true if all chars are whitespace.
+     */
+
+    inline bool
+    is_all_whitespace(const std::string& s) throw()
+    {
+        const std::string::difference_type size(s.size());
+        return (std::count_if(s.begin(), s.end(), ::isspace) == size);
+    }
+
     /**
      * Convert string to all lowercase.
      * @param s String object.
@@ -161,12 +155,13 @@ namespace util {
     {
         std::transform(s.begin(), s.end(), s.begin(), ::tolower);
     }
-    /************************************************************************/
+
     /**
      * Convert a type to a std::string.
      * @param v Value of type T.
      * @returns A std::string object.
      */
+
     template <typename T>
     std::string
     stringify(const T& v)
@@ -201,12 +196,13 @@ namespace util {
     {
         return v;
     }
-    /************************************************************************/
+
     /**
      * Convert a std::string to a type.
      * @param s A std::string object.
      * @returns Value of type T.
      */
+
     template <typename T>
     T
     destringify(const std::string& s) throw (BadCast)
@@ -231,7 +227,7 @@ namespace util {
     {
         return split(s);
     }
-    /************************************************************************/
+
     /// destringify specialization for int
     template <>
     inline int
@@ -245,7 +241,7 @@ namespace util {
             throw BadCast("Failed to cast '"+s+"' to int.");
         return result;
     }
-    /************************************************************************/
+
     /// destringify specialization for long
     template <>
     inline long
@@ -259,7 +255,7 @@ namespace util {
             throw BadCast("Failed to cast '"+s+"' to long.");
         return result;
     }
-    /************************************************************************/
+
     /// destringify specialization for unsigned long
     template <>
     inline unsigned long
@@ -273,7 +269,7 @@ namespace util {
             throw BadCast("Failed to cast '"+s+"' to unsigned long.");
         return result;
     }
-    /************************************************************************/
+
     /// destringify specialization for double
     template <>
     inline double
@@ -287,7 +283,7 @@ namespace util {
             throw BadCast("Failed to cast '"+s+"' to double.");
         return result;
     }
-    /************************************************************************/
+
     /// destringify specialization for float
     template <>
     inline float
@@ -301,7 +297,7 @@ namespace util {
             throw BadCast("Failed to cast '"+s+"' to float.");
         return result;
     }
-    /************************************************************************/
+    
     /// destringify specialization for bool
     template <>
     inline bool
@@ -313,7 +309,6 @@ namespace util {
         if (s == "false" or s == "no" or s == "off") return false;
         return destringify<int>(s);
     }
-    /************************************************************************/
 
 } // namespace util
 } // namespace herdstat
