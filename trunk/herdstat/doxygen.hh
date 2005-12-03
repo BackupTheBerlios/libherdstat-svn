@@ -136,6 +136,11 @@ PKG_CHECK_MODULES(libherdstat, libherdstat-0.2 >= 0.2.5)
  */
 
 /**
+ * @namespace herdstat::io
+ * @brief General-purpose input/output classes/functions.
+ */
+
+/**
  * @namespace herdstat::portage
  * @brief portage-related classes/functions.
  */

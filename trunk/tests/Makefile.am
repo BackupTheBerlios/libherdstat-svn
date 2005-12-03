@@ -3,6 +3,7 @@
 SUBDIRS = src
 
 export tests := \
+	binaryio \
 	string \
 	file \
 	vars \

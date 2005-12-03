@@ -29,7 +29,7 @@ libutil_la_SOURCES = $(cc_sources) $(hh_sources)
 library_includedir=$(includedir)/$(PACKAGE)-$(VERSION_MAJOR).$(VERSION_MINOR)/herdstat/util
 library_include_HEADERS = $(hh_sources)
 
-MAINTAINERCLEANFILES = Makefile.in *~ .loT
+MAINTAINERCLEANFILES = Makefile.in *~ *.loT
 
 srchtml: $(foreach f, $(libutil_la_SOURCES), $(f).html)
 

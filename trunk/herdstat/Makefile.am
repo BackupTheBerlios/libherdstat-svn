@@ -2,7 +2,7 @@
 
 include $(top_builddir)/Makefile.am.common
 
-SUBDIRS = util fetcher xml portage
+SUBDIRS = util io fetcher xml portage
 MAINTAINERCLEANFILES = Makefile.in *~ .loT libherdstat_version.hh
 EXTRA_DIST = libherdstat_version.hh.in doxygen.hh
 
@@ -18,6 +18,7 @@ hh_sources = exceptions.hh \
 lib_LTLIBRARIES = libherdstat.la
 libherdstat_la_LDFLAGS = -release $(VERSION_MAJOR).$(VERSION_MINOR) -version-info $(LIBRARY_VERSION)
 libherdstat_la_LIBADD = util/libutil.la \
+			io/libio.la \
 			fetcher/libfetcher.la \
 			xml/libxml.la \
 			portage/libportage.la
@@ -28,7 +29,7 @@ library_include_HEADERS = $(hh_sources) libherdstat_version.hh
 
 srchtml: $(foreach f, $(libherdstat_la_SOURCES), $(f).html)
 	@for x in $(SUBDIRS) ; do \
-		cd ${PWD}/$${x} && $(MAKE) $@ ; \
+		$(MAKE) -C $${x} $@
 	done
 
 %.cc.html: %.cc
