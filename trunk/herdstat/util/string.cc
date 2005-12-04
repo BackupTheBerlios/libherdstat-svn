@@ -188,6 +188,9 @@ join(const std::vector<std::string> &v,
 std::vector<std::string>
 split(const std::string& str, const char delim, bool append_empty) throw()
 {
+    if (str.empty())
+        return std::vector<std::string>();
+
     std::vector<std::string> v;
     std::string::size_type pos, lpos = 0;
     
