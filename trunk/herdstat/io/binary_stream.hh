@@ -48,6 +48,9 @@ namespace io {
     class BinaryStream
     {
 	public:
+            /// Destructor.
+	    virtual ~BinaryStream() throw();
+
             /// Open stream (path already set).
 	    void open() throw ();
             
@@ -84,9 +87,6 @@ namespace io {
              * @param path Path of file.
              */
 	    BinaryStream(const std::string& path) throw ();
-
-            /// Destructor.
-	    virtual ~BinaryStream() throw();
 
             /// For derivatives to define their open mode.
 	    virtual const char * const mode() const = 0;
@@ -160,6 +160,8 @@ namespace io {
 	    template <typename T>
 	    inline BinaryOStream& operator<<(const T& v);
 
+            inline BinaryOStream& operator<<(const char * const str);
+
 	protected:
             /// Open mode.
 	    virtual const char * const mode() const;
@@ -180,12 +182,17 @@ namespace io {
     BinaryOStream::operator<< <std::string>(const std::string& str)
     {
 	const std::string::size_type len(str.length());
-        std::fwrite(static_cast<const void *>(&len),
-            sizeof(std::string::size_type), 1, this->stream());
+        this->operator<<(len);
 
         std::fwrite(static_cast<const void *>(str.c_str()), sizeof(char),
             len, this->stream());
 	return *this;
+    }
+
+    inline BinaryOStream&
+    BinaryOStream::operator<<(const char * const str)
+    {
+        return this->operator<<(std::string(str));
     }
 
     template <typename T>
@@ -202,8 +209,10 @@ namespace io {
     BinaryIStream::operator>> <std::string>(std::string& str)
     {
 	std::string::size_type len;
-        std::fread(static_cast<void*>(&len),
-            sizeof(std::string::size_type), 1, this->stream());
+        this->operator>>(len);
+
+        if (not this->is_ok())
+            return *this;
 
         char *buf = new char[len+1];
         buf[len] = 0;

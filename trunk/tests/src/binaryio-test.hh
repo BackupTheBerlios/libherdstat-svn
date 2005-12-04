@@ -48,8 +48,8 @@ BinaryIO::operator()(const opts_type& null) const
         stream << i;
         std::cout << "wrote '" << i << "'." << std::endl;
 
-//        stream << "This is a test.";
-//        std::cout << "wrote 'This is a test.'." << std::endl;
+        stream << "This is a test.";
+        std::cout << "wrote 'This is a test.'." << std::endl;
     
         std::string foo("foo");
         stream << foo;
@@ -72,11 +72,10 @@ BinaryIO::operator()(const opts_type& null) const
         std::cout << "read value '" << ival << "'." << std::endl;
         assert(ival == 10);
 
-//        std::string test;
-//        stream >> test;
-//        std::cout << "read value '" << test << "'." << std::endl;
-
-//        assert(test == "This is a test.");
+        std::string test;
+        stream >> test;
+        std::cout << "read value '" << test << "'." << std::endl;
+        assert(test == "This is a test.");
 
         std::string foo;
         stream >> foo;

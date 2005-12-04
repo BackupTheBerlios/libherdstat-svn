@@ -132,30 +132,6 @@ namespace io {
 	    T _value;
     };
 
-    /// Partial specialization for std::string.
-    template <>
-    inline void
-    BinaryIStreamIterator<std::string>::_read()
-    {
-        _ok = ((_stream != NULL) and (_stream->is_ok()));
-        if (_ok)
-        {
-	    std::string::size_type len;
-	    *_stream >> len;
-
-	    if (not (_ok = _stream->is_ok()))
-	        return;
-
-	    char *buf = new char[len+1];
-	    buf[len] = 0;
-	    std::fread(static_cast<void*>(buf), sizeof(char),
-                len, _stream->stream());
-	    _value.assign(buf);
-            delete[] buf;
-
-	    _ok = _stream->is_ok();
-        }
-    }
 
     /**
      * @class BinaryOStreamIterator
