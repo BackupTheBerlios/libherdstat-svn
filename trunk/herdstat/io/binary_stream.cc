@@ -41,7 +41,8 @@ BinaryStream::BinaryStream(const std::string& path) throw ()
 /****************************************************************************/
 BinaryStream::~BinaryStream() throw()
 {
-    this->close();
+    if (_stream)
+        this->close();
 }
 /****************************************************************************/
 void
@@ -72,6 +73,7 @@ BinaryStream::close() throw()
     if (not _open)
 	return;
 
+    assert(_stream != NULL);
     std::fclose(_stream);
     _stream = NULL;
 
