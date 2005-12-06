@@ -40,7 +40,7 @@ namespace herdstat {
 namespace io {
 
     /**
-     * @class BinaryIStreamIterator
+     * @class BinaryIStreamIterator binary_stream_iterator.hh herdstat/io/binary_stream_iterator.hh
      * @brief Provides input iterator semantics for BinaryIStream.
      *
      * @section quirks Quirks
@@ -49,8 +49,8 @@ namespace io {
      * is only one type (template argument T) from the stream position at
      * construction to EOF.  For example, if you write a vector of int's to the
      * stream, then a vector of strings, and then try to use a
-     * BinaryIStreamIterator, it'll read until EOF, treating the strings as
-     * int's.  BinaryIStreamIterator is not suitable for these cases.
+     * BinaryIStreamIterator<int>, it'll read until EOF, treating the strings
+     * as int's.  BinaryIStreamIterator is not suitable for these cases.
      */
 
     template <typename T>
@@ -119,11 +119,11 @@ namespace io {
             /// Read next value.
 	    inline void _read()
 	    {
-	        _ok = ((_stream != NULL) and _stream->is_ok());
+                _ok = (_stream and *_stream);
 	        if (_ok)
 	        {
 		    *_stream >> _value;
-		    _ok = _stream->is_ok();
+		    _ok = *_stream;
 	        }
 	    }
 
@@ -134,7 +134,7 @@ namespace io {
 
 
     /**
-     * @class BinaryOStreamIterator
+     * @class BinaryOStreamIterator binary_stream_iterator.hh herdstat/io/binary_stream_iterator.hh
      * @brief Provides output iterator semantics for BinaryOStream.
      */
 

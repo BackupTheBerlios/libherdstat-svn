@@ -41,7 +41,7 @@ namespace herdstat {
 namespace io {
 
     /**
-     * @class BinaryStream
+     * @class BinaryStream binary_stream.hh herdstat/io/binary_stream.hh
      * @brief C++-like stream interface for C's fread/fwrite.
      */
 
@@ -51,9 +51,6 @@ namespace io {
             /// Destructor.
 	    virtual ~BinaryStream() throw();
 
-            /// Open stream (path already set).
-	    void open() throw ();
-            
             /** Open stream.
              * @param path path of file to open.
              */
@@ -67,15 +64,19 @@ namespace io {
             /// Get path.
 	    inline const std::string& path() const { return _path; }
 
-            /// Check if stream's status is ok.
-	    inline bool is_ok() const { return not operator!(); }
+            ///@{
+            /** Check if stream's status is ok.  Allows the use of BinaryStream
+             * classes in boolean expressions.
+             */
+            inline operator void*() const
+            { return (operator!() ? NULL : const_cast<BinaryStream*>(this)); }
 
-            /// Check if stream's status is not ok.
 	    inline bool operator!() const
 	    {
 		return ((_stream == NULL) or (std::ferror(_stream)) or
 		        (std::feof(_stream)));
 	    }
+            ///@}
 
 	protected:
 	    template <typename T> friend class BinaryIStreamIterator;
@@ -87,6 +88,9 @@ namespace io {
              * @param path Path of file.
              */
 	    BinaryStream(const std::string& path) throw ();
+
+            /// Open stream (path already set).
+            void open() throw();
 
             /// For derivatives to define their open mode.
 	    virtual const char * const mode() const = 0;
@@ -104,7 +108,7 @@ namespace io {
     };
 
     /**
-     * @class BinaryIStream
+     * @class BinaryIStream binary_stream.hh herdstat/io/binary_stream.hh
      * @brief BinaryStream opened for reading.
      */
 
@@ -122,7 +126,13 @@ namespace io {
             /// Destructor.
 	    virtual ~BinaryIStream() throw();
 
-            /** Read from stream.
+            /** Read value from stream.
+             * @param v variable to save read value.
+             */
+            template <typename T>
+            inline void read(T& v);
+
+            /** Read value from stream.
              * @param v variable to save read value.
              * @returns reference to this.
              */
@@ -134,8 +144,41 @@ namespace io {
 	    virtual const char * const mode() const;
     };
 
+    template <typename T>
+    inline void
+    BinaryIStream::read(T& v)
+    {
+        std::fread(static_cast<void *>(&v), sizeof(T), 1, this->stream());
+    }
+
+    /// Partial specialization for std::string.
+    template <>
+    inline void
+    BinaryIStream::read<std::string>(std::string& str)
+    {
+	std::string::size_type len;
+        this->read(len);
+
+        if (not *this)
+            return;
+
+        char *buf = new char[len+1];
+        buf[len] = 0;
+        std::fread(static_cast<void*>(buf), sizeof(char), len, this->stream());
+	str.assign(buf);
+        delete[] buf;
+    }
+
+    template <typename T>
+    inline BinaryIStream&
+    BinaryIStream::operator>>(T& v)
+    {
+        this->read(v);
+	return *this;
+    }
+
     /**
-     * @class BinaryOStream
+     * @class BinaryOStream binary_stream.hh herdstat/io/binary_stream.hh
      * @brief BinaryStream opened for writing.
      */
 
@@ -153,14 +196,21 @@ namespace io {
             /// Destructor.
 	    virtual ~BinaryOStream() throw();
 
-            /** Write to stream.
-             * @param v Variable to write to stream.
+            /** Write value to stream.
+             * @param v Value to write to stream.
+             */
+            template <typename T>
+            inline void write(const T& v);
+
+            /// char * overload which calls the std::string specialization.
+            inline void write(const char * const str);
+
+            /** Write value to stream.
+             * @param v Value to write to stream.
              * @returns reference to this.
              */
 	    template <typename T>
 	    inline BinaryOStream& operator<<(const T& v);
-
-            inline BinaryOStream& operator<<(const char * const str);
 
 	protected:
             /// Open mode.
@@ -168,58 +218,39 @@ namespace io {
     };
 
     template <typename T>
-    inline BinaryOStream&
-    BinaryOStream::operator<<(const T& v)
+    inline void
+    BinaryOStream::write(const T& v)
     {
-        std::fwrite(static_cast<const void *>(&v), sizeof(T),
-            1, this->stream());
-	return *this;
+        std::fwrite(static_cast<const void *>(&v),
+                sizeof(T), 1, this->stream());
     }
 
     /// Partial specialization for std::string.
     template <>
-    inline BinaryOStream&
-    BinaryOStream::operator<< <std::string>(const std::string& str)
+    inline void
+    BinaryOStream::write<std::string>(const std::string& str)
     {
 	const std::string::size_type len(str.length());
-        this->operator<<(len);
+        this->write(len);
 
-        std::fwrite(static_cast<const void *>(str.c_str()), sizeof(char),
-            len, this->stream());
-	return *this;
+        if (not *this)
+            return;
+
+        std::fwrite(static_cast<const void *>(str.c_str()),
+                sizeof(char), len, this->stream());
     }
 
-    inline BinaryOStream&
-    BinaryOStream::operator<<(const char * const str)
+    inline void
+    BinaryOStream::write(const char * const str)
     {
-        return this->operator<<(std::string(str));
+        this->write(std::string(str));
     }
 
     template <typename T>
-    inline BinaryIStream&
-    BinaryIStream::operator>>(T& v)
+    inline BinaryOStream&
+    BinaryOStream::operator<<(const T& v)
     {
-        std::fread(static_cast<void *>(&v), sizeof(T), 1, this->stream());
-	return *this;
-    }
-
-    /// Partial specialization for std::string.
-    template <>
-    inline BinaryIStream&
-    BinaryIStream::operator>> <std::string>(std::string& str)
-    {
-	std::string::size_type len;
-        this->operator>>(len);
-
-        if (not this->is_ok())
-            return *this;
-
-        char *buf = new char[len+1];
-        buf[len] = 0;
-        std::fread(static_cast<void*>(buf), sizeof(char), len, this->stream());
-	str.assign(buf);
-        delete[] buf;
-
+        this->write(v);
 	return *this;
     }
 
