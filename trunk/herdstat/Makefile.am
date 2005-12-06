@@ -29,7 +29,7 @@ library_include_HEADERS = $(hh_sources) libherdstat_version.hh
 
 srchtml: $(foreach f, $(libherdstat_la_SOURCES), $(f).html)
 	@for x in $(SUBDIRS) ; do \
-		$(MAKE) -C $${x} $@
+		$(MAKE) -C $${x} $@ ; \
 	done
 
 %.cc.html: %.cc
