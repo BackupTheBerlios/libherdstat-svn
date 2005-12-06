@@ -73,6 +73,9 @@ PackageList::fill()
         if (not util::is_dir(path))
             continue;
 
+        /* add category itself */
+        this->push_back(Package(*ci, _portdir));
+
         /* for each pkg in category, insert "cat/pkg" into container */
         const util::Directory cat(path);
         std::transform(cat.begin(), cat.end(),
@@ -91,6 +94,8 @@ PackageList::fill()
                 path.assign(*oi+"/"+(*ci));
                 if (not util::is_dir(path))
                     continue;
+
+                this->push_back(Package(*ci, *oi));
 
                 /* for each pkg in category, insert "cat/pkg" */
                 const util::Directory cat(path);

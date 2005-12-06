@@ -97,15 +97,18 @@ namespace portage {
         _timer.start();
 
         /* copy those packages in _pkglist that
-         *      a) match the given criteria (v), and
-         *      b) have a valid package directory
+         *      match the given criteria (v), and
+         *          has a valid package directory, or
+         *          is a valid category
          * to our _results vector.
          */
         util::copy_if(_pkglist.begin(), _pkglist.end(),
             std::back_inserter(_results),
             util::compose_f_gx_hx(std::logical_and<bool>(),
-                    std::bind2nd(PackageMatches<T>(), v),
-                    PackageIsValid()));
+                std::bind2nd(PackageMatches<T>(), v),
+                util::compose_f_gx_hx(std::logical_or<bool>(),
+                    PackageIsValid(),
+                    IsCategory())));
 
         _timer.stop();
 
