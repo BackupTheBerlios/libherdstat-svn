@@ -79,7 +79,12 @@ Package::set_name(const std::string& name)
     if (name.find('/') != std::string::npos)
         set_full(name);
     else
+    {
         _name.assign(name);
+        _full.assign(_name);
+        set_category(_name);
+        set_path(_dir+"/"+_name);
+    }
 }
 /****************************************************************************/
 void
