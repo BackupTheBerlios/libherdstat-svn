@@ -89,6 +89,20 @@ namespace portage {
             /// Get developers contained in this metadata.
             inline const Developers& devs() const;
 
+            ///@{
+            /** Determine equivelance of this Metadata compared to that
+             * Metadata.  Only compares the package name.
+             * @param that const reference to another Metadata object.
+             * @returns A boolean value.
+             */
+            inline bool operator< (const Metadata& that) const;
+            inline bool operator<=(const Metadata& that) const;
+            inline bool operator> (const Metadata& that) const;
+            inline bool operator>=(const Metadata& that) const;
+            inline bool operator==(const Metadata& that) const;
+            inline bool operator!=(const Metadata& that) const;
+            ///@}
+
         private:
             std::string _pkg;
             std::string _longdesc;
@@ -132,6 +146,42 @@ namespace portage {
     {
         if (not _devs) _devs = new Developers();
         return *_devs;
+    }
+
+    inline bool
+    Metadata::operator< (const Metadata& that) const
+    {
+        return (_pkg < that._pkg);
+    }
+
+    inline bool
+    Metadata::operator<=(const Metadata& that) const
+    {
+        return not (*this > that);
+    }
+
+    inline bool
+    Metadata::operator> (const Metadata& that) const
+    {
+        return (that < *this);
+    }
+
+    inline bool
+    Metadata::operator>=(const Metadata& that) const
+    {
+        return not (*this < that);
+    }
+
+    inline bool
+    Metadata::operator==(const Metadata& that) const
+    {
+        return (_pkg == that._pkg);
+    }
+
+    inline bool
+    Metadata::operator!=(const Metadata& that) const
+    {
+        return not (*this == that);
     }
 
 } // namespace portage
