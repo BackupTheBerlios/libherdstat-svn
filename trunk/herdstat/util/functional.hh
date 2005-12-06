@@ -299,6 +299,7 @@ herdstat::util::copy_if(v.begin(), v.end(),
      * @class compose_f_gx_t functional.hh herdstat/util/functional.hh
      * @brief Function object adapter that uses the result of a unary operation
      * as input to another unary operation.
+     * @see compose_f_gx
      */
 
     template <typename Op1, typename Op2>
@@ -353,6 +354,7 @@ std::for_each(fm.begin(), fm.end(),
      * @brief Function object adapter that allows the combination of two
      * criteria logically to formulate a single criterion.  Use this when you
      * want to do something like "greater than 10 and less than 15".
+     * @see compose_f_gx_hx
      */
 
     template <typename Op1, typename Op2, typename Op3>
@@ -395,7 +397,27 @@ herdstat::util::copy_if(paths.begin(), paths.end(),
             herdstat::util::IsFile()));
 @endcode
      * The above code snippet can be read as "for each element in paths, if it
-     * matches the pattern '*foo*' and is a valid file, insert it into results".
+     * matches the pattern '*foo*' @b and is a valid file, insert it into
+     * results".
+     *
+     * You can also nest compose_f_gx_hx calls to create larger expressions (the
+     * below code is a real example taken from
+     * portage::PackageFinder::operator()()):
+     *
+@code
+util::copy_if(_pkglist.begin(), _pkglist.end(),
+    std::back_inserter(_results),
+        util::compose_f_gx_hx(std::logical_and<bool>(),
+            std::bind2nd(PackageMatches<T>(), v),
+            util::compose_f_gx_hx(std::logical_or<bool>(),
+                PackageIsValid(), IsCategory())));
+@endcode
+     * The above code snippet can be read as "for each element in _pkglist, if
+     * it matches the criteria (v) @b and is a valid package @b or a valid
+     * category, insert it into _results".
+     *
+     * Of course, I don't recommend nesting more than this, as it really kills
+     * the readability of your code.
      */
 
     template <typename Op1, typename Op2, typename Op3>
@@ -410,6 +432,7 @@ herdstat::util::copy_if(paths.begin(), paths.end(),
      * @brief Function object adapter for use when you have two arguments to
      * pass to two different unary predicates (Op2 and Op3).  The results from
      * both are passed to the binary predicate Op1.
+     * @see compose_f_gx_hy
      */
 
     template <typename Op1, typename Op2, typename Op3>
