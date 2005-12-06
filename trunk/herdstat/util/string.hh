@@ -47,7 +47,7 @@ namespace util {
     /**
      * Return the basename of the given path.
      * @param path path string.
-     * @returns basename of @p path.
+     * @returns basename of @a path.
      */
 
     std::string basename(const std::string& path) throw();
@@ -55,7 +55,7 @@ namespace util {
     /**
      * Return the dirname of the given path.
      * @param path path string.
-     * @returns directory that @p path is located in.
+     * @returns directory that @a path is located in.
      */
 
     std::string dirname(const std::string& path) throw();
@@ -86,28 +86,49 @@ namespace util {
     std::string sprintf(const std::string&, va_list) throw();
     //@}
 
-    /**
-     * Split string into a vector of strings.
-     * @param s String to split.
-     * @param d Delimiter.
-     * @param append_empty Append "" if two contiguous delimiters are
-     * encountered?
-     * @returns Vector of sub-strings.
+    /** Function template for splitting a string using the given delimiter and
+     * writing each part to the given output iterator.
+     * @param str string to split.
+     * @param result output iterator to write parts to.
+     * @param delim Delimiter to use (defaults to " ").
+     * @param append_empty Insert an empty element if two consecutive delimiters
+     * are encountered?
+     *
+     * @section example Example
+     *
+@code
+std::string foo("This is an example of using util::split");
+std::vector<std::string> foov;
+util::split(foo, std::back_inserter(foov));
+...
+std::set<std::string> foos;
+util::split(foo, std::inserter(foos, foos.end()));
+@endcode
      */
+    template <typename OutputIterator>
+    void split(const std::string& str, OutputIterator result,
+               const std::string& delim = " ", bool append_empty = false);
 
-    std::vector<std::string> split(const std::string& s,
-                                   const char d = ' ',
-                                   bool append_empty = false) throw();
-
-    /**
-     * Convert vector of std::strings to one std::string.
-     * @param v Vector of std::strings
-     * @param d Delimiter.
-     * @returns Resulting string object.
+    /** Function template for creating a string from the range [first,last)
+     * using the specified delimiter in between each element.
+     * @param first beginning input iterator.
+     * @param last ending input iterator.
+     * @param delim Delimiter to use (defaults to " ").
+     * @returns resulting string.
+     *
+     * @section example Example
+     *
+@code
+std::vector<std::string> foov;
+foov.push_back("This");
+foov.push_back("is an example");
+foov.push_back("of using util::join");
+std::string foo(util::join(foov.begin(), foov.end()));
+@endcode
      */
-
-    std::string join(const std::vector<std::string>& v,
-                     const char d = ' ') throw();
+    template <typename InputIterator>
+    std::string join(InputIterator first, InputIterator last,
+                     const std::string& delim = " ");
 
     /**
      * Return a copy of the given string with the ASCII color sequences removed.
@@ -186,7 +207,7 @@ namespace util {
     inline std::string
     stringify<std::vector<std::string> >(const std::vector<std::string>& v)
     {
-        return join(v);
+        return join(v.begin(), v.end());
     }
 
     /// stringify specialization for std::string.
@@ -225,7 +246,9 @@ namespace util {
     inline std::vector<std::string>
     destringify<std::vector<std::string> >(const std::string& s) throw (BadCast)
     {
-        return split(s);
+        std::vector<std::string> v;
+        split(s, std::back_inserter(v));
+        return v;
     }
 
     /// destringify specialization for int
@@ -308,6 +331,48 @@ namespace util {
         if (s == "true" or s == "yes" or s == "on")  return true;
         if (s == "false" or s == "no" or s == "off") return false;
         return destringify<int>(s);
+    }
+
+    template <typename OutputIterator>
+    void split(const std::string& str, OutputIterator result,
+               const std::string& delim, bool append_empty)
+    {
+        if (str.empty())
+            return;
+
+        std::string::size_type pos, lpos = 0;
+
+        while (true)
+        {
+	    if ((pos = str.find(delim, lpos)) == std::string::npos)
+	    {
+	        *result++ = str.substr(lpos);
+	        break;
+	    }
+	
+	    const std::string sub(str.substr(lpos, pos - lpos));
+	    if (not sub.empty() or append_empty)
+	        *result++ = sub;
+
+	    lpos = pos + delim.length();
+        }
+    }
+
+    template <typename InputIterator>
+    std::string
+    join(InputIterator first, InputIterator last,
+         const std::string& delim)
+    {
+        std::string result;
+
+        while (first != last)
+        {
+	    result += *first++;
+	    if (first != last)
+	        result += delim;
+        }
+
+        return result;
     }
 
 } // namespace util

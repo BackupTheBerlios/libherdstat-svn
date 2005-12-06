@@ -168,50 +168,50 @@ sprintf(const std::string& fmt, va_list v) throw()
     return util::sprintf(fmt.c_str(), v);
 }
 /*****************************************************************************/
-std::string
-join(const std::vector<std::string> &v,
-           const std::string::value_type delim) throw()
-{
-    std::string result;
+//std::string
+//join(const std::vector<std::string> &v,
+//           const std::string::value_type delim) throw()
+//{
+//    std::string result;
 
-    std::vector<std::string>::const_iterator i, end;
-    for (i = v.begin(), end = v.end(); i != end ; ++i)
-    {
-        result += *i;
-        if ((i+1) != end)
-            result += delim;
-    }
+//    std::vector<std::string>::const_iterator i, end;
+//    for (i = v.begin(), end = v.end(); i != end ; ++i)
+//    {
+//        result += *i;
+//        if ((i+1) != end)
+//            result += delim;
+//    }
 
-    return result;
-}
+//    return result;
+//}
 /*****************************************************************************/
-std::vector<std::string>
-split(const std::string& str, const char delim, bool append_empty) throw()
-{
-    if (str.empty())
-        return std::vector<std::string>();
+//std::vector<std::string>
+//split(const std::string& str, const char delim, bool append_empty) throw()
+//{
+//    if (str.empty())
+//        return std::vector<std::string>();
 
-    std::vector<std::string> v;
-    std::string::size_type pos, lpos = 0;
-    
-    while (true)
-    {
-	if ((pos = str.find(delim, lpos)) == std::string::npos)
-	{
-	    v.push_back(str.substr(lpos));
-	    break;
-	}
+//    std::vector<std::string> v;
+//    std::string::size_type pos, lpos = 0;
+//    
+//    while (true)
+//    {
+//        if ((pos = str.find(delim, lpos)) == std::string::npos)
+//        {
+//            v.push_back(str.substr(lpos));
+//            break;
+//        }
 
 	/* don't append empty strings (two
 	 * delimiters in a row were encountered) */
-        const std::string sub(str.substr(lpos, pos - lpos));
-	if (not sub.empty() or append_empty)
-	    v.push_back(sub);
+//        const std::string sub(str.substr(lpos, pos - lpos));
+//        if (not sub.empty() or append_empty)
+//            v.push_back(sub);
 
-	lpos = ++pos;
-    }
-    return v;
-}
+//        lpos = ++pos;
+//    }
+//    return v;
+//}
 /*****************************************************************************/
 std::string
 strip_colors(const std::string& str) throw()

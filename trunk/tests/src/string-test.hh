@@ -39,7 +39,8 @@ StringTest::operator()(const opts_type& null) const
     std::cout << s << std::endl;
     
     /* test util::split() */
-    std::vector<std::string> v(herdstat::util::split(s));
+    std::vector<std::string> v;
+    herdstat::util::split(s, std::back_inserter(v));
     assert(v.size() == 5);
     std::vector<std::string>::iterator i;
     std::cout << "[ ";
@@ -51,8 +52,9 @@ StringTest::operator()(const opts_type& null) const
     }
     std::cout << " ]" << std::endl;
 
-    /* util::lowercase */
-    std::cout << herdstat::util::lowercase(s) << std::endl;
+    /* util::lowercase/util::join */
+    std::cout << herdstat::util::lowercase(
+                    herdstat::util::join(v.begin(), v.end())) << std::endl;
 
     /* util::destringify */
     std::cout

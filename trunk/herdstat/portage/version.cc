@@ -141,7 +141,8 @@ VersionComponents::parse() throw()
         }
     }
 
-    std::vector<std::string> parts(util::split(_verstr, '-'));
+    std::vector<std::string> parts;
+    util::split(_verstr, std::back_inserter(parts), "-");
 
     /* If parts > 3, ${PN} contains a '-' */
     if (parts.size() > 3)
@@ -337,8 +338,10 @@ VersionString::nosuffix::operator< (const nosuffix& that) const throw()
     else if (_version == that._version)
         return _extra < that._extra;
 
-    std::vector<std::string> thisparts(util::split(_version, '.'));
-    std::vector<std::string> thatparts(util::split(that._version, '.'));
+    std::vector<std::string> thisparts, thatparts;
+    util::split(_version, std::back_inserter(thisparts), ".");
+    util::split(that._version, std::back_inserter(thatparts), ".");
+
     std::vector<std::string>::size_type stoppos =
         std::min<std::vector<std::string>::size_type>(thisparts.size(),
                                                        thatparts.size());

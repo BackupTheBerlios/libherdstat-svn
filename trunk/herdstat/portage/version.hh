@@ -102,7 +102,7 @@ namespace portage {
 
             /** Get value mapped to given version component.
              * @param key version component (P, PN, etc).
-             * @returns const reference to value mapped to @p key.
+             * @returns const reference to value mapped to @a key.
              */
             inline const mapped_type& operator[](const key_type& key) const throw();
 
@@ -388,9 +388,20 @@ std::cout << v1.str() << std::endl;
             /// Destructor.
             virtual ~Versions() throw();
 
-            /// Get first VersionString.
+            /** Get "least" VersionString (as determined by
+             * std::less<VersionString>).
+             * @pre The instance this function is invoked upon must not be
+             * empty().
+             * @returns const reference to "least" element.
+             */
             inline const VersionString& front() const throw();
-            /// Get last VersionString.
+
+            /** Get "greatest" VersionString (as determined by
+             * std::less<VersionString>).
+             * @pre The instance this function is invoked upon must not be
+             * empty().
+             * @returns const reference to "greatest" element.
+             */
             inline const VersionString& back() const throw();
 
             //@{

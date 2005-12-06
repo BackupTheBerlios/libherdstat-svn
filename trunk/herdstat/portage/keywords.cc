@@ -140,9 +140,11 @@ Keywords::fill() throw (Exception)
     if (_ebuild["KEYWORDS"].empty())
         throw Exception(_ebuild.path()+": no KEYWORDS variable defined");
 
-    const std::vector<std::string> v(util::split(_ebuild["KEYWORDS"]));
     this->clear();
-    this->insert(v.begin(), v.end());
+
+    /* split the keywords string, inserting each into our container */
+    util::split(_ebuild["KEYWORDS"],
+        std::inserter(this->container(), this->end()));
 }
 /****************************************************************************/
 void
@@ -150,9 +152,11 @@ Keywords::format() throw()
 {
     static util::ColorMap cmap;
 
-    size_type n = 0;
-    for (iterator i = this->begin() ; i != this->end() ; ++i, ++n)
+    iterator i = this->begin();
+    while (i != this->end())
     {
+//    for (iterator i = this->begin() ; i != this->end() ; ++i, ++n)
+//    {
         switch (i->mask())
         {
             case '-':
@@ -167,7 +171,8 @@ Keywords::format() throw()
 
         _str += i->str() + cmap[none];
 
-        if ((n+1) != this->size())
+//        if ((n+1) != this->size())
+        if (++i != this->end())
             _str += " ";
     }
 }

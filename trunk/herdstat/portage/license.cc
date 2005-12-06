@@ -79,8 +79,9 @@ License::parse() throw (QAException)
 
     if (_validate)
     {
-        std::vector<std::string> parts(util::split(_license));
+        std::vector<std::string> parts;
         std::vector<std::string>::iterator i;
+        util::split(_license, std::back_inserter(parts));
         for (i = parts.begin() ; i != parts.end() ; ++i)
         {
             if (not util::file_exists(GlobalConfig().portdir()+

@@ -46,7 +46,8 @@ ProjectXML::ProjectXML(const std::string& path, const std::string& cvsdir,
 {
     if (_cvsdir.empty())
     {
-        std::vector<std::string> parts = util::split(path, '/');
+        std::vector<std::string> parts;
+        util::split(path, std::back_inserter(parts), "/");
         assert(parts.size() > 1);
         this->set_path(util::sprintf("%s/%s.xml", LOCALSTATEDIR,
             (*(parts.end() - 2)).c_str()));

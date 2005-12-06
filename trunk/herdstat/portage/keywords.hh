@@ -327,7 +327,18 @@ namespace portage {
             /// Destructor.
             virtual ~KeywordsMap() throw();
 
+            /** Get "least" pair (as determined by std::less<VersionString>).
+             * @pre The instance this member is invoked upon must not be
+             * empty().
+             * @returns const reference to "least" pair.
+             */
             inline const value_type& front() const;
+
+            /** Get "greatest" pair (as determined by std::less<VersionString>).
+             * @pre The instance this member is invoked upon must not be
+             * empty().
+             * @returns const reference to "greatest" pair.
+             */
             inline const value_type& back() const;
     };
 

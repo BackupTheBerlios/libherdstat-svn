@@ -55,6 +55,8 @@ namespace portage {
             /** Fill a Developer object with data this source provides that is
              * relevant to the specified developer.
              * @param dev reference to a Developer object.
+             * @pre The @a dev parameter must at least have the developer's
+             * user name set.
              * @exception Exception
              */
             virtual void fill_developer(Developer& dev) const

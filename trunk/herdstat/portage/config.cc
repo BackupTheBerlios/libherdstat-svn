@@ -58,12 +58,12 @@ Config::Config() throw (FileException)
     if ((result = std::getenv("PORTDIR_OVERLAY")))
     {
         if (std::strlen(result) > 0)
-            _overlays = util::split(result);
+            util::split(result, std::back_inserter(_overlays));
     }
     else if ((x = _vars.find("PORTDIR_OVERLAY")) != _vars.end())
     {
         if (not x->second.empty())
-            _overlays = util::split(x->second);
+            util::split(x->second, std::back_inserter(_overlays));
     }
 }
 

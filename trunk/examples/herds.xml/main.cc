@@ -40,7 +40,9 @@ main(int argc, char **argv)
 			  << "Name:  " << dev.name() << std::endl
 			  << "Email: " << dev.email() << std::endl
 			  << "Herds: "
-			  << herdstat::util::join(dev.herds(), ',') << std::endl;
+			  << herdstat::util::join(dev.herds().begin(),
+						  dev.herds().end(), ",")
+			  << std::endl;
 	}
 	catch (const herdstat::xml::ParserException& e)
 	{
