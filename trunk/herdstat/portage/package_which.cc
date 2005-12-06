@@ -53,7 +53,7 @@ PackageWhich::operator()(const std::vector<Package>& finder_results)
             std::find_if(pkgs.begin(), pkgs.end(),
                 util::compose_f_gx(
                     std::bind2nd(std::equal_to<std::string>(), *i),
-                    portage::FullPkgName()));
+                    std::mem_fun_ref(&Package::full)));
 
         /* package doesn't exist, so add it */
         if (p == pkgs.end())

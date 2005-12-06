@@ -92,18 +92,6 @@ namespace portage {
     };
 
     /**
-     * @struct FullPkgName functional.hh herdstat/portage/functional.hh
-     * @brief Function object for explicit conversion from Package to
-     * std::string (the category/package string).
-     */
-
-    struct FullPkgName : std::unary_function<Package, std::string>
-    {
-        std::string operator()(const Package& pkg) const
-        { return pkg.full(); }
-    };
-
-    /**
      * @struct NewPackage functional.hh herdstat/portage/functional.hh
      * @brief Function object for instantiating a Package class with the given
      * path (to the package directory) and a portdir (may be an overlay).
