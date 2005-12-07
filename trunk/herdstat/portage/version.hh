@@ -49,6 +49,7 @@
 namespace herdstat {
 namespace portage {
 
+    // {{{ VersionComponents
     /**
      * @class VersionComponents version.hh herdstat/portage/version.hh
      * @brief Version component (${P}, ${PN}, etc) map.
@@ -138,7 +139,9 @@ namespace portage {
     {
         return _verstr;
     }
+    // }}}
 
+    // {{{ VersionString
     /**
      * @class VersionString version.hh herdstat/portage/version.hh
      * @brief Represents a version string corresponding to the given ebuild.
@@ -350,7 +353,9 @@ std::cout << v1.str() << std::endl;
                  (_suffix  == that._suffix)  and
                  (_v["PR"] == that._v["PR"]) );
     }
+    // }}}
 
+    // {{{ Versions
     /** 
      * @class Versions version.hh herdstat/portage/version.hh
      * @brief Sorted VersionString container.
@@ -476,7 +481,9 @@ std::cout << v1.str() << std::endl;
         const_iterator i = this->end();
         return *(--i);
     }
+    // }}}
 
+    // {{{ VersionsMap
     /**
      * @class VersionsMap version.hh herdstat/portage/version.hh
      * @brief Template class for mapping VersionString objects to objects of
@@ -490,7 +497,9 @@ std::cout << v1.str() << std::endl;
         public:
             virtual ~VersionsMap() throw() { }
     };
+    // }}}
 
+    // {{{ NewVersionStringPair
     /**
      * @struct NewVersionStringPair version.hh herdstat/portage/version.hh
      * @brief Function object for creating a new std::pair<VersionString, T>.
@@ -507,6 +516,7 @@ std::cout << v1.str() << std::endl;
             return std::make_pair(VersionString(path), T(path));
         }
     };
+    // }}}
 
 } // namespace portage
 } // namespace herdstat

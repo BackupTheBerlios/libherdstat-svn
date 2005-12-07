@@ -40,6 +40,7 @@
 #include <herdstat/portage/exceptions.hh>
 #include <herdstat/portage/version.hh>
 
+// {{{ ValidSuffixes
 struct SuffixLess : std::binary_function<std::string, std::string, bool>
 {
     /* s1 < s2? */
@@ -100,9 +101,12 @@ GlobalValidSuffixes()
     static ValidSuffixes s;
     return s;
 }
+// }}}
 
 namespace herdstat {
 namespace portage {
+/****************************************************************************/
+// {{{ VersionComponents
 /****************************************************************************/
 VersionComponents::VersionComponents() throw()
 {
@@ -173,18 +177,19 @@ VersionComponents::parse() throw()
     /* remove $PN from _verstr */
     _verstr.erase(0, _vmap["PN"].length()+1); /* +1 for the '-' after ${PN} */
 }
-/*****************************************************************************
- * suffix                                                                  *
- *****************************************************************************/
+// }}}
+/****************************************************************************/
+// {{{ VersionString::suffix
+/****************************************************************************/
 VersionString::suffix::suffix() throw()
 {
 }
-
+/****************************************************************************/
 VersionString::suffix::suffix(const std::string& pvr) throw()
 {
     this->parse(pvr);
 }
-
+/****************************************************************************/
 void
 VersionString::suffix::parse(const std::string &pvr) const throw()
 {
@@ -217,9 +222,7 @@ VersionString::suffix::parse(const std::string &pvr) const throw()
     else
         _suffix.clear();
 }
-/*****************************************************************************
- * Is this suffix less than that suffix?                                     *
- *****************************************************************************/
+/****************************************************************************/
 bool
 VersionString::suffix::operator< (const suffix& that) const throw()
 {
@@ -258,9 +261,7 @@ VersionString::suffix::operator< (const suffix& that) const throw()
 
     return false;
 }
-/*****************************************************************************
- * Is this suffix equal to that suffix?                                      *
- *****************************************************************************/
+/****************************************************************************/
 bool
 VersionString::suffix::operator== (const suffix& that) const throw()
 {
@@ -292,18 +293,19 @@ VersionString::suffix::operator== (const suffix& that) const throw()
 
     return true;
 }
-/*****************************************************************************
- * nosuffix                                                                *
- *****************************************************************************/
+// }}}
+/****************************************************************************/
+// {{{ VersionString::nosuffix
+/****************************************************************************/
 VersionString::nosuffix::nosuffix() throw()
 {
 }
-
+/****************************************************************************/
 VersionString::nosuffix::nosuffix(const std::string& pv) throw()
 {
     this->parse(pv);
 }
-
+/****************************************************************************/
 void
 VersionString::nosuffix::parse(const std::string& pv) const throw()
 {
@@ -323,9 +325,7 @@ VersionString::nosuffix::parse(const std::string& pv) const throw()
         _version.erase(pos);
     }
 }
-/*****************************************************************************
- * Is this version (minus suffix) less that that version (minus suffix)?     *
- *****************************************************************************/
+/****************************************************************************/
 bool
 VersionString::nosuffix::operator< (const nosuffix& that) const throw()
 {
@@ -382,9 +382,7 @@ VersionString::nosuffix::operator< (const nosuffix& that) const throw()
 
     return result;
 }
-/*****************************************************************************
- * Is this version (minus suffix) equal to that version (minus suffix)?      *
- *****************************************************************************/
+/****************************************************************************/
 bool
 VersionString::nosuffix::operator== (const nosuffix& that) const throw()
 {
@@ -392,25 +390,26 @@ VersionString::nosuffix::operator== (const nosuffix& that) const throw()
     return ((_version == that._version) and
             (_extra   == that._extra));
 }
-/*****************************************************************************
- * VersionString                                                             *
- *****************************************************************************/
+// }}}
+/****************************************************************************/
+// {{{ VersionString
+/****************************************************************************/
 VersionString::VersionString() throw()
     : _ebuild(), _v(), _verstr(), _suffix(), _version()
 {
 }
-
+/****************************************************************************/
 VersionString::VersionString(const std::string& path) throw()
     : _ebuild(path), _v(path), _verstr(_v.version()),
       _suffix(_v["PVR"]), _version(_v["PV"])
 {
 }
-
+/****************************************************************************/
 VersionString::VersionString(const VersionString& that) throw()
 {
     *this = that;
 }
-
+/****************************************************************************/
 VersionString&
 VersionString::operator=(const VersionString& that) throw()
 {
@@ -421,7 +420,7 @@ VersionString::operator=(const VersionString& that) throw()
     const_cast<nosuffix&>(_version) = that._version;
     return *this;
 }
-
+/****************************************************************************/
 void
 VersionString::assign(const std::string& path) throw()
 {
@@ -431,9 +430,7 @@ VersionString::assign(const std::string& path) throw()
     _suffix.assign(_v["PVR"]);
     _version.assign(_v["PV"]);
 }
-/*****************************************************************************
- * Display full version std::string (as portage would).                      *
- *****************************************************************************/
+/****************************************************************************/
 std::string
 VersionString::str() const throw()
 {
@@ -444,9 +441,7 @@ VersionString::str() const throw()
 
     return _verstr;
 }
-/*****************************************************************************
- * Is this version less than that version?                                   *
- *****************************************************************************/
+/****************************************************************************/
 bool
 VersionString::operator< (const VersionString& that) const throw()
 {
@@ -468,31 +463,29 @@ VersionString::operator< (const VersionString& that) const throw()
 
     return false;
 }
-/*****************************************************************************
- * versions                                                                *
- *****************************************************************************/
+// }}}
+/****************************************************************************/
+// {{{ Versions
+/****************************************************************************/
 Versions::Versions() throw()
 {
 }
-
+/****************************************************************************/
 Versions::Versions(const std::string& path) throw()
 {
     this->assign(path);
 }
-
+/****************************************************************************/
 Versions::Versions(const std::vector<std::string>& paths) throw()
 {
     std::for_each(paths.begin(), paths.end(),
         std::bind2nd(util::Appender<Versions, std::string>(), this));
 }
-
+/****************************************************************************/
 Versions::~Versions() throw()
 {
 }
-/*****************************************************************************
- * Given a path to a package directory, insert a new VersionString for    *
- * each ebuild found.  clear()'s container first.                            *
- *****************************************************************************/
+/****************************************************************************/
 void
 Versions::assign(const std::string& path) throw()
 {
@@ -505,9 +498,7 @@ Versions::assign(const std::string& path) throw()
     util::copy_if(pkgdir.begin(), pkgdir.end(),
         std::inserter(this->container(), this->end()), IsEbuild());
 }
-/*****************************************************************************
- * Same as assign() but does not call clear().                               *
- *****************************************************************************/
+/****************************************************************************/
 void
 Versions::append(const std::string& path) throw()
 {
@@ -515,7 +506,9 @@ Versions::append(const std::string& path) throw()
     util::copy_if(pkgdir.begin(), pkgdir.end(),
         std::inserter(this->container(), this->end()), IsEbuild());
 }
-/*****************************************************************************/
+/****************************************************************************/
+// }}}
+/****************************************************************************/
 } // namespace portage
 } // namespace herdstat
 

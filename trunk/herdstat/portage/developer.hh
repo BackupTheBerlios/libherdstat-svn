@@ -44,6 +44,7 @@
 namespace herdstat {
 namespace portage {
 
+    // {{{ Developer
     /**
      * @class Developer developer.hh herdstat/portage/developer.hh
      * @brief Represents a Gentoo developer.
@@ -342,7 +343,9 @@ namespace portage {
         return (rhs != lhs);
     }
     ///@}
+    // }}}
 
+    // {{{ Developers
     /**
      * @class Developers developer.hh herdstat/portage/developer.hh
      * @brief Developer container.
@@ -489,6 +492,7 @@ herdstat::util::transform_if(devs.begin(), devs.end(),
         iterator i(this->end());
         return *(--i);
     }
+    // }}}
 
 } // namespace portage
 } // namespace herdstat

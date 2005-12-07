@@ -37,6 +37,7 @@
 namespace herdstat {
 namespace portage {
 
+    // {{{ Herd
     /**
      * @class Herd herd.hh herdstat/portage/herd.hh
      * @brief Represents a herd.
@@ -241,7 +242,9 @@ namespace portage {
         return (rhs != lhs);
     }
     ///@}
+    // }}}
 
+    // {{{ Herds
     /**
      * @class Herds herd.hh herdstat/portage/herd.hh
      * @brief Herd container.
@@ -405,6 +408,7 @@ std::transform(herds.begin(), herds.end(),
         iterator i(this->end());
         return *(--i);
     }
+    // }}}
 
 } // namespace portage
 } // namespace herdstat

@@ -42,6 +42,7 @@
 namespace herdstat {
 namespace portage {
 
+    // {{{ Keyword
     /**
      * @class Keyword keywords.hh herdstat/portage/keywords.hh
      * @brief Represents a single architecture keyword.
@@ -112,6 +113,7 @@ namespace portage {
             bool is_stable() const throw() { return _mask.empty(); }
 
         private:
+            // {{{ Keyword::maskc
             /**
              * @class maskc
              * @brief Keyword mask character ('~' for example).
@@ -176,7 +178,7 @@ namespace portage {
                 private:
                     char _c;
             };
-
+            // }}}
 
             /** Parse keyword.
              * @exception InvalidKeywordMask
@@ -195,7 +197,9 @@ namespace portage {
         return ((_mask == that._mask) ?
                 (_arch < that._arch) : (_mask < that._mask));
     }
+    // }}}
 
+    // {{{ Keywords
     /**
      * @class Keywords keywords.hh herdstat/portage/keywords.hh
      * @brief Keyword container.
@@ -308,7 +312,9 @@ namespace portage {
         return (std::count_if(this->begin(), this->end(),
                     std::mem_fun_ref(&Keyword::is_stable)) == size);
     }
+    // }}}
 
+    // {{{ KeywordsMap
     /**
      * @class KeywordsMap keywords.hh herdstat/portage/keywords.hh
      * @brief Maps VersionString objects to Keywords objects.
@@ -356,6 +362,7 @@ namespace portage {
         const_iterator i = this->end();
         return *(--i);
     }
+    // }}}
 
 } // namespace portage
 } // namespace herdstat
