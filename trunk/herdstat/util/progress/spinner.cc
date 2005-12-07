@@ -50,7 +50,8 @@ Spinner::start() throw()
 void
 Spinner::increment(int cur) throw()
 {
-    if (*_cur == '\0')
+    /* reset to beginning of sequence */
+    if (not *_cur)
         _cur = _sequence;
 
     std::printf("\b%c", *_cur++);
