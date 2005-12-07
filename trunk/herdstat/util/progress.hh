@@ -32,7 +32,9 @@
  * @brief Defines the Progress class.
  */
 
+#include <cstdio>
 #include <string>
+#include <herdstat/util/progress/meter.hh>
 
 namespace herdstat {
 namespace util {
@@ -70,8 +72,13 @@ std::cout << std::endl;
     class Progress
     {
 	public:
-            /// Default constructor.
-	    Progress() throw();
+            /** Constructor.
+             * @param type Meter type.
+             * @param color ASCII color sequence to show meter as (defaults to
+             * "").
+             */
+	    Progress(const std::string& type = "percent",
+                     const std::string& color = "") throw();
 
             /// Destructor.
             ~Progress() throw();
@@ -94,6 +101,10 @@ std::cout << std::endl;
             float _step;
             /// Whether we've started yet.
             bool  _started;
+            /// ASCII color sequence.
+            const std::string _color;
+            /// Pointer to meter implementation.
+            ProgressMeter *_meter;
     };
 
     inline bool
@@ -102,13 +113,11 @@ std::cout << std::endl;
         if (not _started)
             return false;
 
-        int incr = static_cast<int>(_cur += _step);
-        if (incr < 10)
-            std::printf("\b\b%.1d%%", incr);
-        else if (incr < 100)
-            std::printf("\b\b\b%.2d%%", incr);
-        else
-            std::printf("\b\b\b\b%.3d%%", incr);
+        _cur += _step;
+
+        std::printf("%s", _color.c_str());
+        _meter->increment(static_cast<int>(_cur));
+        std::printf("\033[00m");
 
         std::fflush(stdout);
         return true;

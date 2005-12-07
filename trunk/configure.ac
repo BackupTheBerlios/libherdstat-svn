@@ -190,6 +190,7 @@ AC_OUTPUT(Makefile
 	  herdstat/Makefile
 	  herdstat/libherdstat_version.hh
 	  herdstat/util/Makefile
+	  herdstat/util/progress/Makefile
 	  herdstat/io/Makefile
 	  herdstat/fetcher/Makefile
 	  herdstat/xml/Makefile

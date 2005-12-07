@@ -2,6 +2,8 @@
 
 include $(top_builddir)/Makefile.am.common
 
+SUBDIRS = progress
+
 cc_sources = string.cc \
 	     regex.cc \
 	     file.cc \
@@ -25,6 +27,7 @@ hh_sources = container_base.hh \
 
 noinst_LTLIBRARIES = libutil.la
 libutil_la_SOURCES = $(cc_sources) $(hh_sources)
+libutil_la_LIBADD = progress/libprogress.la
 
 library_includedir=$(includedir)/$(PACKAGE)-$(VERSION_MAJOR).$(VERSION_MINOR)/herdstat/util
 library_include_HEADERS = $(hh_sources)
@@ -35,11 +38,15 @@ srchtml: $(foreach f, $(libutil_la_SOURCES), $(f).html)
 
 %.cc.html: %.cc
 	@echo Generating $@
-	@test -d $(top_srcdir)/html/herdstat/util || mkdir $(top_srcdir)/html/herdstat/util
-	@source-highlight -c ../../src.css -s cpp -f html -t4 -n -i $? -o $(top_srcdir)/html/herdstat/util/$@
+	@test -d $(top_srcdir)/html/herdstat/util || \
+		mkdir $(top_srcdir)/html/herdstat/util
+	@source-highlight -c ../../src.css -s cpp -f html -t4 -n -i $? -o \
+		$(top_srcdir)/html/herdstat/util/$@
 
 %.hh.html: %.hh
 	@echo Generating $@
-	@test -d $(top_srcdir)/html/herdstat/util || mkdir $(top_srcdir)/html/herdstat/util
-	@source-highlight -c ../../src.css -s cpp -f html -t4 -n -i $? -o $(top_srcdir)/html/herdstat/util/$@
+	@test -d $(top_srcdir)/html/herdstat/util || \
+		mkdir $(top_srcdir)/html/herdstat/util
+	@source-highlight -c ../../src.css -s cpp -f html -t4 -n -i $? -o \
+		$(top_srcdir)/html/herdstat/util/$@
 

@@ -24,23 +24,36 @@
 # include "config.h"
 #endif
 
-#include <cstdio>
+#include <herdstat/util/progress/spinner.hh>
+#include <herdstat/util/progress/percent.hh>
 #include <herdstat/util/progress.hh>
 
 namespace herdstat {
 namespace util {
 /****************************************************************************/
-Progress::Progress() throw()
-    : _cur(0), _step(0), _started(false)
+Progress::Progress(const std::string& meter, const std::string& color) throw()
+    : _cur(0), _step(0), _started(false), _color(color), _meter(NULL)
 {
+    if (meter == "twirl")
+        _meter = new Spinner();
+    else
+        _meter = new PercentMeter();
+
+    assert(_meter);
 }
 /****************************************************************************/
 Progress::~Progress() throw()
 {
-    if (not _started) return;
-    /* sometimes the user has to use an estimate as the value
-     * passed to start(), so we may not have gotten to 100 yet. */
-    while (_cur < 100.0) this->operator++();
+    if (_started)
+    {
+        /* sometimes the user has to use an estimate as the value
+         * passed to start(), so we may not have gotten to 100 yet. */
+        while (_cur < 100.0)
+            this->operator++();
+    }
+
+    if (_meter)
+        delete _meter;
 }
 /****************************************************************************/
 void
@@ -52,9 +65,11 @@ Progress::start(unsigned total, const std::string& title) throw()
     _step = 100.0 / total;
 
     if (not title.empty())
-        std::printf("%s: ", title.c_str());
+        std::printf("%s ", title.c_str());
 
-    std::printf("  0%%");
+    std::printf("%s", _color.c_str());
+    _meter->start();
+    std::printf("\033[00m");
 }
 /****************************************************************************/
 } // namespace util
