@@ -34,7 +34,7 @@ namespace util {
 Progress::Progress(const std::string& meter, const std::string& color) throw()
     : _cur(0), _step(0), _started(false), _color(color), _meter(NULL)
 {
-    if (meter == "twirl")
+    if (meter == "spinner")
         _meter = new Spinner();
     else
         _meter = new PercentMeter();
