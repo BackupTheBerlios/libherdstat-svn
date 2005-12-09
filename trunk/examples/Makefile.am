@@ -9,6 +9,7 @@ export examples = \
 	cachable \
 	vars \
 	package_finder \
+	progress \
 	versions \
 	version_components
 

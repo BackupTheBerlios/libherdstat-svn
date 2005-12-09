@@ -54,18 +54,7 @@ namespace util {
      * Below is an example of using the Progress class to display the progress
      * of an operation:
      *
-@code
-const herdstat::portage::PackageList pkgs;
-herdstat::util::Progress progress;
-progress.start(pkgs.size(), "Searching for all packages matching the criteria");
-herdstat::portage::PackageList::const_iterator i;
-for (i = pkgs.begin() ; i != pkgs.end() ; ++i)
-{
-    ++progress;
-    ...
-}
-std::cout << std::endl;
-@endcode
+     * @include progress/main.cc
      *
      */
 

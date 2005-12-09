@@ -187,6 +187,7 @@ AC_OUTPUT(Makefile
 	  examples/package_finder/Makefile
 	  examples/versions/Makefile
 	  examples/version_components/Makefile
+	  examples/progress/Makefile
 	  herdstat/Makefile
 	  herdstat/libherdstat_version.hh
 	  herdstat/util/Makefile
