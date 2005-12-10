@@ -57,7 +57,7 @@ namespace herdstat {
      */
 
     class BaseException : public std::exception,
-                          public libebt::Backtracable<ExceptionTag>
+                          public libebt::Backtraceable<ExceptionTag>
     {
     };
 
