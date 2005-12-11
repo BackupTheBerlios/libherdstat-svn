@@ -36,12 +36,12 @@ namespace herdstat {
 namespace util {
 /****************************************************************************/
 Vars::Vars() throw()
-    : _depth(0)
+    : BaseFile(), util::MapBase<std::string, std::string>(), _depth(0)
 {
 }
 /****************************************************************************/
 Vars::Vars(const std::string& path) throw (FileException)
-    : BaseFile(path), _depth(0)
+    : BaseFile(path), util::MapBase<std::string, std::string>(), _depth(0)
 {
     this->read();
 }

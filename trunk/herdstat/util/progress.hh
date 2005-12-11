@@ -34,6 +34,8 @@
 
 #include <cstdio>
 #include <string>
+
+#include <herdstat/noncopyable.hh>
 #include <herdstat/util/progress/meter.hh>
 
 namespace herdstat {
@@ -58,7 +60,7 @@ namespace util {
      *
      */
 
-    class Progress
+    class Progress : private Noncopyable
     {
 	public:
             /** Constructor.

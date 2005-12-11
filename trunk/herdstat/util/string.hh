@@ -228,8 +228,6 @@ std::string foo(util::join(foov.begin(), foov.end()));
     T
     destringify(const std::string& s) throw (BadCast)
     {
-        BacktraceContext c("util::destringify("+s+")");
-
         std::istringstream is(s.c_str());
 
         T v;
@@ -256,8 +254,6 @@ std::string foo(util::join(foov.begin(), foov.end()));
     inline int
     destringify<int>(const std::string& s) throw (BadCast)
     {
-        BacktraceContext c("util::destringify<int>("+s+")");
-
         char *invalid;
         int result = std::strtol(s.c_str(), &invalid, 10);
         if (*invalid)
@@ -270,8 +266,6 @@ std::string foo(util::join(foov.begin(), foov.end()));
     inline long
     destringify<long>(const std::string& s) throw (BadCast)
     {
-        BacktraceContext c("util::destringify<long>("+s+")");
-
         char *invalid;
         long result = std::strtol(s.c_str(), &invalid, 10);
         if (*invalid)
@@ -284,8 +278,6 @@ std::string foo(util::join(foov.begin(), foov.end()));
     inline unsigned long
     destringify<unsigned long>(const std::string& s) throw (BadCast)
     {
-        BacktraceContext c("util::destringify<unsigned long>("+s+")");
-
         char *invalid;
         unsigned long result = std::strtoul(s.c_str(), &invalid, 10);
         if (*invalid or ((result == ULONG_MAX) and (errno == ERANGE)))
@@ -298,8 +290,6 @@ std::string foo(util::join(foov.begin(), foov.end()));
     inline double
     destringify<double>(const std::string& s) throw (BadCast)
     {
-        BacktraceContext c("util::destringify<double>("+s+")");
-
         char *invalid;
         double result = std::strtod(s.c_str(), &invalid);
         if (*invalid)
@@ -312,8 +302,6 @@ std::string foo(util::join(foov.begin(), foov.end()));
     inline float
     destringify<float>(const std::string& s) throw (BadCast)
     {
-        BacktraceContext c("util::destringify<float>("+s+")");
-
         char *invalid;
         float result = std::strtod(s.c_str(), &invalid);
         if (*invalid)
@@ -326,8 +314,6 @@ std::string foo(util::join(foov.begin(), foov.end()));
     inline bool
     destringify<bool>(const std::string& s) throw (BadCast)
     {
-        BacktraceContext c("util::destringify<bool>("+s+")");
-
         if (s == "true" or s == "yes" or s == "on")  return true;
         if (s == "false" or s == "no" or s == "off") return false;
         return destringify<int>(s);

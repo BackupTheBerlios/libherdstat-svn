@@ -138,12 +138,12 @@ BaseFileObject::read(const std::string& path)
 }
 /*****************************************************************************/
 BaseFile::BaseFile() throw()
-    : _stream(NULL), _mode(DEFAULT_MODE)
+    : BaseFileObject(), _stream(NULL), _mode(DEFAULT_MODE)
 {
 }
 /*****************************************************************************/
 BaseFile::BaseFile(const BaseFile& that) throw (FileException)
-    : _stream(NULL), _mode(DEFAULT_MODE)
+    : BaseFileObject(), _stream(NULL), _mode(DEFAULT_MODE)
 {
     *this = that;
 }
@@ -284,20 +284,23 @@ File::write()
 }
 /*****************************************************************************/
 Directory::Directory(bool recurse) throw()
-    : _dirp(NULL), _recurse(recurse)
+    : BaseFileObject(), util::VectorBase<std::string>(),
+      _dirp(NULL), _recurse(recurse)
 {
 }
 /*****************************************************************************/
 Directory::Directory(const std::string &path, bool recurse)
     throw (FileException)
-    : BaseFileObject(path), _dirp(NULL), _recurse(recurse)
+    : BaseFileObject(path), util::VectorBase<std::string>(),
+      _dirp(NULL), _recurse(recurse)
 {
     this->open();
     this->read();
 }
 /*****************************************************************************/
 Directory::Directory(const Directory& that)
-    : BaseFileObject(), _dirp(NULL), _recurse(false)
+    : BaseFileObject(), util::VectorBase<std::string>(),
+      _dirp(NULL), _recurse(false)
 {
     *this = that;
 }

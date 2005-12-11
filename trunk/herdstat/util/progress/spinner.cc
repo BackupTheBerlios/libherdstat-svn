@@ -24,7 +24,6 @@
 # include "config.h"
 #endif
 
-#include <cstdio>
 #include <herdstat/util/progress/spinner.hh>
 
 namespace herdstat {
@@ -48,7 +47,7 @@ Spinner::start() throw()
 }
 /****************************************************************************/
 void
-Spinner::increment(int cur) throw()
+Spinner::increment(int cur LIBHERDSTAT_UNUSED) throw()
 {
     /* reset to beginning of sequence */
     if (not *_cur)

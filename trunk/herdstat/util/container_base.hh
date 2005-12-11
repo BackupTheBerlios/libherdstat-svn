@@ -182,6 +182,7 @@ v.insert(v.end(),
 
     template <typename T>
     ContainerBase<T>::ContainerBase()
+        : _c()
     {
     }
 

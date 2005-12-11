@@ -1,5 +1,5 @@
 /*
- * libherdstat -- herdstat/util/progress/percent.cc
+ * libherdstat -- herdstat/util/progress/ellipse.hh
  * $Id$
  * Copyright (c) 2005 Aaron Walker <ka0ttic@gentoo.org>
  *
@@ -20,41 +20,46 @@
  * Place, Suite 325, Boston, MA  02111-1257  USA
  */
 
+#ifndef _HAVE_PROGRESS_ELLIPSE_HH
+#define _HAVE_PROGRESS_ELLIPSE_HH 1
+
 #ifdef HAVE_CONFIG_H
 # include "config.h"
 #endif
 
-#include <herdstat/util/progress/percent.hh>
+/**
+ * @file herdstat/util/progress/ellipse.hh
+ * @brief Provides the EllipseMeter class definition.
+ */
+
+#include <herdstat/util/progress/meter.hh>
 
 namespace herdstat {
 namespace util {
-/****************************************************************************/
-PercentMeter::PercentMeter() throw()
-{
-}
-/****************************************************************************/
-PercentMeter::~PercentMeter() throw()
-{
-}
-/****************************************************************************/
-void
-PercentMeter::start() throw()
-{
-    std::printf("  0%%");
-}
-/****************************************************************************/
-void
-PercentMeter::increment(int cur) throw()
-{
-    if (cur < 10)
-	std::printf("\b\b%.1d%%", cur);
-    else if (cur < 100)
-	std::printf("\b\b\b%.2d%%", cur);
-    else
-	std::printf("\b\b\b\b%.3d%%", cur);
-}
-/****************************************************************************/
+
+    /**
+     * @class EllipseMeter ellipse.hh herdstat/util/progress/ellipse.hh
+     * @brief Concrete ProgressMeter implementation that shows an animated
+     * ellipse ("...") repeatedly.
+     */
+
+    class EllipseMeter : public ProgressMeter
+    {
+        public:
+            virtual ~EllipseMeter() throw();
+            virtual void start() throw();
+            virtual void increment(int cur) throw();
+
+        private:
+            friend class Progress;
+            EllipseMeter() throw();
+
+            unsigned short _cur;
+    };
+
 } // namespace util
 } // namespace herdstat
+
+#endif /* _HAVE_PROGRESS_ELLIPSE_HH */
 
 /* vim: set tw=80 sw=4 fdm=marker et : */

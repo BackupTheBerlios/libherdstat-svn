@@ -2,12 +2,16 @@
 
 cc_sources = \
 	percent.cc \
-	spinner.cc
+	spinner.cc \
+	dots.cc \
+	ellipse.cc
 
 hh_sources = \
 	meter.hh \
 	percent.hh \
-	spinner.hh
+	spinner.hh \
+	dots.hh \
+	ellipse.hh
 
 noinst_LTLIBRARIES = libprogress.la
 libprogress_la_SOURCES = $(cc_sources) $(hh_sources)

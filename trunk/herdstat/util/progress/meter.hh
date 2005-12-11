@@ -32,6 +32,9 @@
  * @brief Provides the ProgressMeter abstract class definition.
  */
 
+#include <cstdio>
+#include <herdstat/defs.hh>
+
 namespace herdstat {
 namespace util {
 
@@ -44,7 +47,9 @@ namespace util {
     {
         public:
             virtual ~ProgressMeter() throw() { }
+            /// start meter
             virtual void start() throw() = 0;
+            /// increment progress
             virtual void increment(int cur) throw() = 0;
 
         protected:

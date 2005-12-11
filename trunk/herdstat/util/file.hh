@@ -44,6 +44,7 @@
 #include <unistd.h>
 #include <dirent.h>
 
+#include <herdstat/defs.hh>
 #include <herdstat/util/regex.hh>
 #include <herdstat/util/container_base.hh>
 
@@ -238,7 +239,7 @@ namespace util {
             /** Dump our internal contents to disk.
              * @param s Output stream.
              */
-            virtual void dump(std::ostream &s) const { }
+            virtual void dump(std::ostream& s LIBHERDSTAT_UNUSED) const { }
 
             /** Open file object.
              * @exception FileException

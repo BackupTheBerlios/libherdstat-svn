@@ -1,5 +1,5 @@
 /*
- * libherdstat -- herdstat/util/progress/percent.cc
+ * libherdstat -- herdstat/util/progress/ellipse.cc
  * $Id$
  * Copyright (c) 2005 Aaron Walker <ka0ttic@gentoo.org>
  *
@@ -24,34 +24,39 @@
 # include "config.h"
 #endif
 
-#include <herdstat/util/progress/percent.hh>
+#include <herdstat/util/progress/ellipse.hh>
 
 namespace herdstat {
 namespace util {
 /****************************************************************************/
-PercentMeter::PercentMeter() throw()
+EllipseMeter::EllipseMeter() throw()
+    : _cur(0)
 {
 }
 /****************************************************************************/
-PercentMeter::~PercentMeter() throw()
+EllipseMeter::~EllipseMeter() throw()
 {
-}
-/****************************************************************************/
-void
-PercentMeter::start() throw()
-{
-    std::printf("  0%%");
 }
 /****************************************************************************/
 void
-PercentMeter::increment(int cur) throw()
+EllipseMeter::start() throw()
 {
-    if (cur < 10)
-	std::printf("\b\b%.1d%%", cur);
-    else if (cur < 100)
-	std::printf("\b\b\b%.2d%%", cur);
+    std::printf(".");
+    _cur = 1;
+}
+/****************************************************************************/
+void
+EllipseMeter::increment(int cur LIBHERDSTAT_UNUSED) throw()
+{
+    if (_cur == 3)
+    {
+        std::printf("\b\b\b");
+        _cur = 1;
+    }
     else
-	std::printf("\b\b\b\b%.3d%%", cur);
+        _cur++;
+
+    std::printf(".  \b\b");
 }
 /****************************************************************************/
 } // namespace util

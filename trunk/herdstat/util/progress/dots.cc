@@ -1,5 +1,5 @@
 /*
- * libherdstat -- herdstat/util/progress/percent.cc
+ * libherdstat -- herdstat/util/progress/dots.cc
  * $Id$
  * Copyright (c) 2005 Aaron Walker <ka0ttic@gentoo.org>
  *
@@ -24,34 +24,29 @@
 # include "config.h"
 #endif
 
-#include <herdstat/util/progress/percent.hh>
+#include <herdstat/util/progress/dots.hh>
 
 namespace herdstat {
 namespace util {
 /****************************************************************************/
-PercentMeter::PercentMeter() throw()
+DotsMeter::DotsMeter() throw()
 {
 }
 /****************************************************************************/
-PercentMeter::~PercentMeter() throw()
+DotsMeter::~DotsMeter() throw()
 {
-}
-/****************************************************************************/
-void
-PercentMeter::start() throw()
-{
-    std::printf("  0%%");
 }
 /****************************************************************************/
 void
-PercentMeter::increment(int cur) throw()
+DotsMeter::start() throw()
 {
-    if (cur < 10)
-	std::printf("\b\b%.1d%%", cur);
-    else if (cur < 100)
-	std::printf("\b\b\b%.2d%%", cur);
-    else
-	std::printf("\b\b\b\b%.3d%%", cur);
+    std::printf(".");
+}
+/****************************************************************************/
+void
+DotsMeter::increment(int cur LIBHERDSTAT_UNUSED) throw()
+{
+    this->start();
 }
 /****************************************************************************/
 } // namespace util

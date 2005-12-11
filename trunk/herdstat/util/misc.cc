@@ -107,8 +107,6 @@ debug(const char *fmt, ...)
 std::string
 getcwd()
 {
-    BacktraceContext c("util::getcwd");
-
     char *pwd = ::getcwd(NULL, 0);
     if (not pwd)
 	throw ErrnoException("getcwd");
@@ -187,7 +185,7 @@ format_date(const std::string &epoch, const char *fmt)
 std::time_t
 str2epoch(const char *str, const char *fmt)
 {
-    BacktraceContext c("util::str2epoch");
+    BacktraceContext c("herdstat::util::str2epoch");
 
     struct tm t;
     std::memset(&t, '\0', sizeof(t));

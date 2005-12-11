@@ -1,5 +1,5 @@
 /*
- * libherdstat -- herdstat/util/progress/percent.cc
+ * libherdstat -- herdstat/util/progress/dots.hh
  * $Id$
  * Copyright (c) 2005 Aaron Walker <ka0ttic@gentoo.org>
  *
@@ -20,41 +20,44 @@
  * Place, Suite 325, Boston, MA  02111-1257  USA
  */
 
+#ifndef _HAVE_PROGRESS_DOTS_HH
+#define _HAVE_PROGRESS_DOTS_HH 1
+
 #ifdef HAVE_CONFIG_H
 # include "config.h"
 #endif
 
-#include <herdstat/util/progress/percent.hh>
+/**
+ * @file herdstat/util/progress/dots.hh
+ * @brief Provides the DotsMeter class definition.
+ */
+
+#include <herdstat/util/progress/meter.hh>
 
 namespace herdstat {
 namespace util {
-/****************************************************************************/
-PercentMeter::PercentMeter() throw()
-{
-}
-/****************************************************************************/
-PercentMeter::~PercentMeter() throw()
-{
-}
-/****************************************************************************/
-void
-PercentMeter::start() throw()
-{
-    std::printf("  0%%");
-}
-/****************************************************************************/
-void
-PercentMeter::increment(int cur) throw()
-{
-    if (cur < 10)
-	std::printf("\b\b%.1d%%", cur);
-    else if (cur < 100)
-	std::printf("\b\b\b%.2d%%", cur);
-    else
-	std::printf("\b\b\b\b%.3d%%", cur);
-}
-/****************************************************************************/
+
+    /**
+     * @class DotsMeter dots.hh herdstat/util/progress/dots.hh
+     * @brief Concrete ProgressMeter implementation that shows progress by
+     * showing dots (periods) for each increment.
+     */
+
+    class DotsMeter : public ProgressMeter
+    {
+        public:
+            virtual ~DotsMeter() throw();
+            virtual void start() throw();
+            virtual void increment(int cur) throw();
+
+        private:
+            friend class Progress;
+            DotsMeter() throw();
+    };
+
 } // namespace util
 } // namespace herdstat
+
+#endif /* _HAVE_PROGRESS_DOTS_HH */
 
 /* vim: set tw=80 sw=4 fdm=marker et : */

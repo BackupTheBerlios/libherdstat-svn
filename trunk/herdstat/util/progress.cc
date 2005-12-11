@@ -26,6 +26,8 @@
 
 #include <herdstat/util/progress/spinner.hh>
 #include <herdstat/util/progress/percent.hh>
+#include <herdstat/util/progress/dots.hh>
+#include <herdstat/util/progress/ellipse.hh>
 #include <herdstat/util/progress.hh>
 
 namespace herdstat {
@@ -36,6 +38,10 @@ Progress::Progress(const std::string& meter, const std::string& color) throw()
 {
     if (meter == "spinner")
         _meter = new Spinner();
+    else if (meter == "dots")
+        _meter = new DotsMeter();
+    else if (meter == "ellipse")
+        _meter = new EllipseMeter();
     else
         _meter = new PercentMeter();
 

@@ -84,7 +84,7 @@ namespace util {
 
             /// Derivatives may override this to define something that must
             /// be done for each line of the file.
-            virtual void do_perform_action_on(const std::string& line) { }
+            virtual void do_perform_action_on(const std::string& line LIBHERDSTAT_UNUSED) { }
 
         private:
             void set_defaults();

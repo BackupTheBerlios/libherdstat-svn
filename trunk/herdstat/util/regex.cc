@@ -108,8 +108,6 @@ Regex::assign(const std::string &regex, int c, int e) throw (BadRegex)
 void
 Regex::compile() throw (BadRegex)
 {
-    BacktraceContext c("util::Regex::compile("+_str+")");
-
     if (this->_compiled)
         this->cleanup();
 
