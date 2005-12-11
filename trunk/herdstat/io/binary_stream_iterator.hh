@@ -60,10 +60,11 @@ namespace io {
     {
         public:
             /// Construct end of input stream iterator.
-	    inline BinaryIStreamIterator() : _stream(NULL), _ok(false) { }
+	    inline BinaryIStreamIterator()
+                : _stream(NULL), _ok(false), _value() { }
             /// Construct start of input stream iterator.
 	    inline BinaryIStreamIterator(BinaryIStream& stream)
-	        : _stream(&stream) { this->_read(); }
+	        : _stream(&stream), _ok(false), _value() { this->_read(); }
             /// Copy constructor.
 	    inline BinaryIStreamIterator(const BinaryIStreamIterator& that)
 	        : _stream(that._stream), _ok(that._ok), _value(that._value) { }

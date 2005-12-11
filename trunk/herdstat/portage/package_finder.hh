@@ -92,8 +92,6 @@ namespace portage {
     const std::vector<Package>&
     PackageFinder::operator()(const T& v) throw (NonExistentPkg)
     {
-        BacktraceContext c("herdstat::portage::PackageFinder::operator()");
-
         _timer.start();
 
         /* copy those packages in _pkglist that

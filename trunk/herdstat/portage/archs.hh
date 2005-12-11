@@ -63,9 +63,6 @@ namespace portage {
         protected:
             /// Read arch.list.
             virtual void do_read();
-
-        private:
-            std::string _portdir;
     };
 
 } // namespace portage

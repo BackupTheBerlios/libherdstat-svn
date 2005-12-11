@@ -38,7 +38,7 @@
 DECLARE_TEST_HANDLER(GlobTest)
 
 void
-GlobTest::operator()(const opts_type& null) const
+GlobTest::operator()(const opts_type& null LIBHERDSTAT_UNUSED) const
 {
     /* test Glob */
     char *test_data = std::getenv("TEST_DATA");

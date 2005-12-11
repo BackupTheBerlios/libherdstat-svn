@@ -71,14 +71,12 @@ AC_MSG_CHECKING([whether to enable debugging code/flags])
 AC_ARG_ENABLE(debug,
     AC_HELP_STRING([--enable-debug],[Enable debugging code/flags]),
     [enable_debug=$enableval],[enable_debug=no])
+AC_MSG_RESULT([$enable_debug])
 AM_CONDITIONAL(DEBUG, test x$enable_debug != "xno")
 
 if test x$enable_debug != "xno" ; then
-    CXXFLAGS="-ggdb3 -Winline"
-    AC_MSG_RESULT([$CXXFLAGS])
+    CXXFLAGS="$CXXFLAGS -ggdb3"
     AC_DEFINE(DEBUG, 1, [Enable debugging code])
-else
-    AC_MSG_RESULT(no)
 fi
 
 AC_PATH_PROGS(_WGET, wget)

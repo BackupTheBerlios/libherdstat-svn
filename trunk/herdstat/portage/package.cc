@@ -32,18 +32,19 @@ namespace herdstat {
 namespace portage {
 /****************************************************************************/
 Package::Package()
-    : _name(), _cat(), _dir(), _path(), _kwmap(NULL), _pkgdir(NULL)
+    : _name(), _cat(), _dir(), _full(), _path(), _kwmap(NULL), _pkgdir(NULL)
 {
 }
 /****************************************************************************/
 Package::Package(const Package& that)
-    : _name(), _cat(), _dir(), _path(), _kwmap(NULL), _pkgdir(NULL)
+    : _name(), _cat(), _dir(), _full(), _path(), _kwmap(NULL), _pkgdir(NULL)
 {
     *this = that;
 }
 /****************************************************************************/
 Package::Package(const std::string& name, const std::string& portdir)
-    : _name(), _cat(), _dir(portdir), _path(), _kwmap(NULL), _pkgdir(NULL)
+    : _name(), _cat(), _dir(portdir), _full(),  _path(), _kwmap(NULL),
+      _pkgdir(NULL)
 {
     set_name(name);
 }
@@ -74,8 +75,6 @@ Package::operator=(const Package& that)
 void
 Package::set_name(const std::string& name)
 {
-    BacktraceContext c("herdstat::portage::Package::set_name("+name+")");
-
     if (name.find('/') != std::string::npos)
         set_full(name);
     else
@@ -90,8 +89,6 @@ Package::set_name(const std::string& name)
 void
 Package::set_full(const std::string& full)
 {
-    BacktraceContext c("herdstat::portage::Package::set_full("+full+")");
-
     std::string::size_type pos = full.find('/');
     if (pos == std::string::npos)
         throw Exception("Invalid full category/package specification '"+full+"'.");

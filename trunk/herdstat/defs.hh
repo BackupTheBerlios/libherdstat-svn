@@ -1,5 +1,5 @@
 /*
- * libherdstat -- tests/src/container_base-test.hh
+ * libherdstat -- herdstat/defs.hh
  * $Id$
  * Copyright (c) 2005 Aaron Walker <ka0ttic@gentoo.org>
  *
@@ -20,47 +20,34 @@
  * Place, Suite 325, Boston, MA  02111-1257  USA
  */
 
-#ifndef _HAVE__CONTAINER_BASE_TEST_HH
-#define _HAVE__CONTAINER_BASE_TEST_HH 1
+#ifndef _HAVE_HERDSTAT_DEFS_HH
+#define _HAVE_HERDSTAT_DEFS_HH 1
 
 #ifdef HAVE_CONFIG_H
 # include "config.h"
 #endif
 
-#include <herdstat/util/container_base.hh>
-#include "test_handler.hh"
+/**
+ * @file herdstat/defs.hh
+ * @brief Provides some common #define's.
+ */
 
-DECLARE_TEST_HANDLER(ContainerBaseTest)
+#ifndef LIBHERDSTAT_DEPRECATED
+# if defined(__GNUC__) || defined(DOXYGEN)
+#   define LIBHERDSTAT_DEPRECATED __attribute__ ((deprecated))
+# else
+#   define LIBHERDSTAT_DEPRECATED
+# endif
+#endif
 
-class MySet : public herdstat::util::SetBase<std::string>
-{
-    public:
-        void display()
-        {
-            for (iterator i = this->begin() ; i != this->end() ; ++i)
-                std::cout << *i << std::endl;
-        }
-};
+#ifndef LIBHERDSTAT_UNUSED
+# if defined(__GNUC__) || defined(DOXYGEN)
+#   define LIBHERDSTAT_UNUSED __attribute__ ((unused))
+# else
+#   define LIBHERDSTAT_UNUSED
+# endif
+#endif
 
-#define TRY_INSERT(x) \
-    if (not m.insert(#x).second) \
-        std::cout << "Failed to insert " << #x << std::endl;
-
-void
-ContainerBaseTest::operator()(const opts_type& null LIBHERDSTAT_UNUSED) const
-{
-    MySet m;
-    TRY_INSERT(foo);
-    TRY_INSERT(bar);
-    TRY_INSERT(baz);
-    TRY_INSERT(foo);
-    TRY_INSERT(foobarbaz);
-
-    m.display();
-}
-
-#undef TRY_INSERT
-
-#endif /* _HAVE__CONTAINER_BASE-TEST_HH */
+#endif /* _HAVE_HERDSTAT_DEFS_HH */
 
 /* vim: set tw=80 sw=4 fdm=marker et : */

@@ -33,7 +33,7 @@
 DECLARE_TEST_HANDLER(StringTest)
 
 void
-StringTest::operator()(const opts_type& null) const
+StringTest::operator()(const opts_type& null LIBHERDSTAT_UNUSED) const
 {
     std::string s("Mary had a little lamb!");
     std::cout << s << std::endl;

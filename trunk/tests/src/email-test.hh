@@ -34,7 +34,7 @@
 DECLARE_TEST_HANDLER(EmailTest)
 
 void
-EmailTest::operator()(const opts_type& opts) const
+EmailTest::operator()(const opts_type& null LIBHERDSTAT_UNUSED) const
 {
     try
     {

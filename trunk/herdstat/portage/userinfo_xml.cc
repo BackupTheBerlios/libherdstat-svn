@@ -95,8 +95,6 @@ UserinfoXML::start_element(const std::string& name, const attrs_type& attrs)
 {
     if (name == "user")
     {
-        BacktraceContext c("portage::UserinfoXML::start_element("+name+")");
-
         attrs_type::const_iterator pos = attrs.find("username");
         if (pos == attrs.end())
             throw Exception("<user> tag with no username attribute!");

@@ -60,7 +60,6 @@ struct BailIfInvalid : std::binary_function<std::string, std::string, void>
 {
     void operator()(const std::string& cat, const std::string& portdir) const
     {
-        BacktraceContext c("BailIfInvalid::operator()("+cat+", "+portdir+")");
         if (not util::is_dir(portdir+"/"+cat))
             throw QAException("invalid category '"+cat+"'.");
     }

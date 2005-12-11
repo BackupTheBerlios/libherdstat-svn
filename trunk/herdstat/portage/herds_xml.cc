@@ -110,7 +110,8 @@ HerdsXML::fill_developer(Developer& dev) const throw (Exception)
 }
 /****************************************************************************/
 bool
-HerdsXML::start_element(const std::string& name, const attrs_type& attrs)
+HerdsXML::start_element(const std::string& name,
+                        const attrs_type& attrs LIBHERDSTAT_UNUSED)
 {
     if (name == "herd")
         in_herd = true;

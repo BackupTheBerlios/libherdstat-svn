@@ -49,8 +49,11 @@ namespace portage {
     class BadVersionSuffix : public Exception
     {
         public:
+            /// Constructor
             BadVersionSuffix(const std::string &msg) throw();
+            /// Destructor
             virtual ~BadVersionSuffix() throw();
+            /// Get message
             virtual const char *what() const throw();
     };
 
@@ -62,14 +65,26 @@ namespace portage {
     class AmbiguousPkg : public Exception
     {
         public:
+            /** Constructor.
+             * @param pkgs const reference to a vector of package names.
+             */
             AmbiguousPkg(const std::vector<std::string>& pkgs) throw();
+
+            /** Constructor.
+             * @param first beginning input iterator
+             * @param last ending input iterator
+             */
             template <typename InputIterator>
             AmbiguousPkg(InputIterator first, InputIterator last) throw()
                 : _name(), _packages(first, last) { _set_name(*first); }
+
+            /// Destructor
             virtual ~AmbiguousPkg() throw();
 
-            const std::string& name() const throw() { return _name; }
-            const std::vector<std::string>& packages() const throw()
+            /// Get ambiguous package name (just the ambigious part).
+            inline const std::string& name() const throw() { return _name; }
+            /// Get const reference to vector of ambigious package names
+            inline const std::vector<std::string>& packages() const throw()
             { return _packages; }
 
         private:
@@ -89,9 +104,20 @@ namespace portage {
     class NonExistentPkg : public Exception
     {
         public:
-            NonExistentPkg(const std::string &msg) throw();
+            /** Constructor.
+             * @param msg package name.
+             */
+            NonExistentPkg(const std::string& msg) throw();
+
+            /** Constructor.
+             * @param re package name regular expression.
+             */
             NonExistentPkg(const util::Regex& re) throw();
+
+            /// Destructor.
             virtual ~NonExistentPkg() throw();
+
+            /// Get message.
             virtual const char *what() const throw();
         
         private:
@@ -106,7 +132,12 @@ namespace portage {
     class QAException : public Exception
     {
         public:
-            QAException(const std::string &msg) throw();
+            /** Constructor.
+             * @param msg QA error message.
+             */
+            QAException(const std::string& msg) throw();
+
+            /// Destructor.
             virtual ~QAException() throw();
     };
 
@@ -118,8 +149,15 @@ namespace portage {
     class QAErrnoException : public ErrnoException
     {
         public:
-            QAErrnoException(const std::string &msg) throw();
+            /** Constructor.
+             * @param msg QA error message.
+             */
+            QAErrnoException(const std::string& msg) throw();
+
+            /// Destructor.
             virtual ~QAErrnoException() throw();
+
+            /// Get message.
             virtual const char *what() const throw();
     };
 
@@ -131,8 +169,15 @@ namespace portage {
     class InvalidKeywordMask : public Exception
     {
         public:
+            /** Constructor.
+             * @param c keyword mask character
+             */
             InvalidKeywordMask(const char c) throw();
+
+            /// Destructor.
             virtual ~InvalidKeywordMask() throw();
+
+            /// Get message.
             virtual const char *what() const throw();
 
         private:
@@ -147,8 +192,15 @@ namespace portage {
     class InvalidArch : public Exception
     {
         public:
+            /** Constructor.
+             * @param arch architecture
+             */
             InvalidArch(const std::string& arch) throw();
+
+            /// Destructor.
             virtual ~InvalidArch() throw();
+
+            /// Get message.
             virtual const char *what() const throw();
     };
 

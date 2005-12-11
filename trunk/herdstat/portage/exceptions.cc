@@ -30,6 +30,7 @@ namespace herdstat {
 namespace portage {
 /****************************************************************************/
 BadVersionSuffix::BadVersionSuffix(const std::string& msg) throw()
+    : Exception(msg)
 {
 }
 /****************************************************************************/

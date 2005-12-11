@@ -30,34 +30,44 @@
 #include <herdstat/exceptions.hh>
 
 namespace herdstat {
-
-Exception::Exception() throw()
-    : _buf(NULL)
+/****************************************************************************/
+BaseException::BaseException() throw()
+    : std::exception(),
+      libebt::Backtraceable<ExceptionTag>()
 {
 }
-
+/****************************************************************************/
+BaseException::~BaseException() throw()
+{
+}
+/****************************************************************************/
+Exception::Exception() throw()
+    : BaseException(), _buf(NULL)
+{
+}
+/****************************************************************************/
 Exception::Exception(const Exception& that) throw()
-    : _buf(NULL)
+    : BaseException(), _buf(NULL)
 {
     *this = that;
 }
-
+/****************************************************************************/
 Exception::Exception(const char *fmt, va_list v) throw()
-    : _buf(NULL)
+    : BaseException(), _buf(NULL)
 {
     vasprintf(&_buf, fmt, v);
 }
-
+/****************************************************************************/
 Exception::Exception(const char *fmt, ...) throw()
-    : _buf(NULL)
+    : BaseException(), _buf(NULL)
 {
     va_start(_v, fmt);
     vasprintf(&_buf, fmt, _v);
     va_end(_v);
 }
-
+/****************************************************************************/
 Exception::Exception(const std::string& fmt, ...) throw()
-    : _buf(NULL)
+    : BaseException(), _buf(NULL)
 {
 #ifdef HAVE_GCC4
     va_start(_v, fmt);
@@ -67,13 +77,13 @@ Exception::Exception(const std::string& fmt, ...) throw()
     vasprintf(&_buf, fmt.c_str(), _v);
     va_end(_v);
 }
-
+/****************************************************************************/
 Exception::~Exception() throw()
 {
     if (_buf)
         std::free(_buf);
 }
-
+/****************************************************************************/
 Exception&
 Exception::operator= (const Exception& that) throw()
 {
@@ -89,28 +99,32 @@ Exception::operator= (const Exception& that) throw()
     std::memcpy(&_v, &that._v, sizeof(va_list));
     return *this;
 }
-
+/****************************************************************************/
 const char *
 Exception::what() const throw()
 {
     return _buf;
 }
-
+/****************************************************************************/
 ErrnoException::ErrnoException() throw()
-    : _code(errno)
+    : Exception(), _code(errno)
 {
 }
-
+/****************************************************************************/
 ErrnoException::ErrnoException(const char *msg) throw()
     : Exception(msg), _code(errno)
 {
 }
-
+/****************************************************************************/
 ErrnoException::ErrnoException(const std::string& msg) throw()
     : Exception(msg), _code(errno)
 {
 }
-
+/****************************************************************************/
+ErrnoException::~ErrnoException() throw()
+{
+}
+/****************************************************************************/
 const char *
 ErrnoException::what() const throw()
 {
@@ -130,50 +144,64 @@ ErrnoException::what() const throw()
 
     return (s + ": " + e).c_str();
 }
-
+/****************************************************************************/
 FileException::FileException() throw()
+    : ErrnoException()
 {
 }
-
+/****************************************************************************/
 FileException::FileException(const char *msg) throw()
     : ErrnoException(msg)
 {
 }
-
+/****************************************************************************/
 FileException::FileException(const std::string& msg) throw()
     : ErrnoException(msg)
 {
 }
-
-BadCast::BadCast() throw()
+/****************************************************************************/
+FileException::~FileException() throw()
 {
 }
-
+/****************************************************************************/
+BadCast::BadCast() throw()
+    : Exception()
+{
+}
+/****************************************************************************/
 BadCast::BadCast(const char *msg) throw()
     : Exception(msg)
 {
 }
-
+/****************************************************************************/
 BadCast::BadCast(const std::string& msg) throw()
     : Exception(msg)
 {
 }
-
+/****************************************************************************/
+BadCast::~BadCast() throw()
+{
+}
+/****************************************************************************/
 BadRegex::BadRegex() throw()
-    : _err(0), _re(NULL)
+    : Exception(), _err(0), _re(NULL)
 {
 }
-
+/****************************************************************************/
 BadRegex::BadRegex(int e, const regex_t *re) throw()
-    : _err(e), _re(re)
+    : Exception(), _err(e), _re(re)
 {
 }
-
+/****************************************************************************/
 BadRegex::BadRegex(const std::string& msg) throw()
     : Exception(msg), _err(0), _re(NULL)
 {
 }
-
+/****************************************************************************/
+BadRegex::~BadRegex() throw()
+{
+}
+/****************************************************************************/
 const char *
 BadRegex::what() const throw()
 {
@@ -192,35 +220,45 @@ BadRegex::what() const throw()
              
     return "";
 }
-
+/****************************************************************************/
 BadDate::BadDate() throw()
+    : Exception()
 {
 }
-
+/****************************************************************************/
 BadDate::BadDate(const char *msg) throw()
     : Exception(msg)
 {
 }
-
+/****************************************************************************/
 BadDate::BadDate(const std::string& msg) throw()
     : Exception(msg)
 {
 }
-
-MalformedEmail::MalformedEmail() throw()
+/****************************************************************************/
+BadDate::~BadDate() throw()
 {
 }
-
+/****************************************************************************/
+MalformedEmail::MalformedEmail() throw()
+    : Exception()
+{
+}
+/****************************************************************************/
 MalformedEmail::MalformedEmail(const char *msg) throw()
     : Exception(msg)
 {
 }
-
+/****************************************************************************/
 MalformedEmail::MalformedEmail(const std::string& msg) throw()
     : Exception(msg)
 {
 }
-
+/****************************************************************************/
+MalformedEmail::~MalformedEmail() throw()
+{
+}
+/****************************************************************************/
 } // namespace herdstat
 
 /* vim: set tw=80 sw=4 fdm=marker et : */

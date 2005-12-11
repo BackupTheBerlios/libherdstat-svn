@@ -38,6 +38,8 @@
 #include <cassert>
 #include <cstdlib>
 
+#include <herdstat/defs.hh>
+
 typedef std::vector<std::string> opts_type;
 
 class TestHandler

@@ -34,7 +34,7 @@
 DECLARE_TEST_HANDLER(PackageWhichTest)
 
 void
-PackageWhichTest::operator()(const opts_type& null) const
+PackageWhichTest::operator()(const opts_type& null LIBHERDSTAT_UNUSED) const
 {
     herdstat::portage::PackageList pkgs;
     const std::string& portdir(herdstat::portage::GlobalConfig().portdir());

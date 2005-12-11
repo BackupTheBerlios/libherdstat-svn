@@ -115,8 +115,6 @@ namespace portage {
     {
         std::string operator()(const Package& pkg) const
         {
-            BacktraceContext c("herdstat::portage::GetWhichFromPackage::operator()("+pkg.full()+")");
-
             const KeywordsMap& versions(pkg.keywords());
             if (versions.empty())
                 throw NonExistentPkg(pkg);

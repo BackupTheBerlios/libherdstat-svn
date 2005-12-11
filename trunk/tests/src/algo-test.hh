@@ -35,7 +35,7 @@
 DECLARE_TEST_HANDLER(AlgoTest)
 
 void
-AlgoTest::operator()(const opts_type& null) const
+AlgoTest::operator()(const opts_type& null LIBHERDSTAT_UNUSED) const
 {
     std::vector<int> v1, v2;
     v1.push_back(1);

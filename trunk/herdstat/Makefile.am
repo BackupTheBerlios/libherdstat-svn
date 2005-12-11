@@ -6,14 +6,17 @@ SUBDIRS = util io fetcher xml portage
 MAINTAINERCLEANFILES = Makefile.in *~ .loT libherdstat_version.hh
 EXTRA_DIST = libherdstat_version.hh.in doxygen.hh
 
-cc_sources = exceptions.cc \
-	     email_address.cc
-hh_sources = exceptions.hh \
-	     noncopyable.hh \
-	     cachable.hh \
-	     fetchable.hh \
-	     parsable.hh \
-	     email_address.hh
+cc_sources = \
+	exceptions.cc \
+	email_address.cc
+hh_sources = \
+	exceptions.hh \
+	noncopyable.hh \
+	cachable.hh \
+	fetchable.hh \
+	parsable.hh \
+	email_address.hh \
+	defs.hh
 
 lib_LTLIBRARIES = libherdstat.la
 libherdstat_la_LDFLAGS = -release $(VERSION_MAJOR).$(VERSION_MINOR) -version-info $(LIBRARY_VERSION)

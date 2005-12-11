@@ -30,6 +30,7 @@ namespace herdstat {
 namespace xml {
 /****************************************************************************/
 Init::Init(bool validate)
+    : _init()
 {
     _init.remove_whitespace(true);
     _init.substitute_entities(true);

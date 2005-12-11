@@ -36,11 +36,12 @@ namespace portage {
 //ebuild::eclass_map ebuild::_eclasses;
 /****************************************************************************/
 Ebuild::Ebuild() throw()
+    : util::Vars(), _vmap()
 {
 }
 /****************************************************************************/
 Ebuild::Ebuild(const std::string &path) throw (FileException)
-    : util::Vars()
+    : util::Vars(), _vmap()
 {
     this->read(path);
 }

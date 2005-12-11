@@ -33,7 +33,7 @@
 DECLARE_TEST_HANDLER(RegexTest)
 
 void
-RegexTest::operator()(const opts_type& null) const
+RegexTest::operator()(const opts_type& null LIBHERDSTAT_UNUSED) const
 {
     std::cout << "Testing util::Regex:" << std::endl;
 

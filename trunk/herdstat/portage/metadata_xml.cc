@@ -37,7 +37,7 @@ namespace portage {
 MetadataXML::MetadataXML() throw()
     : Parsable(), _data(), in_herd(false), in_maintainer(false),
       in_email(false), in_name(false), in_desc(false), in_longdesc(false),
-      in_en_longdesc(false), _cur_dev()
+      in_en_longdesc(false), _cur_dev(), _longdesc()
 {
 }
 /****************************************************************************/
@@ -45,7 +45,7 @@ MetadataXML::MetadataXML(const std::string& path, const std::string& pkg)
     throw (FileException, xml::ParserException)
     : Parsable(path), _data(pkg), in_herd(false), in_maintainer(false),
       in_email(false), in_name(false), in_desc(false), in_longdesc(false),
-      in_en_longdesc(false), _cur_dev()
+      in_en_longdesc(false), _cur_dev(), _longdesc()
 {
     this->parse();
 }

@@ -59,6 +59,11 @@ namespace herdstat {
     class BaseException : public std::exception,
                           public libebt::Backtraceable<ExceptionTag>
     {
+        protected:
+            /// Default constructor.
+            BaseException() throw();
+            /// Destructor.
+            virtual ~BaseException() throw();
     };
 
     /**
@@ -100,7 +105,7 @@ namespace herdstat {
             virtual const char *what() const throw();
 
         protected:
-            const char *message() const throw() { return _buf; }
+            inline const char *message() const throw() { return _buf; }
 
         private:
             char *_buf;
@@ -127,13 +132,13 @@ namespace herdstat {
             //@}
 
             /// Destructor.
-            virtual ~ErrnoException() throw() { }
+            virtual ~ErrnoException() throw();
 
             /// Get error message prefix + strerror(errno).
             virtual const char *what() const throw();
 
             /// Get error code (errno) for this error.
-            int code() const throw() { return _code; }
+            inline int code() const throw() { return _code; }
 
         private:
             int _code;
@@ -159,7 +164,7 @@ namespace herdstat {
             //@}
             
             /// Destructor.
-            virtual ~FileException() throw() { }
+            virtual ~FileException() throw();
     };
 
     /**
@@ -182,7 +187,7 @@ namespace herdstat {
             //@}
 
             /// Destructor.
-            virtual ~BadCast() throw() { }
+            virtual ~BadCast() throw();
     };
 
     /**
@@ -208,7 +213,7 @@ namespace herdstat {
             BadRegex(const std::string& s) throw();
 
             /// Destructor.
-            virtual ~BadRegex() throw() { }
+            virtual ~BadRegex() throw();
 
             /// Get error message.
             virtual const char *what() const throw();
@@ -238,7 +243,7 @@ namespace herdstat {
             //@}
 
             /// Destructor.
-            virtual ~BadDate() throw() { }
+            virtual ~BadDate() throw();
     };
 
     /**
@@ -261,7 +266,7 @@ namespace herdstat {
             //@}
 
             /// Destructor.
-            virtual ~MalformedEmail() throw() { }
+            virtual ~MalformedEmail() throw();
     };
 
 } // namespace herdstat

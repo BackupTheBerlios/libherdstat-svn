@@ -74,7 +74,7 @@ Keyword::maskc::operator< (const maskc& that) const throw()
 }
 /****************************************************************************/
 Keyword::Keyword(const std::string& kw) throw (InvalidKeywordMask, InvalidArch)
-    : _valid_archs(GlobalConfig().archs())
+    : _arch(), _mask(), _valid_archs(GlobalConfig().archs())
 {
     BacktraceContext c("portage::Keyword::Keyword("+kw+")");
 

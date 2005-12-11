@@ -34,7 +34,7 @@
 DECLARE_TEST_HANDLER(PackageFinderTest)
 
 void
-PackageFinderTest::operator()(const opts_type& null) const
+PackageFinderTest::operator()(const opts_type& null LIBHERDSTAT_UNUSED) const
 {
     herdstat::portage::PackageList pkgs;
     herdstat::portage::PackageFinder find(pkgs);

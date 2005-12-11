@@ -64,13 +64,10 @@ class ValidSuffixes
         typedef container_type::const_iterator const_iterator;
 
         /* for testing against return value of find() */
-        const_iterator end() const
-        {
-            return _s.end();
-        }
+        inline const_iterator end() const { return _s.end(); }
 
         /* get location of v or end() if it doesn't exist */
-        const_iterator find(const value_type& v) const
+        inline const_iterator find(const value_type& v) const
         {
             std::pair<const_iterator, const_iterator> p =
                 std::equal_range(_s.begin(), _s.end(), v, SuffixLess());
@@ -78,7 +75,7 @@ class ValidSuffixes
         }
         
         /* does v exist? */
-        bool count(const value_type& v) const
+        inline bool count(const value_type& v) const
         {
             return std::binary_search(_s.begin(), _s.end(), v, SuffixLess());
         }
@@ -86,7 +83,7 @@ class ValidSuffixes
     private:
         friend const ValidSuffixes& GlobalValidSuffixes();
 
-        ValidSuffixes()
+        ValidSuffixes() : _s()
         {
             const char * const suffixes[] = {"alpha","beta","pre","rc","p"};
             _s.assign(suffixes, suffixes+(sizeof(suffixes)/sizeof(suffixes[0])));
@@ -109,11 +106,12 @@ namespace portage {
 // {{{ VersionComponents
 /****************************************************************************/
 VersionComponents::VersionComponents() throw()
+    : _verstr(), _vmap()
 {
 }
 /****************************************************************************/
 VersionComponents::VersionComponents(const std::string &path) throw()
-    : _verstr(util::chop_fileext(util::basename(path)))
+    : _verstr(util::chop_fileext(util::basename(path))), _vmap()
 {
     this->parse();
 }
@@ -182,10 +180,12 @@ VersionComponents::parse() throw()
 // {{{ VersionString::suffix
 /****************************************************************************/
 VersionString::suffix::suffix() throw()
+    : _suffix(), _suffix_ver()
 {
 }
 /****************************************************************************/
 VersionString::suffix::suffix(const std::string& pvr) throw()
+    : _suffix(), _suffix_ver()
 {
     this->parse(pvr);
 }
@@ -298,10 +298,12 @@ VersionString::suffix::operator== (const suffix& that) const throw()
 // {{{ VersionString::nosuffix
 /****************************************************************************/
 VersionString::nosuffix::nosuffix() throw()
+    : _version(), _extra()
 {
 }
 /****************************************************************************/
 VersionString::nosuffix::nosuffix(const std::string& pv) throw()
+    : _version(), _extra()
 {
     this->parse(pv);
 }
@@ -406,6 +408,7 @@ VersionString::VersionString(const std::string& path) throw()
 }
 /****************************************************************************/
 VersionString::VersionString(const VersionString& that) throw()
+    : _ebuild(), _v(), _verstr(), _suffix(), _version()
 {
     *this = that;
 }
@@ -468,15 +471,18 @@ VersionString::operator< (const VersionString& that) const throw()
 // {{{ Versions
 /****************************************************************************/
 Versions::Versions() throw()
+    : util::SetBase<VersionString>()
 {
 }
 /****************************************************************************/
 Versions::Versions(const std::string& path) throw()
+    : util::SetBase<VersionString>()
 {
     this->assign(path);
 }
 /****************************************************************************/
 Versions::Versions(const std::vector<std::string>& paths) throw()
+    : util::SetBase<VersionString>()
 {
     std::for_each(paths.begin(), paths.end(),
         std::bind2nd(util::Appender<Versions, std::string>(), this));

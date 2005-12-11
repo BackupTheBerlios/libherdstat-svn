@@ -35,7 +35,7 @@
 DECLARE_TEST_HANDLER(BinaryIO)
 
 void
-BinaryIO::operator()(const opts_type& null) const
+BinaryIO::operator()(const opts_type& null LIBHERDSTAT_UNUSED) const
 {
     std::cout << "Testing BinaryOStream... " << std::endl;
 
