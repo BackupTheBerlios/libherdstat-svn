@@ -58,7 +58,9 @@
  * - POSIX regular expressions (herdstat::util::Regex).
  * - POSIX pattern matching (herdstat::util::Glob).
  * - Directory iterators (herdstat::util::Directory).
- * - Simple progress meter (herdstat::util::Progress).
+ * - Extensible progress meter interface (herdstat::util::ProgressMeter) with
+ *   several different implementations (herdstat::util::PercentMeter,
+ *   herdstat::util::EllipseMeter, herdstat::util::Spinner).
  * - String manipulation utilities (herdstat/util/string.hh).
  * - General purpose algorithms (herdstat/util/algorithms.hh) and functional
  *   objects (herdstat/util/functional.hh).
