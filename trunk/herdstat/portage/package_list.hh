@@ -32,6 +32,7 @@
  * @brief Defines the PackageList class.
  */
 
+#include <herdstat/util/progress/meter.hh>
 #include <herdstat/util/container_base.hh>
 #include <herdstat/portage/package.hh>
 #include <herdstat/portage/functional.hh>
@@ -59,24 +60,32 @@ namespace portage {
     {
         public:
             /** Default constructor.
-             * @param fill Fill with all packages in the tree?
+             * @param fill Fill with all packages in the tree? (defaults to
+             * true).
+             * @param progress progress meter to use (defaults to NULL).
              */
-            PackageList(bool fill = true);
+            PackageList(bool fill = true, util::ProgressMeter *progress = NULL);
 
             /** Constructor.
              * @param portdir PORTDIR to search.
              * @param overlays const reference to a vector of strings denoting
              * overlays (defaults to empty).
-             * @param fill Fill with all packages in the tree?
+             * @param fill Fill with all packages in the tree? (defaults to
+             * true).
+             * @param progress progress meter to use (defaults to NULL).
              */
             PackageList(const std::string& portdir, const std::vector<std::string>&
-                overlays = std::vector<std::string>(), bool fill = true);
+                overlays = std::vector<std::string>(), bool fill = true,
+                util::ProgressMeter *progress = NULL);
 
             /// Destructor.
             ~PackageList() throw();
 
-            /// Fill container.
-            void fill();
+            /** Fill container.
+             * @param progress pointer to progress meter to use (defaults to
+             * NULL).
+             */
+            void fill(util::ProgressMeter *progress = NULL);
             /// Has our container been fill()'d?
             bool filled() const { return _filled; }
 

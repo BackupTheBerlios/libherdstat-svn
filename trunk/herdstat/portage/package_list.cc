@@ -29,22 +29,22 @@
 namespace herdstat {
 namespace portage {
 /****************************************************************************/
-PackageList::PackageList(bool fill)
+PackageList::PackageList(bool fill, util::ProgressMeter *progress)
     : _portdir(GlobalConfig().portdir()),
       _overlays(GlobalConfig().overlays()),
       _filled(false)
 {
     if (fill)
-        this->fill();
+        this->fill(progress);
 }
 /****************************************************************************/
 PackageList::PackageList(const std::string& portdir,
                          const std::vector<std::string>& overlays,
-                         bool fill)
+                         bool fill, util::ProgressMeter *progress)
     : _portdir(portdir), _overlays(overlays), _filled(false)
 {
     if (fill)
-        this->fill();
+        this->fill(progress);
 }
 /****************************************************************************/
 PackageList::~PackageList() throw()
@@ -52,7 +52,7 @@ PackageList::~PackageList() throw()
 }
 /****************************************************************************/
 void
-PackageList::fill()
+PackageList::fill(util::ProgressMeter *progress)
 {
     BacktraceContext c("herdstat::portage::PackageList::fill()");
 
@@ -78,9 +78,18 @@ PackageList::fill()
 
         /* for each pkg in category, insert "cat/pkg" into container */
         const util::Directory cat(path);
-        std::transform(cat.begin(), cat.end(),
-            std::back_inserter(this->container()),
-            std::bind2nd(NewPackage(), _portdir));
+//        std::transform(cat.begin(), cat.end(),
+//            std::back_inserter(this->container()),
+//            std::bind2nd(NewPackage(), _portdir));
+
+        util::Directory::const_iterator i;
+        for (i = cat.begin() ; i != cat.end() ; ++i)
+        {
+            if (progress)
+                ++*progress;
+
+            this->push_back(Package(get_pkg_from_path(*i), _portdir));
+        }
     }
 
     /* search overlays, if any */
@@ -99,9 +108,18 @@ PackageList::fill()
 
                 /* for each pkg in category, insert "cat/pkg" */
                 const util::Directory cat(path);
-                std::transform(cat.begin(), cat.end(),
-                    std::back_inserter(this->container()),
-                    std::bind2nd(NewPackage(), *oi));
+//                std::transform(cat.begin(), cat.end(),
+//                    std::back_inserter(this->container()),
+//                    std::bind2nd(NewPackage(), *oi));
+                
+                util::Directory::const_iterator i;
+                for (i = cat.begin() ; i != cat.end() ; ++i)
+                {
+                    if (progress)
+                        ++*progress;
+
+                    this->push_back(Package(get_pkg_from_path(*i), *oi));
+                }
             }
         }
     }
