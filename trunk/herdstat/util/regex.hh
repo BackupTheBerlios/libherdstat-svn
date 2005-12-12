@@ -35,7 +35,6 @@
 #include <string>
 #include <functional>
 #include <cstddef>
-#include <cassert>
 #include <sys/types.h>
 #include <regex.h>
 

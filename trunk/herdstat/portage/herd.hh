@@ -309,19 +309,21 @@ std::transform(herds.begin(), herds.end(),
             Herds& operator= (const std::vector<std::string>& v) throw();
 
             ///@{
-            /** Get reference to element at front of container (the "least"
-             * element as determined by std::less<Herd>).
+            /** Get "least" element (as determined by std::less<Herd>).
+             * @returns reference to "least" element.
+             * @exception Exception.
              */
-            inline value_type& front() throw();
-            inline const value_type& front() const throw();
+            inline value_type& front() throw (Exception);
+            inline const value_type& front() const throw (Exception);
             ///@}
             
             ///@{
-            /** Get reference to element at back of container (the "greatest"
-             * element as determined by std::less<Herd>).
+            /** Get "greatest" element (as determined by std::less<Herd>).
+             * @returns reference to "greatest" element.
+             * @exception Exception.
              */
-            inline value_type& back() throw();
-            inline const value_type& back() const throw();
+            inline value_type& back() throw (Exception);
+            inline const value_type& back() const throw (Exception);
             ///@}
 
             ///@{
@@ -380,31 +382,39 @@ std::transform(herds.begin(), herds.end(),
     }
 
     inline Herds::value_type&
-    Herds::front() throw()
+    Herds::front() throw (Exception)
     {
-        assert(not this->empty());
+        if (this->empty())
+            throw Exception("Herds::front() called on an empty Herds instance.");
+
         return const_cast<value_type&>(*this->begin());
     }
     
     inline const Herds::value_type&
-    Herds::front() const throw()
+    Herds::front() const throw (Exception)
     {
-        assert(not this->empty());
+        if (this->empty())
+            throw Exception("Herds::front() called on an empty Herds instance.");
+
         return *(this->begin());
     }
 
     inline Herds::value_type&
-    Herds::back() throw()
+    Herds::back() throw (Exception)
     {
-        assert(not this->empty());
+        if (this->empty())
+            throw Exception("Herds::back() called on an empty Herds instance.");
+
         iterator i(this->end());
         return const_cast<value_type&>(*(--i));
     }
     
     inline const Herds::value_type&
-    Herds::back() const throw()
+    Herds::back() const throw (Exception)
     {
-        assert(not this->empty());
+        if (this->empty())
+            throw Exception("Herds::back() called on an empty Herds instance.");
+
         iterator i(this->end());
         return *(--i);
     }

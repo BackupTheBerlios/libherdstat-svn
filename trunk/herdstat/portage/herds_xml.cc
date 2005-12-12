@@ -25,7 +25,6 @@
 #endif
 
 #include <iostream>
-#include <cassert>
 
 #include <herdstat/exceptions.hh>
 #include <herdstat/util/string.hh>

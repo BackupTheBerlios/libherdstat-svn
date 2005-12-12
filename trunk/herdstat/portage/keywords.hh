@@ -337,28 +337,34 @@ namespace portage {
              * @pre The instance this member is invoked upon must not be
              * empty().
              * @returns const reference to "least" pair.
+             * @exception Exception.
              */
-            inline const value_type& front() const;
+            inline const value_type& front() const throw (Exception);
 
             /** Get "greatest" pair (as determined by std::less<VersionString>).
              * @pre The instance this member is invoked upon must not be
              * empty().
              * @returns const reference to "greatest" pair.
+             * @exception Exception.
              */
-            inline const value_type& back() const;
+            inline const value_type& back() const throw (Exception);
     };
 
     inline const KeywordsMap::value_type&
-    KeywordsMap::front() const
+    KeywordsMap::front() const throw (Exception)
     {
-        assert(not this->empty());
+        if (this->empty())
+            throw Exception("KeywordsMap::front() called on an empty KeywordsMap instance.");
+
         return *(this->begin());
     }
 
     inline const KeywordsMap::value_type&
-    KeywordsMap::back() const
+    KeywordsMap::back() const throw (Exception)
     {
-        assert(not this->empty());
+        if (this->empty())
+            throw Exception("KeywordsMap::back() called on an empty KeywordsMap instance.");
+
         const_iterator i = this->end();
         return *(--i);
     }

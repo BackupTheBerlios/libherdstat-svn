@@ -49,6 +49,9 @@ PackageWhich::operator()(const std::vector<Package>& finder_results)
     std::vector<Package>::const_iterator i;
     for (i = finder_results.begin() ; i != finder_results.end() ; ++i)
     {
+        if (is_category(i->full()))
+            continue;
+
         /* see if we've inserted it already */
         std::vector<Package>::iterator p =
             std::find_if(pkgs.begin(), pkgs.end(),

@@ -118,7 +118,10 @@ void
 BaseFileObject::read()
 {
     BacktraceContext c("herdstat::util::BaseFileObject::read()");
-    assert(this->is_open());
+    
+    if (not this->is_open())
+        throw Exception("BaseFileObject::read() called before BaseFileObject::open().");
+
     this->do_read();    
 }
 

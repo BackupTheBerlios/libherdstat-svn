@@ -412,10 +412,23 @@ herdstat::util::transform_if(devs.begin(), devs.end(),
              */
             Developers& operator= (const std::vector<std::string>& v) throw();
 
-            inline value_type& front() throw();
-            inline const value_type& front() const throw();
-            inline value_type& back() throw();
-            inline const value_type& back() const throw();
+            ///@{
+            /** Get "least" element (as determined by std::less<Developer>).
+             * @returns reference to "least" element.
+             * @exception Exception
+             */
+            inline value_type& front() throw (Exception);
+            inline const value_type& front() const throw (Exception);
+            ///@}
+
+            ///@{
+            /** Get "greatest" element (as determined by std::less<Developer>).
+             * @returns reference to "greatest" element.
+             * @exception Exception.
+             */
+            inline value_type& back() throw (Exception);
+            inline const value_type& back() const throw (Exception);
+            ///@}
 
             /** Find developer with the given user name.
              * @param dev user name string.
@@ -464,31 +477,39 @@ herdstat::util::transform_if(devs.begin(), devs.end(),
     }
 
     inline Developers::value_type&
-    Developers::front() throw()
+    Developers::front() throw(Exception)
     {
-        assert(not this->empty());
+        if (this->empty())
+            throw Exception("Developers::front() called on an empty Developers instance.");
+
         return const_cast<value_type&>(*this->begin());
     }
     
     inline const Developers::value_type&
-    Developers::front() const throw()
+    Developers::front() const throw(Exception)
     {
-        assert(not this->empty());
+        if (this->empty())
+            throw Exception("Developers::front() called on an empty Developers instance.");
+
         return *(this->begin());
     }
 
     inline Developers::value_type&
-    Developers::back() throw()
+    Developers::back() throw(Exception)
     {
-        assert(not this->empty());
+        if (this->empty())
+            throw Exception("Developers::back() called on an empty Developers instance.");
+
         iterator i(this->end());
         return const_cast<value_type&>(*(--i));
     }
     
     inline const Developers::value_type&
-    Developers::back() const throw()
+    Developers::back() const throw(Exception)
     {
-        assert(not this->empty());
+        if (this->empty())
+            throw Exception("Developers::back() called on an empty Developers instance.");
+
         iterator i(this->end());
         return *(--i);
     }

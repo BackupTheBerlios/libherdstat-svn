@@ -24,9 +24,7 @@
 # include "config.h"
 #endif
 
-#include <ostream>
 #include <utility>
-#include <cassert>
 
 #include <herdstat/exceptions.hh>
 #include <herdstat/util/misc.hh>

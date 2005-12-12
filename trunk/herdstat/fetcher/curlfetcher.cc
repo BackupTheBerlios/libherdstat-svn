@@ -56,7 +56,8 @@ CurlFetcher::fetch(const std::string& url, const std::string& path) const
     bool result = true;
 
     CURL *handle = curl_easy_init();
-    assert(handle);
+    if (not handle)
+        throw Exception("curl_easy_init() returned NULL.");
 
     try
     {

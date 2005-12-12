@@ -398,16 +398,18 @@ std::cout << v1.str() << std::endl;
              * @pre The instance this function is invoked upon must not be
              * empty().
              * @returns const reference to "least" element.
+             * @exception Exception.
              */
-            inline const VersionString& front() const throw();
+            inline const VersionString& front() const throw (Exception);
 
             /** Get "greatest" VersionString (as determined by
              * std::less<VersionString>).
              * @pre The instance this function is invoked upon must not be
              * empty().
              * @returns const reference to "greatest" element.
+             * @exception Exception.
              */
-            inline const VersionString& back() const throw();
+            inline const VersionString& back() const throw (Exception);
 
             //@{
             /** Find version string using ebuild matching path.
@@ -468,16 +470,20 @@ std::cout << v1.str() << std::endl;
     }
 
     inline const VersionString&
-    Versions::front() const throw()
+    Versions::front() const throw (Exception)
     {
-        assert(not this->empty());
+        if (this->empty())
+            throw Exception("Versions::front() called on an empty Versions instance.");
+
         return *(this->begin());
     }
 
     inline const VersionString&
-    Versions::back() const throw()
+    Versions::back() const throw (Exception)
     {
-        assert(not this->empty());
+        if (this->empty())
+            throw Exception("Versions::back() called on an empty Versions instance.");
+
         const_iterator i = this->end();
         return *(--i);
     }
