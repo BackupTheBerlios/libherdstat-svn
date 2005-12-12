@@ -1,5 +1,5 @@
 /*
- * libherdstat -- herdstat/util/progress/ellipse.cc
+ * libherdstat -- herdstat/util/progress/meter.cc
  * $Id$
  * Copyright (c) 2005 Aaron Walker <ka0ttic@gentoo.org>
  *
@@ -24,40 +24,44 @@
 # include "config.h"
 #endif
 
-#include <herdstat/util/progress/ellipse.hh>
+#include <herdstat/util/progress/meter.hh>
 
 namespace herdstat {
 namespace util {
 /****************************************************************************/
-EllipseMeter::EllipseMeter(const std::string& color) throw()
-    : ProgressMeter(color), _cur(0)
+ProgressMeter::ProgressMeter(const std::string& color) throw()
+    : _cur(0), _step(0), _started(false), _outlen(0), _color(color)
 {
 }
 /****************************************************************************/
-EllipseMeter::~EllipseMeter() throw()
+ProgressMeter::~ProgressMeter() throw()
 {
-    append_outlen(3);
-}
-/****************************************************************************/
-void
-EllipseMeter::do_start() throw()
-{
-    std::printf(".");
-    _cur = 1;
-}
-/****************************************************************************/
-void
-EllipseMeter::do_increment(int cur LIBHERDSTAT_UNUSED) throw()
-{
-    if (_cur == 3)
+    if (_started)
     {
-        std::printf("\b\b\b");
-        _cur = 1;
+        for (unsigned i = 0 ; i < _outlen ; ++i)
+            std::printf("\b \b");
+        std::fflush(stdout);
     }
-    else
-        _cur++;
+}
+/****************************************************************************/
+void
+ProgressMeter::start(unsigned total, const std::string& title) throw()
+{
+    if (_started) return;
+    _started = true;
 
-    std::printf(".  \b\b");
+    _step = 100.0 / total;
+
+    if (not title.empty())
+    {
+        std::printf("%s ", title.c_str());
+        _outlen = title.length()+1;
+    }
+
+    std::printf("%s", _color.c_str());
+    this->do_start();
+    std::printf("\033[00m");
+    std::fflush(stdout);
 }
 /****************************************************************************/
 } // namespace util

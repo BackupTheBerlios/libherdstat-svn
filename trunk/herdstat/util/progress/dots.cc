@@ -29,7 +29,8 @@
 namespace herdstat {
 namespace util {
 /****************************************************************************/
-DotsMeter::DotsMeter() throw()
+DotsMeter::DotsMeter(const std::string& color) throw()
+    : ProgressMeter(color)
 {
 }
 /****************************************************************************/
@@ -38,15 +39,16 @@ DotsMeter::~DotsMeter() throw()
 }
 /****************************************************************************/
 void
-DotsMeter::start() throw()
+DotsMeter::do_start() throw()
 {
     std::printf(".");
+    append_outlen(1);
 }
 /****************************************************************************/
 void
-DotsMeter::increment(int cur LIBHERDSTAT_UNUSED) throw()
+DotsMeter::do_increment(int cur LIBHERDSTAT_UNUSED) throw()
 {
-    this->start();
+    this->do_start();
 }
 /****************************************************************************/
 } // namespace util

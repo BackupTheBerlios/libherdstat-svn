@@ -3,9 +3,16 @@
 #endif
 
 #include <iostream>
+#include <string>
+#include <map>
 #include <cstdlib>
+#include <algorithm>
 #include <herdstat/exceptions.hh>
-#include <herdstat/util/progress.hh>
+#include <herdstat/util/functional.hh>
+#include <herdstat/util/progress/spinner.hh>
+#include <herdstat/util/progress/percent.hh>
+#include <herdstat/util/progress/ellipse.hh>
+#include <herdstat/util/progress/dots.hh>
 #include <unistd.h>
 
 int
@@ -25,13 +32,28 @@ main(int argc, char **argv)
 
 	try
 	{
-		herdstat::util::Progress progress(type);
-		progress.start(1000, "Some operation");
-		for (size_t i = 0 ; i < 1000 ; ++i)
+		std::map<std::string, herdstat::util::ProgressMeter*> pmap;
+		pmap["percent"] = new herdstat::util::PercentMeter();
+		pmap["spinner"] = new herdstat::util::Spinner();
+		pmap["ellipse"] = new herdstat::util::EllipseMeter();
+		pmap["dots"]    = new herdstat::util::DotsMeter();
+
+		herdstat::util::ProgressMeter *progress = pmap[type];
+		if (not progress)
+			throw herdstat::Exception("Unknown ProgressMeter type '"+type+"'.");
+
+		progress->start(10, "Some operation");
+
+		for (size_t i = 0 ; i < 10 ; ++i)
 		{
-			++progress;
+			++*progress;
 			sleep(1);
 		}
+
+		std::for_each(pmap.begin(), pmap.end(),
+			herdstat::util::compose_f_gx(
+				herdstat::util::DeleteAndNullify<herdstat::util::ProgressMeter>(),
+				herdstat::util::Second<std::map<std::string, herdstat::util::ProgressMeter*>::value_type>()));
 	}
 	catch (const herdstat::BaseException& e)
 	{

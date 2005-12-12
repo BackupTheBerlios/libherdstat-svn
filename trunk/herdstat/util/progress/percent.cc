@@ -29,22 +29,32 @@
 namespace herdstat {
 namespace util {
 /****************************************************************************/
-PercentMeter::PercentMeter() throw()
+PercentMeter::PercentMeter(const std::string& color) throw()
+    : ProgressMeter(color)
 {
 }
 /****************************************************************************/
 PercentMeter::~PercentMeter() throw()
 {
+    append_outlen(4);
+
+    if (this->started())
+    {
+        /* sometimes the user has to use an estimate as the value
+         * passed to start(), so we may not have gotten to 100 yet. */
+        while (this->cur() < 100.0)
+            this->operator++();
+    }
 }
 /****************************************************************************/
 void
-PercentMeter::start() throw()
+PercentMeter::do_start() throw()
 {
     std::printf("  0%%");
 }
 /****************************************************************************/
 void
-PercentMeter::increment(int cur) throw()
+PercentMeter::do_increment(int cur) throw()
 {
     if (cur < 10)
 	std::printf("\b\b%.1d%%", cur);

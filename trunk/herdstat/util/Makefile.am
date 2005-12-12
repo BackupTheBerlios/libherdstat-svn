@@ -10,8 +10,7 @@ cc_sources = string.cc \
 	     misc.cc \
 	     vars.cc \
 	     glob.cc \
-	     timer.cc \
-	     progress.cc
+	     timer.cc
 
 hh_sources = container_base.hh \
 	     string.hh \
@@ -21,7 +20,6 @@ hh_sources = container_base.hh \
 	     vars.hh \
 	     glob.hh \
 	     timer.hh \
-	     progress.hh \
 	     functional.hh \
 	     algorithm.hh
 

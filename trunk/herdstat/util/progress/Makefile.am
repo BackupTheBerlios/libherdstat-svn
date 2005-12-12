@@ -1,6 +1,7 @@
 # $Id$
 
 cc_sources = \
+	meter.cc \
 	percent.cc \
 	spinner.cc \
 	dots.cc \

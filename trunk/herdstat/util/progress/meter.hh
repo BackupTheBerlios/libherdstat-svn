@@ -32,6 +32,7 @@
  * @brief Provides the ProgressMeter abstract class definition.
  */
 
+#include <string>
 #include <cstdio>
 #include <herdstat/defs.hh>
 
@@ -39,22 +40,75 @@ namespace herdstat {
 namespace util {
 
     /**
-     * @class ProgressMeter meter.hh herdstat/util/progress/meter.hh
-     * @brief Defines the abstract interface for progress meter implementations.
+     * @class ProgressMeter
+     * @brief Provides the abstract interface for progress meters.
      */
 
     class ProgressMeter
     {
         public:
-            virtual ~ProgressMeter() throw() { }
-            /// start meter
-            virtual void start() throw() = 0;
-            /// increment progress
-            virtual void increment(int cur) throw() = 0;
+            /// Destructor.
+            virtual ~ProgressMeter() throw();
+
+            /** Start progress meter.
+             * @param total Total number of items that will be processed.
+             * @param title Title to display before the meter (defaults to "").
+             */
+            void start(unsigned total, const std::string& title = "") throw();
+
+            ///@{
+            /// Increment progress.
+            inline bool operator++() throw();
+            inline bool operator++(int) throw() { return operator++(); }
+            ///@}
+
+            /// Has this meter been started?
+            inline bool started() const { return _started; }
+            /// Get current progress.
+            inline const float& cur() const { return _cur; }
 
         protected:
-            ProgressMeter() throw() { }
+            /** Constructor.
+             * @param color ASCII color sequence (defaults to "").
+             */
+            ProgressMeter(const std::string& color = "") throw();
+
+            /// Append value to _outlen.
+            inline void append_outlen(unsigned len) { _outlen += len; }
+
+            /** Abstract interface for starting the meter, implemented by each
+             * ProgressMeter derivative.
+             */
+            virtual void do_start() throw() = 0;
+
+            /** Abstract interface for incrementing the progress meter,
+             * implemented by each ProgressMeter derivative.
+             */
+            virtual void do_increment(int cur) throw() = 0;
+
+        private:
+            float _cur;
+            float _step;
+            bool _started;
+            unsigned _outlen;
+            const std::string _color;
     };
+
+    inline bool
+    ProgressMeter::operator++() throw()
+    {
+        if (not _started)
+            return false;
+
+        _cur += _step;
+
+        std::printf("%s", _color.c_str());
+        this->do_increment(static_cast<int>(_cur));
+        std::printf("\033[00m");
+
+        std::fflush(stdout);
+        return true;
+    }
 
 } // namespace util
 } // namespace herdstat

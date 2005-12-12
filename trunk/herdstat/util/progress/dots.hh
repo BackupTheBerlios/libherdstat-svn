@@ -46,13 +46,19 @@ namespace util {
     class DotsMeter : public ProgressMeter
     {
         public:
-            virtual ~DotsMeter() throw();
-            virtual void start() throw();
-            virtual void increment(int cur) throw();
+            /** Constructor.
+             * @param color ASCII color sequence (defaults to "").
+             */
+            DotsMeter(const std::string& color = "") throw();
 
-        private:
-            friend class Progress;
-            DotsMeter() throw();
+            /// Destructor.
+            virtual ~DotsMeter() throw();
+
+        protected:
+            /// Start dot meter.
+            virtual void do_start() throw();
+            /// Show another dot.
+            virtual void do_increment(int cur) throw();
     };
 
 } // namespace util

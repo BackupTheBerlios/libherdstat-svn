@@ -46,13 +46,19 @@ namespace util {
     class PercentMeter : public ProgressMeter
     {
         public:
-            virtual ~PercentMeter() throw();
-            virtual void start() throw();
-            virtual void increment(int cur) throw();
+            /** Constructor.
+             * @param color ASCII color sequence (defaults to "").
+             */
+            PercentMeter(const std::string& color = "") throw();
 
-        private:
-            friend class Progress;
-            PercentMeter() throw();
+            /// Destructor.
+            virtual ~PercentMeter() throw();
+
+        protected:
+            /// Start percent meter.
+            virtual void do_start() throw();
+            /// Increment percentage.
+            virtual void do_increment(int cur) throw();
     };
 
 } // namespace util

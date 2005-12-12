@@ -40,20 +40,27 @@ namespace util {
     /**
      * @class Spinner spinner.hh herdstat/util/progress/spinner.hh
      * @brief Concrete ProgressMeter implementation that shows progress by
-     * showing a little twirl meter.
+     * showing a spinner.
      */
 
     class Spinner : public ProgressMeter
     {
         public:
+            /** Constructor.
+             * @param color ASCII color sequence (defaults to "").
+             */
+            Spinner(const std::string& color = "") throw();
+
+            /// Destructor.
             virtual ~Spinner() throw();
-            virtual void start() throw();
-            virtual void increment(int cur) throw();
+
+        protected:
+            /// Start spinner.
+            virtual void do_start() throw();
+            /// Show next character in spinner animation sequence.
+            virtual void do_increment(int cur) throw();
 
         private:
-            friend class Progress;
-            Spinner() throw();
-
             /// pointer into _sequence.
             const char *_cur;
             /// animation sequence.

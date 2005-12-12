@@ -46,14 +46,21 @@ namespace util {
     class EllipseMeter : public ProgressMeter
     {
         public:
+            /** Constructor.
+             * @param color ASCII color sequence (defaults to "").
+             */
+            EllipseMeter(const std::string& color = "") throw();
+
+            /// Destructor.
             virtual ~EllipseMeter() throw();
-            virtual void start() throw();
-            virtual void increment(int cur) throw();
+
+        protected:
+            /// Start ellipse meter.
+            virtual void do_start() throw();
+            /// Show next character in animation sequence.
+            virtual void do_increment(int cur) throw();
 
         private:
-            friend class Progress;
-            EllipseMeter() throw();
-
             unsigned short _cur;
     };
 

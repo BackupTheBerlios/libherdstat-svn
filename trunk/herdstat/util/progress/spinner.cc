@@ -31,23 +31,24 @@ namespace util {
 /*** static members *********************************************************/
 const char * const Spinner::_sequence = "/-\\|";
 /****************************************************************************/
-Spinner::Spinner() throw()
-    : _cur(_sequence)
+Spinner::Spinner(const std::string& color) throw()
+    : ProgressMeter(color), _cur(_sequence)
 {
 }
 /****************************************************************************/
 Spinner::~Spinner() throw()
 {
+    append_outlen(1);
 }
 /****************************************************************************/
 void
-Spinner::start() throw()
+Spinner::do_start() throw()
 {
     std::printf("%c", *_cur++);
 }
 /****************************************************************************/
 void
-Spinner::increment(int cur LIBHERDSTAT_UNUSED) throw()
+Spinner::do_increment(int cur LIBHERDSTAT_UNUSED) throw()
 {
     /* reset to beginning of sequence */
     if (not *_cur)
