@@ -74,11 +74,6 @@ AC_ARG_ENABLE(debug,
 AC_MSG_RESULT([$enable_debug])
 AM_CONDITIONAL(DEBUG, test x$enable_debug != "xno")
 
-if test x$enable_debug != "xno" ; then
-    CXXFLAGS="$CXXFLAGS -ggdb3"
-    AC_DEFINE(DEBUG, 1, [Enable debugging code])
-fi
-
 AC_PATH_PROGS(_WGET, wget)
 if test x$_WGET = "x"; then
     AC_MSG_ERROR([wget is required])
@@ -102,11 +97,25 @@ AC_SUBST(LIBTOOL)
 dnl SED is defined by the LT_AC_PROG_SED ran by AC_PROG_LIBTOOL
 AC_SUBST(SED)
 
-AC_MSG_CHECKING([gcc version])
-gccver=`${CC} -dumpversion | cut -f1 -d.`
-AC_MSG_RESULT([$gccver])
-if test x$gccver = "x4" ; then
+AC_MSG_CHECKING([g++ version])
+gxxver=`${CXX} -dumpversion | cut -f1 -d.`
+AC_MSG_RESULT([$gxxver])
+if test x$gxxver = "x4" ; then
     AC_DEFINE_UNQUOTED(HAVE_GCC4, 1, [GCC Version 4])
+fi
+
+LHS_CHECK_CXXFLAG([-pedantic])
+LHS_CHECK_CXXFLAG([-ansi])
+LHS_CHECK_CXXFLAG([-W])
+LHS_CHECK_CXXFLAG([-Wextra])
+LHS_CHECK_CXXFLAG([-Wall])
+LHS_CHECK_CXXFLAG([-Wold-style-cast])
+LHS_CHECK_CXXFLAG([-Woverloaded-virtual])
+LHS_CHECK_CXXFLAG([-Wredundant-decls])
+
+if test x$enable_debug != "xno" ; then
+    LHS_CHECK_CXXFLAG([-ggdb3])
+    AC_DEFINE(DEBUG, 1, [Enable debugging code])
 fi
 
 dnl Optional headers

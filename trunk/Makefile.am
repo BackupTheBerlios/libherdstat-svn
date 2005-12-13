@@ -21,7 +21,9 @@ pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = $(pc)
 
 DISTCLEANFILES = ChangeLog TODO $(pc)
-EXTRA_DIST = ChangeLog \
+EXTRA_DIST = \
+	m4 \
+	ChangeLog \
 	Makefile.am.common \
 	autogen.sh \
 	.todo \
