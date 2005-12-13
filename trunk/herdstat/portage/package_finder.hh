@@ -34,6 +34,7 @@
 
 #include <herdstat/util/timer.hh>
 #include <herdstat/util/algorithm.hh>
+#include <herdstat/portage/misc.hh>
 #include <herdstat/portage/package_list.hh>
 
 namespace herdstat {
@@ -72,41 +73,54 @@ namespace portage {
             /** Perform search on the given criteria.
              * @param v const reference to either a std::string or a
              * util::Regex.
+             * @param progress Progress meter to use (defaults to NULL).
              * @returns const reference to search results.
              */
             template <typename T>
             const std::vector<Package>&
-            operator()(const T& v) throw (NonExistentPkg);
+            operator()(const T& v, util::ProgressMeter *progress = NULL)
+                throw (NonExistentPkg);
 
-            const std::vector<Package>&
-            operator()(const char * const v) throw (NonExistentPkg)
-            { return operator()(std::string(v)); }
+            inline const std::vector<Package>&
+            operator()(const char * const v, util::ProgressMeter *progress = NULL)
+                throw (NonExistentPkg)
+            { return operator()(std::string(v), progress); }
 
         private:
+            struct IsValid
+                : std::binary_function<Package, util::ProgressMeter *, bool>
+            {
+                inline bool operator()(const Package& pkg,
+                                       util::ProgressMeter *progress) const;
+            };
+
             const PackageList& _pkglist;
             std::vector<Package> _results;
             util::Timer _timer;
     };
 
+    inline bool
+    PackageFinder::IsValid::operator()(const Package& pkg,
+                                       util::ProgressMeter *progress) const
+    {
+        if (progress)
+            ++*progress;
+
+        return (is_pkg_dir(pkg.path()) or is_category(pkg.full()));
+    }
+
     template <typename T>
     const std::vector<Package>&
-    PackageFinder::operator()(const T& v) throw (NonExistentPkg)
+    PackageFinder::operator()(const T& v, util::ProgressMeter *progress)
+        throw (NonExistentPkg)
     {
         _timer.start();
 
-        /* copy those packages in _pkglist that
-         *      match the given criteria (v), and
-         *          has a valid package directory, or
-         *          is a valid category
-         * to our _results vector.
-         */
         util::copy_if(_pkglist.begin(), _pkglist.end(),
             std::back_inserter(_results),
             util::compose_f_gx_hx(std::logical_and<bool>(),
                 std::bind2nd(PackageMatches<T>(), v),
-                util::compose_f_gx_hx(std::logical_or<bool>(),
-                    PackageIsValid(),
-                    IsCategory())));
+                std::bind2nd(IsValid(), progress)));
 
         _timer.stop();
 
