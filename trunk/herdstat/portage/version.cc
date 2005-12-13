@@ -173,7 +173,10 @@ VersionComponents::parse() throw()
     _vmap.insert(value_type("PF", pn.first->second+"-"+pvr.first->second));
 
     /* remove $PN from _verstr */
-    _verstr.erase(0, _vmap["PN"].length()+1); /* +1 for the '-' after ${PN} */
+    std::string::size_type len(_vmap["PN"].length());
+    if (_vmap["PN"].find('-') == std::string::npos)
+        ++len;
+    _verstr.erase(0, len);
 }
 // }}}
 /****************************************************************************/
