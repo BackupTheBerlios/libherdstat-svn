@@ -36,7 +36,7 @@ EllipseMeter::EllipseMeter(const std::string& color) throw()
 /****************************************************************************/
 EllipseMeter::~EllipseMeter() throw()
 {
-    append_outlen(3);
+    this->stop();
 }
 /****************************************************************************/
 void
@@ -44,6 +44,12 @@ EllipseMeter::do_start() throw()
 {
     std::printf(".");
     _cur = 1;
+}
+/****************************************************************************/
+void
+EllipseMeter::do_stop() throw()
+{
+    append_outlen(_cur);
 }
 /****************************************************************************/
 void

@@ -57,6 +57,8 @@ namespace util {
         protected:
             /// Start spinner.
             virtual void do_start() throw();
+            /// Stop spinner.
+            virtual void do_stop() throw();
             /// Show next character in spinner animation sequence.
             virtual void do_increment(int cur) throw();
 

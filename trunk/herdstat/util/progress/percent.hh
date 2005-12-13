@@ -57,6 +57,8 @@ namespace util {
         protected:
             /// Start percent meter.
             virtual void do_start() throw();
+            /// Stop percent meter.
+            virtual void do_stop() throw();
             /// Increment percentage.
             virtual void do_increment(int cur) throw();
     };

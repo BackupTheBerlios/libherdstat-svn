@@ -36,12 +36,6 @@ ProgressMeter::ProgressMeter(const std::string& color) throw()
 /****************************************************************************/
 ProgressMeter::~ProgressMeter() throw()
 {
-    if (_started)
-    {
-        for (unsigned i = 0 ; i < _outlen ; ++i)
-            std::printf("\b \b");
-        std::fflush(stdout);
-    }
 }
 /****************************************************************************/
 void
@@ -62,6 +56,21 @@ ProgressMeter::start(unsigned total, const std::string& title) throw()
     this->do_start();
     std::printf("\033[00m");
     std::fflush(stdout);
+}
+/****************************************************************************/
+void
+ProgressMeter::stop()
+{
+    if (not _started)
+        return;
+
+    this->do_stop();
+
+    for (unsigned i = 0 ; i < _outlen ; ++i)
+        std::printf("\b \b");
+    std::fflush(stdout);
+
+    _started = false;
 }
 /****************************************************************************/
 } // namespace util

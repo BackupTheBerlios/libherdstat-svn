@@ -36,21 +36,24 @@ PercentMeter::PercentMeter(const std::string& color) throw()
 /****************************************************************************/
 PercentMeter::~PercentMeter() throw()
 {
-    append_outlen(4);
-
-    if (this->started())
-    {
-        /* sometimes the user has to use an estimate as the value
-         * passed to start(), so we may not have gotten to 100 yet. */
-        while (this->cur() < 100.0)
-            this->operator++();
-    }
+    this->stop();
 }
 /****************************************************************************/
 void
 PercentMeter::do_start() throw()
 {
     std::printf("  0%%");
+}
+/****************************************************************************/
+void
+PercentMeter::do_stop() throw()
+{
+    append_outlen(4);
+
+    /* sometimes the user has to use an estimate as the value
+     * passed to start(), so we may not have gotten to 100 yet. */
+    while (this->cur() < 100.0)
+        this->operator++();
 }
 /****************************************************************************/
 void

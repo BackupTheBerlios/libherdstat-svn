@@ -1,5 +1,7 @@
 # $Id$
 
+include $(top_builddir)/Makefile.am.common
+
 cc_sources = \
 	meter.cc \
 	percent.cc \

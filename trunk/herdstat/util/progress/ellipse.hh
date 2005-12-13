@@ -57,6 +57,8 @@ namespace util {
         protected:
             /// Start ellipse meter.
             virtual void do_start() throw();
+            /// Stop ellipse meter.
+            virtual void do_stop() throw();
             /// Show next character in animation sequence.
             virtual void do_increment(int cur) throw();
 

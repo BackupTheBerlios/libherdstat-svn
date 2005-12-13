@@ -56,6 +56,9 @@ namespace util {
              */
             void start(unsigned total, const std::string& title = "") throw();
 
+            /// Stop progress meter.
+            void stop();
+
             ///@{
             /// Increment progress.
             inline bool operator++() throw();
@@ -80,6 +83,11 @@ namespace util {
              * ProgressMeter derivative.
              */
             virtual void do_start() throw() = 0;
+
+            /** Abstract interface for stopping the meter.  This has a default
+             * implementation.
+             */
+            virtual void do_stop() throw() { }
 
             /** Abstract interface for incrementing the progress meter,
              * implemented by each ProgressMeter derivative.
