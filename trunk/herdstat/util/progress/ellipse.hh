@@ -41,6 +41,7 @@ namespace util {
      * @class EllipseMeter ellipse.hh herdstat/util/progress/ellipse.hh
      * @brief Concrete ProgressMeter implementation that shows an animated
      * ellipse ("...") repeatedly.
+     * @see ProgressMeter for an example of using the EllipseMeter interface.
      */
 
     class EllipseMeter : public ProgressMeter

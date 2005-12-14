@@ -41,6 +41,7 @@ namespace util {
      * @class DotsMeter dots.hh herdstat/util/progress/dots.hh
      * @brief Concrete ProgressMeter implementation that shows progress by
      * showing dots (periods) for each increment.
+     * @see ProgressMeter for an example of using the DotsMeter interface.
      */
 
     class DotsMeter : public ProgressMeter

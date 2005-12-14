@@ -40,8 +40,17 @@ namespace herdstat {
 namespace util {
 
     /**
-     * @class ProgressMeter
+     * @class ProgressMeter meter.hh herdstat/util/progress/meter.hh
      * @brief Provides the abstract interface for progress meters.
+     *
+     * @section example Example
+     *
+     * Below is a simple example of using the ProgressMeter interface:
+     * 
+     * @include progress/main.cc
+     *
+     * For examples of writing your own ProgressMeter implementation, take a
+     * look at the code for the Spinner class or the PercentMeter class.
      */
 
     class ProgressMeter

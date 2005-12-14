@@ -41,6 +41,7 @@ namespace util {
      * @class Spinner spinner.hh herdstat/util/progress/spinner.hh
      * @brief Concrete ProgressMeter implementation that shows progress by
      * showing a spinner.
+     * @see ProgressMeter for an example of using the Spinner interface.
      */
 
     class Spinner : public ProgressMeter

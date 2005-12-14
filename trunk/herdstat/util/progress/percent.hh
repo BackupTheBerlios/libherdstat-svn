@@ -38,9 +38,10 @@ namespace herdstat {
 namespace util {
 
     /**
-     * @class PercentMeter
+     * @class PercentMeter percent.hh herdstat/util/progress/percent.hh
      * @brief Concrete ProgressMeter implementation that shows progress by
      * percentage.
+     * @see ProgressMeter for an example of using the PercentMeter interface.
      */
 
     class PercentMeter : public ProgressMeter
