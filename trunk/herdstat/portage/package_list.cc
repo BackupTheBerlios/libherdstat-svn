@@ -130,6 +130,10 @@ PackageList::fill(util::ProgressMeter *progress)
     if (not _overlays.empty())
         this->erase(std::unique(this->begin(), this->end()), this->end());
 
+    /* trim unused space */
+    if (this->capacity() > (this->size() + 10))
+        container_type(this->container()).swap(this->container());
+
     _filled = true;
 }
 /****************************************************************************/
