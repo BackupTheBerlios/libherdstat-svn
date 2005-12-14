@@ -36,6 +36,11 @@ ChangeLog file for a more detailed listing of changes/bug fixes.
       pointers.  The Fetcher class allows passing a FetcherImpMap instance upon
       construction, so now, not only can the user choose which implementation to
       use, s(he) can also add their own concrete FetcherImp derivatives.
+    - util::Progress is no longer.  Instead we have an abstract interface,
+      util::ProgressMeter and several concrete derivatives: PercentMeter (the
+      previous implementation), EllipseMeter (shows an animated ellipse),
+      DotsMeter (simply shows a '.' for each progress increment), and Spinner
+      (like the portage spinner).
 
     Implementation Changes:
     - The following class members are now implemented as pointers and

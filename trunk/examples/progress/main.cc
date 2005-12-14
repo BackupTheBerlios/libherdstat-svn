@@ -42,11 +42,14 @@ main(int argc, char **argv)
 		if (not progress)
 			throw herdstat::Exception("Unknown ProgressMeter type '"+type+"'.");
 
-		progress->start(10, "Some operation");
+		progress->start(1000, "Some operation");
 
-		for (size_t i = 0 ; i < 10 ; ++i)
+		for (size_t i = 0 ; i < 1000 ; ++i)
 		{
 			++*progress;
+
+			/* obviously in a real example we'd actually do
+			 * something */
 			sleep(1);
 		}
 
