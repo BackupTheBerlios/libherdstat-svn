@@ -39,7 +39,8 @@ PackageWhich::~PackageWhich() throw()
 }
 /****************************************************************************/
 const std::vector<std::string>&
-PackageWhich::operator()(const std::vector<Package>& finder_results)
+PackageWhich::operator()(const std::vector<Package>& finder_results,
+                         util::ProgressMeter *progress)
     throw (NonExistentPkg)
 {
     BacktraceContext c("herdstat::portage::PackageWhich::operator()(std::vector<Package>)");
@@ -49,6 +50,9 @@ PackageWhich::operator()(const std::vector<Package>& finder_results)
     std::vector<Package>::const_iterator i;
     for (i = finder_results.begin() ; i != finder_results.end() ; ++i)
     {
+        if (progress)
+            ++*progress;
+
         if (is_category(i->full()))
             continue;
 

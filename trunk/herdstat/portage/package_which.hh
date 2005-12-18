@@ -33,6 +33,7 @@
  */
 
 #include <vector>
+#include <herdstat/util/progress/meter.hh>
 #include <herdstat/portage/package_finder.hh>
 
 namespace herdstat {
@@ -61,18 +62,22 @@ namespace portage {
              * vector<Package> will do, but this is mainly offered for use with
              * PackageFinder results.
              * @param results const reference to a std::vector<Package>.
+             * @param progress progress meter to use (defaults to NULL).
              * @returns vector of ebuild paths.
              */
             const std::vector<std::string>&
-            operator()(const std::vector<Package>& results) throw (NonExistentPkg);
+            operator()(const std::vector<Package>& results,
+                       util::ProgressMeter *progress = NULL) throw (NonExistentPkg);
 
             /** Get the latest ebuild(s) for the given package string/portdir.
              * @param pkg Full category/package string.
              * @param portdir PORTDIR the package is located in.
+             * @param progress progress meter to use (defaults to NULL).
              * @returns vector of ebuild paths.
              */
             inline const std::vector<std::string>&
-            operator()(const std::string& pkg, const std::string& portdir)
+            operator()(const std::string& pkg, const std::string& portdir,
+                       util::ProgressMeter *progress = NULL)
                 throw (NonExistentPkg);
 
             /** Get the latest ebuild(s) for those packages matching the given
@@ -80,21 +85,28 @@ namespace portage {
              * the list of matching packages.
              * @param v search criteria of type T.
              * @param pkglist const reference to a PackageList.
+             * @param progress progress meter to use (defaults to NULL).
              * @returns vector of ebuild paths.
              */
             template <typename T>
             inline const std::vector<std::string>&
-            operator()(const T& v, const PackageList& pkglist) throw (NonExistentPkg);
+            operator()(const T& v, const PackageList& pkglist,
+                       util::ProgressMeter *progress = NULL) throw (NonExistentPkg);
 
         private:
             std::vector<std::string> _results;
     };
 
     inline const std::vector<std::string>&
-    PackageWhich::operator()(const std::string& pkg, const std::string& portdir)
+    PackageWhich::operator()(const std::string& pkg,
+                             const std::string& portdir,
+                             util::ProgressMeter *progress)
         throw (NonExistentPkg)
     {
         BacktraceContext c("herdstat::portage::PackageWhich::operator()("+pkg+", "+portdir+")");
+
+        if (progress)
+            ++*progress;
 
         if (not util::is_dir(portdir+"/"+pkg))
             throw NonExistentPkg(pkg);
@@ -108,10 +120,11 @@ namespace portage {
     template <typename T>
     inline const std::vector<std::string>&
     PackageWhich::operator()(const T& v,
-                             const PackageList& pkglist) throw (NonExistentPkg)
+                             const PackageList& pkglist,
+                             util::ProgressMeter *progress) throw (NonExistentPkg)
     {
         PackageFinder find(pkglist);
-        return operator()(find(v));
+        return operator()(find(v, progress));
     }
 
 } // namespace portage
