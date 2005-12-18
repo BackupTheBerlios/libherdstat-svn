@@ -5,7 +5,4 @@
             Figure out a way to fill in names of devs listed in &lt;dev&gt; tags
         </note>
     </note>
-    <note priority="low" time="1134555825">
-        Move getcols() code from herdstat to libherdstat and write a ProgressBar class.
-    </note>
 </todo>

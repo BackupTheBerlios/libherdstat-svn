@@ -173,6 +173,13 @@ fi
 AC_SUBST(CURL_LIBS)
 
 dnl Required libs
+
+AC_CHECK_LIB(ncurses, tgetent, [TERM_LIBS="-lncurses"],
+    AC_MSG_ERROR([ncurses is required]))
+AC_CHECK_HEADERS([curses.h term.h],,
+    AC_MSG_ERROR([ncurses headers required]))
+AC_SUBST(TERM_LIBS)
+
 PKG_PROG_PKG_CONFIG
 PKG_CHECK_MODULES(xmlwrapp, xmlwrapp >= 0.5.0,
     [xmlwrapp_LIBS="-lxmlwrapp -lxslt -lxml2 -lz -lm"],

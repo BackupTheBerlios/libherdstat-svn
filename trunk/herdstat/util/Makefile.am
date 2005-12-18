@@ -4,28 +4,32 @@ include $(top_builddir)/Makefile.am.common
 
 SUBDIRS = progress
 
-cc_sources = string.cc \
-	     regex.cc \
-	     file.cc \
-	     misc.cc \
-	     vars.cc \
-	     glob.cc \
-	     timer.cc
+cc_sources = \
+	string.cc \
+	regex.cc \
+	file.cc \
+	misc.cc \
+	vars.cc \
+	glob.cc \
+	timer.cc \
+	getcols.cc
 
-hh_sources = container_base.hh \
-	     string.hh \
-	     regex.hh \
-	     file.hh \
-	     misc.hh \
-	     vars.hh \
-	     glob.hh \
-	     timer.hh \
-	     functional.hh \
-	     algorithm.hh
+hh_sources = \
+	container_base.hh \
+	string.hh \
+	regex.hh \
+	file.hh \
+	misc.hh \
+	vars.hh \
+	glob.hh \
+	timer.hh \
+	functional.hh \
+	algorithm.hh \
+	getcols.hh
 
 noinst_LTLIBRARIES = libutil.la
 libutil_la_SOURCES = $(cc_sources) $(hh_sources)
-libutil_la_LIBADD = progress/libprogress.la
+libutil_la_LIBADD = progress/libprogress.la @TERM_LIBS@
 
 library_includedir=$(includedir)/$(PACKAGE)-$(VERSION_MAJOR).$(VERSION_MINOR)/herdstat/util
 library_include_HEADERS = $(hh_sources)
