@@ -33,6 +33,7 @@
  */
 
 #include <herdstat/parsable.hh>
+#include <herdstat/progressable.hh>
 #include <herdstat/xml/saxparser.hh>
 #include <herdstat/portage/metadata.hh>
 
@@ -53,6 +54,7 @@ namespace portage {
      */
 
     class MetadataXML : public Parsable,
+                        public Progressable,
                         protected xml::SAXHandler
     {
         public:

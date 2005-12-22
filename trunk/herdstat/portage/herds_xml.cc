@@ -162,6 +162,9 @@ HerdsXML::end_element(const std::string& name)
 bool
 HerdsXML::do_text(const std::string& text)
 {
+    if (meter())
+        ++*meter();
+
     if (in_herd_name)
         _cur_herd = _herds.insert(Herd(text)).first;
     else if (in_herd_desc)
@@ -187,6 +190,7 @@ HerdsXML::do_text(const std::string& text)
         try
         {
             ProjectXML mp(text, _cvsdir, _force_fetch);
+            mp.set_meter(this->meter());
             const_cast<Herd&>(*_cur_herd).insert(
                 mp.devs().begin(), mp.devs().end());
         }

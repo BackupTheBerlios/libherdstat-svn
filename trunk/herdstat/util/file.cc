@@ -286,15 +286,16 @@ File::write()
     this->clear();
 }
 /*****************************************************************************/
-Directory::Directory(bool recurse) throw()
-    : BaseFileObject(), util::VectorBase<std::string>(),
+Directory::Directory(bool recurse, util::ProgressMeter *meter) throw()
+    : Progressable(meter), BaseFileObject(), util::VectorBase<std::string>(),
       _dirp(NULL), _recurse(recurse)
 {
 }
 /*****************************************************************************/
-Directory::Directory(const std::string &path, bool recurse)
+Directory::Directory(const std::string &path, bool recurse,
+                     util::ProgressMeter *meter)
     throw (FileException)
-    : BaseFileObject(path), util::VectorBase<std::string>(),
+    : Progressable(meter), BaseFileObject(path), util::VectorBase<std::string>(),
       _dirp(NULL), _recurse(recurse)
 {
     this->open();
@@ -302,7 +303,8 @@ Directory::Directory(const std::string &path, bool recurse)
 }
 /*****************************************************************************/
 Directory::Directory(const Directory& that)
-    : BaseFileObject(), util::VectorBase<std::string>(),
+    : Progressable(that.meter()), BaseFileObject(),
+      util::VectorBase<std::string>(),
       _dirp(NULL), _recurse(false)
 {
     *this = that;
@@ -360,6 +362,9 @@ Directory::do_read()
     struct dirent *d = NULL;
     while ((d = readdir(_dirp)))
     {
+        if (meter())
+            ++*meter();
+
         /* skip . and .. */
         if ((std::strcmp(d->d_name, ".") == 0) or
             (std::strcmp(d->d_name, "..") == 0))
@@ -370,7 +375,7 @@ Directory::do_read()
         /* recurse into sub-directories */
         if (_recurse and util::is_dir(this->back()))
         {
-            Directory dir(this->back(), true);
+            Directory dir(this->back(), _recurse, this->meter());
             this->insert(this->end(), dir.begin(), dir.end());
         }
     }

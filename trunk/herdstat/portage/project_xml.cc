@@ -153,6 +153,7 @@ ProjectXML::start_element(const std::string& name, const attrs_type& attrs)
                 in_sub = true;
 
                 ProjectXML mp(pos->second, _cvsdir, _force_fetch);
+                mp.set_meter(this->meter());
                 Herd::const_iterator i;
                 for (i = mp.devs().begin() ; i != mp.devs().end() ; ++i)
                 {
@@ -191,6 +192,9 @@ ProjectXML::end_element(const std::string& name)
 bool
 ProjectXML::do_text(const std::string& text)
 {
+    if (meter())
+        ++*meter();
+
     if (in_dev)
     {
         Developer dev(util::lowercase(text));

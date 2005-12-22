@@ -45,6 +45,7 @@
 #include <dirent.h>
 
 #include <herdstat/defs.hh>
+#include <herdstat/progressable.hh>
 #include <herdstat/util/regex.hh>
 #include <herdstat/util/container_base.hh>
 
@@ -445,22 +446,29 @@ if (i != dir.end())
      * string.
      */
 
-    class Directory  : public BaseFileObject,
+    class Directory  : public Progressable,
+                       public BaseFileObject,
                        public VectorBase<std::string>
     {
         public:
             /** Default constructor.
              * @param recurse Recurse into sub-directories (defaults to false)?
+             * @param meter pointer to a ProgressMeter instance (defaults to
+             * NULL).
              */
-            Directory(bool recurse = false) throw();
+            Directory(bool recurse = false,
+                      util::ProgressMeter *meter = NULL) throw();
 
             /** Constructor.  Opens and reads directory.
              * @param path Path.
              * @param recurse Recurse into sub-directories (defaults to false)?
+             * @param meter pointer to a ProgressMeter instance (defaults to
+             * NULL).
              * @exception FileException
              */
             Directory(const std::string& path,
-                      bool recurse = false) throw (FileException);
+                      bool recurse = false,
+                      util::ProgressMeter *meter = NULL) throw (FileException);
 
             /// Copy constructor.
             Directory(const Directory& that);

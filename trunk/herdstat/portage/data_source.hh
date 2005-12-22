@@ -33,7 +33,9 @@
  */
 
 #include <herdstat/parsable.hh>
+#include <herdstat/progressable.hh>
 #include <herdstat/noncopyable.hh>
+#include <herdstat/util/progress/meter.hh>
 #include <herdstat/xml/saxparser.hh>
 
 namespace herdstat {
@@ -48,6 +50,7 @@ namespace portage {
      */
 
     class DataSource : public Parsable,
+                       public Progressable,
                        protected xml::SAXHandler,
                        private Noncopyable
     {

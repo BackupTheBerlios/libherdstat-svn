@@ -33,6 +33,7 @@
  */
 
 #include <set>
+#include <herdstat/progressable.hh>
 #include <herdstat/noncopyable.hh>
 #include <herdstat/fetchable.hh>
 #include <herdstat/parsable.hh>
@@ -56,6 +57,7 @@ namespace portage {
      */
 
     class ProjectXML : public Parsable,
+                       public Progressable,
                        public Fetchable,
                        protected xml::SAXHandler,
                        private Noncopyable

@@ -15,6 +15,7 @@ hh_sources = \
 	cachable.hh \
 	fetchable.hh \
 	parsable.hh \
+	progressable.hh \
 	email_address.hh \
 	defs.hh
 

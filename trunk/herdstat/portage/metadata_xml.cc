@@ -129,6 +129,9 @@ MetadataXML::end_element(const std::string& name)
 bool
 MetadataXML::do_text(const std::string& text)
 {
+    if (meter())
+        ++*meter();
+
     if (in_herd)
         _data.herds().insert(Herd(text));
     else if (in_email)
