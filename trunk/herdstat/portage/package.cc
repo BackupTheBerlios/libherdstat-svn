@@ -32,12 +32,14 @@ namespace herdstat {
 namespace portage {
 /****************************************************************************/
 Package::Package()
-    : _name(), _cat(), _dir(), _full(), _path(), _kwmap(NULL), _pkgdir(NULL)
+    : _name(), _cat(), _dir(GlobalConfig().portdir()), _full(), _path(),
+      _kwmap(NULL), _pkgdir(NULL)
 {
 }
 /****************************************************************************/
 Package::Package(const Package& that)
-    : _name(), _cat(), _dir(), _full(), _path(), _kwmap(NULL), _pkgdir(NULL)
+    : _name(), _cat(), _dir(GlobalConfig().portdir()), _full(), _path(),
+      _kwmap(NULL), _pkgdir(NULL)
 {
     *this = that;
 }
