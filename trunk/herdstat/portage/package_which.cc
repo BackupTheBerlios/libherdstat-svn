@@ -53,7 +53,7 @@ PackageWhich::operator()(const std::vector<Package>& finder_results,
         if (progress)
             ++*progress;
 
-        if (is_category(i->full()))
+        if (is_category(i->path()))
             continue;
 
         /* see if we've inserted it already */

@@ -31,7 +31,7 @@
 #include <herdstat/util/string.hh>
 #include <herdstat/util/algorithm.hh>
 #include <herdstat/portage/functional.hh>
-#include <herdstat/portage/misc.hh>
+#include <herdstat/portage/util.hh>
 #include <herdstat/portage/config.hh>
 #include <herdstat/portage/keywords.hh>
 

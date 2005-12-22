@@ -4,6 +4,7 @@ include $(top_builddir)/Makefile.am.common
 
 cc_sources = \
 	exceptions.cc \
+	util.cc \
 	config.cc \
 	version.cc \
 	categories.cc \
@@ -27,7 +28,7 @@ cc_sources = \
 	userinfo_xml.cc
 hh_sources = \
 	exceptions.hh \
-	misc.hh \
+	util.hh \
 	config.hh \
 	categories.hh \
 	package.hh \

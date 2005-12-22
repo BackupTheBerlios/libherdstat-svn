@@ -7,7 +7,7 @@
 #include <functional>
 #include <algorithm>
 #include <iterator>
-#include <herdstat/portage/misc.hh> /* for get_pkg_from_path() */
+#include <herdstat/portage/util.hh> /* for get_pkg_from_path() */
 #include <herdstat/portage/version.hh>
 
 int

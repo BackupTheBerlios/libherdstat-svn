@@ -34,7 +34,7 @@
 
 #include <herdstat/util/timer.hh>
 #include <herdstat/util/algorithm.hh>
-#include <herdstat/portage/misc.hh>
+#include <herdstat/portage/util.hh>
 #include <herdstat/portage/package_list.hh>
 
 namespace herdstat {
@@ -106,7 +106,7 @@ namespace portage {
         if (progress)
             ++*progress;
 
-        return (is_pkg_dir(pkg.path()) or is_category(pkg.full()));
+        return (is_pkg_dir(pkg.path()) or is_category(pkg.path()));
     }
 
     template <typename T>

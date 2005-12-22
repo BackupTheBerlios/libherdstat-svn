@@ -41,6 +41,7 @@ ChangeLog file for a more detailed listing of changes/bug fixes.
       previous implementation), EllipseMeter (shows an animated ellipse),
       DotsMeter (simply shows a '.' for each progress increment), and Spinner
       (like the portage spinner).
+    - herdstat/portage/misc.hh renamed to herdstat/portage/util.hh.
 
     Implementation Changes:
     - The following class members are now implemented as pointers and

@@ -1,5 +1,5 @@
 /*
- * libherdstat -- herdstat/portage/portage_misc.hh
+ * libherdstat -- herdstat/portage/util.hh
  * $Id$
  * Copyright (c) 2005 Aaron Walker <ka0ttic@gentoo.org>
  *
@@ -20,19 +20,20 @@
  * Place, Suite 325, Boston, MA  02111-1257  USA
  */
 
-#ifndef HAVE_PORTAGE_MISC_HH
-#define HAVE_PORTAGE_MISC_HH 1
+#ifndef HAVE_PORTAGE_UTIL_HH
+#define HAVE_PORTAGE_UTIL_HH 1
 
 #ifdef HAVE_CONFIG_H
 # include "config.h"
 #endif
 
 /**
- * @file herdstat/portage/misc.hh
+ * @file herdstat/portage/util.hh
  * @brief portage-related miscellaneous functions.
  */
 
 #include <fnmatch.h>
+#include <herdstat/util/string.hh>
 #include <herdstat/util/misc.hh>
 #include <herdstat/util/regex.hh>
 #include <herdstat/util/file.hh>
@@ -54,15 +55,16 @@ namespace portage {
     }
 
     /**
-     * Is the specified string the name of a category?
-     * @param str string.
+     * Is the specified path a category?
+     * @param path path to category.
      * @returns A boolean value.
      */
 
     inline bool
-    is_category(const std::string& str)
+    is_category(const std::string& path)
     {
-        return GlobalConfig().categories().count(str);
+        return (util::is_dir(path) and
+                GlobalConfig().categories().count(util::basename(path)));
     }
 
     /**
@@ -107,6 +109,8 @@ namespace portage {
         pos = path.rfind('/', --pos);
         return path.substr(++pos);
     }
+
+    std::string get_pkg_from_verstr(const std::string& ver);
 
 } // namespace portage
 } // namespace herdstat

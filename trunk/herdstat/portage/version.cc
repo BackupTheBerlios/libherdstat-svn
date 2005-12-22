@@ -35,7 +35,7 @@
 #include <herdstat/util/misc.hh>
 #include <herdstat/util/string.hh>
 #include <herdstat/util/algorithm.hh>
-#include <herdstat/portage/misc.hh>
+#include <herdstat/portage/util.hh>
 #include <herdstat/portage/functional.hh>
 #include <herdstat/portage/exceptions.hh>
 #include <herdstat/portage/version.hh>

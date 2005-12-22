@@ -35,7 +35,7 @@
 #include <functional>
 #include <herdstat/util/regex.hh>
 #include <herdstat/portage/exceptions.hh>
-#include <herdstat/portage/misc.hh>
+#include <herdstat/portage/util.hh>
 #include <herdstat/portage/ebuild.hh>
 #include <herdstat/portage/config.hh>
 #include <herdstat/portage/package.hh>
@@ -51,8 +51,8 @@ namespace portage {
 
     struct IsCategory : std::unary_function<std::string, bool>
     {
-        bool operator()(const std::string& cat) const
-        { return is_category(cat); }
+        bool operator()(const std::string& path) const
+        { return is_category(path); }
     };
 
     /**

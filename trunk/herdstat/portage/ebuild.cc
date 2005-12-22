@@ -27,7 +27,7 @@
 #include <iostream>
 #include <cassert>
 #include <herdstat/util/string.hh>
-#include <herdstat/portage/misc.hh>
+#include <herdstat/portage/util.hh>
 #include <herdstat/portage/ebuild.hh>
 
 namespace herdstat {
