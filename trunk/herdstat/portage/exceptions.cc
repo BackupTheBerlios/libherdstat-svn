@@ -147,6 +147,15 @@ InvalidArch::what() const throw()
     return msg.c_str();
 }
 /****************************************************************************/
+InvalidAtom::InvalidAtom(const std::string& atom) throw()
+    : Exception("Invalid DEPEND atom '%s'", atom.c_str())
+{
+}
+/****************************************************************************/
+InvalidAtom::~InvalidAtom() throw()
+{
+}
+/****************************************************************************/
 } // namespace portage
 } // namespace herdstat
 

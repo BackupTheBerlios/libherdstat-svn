@@ -204,6 +204,18 @@ namespace portage {
             virtual const char *what() const throw();
     };
 
+    class InvalidAtom : public Exception
+    {
+        public:
+            /** Constructor.
+             * @param atom atom string.
+             */
+            InvalidAtom(const std::string& atom) throw();
+
+            /// Destructor.
+            virtual ~InvalidAtom() throw();
+    };
+
 } // namespace portage
 } // namespace herdstat
 
