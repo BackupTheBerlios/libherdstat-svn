@@ -65,7 +65,7 @@ namespace util {
 
         private:
             /// pointer into _sequence.
-            const char *_cur;
+            const char *_seqp;
             /// animation sequence.
             static const char * const _sequence;
     };

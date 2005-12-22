@@ -32,7 +32,7 @@ namespace util {
 const char * const Spinner::_sequence = "/-\\|";
 /****************************************************************************/
 Spinner::Spinner(const std::string& color) throw()
-    : ProgressMeter(color), _cur(_sequence)
+    : ProgressMeter(color), _seqp(_sequence)
 {
 }
 /****************************************************************************/
@@ -44,7 +44,7 @@ Spinner::~Spinner() throw()
 void
 Spinner::do_start() throw()
 {
-    std::printf("%c", *_cur++);
+    std::printf("%c", *_seqp++);
 }
 /****************************************************************************/
 void
@@ -58,10 +58,10 @@ void
 Spinner::do_increment(int cur LIBHERDSTAT_UNUSED) throw()
 {
     /* reset to beginning of sequence */
-    if (not *_cur)
-        _cur = _sequence;
+    if (not *_seqp)
+        _seqp = _sequence;
 
-    std::printf("\b%c", *_cur++);
+    std::printf("\b%c", *_seqp++);
 }
 /****************************************************************************/
 } // namespace util
