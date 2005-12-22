@@ -29,21 +29,13 @@
 
 /**
  * @file herdstat/portage/package.hh
- * @brief Defines the Package class.
+ * @brief Provides the Package class definition.
  */
 
 #include <herdstat/util/regex.hh>
 #include <herdstat/portage/config.hh>
 #include <herdstat/portage/ebuild.hh>
 #include <herdstat/portage/keywords.hh>
-
-/** 
- * @def PKGLIST_RESERVE
- * @brief Rough estimate of number of packages updated from time to time.  Used
- * for reserve()'ing to prevent a sleu of allocations.
- */
-
-#define PKGLIST_RESERVE            10250
 
 namespace herdstat {
 namespace portage {
@@ -70,7 +62,7 @@ namespace portage {
              * @param portdir Directory package lives in.
              */
             Package(const std::string& name,
-                    const std::string& portdir = "");
+                    const std::string& portdir = GlobalConfig().portdir());
 
             /// Destructor.
             ~Package();

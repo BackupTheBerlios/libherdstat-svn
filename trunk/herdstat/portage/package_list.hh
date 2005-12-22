@@ -29,13 +29,21 @@
 
 /**
  * @file herdstat/portage/package_list.hh
- * @brief Defines the PackageList class.
+ * @brief Provides the PackageList class definition.
  */
 
 #include <herdstat/util/progress/meter.hh>
 #include <herdstat/util/container_base.hh>
 #include <herdstat/portage/package.hh>
 #include <herdstat/portage/functional.hh>
+
+/** 
+ * @def PKGLIST_RESERVE
+ * @brief Rough estimate of number of packages updated from time to time.  Used
+ * for reserve()'ing to prevent a sleu of allocations.
+ */
+
+#define PKGLIST_RESERVE            10250
 
 namespace herdstat {
 namespace portage {
