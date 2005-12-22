@@ -34,7 +34,6 @@
 
 #include <vector>
 #include <string>
-#include <glob.h>
 
 namespace herdstat {
 namespace util {
@@ -101,7 +100,6 @@ std::copy(glob.results().begin(), glob.results().end(),
 
         private:
             std::vector<std::string> _results;
-            glob_t _glob;
     };
 
     inline void

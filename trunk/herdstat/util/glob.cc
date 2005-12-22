@@ -25,6 +25,7 @@
 #endif
 
 #include <iostream>
+#include <glob.h>
 #include <herdstat/exceptions.hh>
 #include <herdstat/util/glob.hh>
 
@@ -32,13 +33,13 @@ namespace herdstat {
 namespace util {
 /****************************************************************************/
 Glob::Glob() throw()
-    : _results(), _glob()
+    : _results()
 {
 
 }
 /****************************************************************************/
 Glob::Glob(const std::string& pattern) throw (ErrnoException)
-    : _results(), _glob()
+    : _results()
 {
     this->operator()(pattern);
 }
@@ -52,19 +53,21 @@ Glob::operator()(const std::string& pattern) throw (ErrnoException)
 {
     BacktraceContext c("herdstat::util::Glob::operator()("+pattern+")");
 
-    int ret = glob(pattern.c_str(), GLOB_ERR, NULL, &_glob);
+    glob_t globbuf;
+
+    int ret = glob(pattern.c_str(), GLOB_ERR, NULL, &globbuf);
     if (ret != 0 and ret != GLOB_NOMATCH)
         throw ErrnoException("glob");
 
     /* fill _results */
     if (ret != GLOB_NOMATCH)
-        std::copy(_glob.gl_pathv, _glob.gl_pathv+_glob.gl_pathc,
-            std::back_inserter(_results));
+        _results.insert(_results.end(),
+                        globbuf.gl_pathv, globbuf.gl_pathv + globbuf.gl_pathc);
 
-    globfree(&_glob);
+    globfree(&globbuf);
 
     /* there may be duplicates due to previous calls to operator(). */
-    if (_results.size() > 1)
+    if ((ret != GLOB_NOMATCH) and (_results.size() > 1))
     {
         std::sort(_results.begin(), _results.end());
         _results.erase(std::unique(_results.begin(), _results.end()),
