@@ -37,6 +37,7 @@
 #include <herdstat/util/string.hh>
 #include <herdstat/util/file.hh>
 #include <herdstat/util/regex.hh>
+#include <herdstat/util/progress/meter.hh>
 
 namespace herdstat {
 namespace util {
@@ -286,6 +287,26 @@ herdstat::util::copy_if(v.begin(), v.end(),
                                 const std::string& pattern) const
         {
             return (fnmatch(pattern.c_str(), path.c_str(), 0) == 0);
+        }
+    };
+
+    /**
+     * @struct IncrementProgress
+     * @brief Template function object that takes a ProgressMeter pointer as the
+     * second argument and calls ProgressMeter::operator++() on it.  An object
+     * of type T is passed as the first argument, however it is not used at all.
+     */
+
+    template <typename T>
+    struct IncrementProgress
+        : std::binary_function<T, ProgressMeter * const, bool>
+    {
+        bool operator()(const T& v LIBHERDSTAT_UNUSED,
+                        ProgressMeter * const meter) const
+        {
+            assert(meter != NULL);
+            ++*meter;
+            return true;
         }
     };
 
