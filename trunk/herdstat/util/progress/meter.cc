@@ -70,7 +70,7 @@ ProgressMeter::stop()
         std::printf("\b \b");
     std::fflush(stdout);
 
-    _started = false;
+    _cur = _step = _outlen = _started = 0;
 }
 /****************************************************************************/
 } // namespace util
