@@ -73,9 +73,6 @@ Categories::do_read()
     this->insert(std::istream_iterator<std::string>(this->stream()),
                  std::istream_iterator<std::string>());
 
-    /* virtual isn't really a category */
-    this->erase("virtual");
-
     /* validate if requested */
     if (_validate)
         std::for_each(this->begin(), this->end(),
