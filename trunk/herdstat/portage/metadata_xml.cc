@@ -135,11 +135,29 @@ MetadataXML::do_text(const std::string& text)
     if (in_herd)
         _data.herds().insert(Herd(text));
     else if (in_email)
-        _cur_dev = _data.devs().insert(Developer(util::lowercase(text))).first;
+    {
+        std::string base;
+        std::string::size_type pos = text.find('@');
+        if (pos != std::string::npos)
+            base.assign(text.substr(0, pos));
+        else
+            base.assign(text);
+
+        if (_data.herds().find(base) == _data.herds().end())
+            _cur_dev = _data.devs().insert(Developer(util::lowercase(text))).first;
+        else
+            _cur_dev = _data.devs().end();
+    }
     else if (in_name)
-        const_cast<Developer&>(*_cur_dev).set_name(_cur_dev->name() + text);
+    {
+        if (_cur_dev != _data.devs().end())
+            const_cast<Developer&>(*_cur_dev).set_name(_cur_dev->name() + text);
+    }
     else if (in_desc)
-        const_cast<Developer&>(*_cur_dev).set_role(text);
+    {
+        if (_cur_dev != _data.devs().end())
+            const_cast<Developer&>(*_cur_dev).set_role(text);
+    }
     else if (in_en_longdesc)
         _longdesc += text;
     else if (in_longdesc)
