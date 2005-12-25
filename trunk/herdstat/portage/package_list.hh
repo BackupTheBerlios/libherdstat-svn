@@ -106,6 +106,11 @@ namespace portage {
             /// Implicit conversion to const std::vector<Package>&
             operator const container_type&() const { return this->container(); }
 
+            /// Get main portdir used when filling the container.
+            const std::string& portdir() const { return _portdir; }
+            /// Get overlays used when filling the container.
+            const std::vector<std::string>& overlays() const { return _overlays; }
+
         private:
             const std::string& _portdir;
             const std::vector<std::string>& _overlays;
