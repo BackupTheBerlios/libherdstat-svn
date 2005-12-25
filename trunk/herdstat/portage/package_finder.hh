@@ -75,16 +75,37 @@ namespace portage {
              * util::Regex.
              * @param progress Progress meter to use (defaults to NULL).
              * @returns const reference to search results.
+             * @exception NonExistentPkg
              */
             template <typename T>
             const std::vector<Package>&
-            operator()(const T& v, util::ProgressMeter *progress = NULL)
+            find(const T& v, util::ProgressMeter *progress = NULL)
                 throw (NonExistentPkg);
 
+            /** Perform search for literal string.  Does some possible
+             * optimizations, otherwise just calls find().
+             * @param v literal string.
+             * @param progress Progress meter to use (defaults to NULL).
+             * @returns const reference to search results.
+             * @exception NonExistentPkg
+             */
+            const std::vector<Package>&
+            operator()(const std::string& v,
+                       util::ProgressMeter *progress = NULL) throw (NonExistentPkg);
+
+            /** char * overload that calls the std::string version of
+             * operator().
+             */
             inline const std::vector<Package>&
             operator()(const char * const v, util::ProgressMeter *progress = NULL)
                 throw (NonExistentPkg)
             { return operator()(std::string(v), progress); }
+
+            /// util::Regex overload that simply calls find().
+            inline const std::vector<Package>&
+            operator()(const util::Regex& v, util::ProgressMeter *progress = NULL)
+                throw (NonExistentPkg)
+            { return find(v, progress); }
 
         private:
             struct IsValid
@@ -111,7 +132,7 @@ namespace portage {
 
     template <typename T>
     const std::vector<Package>&
-    PackageFinder::operator()(const T& v, util::ProgressMeter *progress)
+    PackageFinder::find(const T& v, util::ProgressMeter *progress)
         throw (NonExistentPkg)
     {
         _timer.start();

@@ -38,6 +38,36 @@ PackageFinder::~PackageFinder() throw()
 {
 }
 /****************************************************************************/
+const std::vector<Package>&
+PackageFinder::operator()(const std::string& criteria,
+                          util::ProgressMeter *progress)
+    throw (NonExistentPkg)
+{
+    /* literal searches allow us to use a little optimization hack - we can
+     * simply check if the criteria exists in portdir or any of the overlays */
+
+    const std::string pd(_pkglist.portdir()+"/"+criteria);
+    if (is_pkg_dir(pd) or is_category(pd))
+        _results.push_back(Package(criteria, _pkglist.portdir()));
+
+    std::vector<std::string>::const_iterator i;
+    for (i = _pkglist.overlays().begin() ;
+            i != _pkglist.overlays().end() ; ++i)
+    {
+        if (progress)
+            ++*progress;
+
+        const std::string od(*i+"/"+criteria);
+        if (is_pkg_dir(od) or is_category(od))
+            _results.push_back(Package(criteria, *i));
+    }
+
+    if (_results.empty())
+        return find(criteria, progress);
+
+    return _results;
+}
+/****************************************************************************/
 } // namespace portage
 } // namespace herdstat
 
