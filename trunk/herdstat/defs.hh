@@ -32,6 +32,8 @@
  * @brief Provides some common #define's.
  */
 
+#define NELEMS(x) (sizeof(x) / sizeof(x[0]))
+
 #ifndef LIBHERDSTAT_DEPRECATED
 # if defined(__GNUC__) || defined(DOXYGEN)
 #   define LIBHERDSTAT_DEPRECATED __attribute__ ((deprecated))
