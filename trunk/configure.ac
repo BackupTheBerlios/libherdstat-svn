@@ -172,12 +172,25 @@ if test "$WITH_CURL" = "yes" ; then
 fi
 AC_SUBST(CURL_LIBS)
 
+AC_MSG_CHECKING([whether to build the readline interface])
+AC_ARG_WITH(readline,
+    AC_HELP_STRING([--with-readline],[Build readline interface]),
+    [WITH_RL=$withval],[WITH_RL=yes])
+AC_MSG_RESULT([$WITH_RL])
+AM_CONDITIONAL(BUILD_RL_INTERFACE, test x"$WITH_RL" = "xyes")
+
+if test x"$WITH_RL" = "xyes" ; then
+    AC_CHECK_HEADERS(readline/readline.h,,
+        [AC_MSG_ERROR([readline support was enabled but no readline/readline.h was found])])
+    AC_CHECK_LIB(readline, readline, [TERM_LIBS="-lreadline"])
+fi
+
 dnl Required libs
 
-AC_CHECK_LIB(ncurses, tgetent, [TERM_LIBS="-lncurses"],
-    AC_MSG_ERROR([ncurses is required]))
 AC_CHECK_HEADERS([curses.h term.h],,
     AC_MSG_ERROR([ncurses headers required]))
+AC_CHECK_LIB(ncurses, tgetent, [TERM_LIBS="$TERM_LIBS -lncurses"],
+    AC_MSG_ERROR([ncurses is required]))
 AC_SUBST(TERM_LIBS)
 
 PKG_PROG_PKG_CONFIG
