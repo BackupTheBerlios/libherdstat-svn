@@ -105,6 +105,9 @@ DevawayXML::keys() const
 bool
 DevawayXML::start_element(const std::string& name, const attrs_type& attrs)
 {
+    if (meter())
+        ++*meter();
+
     if (name == "devaway")
         in_devaway = true;
     else if (name == "dev" and in_devaway)
@@ -128,6 +131,9 @@ DevawayXML::start_element(const std::string& name, const attrs_type& attrs)
 bool
 DevawayXML::end_element(const std::string& name)
 {
+    if (meter())
+        ++*meter();
+
     if (name == "devaway")      in_devaway = false;
     else if (name == "dev")     in_dev = false;
     else if (name == "reason")  in_reason = false;
@@ -138,6 +144,9 @@ DevawayXML::end_element(const std::string& name)
 bool
 DevawayXML::do_text(const std::string& text)
 {
+    if (meter())
+        ++*meter();
+
     if (in_reason)
         const_cast<Developer&>(*_cur_dev).set_awaymsg(_cur_dev->awaymsg()+text);
 

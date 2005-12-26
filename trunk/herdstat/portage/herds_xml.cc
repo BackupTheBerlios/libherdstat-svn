@@ -112,6 +112,9 @@ bool
 HerdsXML::start_element(const std::string& name,
                         const attrs_type& attrs LIBHERDSTAT_UNUSED)
 {
+    if (meter())
+        ++*meter();
+
     if (name == "herd")
         in_herd = true;
     else if (name == "name" and not in_maintainer)
@@ -137,6 +140,9 @@ HerdsXML::start_element(const std::string& name,
 bool
 HerdsXML::end_element(const std::string& name)
 {
+    if (meter())
+        ++*meter();
+
     if (name == "herd")
         in_herd = false;
     else if (name == "name" and not in_maintainer)

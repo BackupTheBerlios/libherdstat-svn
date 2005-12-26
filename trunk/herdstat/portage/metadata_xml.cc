@@ -72,6 +72,9 @@ MetadataXML::do_parse(const std::string& path)
 bool
 MetadataXML::start_element(const std::string& name, const attrs_type& attrs)
 {
+    if (meter())
+        ++*meter();
+
     if (name == "catmetadata")
         _data.set_category(true);
     else if (name == "herd")
@@ -108,6 +111,9 @@ MetadataXML::start_element(const std::string& name, const attrs_type& attrs)
 bool
 MetadataXML::end_element(const std::string& name)
 {
+    if (meter())
+        ++*meter();
+
     if (name == "herd")
         in_herd = false;
     else if (name == "maintainer")
@@ -136,14 +142,9 @@ MetadataXML::do_text(const std::string& text)
         _data.herds().insert(Herd(text));
     else if (in_email)
     {
-        std::string base;
-        std::string::size_type pos = text.find('@');
-        if (pos != std::string::npos)
-            base.assign(text.substr(0, pos));
-        else
-            base.assign(text);
-
-        if (_data.herds().find(base) == _data.herds().end())
+        /* only insert it if it's not a herd */
+        if (_data.herds().find(text.substr(0, text.find('@'))) ==
+                _data.herds().end())
             _cur_dev = _data.devs().insert(Developer(util::lowercase(text))).first;
         else
             _cur_dev = _data.devs().end();
@@ -162,6 +163,7 @@ MetadataXML::do_text(const std::string& text)
         _longdesc += text;
     else if (in_longdesc)
         _data.set_longdesc(_data.longdesc() + text);
+
     return true;
 }
 /****************************************************************************/

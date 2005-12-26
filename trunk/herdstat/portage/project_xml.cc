@@ -135,6 +135,9 @@ ProjectXML::do_parse(const std::string& path)
 bool
 ProjectXML::start_element(const std::string& name, const attrs_type& attrs)
 {
+    if (meter())
+        ++*meter();
+
     if (name == "task")
         in_task = true;
     else if (name == "subproject")
@@ -142,7 +145,6 @@ ProjectXML::start_element(const std::string& name, const attrs_type& attrs)
         /*
          * If inheritmembers == "yes", fetch the file listed in the ref attr,
          * and treat it as another projectxml, recursing into ourselves.
-         * TODO: should we add some kind of reference counting?
          */
 
         attrs_type::const_iterator pos = attrs.find("inheritmembers");
@@ -183,6 +185,9 @@ ProjectXML::start_element(const std::string& name, const attrs_type& attrs)
 bool
 ProjectXML::end_element(const std::string& name)
 {
+    if (meter())
+        ++*meter();
+
     if (name == "task")             in_task = false;
     else if (name == "subproject")  in_sub = false;
     else if (name == "dev")         in_dev = false;

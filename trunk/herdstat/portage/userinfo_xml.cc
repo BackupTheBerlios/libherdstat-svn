@@ -93,6 +93,9 @@ UserinfoXML::fill_developer(Developer& dev) const throw (Exception)
 bool
 UserinfoXML::start_element(const std::string& name, const attrs_type& attrs)
 {
+    if (meter())
+        ++*meter();
+
     if (name == "user")
     {
         attrs_type::const_iterator pos = attrs.find("username");
@@ -133,6 +136,9 @@ UserinfoXML::start_element(const std::string& name, const attrs_type& attrs)
 bool
 UserinfoXML::end_element(const std::string& name)
 {
+    if (meter())
+        ++*meter();
+
     if      (name == "user")        in_user = false;
     else if (name == "firstname")   in_firstname = false;
     else if (name == "familyname")  in_familyname = false;
@@ -149,6 +155,9 @@ UserinfoXML::end_element(const std::string& name)
 bool
 UserinfoXML::do_text(const std::string& text)
 {
+    if (meter())
+        ++*meter();
+
     if (in_firstname)
         const_cast<Developer&>(*_cur_dev).set_name(_cur_dev->name() + text);
     else if (in_familyname)
