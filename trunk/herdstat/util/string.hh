@@ -35,9 +35,11 @@
 #include <string>
 #include <vector>
 #include <sstream>
+#include <cstdlib>
 #include <cstdarg>
 #include <cerrno>
 #include <cctype>
+#include <cstring>
 
 #include <herdstat/exceptions.hh>
 
@@ -175,6 +177,22 @@ std::string foo(util::join(foov.begin(), foov.end()));
     lowercase_inplace(std::string& s) throw()
     {
         std::transform(s.begin(), s.end(), s.begin(), ::tolower);
+    }
+
+    /** strdup replacement in case it's not available from your C library.
+     * @param s string to duplicate.
+     * @returns Duplicated string (memory obtained with malloc()).
+     * @exception std::bad_alloc
+     */
+    inline char *
+    strdup(const char * const s) throw (std::bad_alloc)
+    {
+        char *tmp = static_cast<char *>(std::malloc(std::strlen(s) + 1));
+        if (not tmp)
+            throw std::bad_alloc();
+
+        std::strcpy(tmp, s);
+        return tmp;
     }
 
     /**

@@ -28,9 +28,6 @@
 #include <iterator>
 #include <vector>
 #include <map>
-#include <cstdarg>
-#include <cstring>
-#include <cctype>
 #include <locale>
 #include <functional>
 
