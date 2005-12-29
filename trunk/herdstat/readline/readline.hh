@@ -1,5 +1,5 @@
 /*
- * libherdstat -- herdstat/util/readline.hh
+ * libherdstat -- herdstat/readline/readline.hh
  * $Id$
  * Copyright (c) 2005 Aaron Walker <ka0ttic@gentoo.org>
  *
@@ -20,8 +20,8 @@
  * Place, Suite 325, Boston, MA  02111-1257  USA
  */
 
-#ifndef _HAVE_UTIL_READLINE_HH
-#define _HAVE_UTIL_READLINE_HH 1
+#ifndef _HAVE_READLINE_READLINE_HH
+#define _HAVE_READLINE_READLINE_HH 1
 
 #ifdef HAVE_CONFIG_H
 # include "config.h"
@@ -30,16 +30,15 @@
 #include <string>
 #include <herdstat/exceptions.hh>
 #include <readline/readline.h>
-#include <readline/history.h>
 
 namespace herdstat {
-namespace util {
+namespace readline {
 
     /// ReadLine EOF exception, thrown when readline encounters an EOF
     class ReadLineEOF : public BaseException { };
 
     /**
-     * @class ReadLine
+     * @class ReadLine readline.hh herdstat/readline/readline.hh
      * @brief Interface to the readline library.  Note that the interface is
      * currently incomplete.  Stuff will be added as it is needed/requested.
      *
@@ -50,7 +49,7 @@ namespace util {
 @code
 try
 {
-    herdstat::util::ReadLine rl("MyApp", "prompt> ");
+    herdstat::readline::ReadLine rl("MyApp", "prompt> ");
     std::string input;
 
     while (input != "quit" and input != "exit")
@@ -65,7 +64,7 @@ try
             rl.set_prompt("foo> ");
     }
 }
-catch (const herdstat::util::ReadLineEOF&)
+catch (const herdstat::readline::ReadLineEOF&)
 {
 
 }
@@ -119,7 +118,7 @@ catch (const herdstat::util::ReadLineEOF&)
             /// Set completion entry function (rl_completion_entry_function).
             inline void set_completion_entry_hook(rl_compentry_func_t *hook);
 
-            /** Get user input (also adds input to history).
+            /** Get user input.
              * @param text preexisting text to be present when the prompt is
              * shown (defaults to empty).
              * @returns user input.
@@ -158,7 +157,7 @@ catch (const herdstat::util::ReadLineEOF&)
         rl_completion_entry_function = hook;
     }
 
-} // namespace util
+} // namespace readline
 } // namespace herdstat
 
 #endif /* _HAVE_UTIL_READLINE_HH */

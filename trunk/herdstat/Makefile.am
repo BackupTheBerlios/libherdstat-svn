@@ -2,7 +2,7 @@
 
 include $(top_builddir)/Makefile.am.common
 
-SUBDIRS = util io fetcher xml portage
+SUBDIRS = util readline io fetcher xml portage
 MAINTAINERCLEANFILES = Makefile.in *~ .loT libherdstat_version.hh
 EXTRA_DIST = libherdstat_version.hh.in doxygen.hh
 
@@ -27,6 +27,10 @@ libherdstat_la_LIBADD = util/libutil.la \
 			xml/libxml.la \
 			portage/libportage.la
 libherdstat_la_SOURCES = $(hh_sources) $(cc_sources)
+
+if BUILD_RL_INTERFACE
+libherdstat_la_LIBADD += readline/librl.la
+endif
 
 library_includedir=$(includedir)/$(PACKAGE)-$(VERSION_MAJOR).$(VERSION_MINOR)/herdstat
 library_include_HEADERS = $(hh_sources) libherdstat_version.hh

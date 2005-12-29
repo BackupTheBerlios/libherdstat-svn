@@ -4,7 +4,8 @@ ChangeLog file for a more detailed listing of changes/bug fixes.
 0.2.0:
 
     New additions:
-    - util::ReadLine class, an interface to the readline library.  Currently
+    - Interfaces for readline's libreadline and libhistory libraries
+      (readline::ReadLine and readline::History respectively).  Currently
       not a complete interface.  More will be added as needed/requested.
 
     API Changes:

@@ -181,17 +181,23 @@ AM_CONDITIONAL(BUILD_RL_INTERFACE, test x"$WITH_RL" = "xyes")
 
 if test x"$WITH_RL" = "xyes" ; then
     AC_CHECK_HEADERS(readline/readline.h,,
-        [AC_MSG_ERROR([readline support was enabled but no readline/readline.h was found])])
-    AC_CHECK_LIB(readline, readline, [TERM_LIBS="-lreadline"])
+        [AC_MSG_ERROR([readline support was enabled but readline/readline.h was not found])])
+    AC_CHECK_LIB(readline, readline, [READLINE_LIBS="-lreadline"],
+	[AC_MSG_ERROR([readline support was enabled but libreadline was not found])])
+    AC_CHECK_HEADERS(readline/history.h,,
+	[AC_MSG_ERROR([readline support was enabled but readline/history.h was not found])])
+    AC_CHECK_LIB(history, add_history, [READLINE_LIBS="$READLINE_LIBS -lhistory"],
+	[AC_MSG_ERROR([readline support was enabled but libhistory was not found])])
 fi
+AC_SUBST(READLINE_LIBS)
 
 dnl Required libs
 
 AC_CHECK_HEADERS([curses.h term.h],,
     AC_MSG_ERROR([ncurses headers required]))
-AC_CHECK_LIB(ncurses, tgetent, [TERM_LIBS="$TERM_LIBS -lncurses"],
+AC_CHECK_LIB(ncurses, tgetent, [CURSES_LIBS="-lncurses"],
     AC_MSG_ERROR([ncurses is required]))
-AC_SUBST(TERM_LIBS)
+AC_SUBST(CURSES_LIBS)
 
 PKG_PROG_PKG_CONFIG
 PKG_CHECK_MODULES(xmlwrapp, xmlwrapp >= 0.5.0,
@@ -219,6 +225,7 @@ AC_OUTPUT(Makefile
 	  herdstat/libherdstat_version.hh
 	  herdstat/util/Makefile
 	  herdstat/util/progress/Makefile
+	  herdstat/readline/Makefile
 	  herdstat/io/Makefile
 	  herdstat/fetcher/Makefile
 	  herdstat/xml/Makefile

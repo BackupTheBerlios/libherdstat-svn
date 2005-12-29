@@ -64,6 +64,9 @@
  * - String manipulation utilities (herdstat/util/string.hh).
  * - General purpose algorithms (herdstat/util/algorithms.hh) and functional
  *   objects (herdstat/util/functional.hh).
+ * - Interfaces for readline's libreadline and libhistory
+ *   (herdstat::readline::ReadLine and herdstat::readline::History
+ *   respectively).
  * - Even more.
  *
  *
@@ -135,6 +138,11 @@ PKG_CHECK_MODULES(libherdstat, libherdstat-0.2 >= 0.2.5)
 /**
  * @namespace herdstat::util
  * @brief General-purpose utility classes/functions.
+ */
+
+/**
+ * @namespace herdstat::readline
+ * @brief Interfaces for readline's libreadline/libhistory.
  */
 
 /**

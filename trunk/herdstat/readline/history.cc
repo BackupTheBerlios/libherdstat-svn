@@ -1,5 +1,5 @@
 /*
- * libherdstat -- herdstat/util/readline.cc
+ * libherdstat -- herdstat/readline/history.cc
  * $Id$
  * Copyright (c) 2005 Aaron Walker <ka0ttic@gentoo.org>
  *
@@ -25,78 +25,66 @@
 #endif
 
 #include <cstdlib>
-#include <herdstat/util/readline.hh>
-
-static const std::string * _rl_buf = NULL;
-
-static int
-default_readline_startup_hook()
-{
-    rl_insert_text(_rl_buf->c_str());
-    return 0;
-}
+#include <herdstat/util/file.hh>
+#include <herdstat/readline/history.hh>
 
 namespace herdstat {
-namespace util {
+namespace readline {
 /****************************************************************************/
-ReadLine::ReadLine(const std::string& name,
-                   const std::string& prompt) throw()
-    : _name(name), _prompt(prompt),
-      _inithook(default_readline_startup_hook)
+History::History() throw()
+    : _path()
 {
     _init();
 }
 /****************************************************************************/
-ReadLine::ReadLine(rl_hook_func_t *startup_hook) throw()
-    : _name(), _prompt(), _inithook(startup_hook)
+History::History(const std::string& path) throw()
+    : _path(path)
 {
     _init();
 }
 /****************************************************************************/
-ReadLine::ReadLine(const std::string& name,
-                   const std::string& prompt,
-                   rl_hook_func_t *startup_hook)
-    throw()
-    : _name(name), _prompt(prompt), _inithook(startup_hook)
-{
-    _init();
-}
-/****************************************************************************/
-ReadLine::~ReadLine() throw()
+History::~History() throw()
 {
 }
 /****************************************************************************/
 void
-ReadLine::_init() throw()
+History::_init() throw()
 {
-    if (not _name.empty())
-        rl_readline_name = _name.c_str();
+    using_history();
 
-    rl_startup_hook = _inithook;
-}
-/****************************************************************************/
-std::string
-ReadLine::operator()(const std::string& text) const throw (ReadLineEOF)
-{
-    _rl_buf = &text;
-
-    char *input = readline(_prompt.c_str());
-    if (not input)
-        throw ReadLineEOF();
-
-    std::string result;
-
-    if (*input)
+    if (_path.empty())
     {
-        add_history(input);
-        result.assign(input);
+        const char * const homedir = std::getenv("HOME");
+        if (homedir)
+            _path.assign(std::string(homedir) + "/.history");
+        else
+            _path.assign(".history");
     }
-
-    std::free(input);
-    return result;
 }
 /****************************************************************************/
-} // namespace util
+void
+History::read() throw (FileException)
+{
+    if (util::is_file(_path) and (read_history(_path.c_str()) != 0))
+        throw FileException(_path);
+}
+/****************************************************************************/
+void
+History::read(int from, int to) throw (FileException)
+{
+    if (util::is_file(_path) and
+        (read_history_range(_path.c_str(), from, to) != 0))
+        throw FileException(_path);
+}
+/****************************************************************************/
+void
+History::write() throw (FileException)
+{
+    if (write_history(_path.c_str()) != 0)
+        throw FileException(_path);
+}
+/****************************************************************************/
+} // namespace readline
 } // namespace herdstat
 
 /* vim: set tw=80 sw=4 fdm=marker et : */

@@ -27,16 +27,9 @@ hh_sources = \
 	algorithm.hh \
 	getcols.hh
 
-if BUILD_RL_INTERFACE
-cc_sources += readline.cc
-hh_sources += readline.hh
-else
-EXTRA_DIST = readline.cc readline.hh
-endif
-
 noinst_LTLIBRARIES = libutil.la
 libutil_la_SOURCES = $(cc_sources) $(hh_sources)
-libutil_la_LIBADD = progress/libprogress.la @TERM_LIBS@
+libutil_la_LIBADD = progress/libprogress.la @CURSES_LIBS@
 
 library_includedir=$(includedir)/$(PACKAGE)-$(VERSION_MAJOR).$(VERSION_MINOR)/herdstat/util
 library_include_HEADERS = $(hh_sources)
