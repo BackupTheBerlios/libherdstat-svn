@@ -141,11 +141,6 @@ PKG_CHECK_MODULES(libherdstat, libherdstat-0.2 >= 0.2.5)
  */
 
 /**
- * @namespace herdstat::readline
- * @brief Interfaces for readline's libreadline/libhistory.
- */
-
-/**
  * @namespace herdstat::io
  * @brief General-purpose input/output classes/functions.
  */
