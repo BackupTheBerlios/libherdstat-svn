@@ -33,7 +33,7 @@
 #include <functional>
 
 /**
- * @file container_base.hh
+ * @file herdstat/util/container_base.hh
  * @brief Defines the ContainerBase base class template.
  */
 
