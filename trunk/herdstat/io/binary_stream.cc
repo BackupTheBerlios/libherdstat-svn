@@ -24,6 +24,7 @@
 # include "config.h"
 #endif
 
+#include <cassert>
 #include <herdstat/io/binary_stream.hh>
 
 namespace herdstat {

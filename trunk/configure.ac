@@ -10,8 +10,8 @@ AC_CONFIG_AUX_DIR(config)
 VERSION_MAJOR=0
 VERSION_MINOR=2
 VERSION_MICRO=0
-VERSION_SUFFIX=
-VERSION_SUFFIX_VERSION=
+VERSION_SUFFIX=p
+VERSION_SUFFIX_VERSION=1
 VERSION_FULL="$VERSION_MAJOR.$VERSION_MINOR.$VERSION_MICRO"
 
 if ! test -z "$VERSION_SUFFIX" ; then
@@ -102,6 +102,41 @@ gxxver=`${CXX} -dumpversion | cut -f1 -d.`
 AC_MSG_RESULT([$gxxver])
 if test x$gxxver = "x4" ; then
     AC_DEFINE_UNQUOTED(HAVE_GCC4, 1, [GCC Version 4])
+fi
+
+AC_MSG_CHECKING([if ${CXX} supports __attribute__ ((unused))])
+AC_COMPILE_IFELSE(AC_LANG_PROGRAM([
+#include <stdio.h>
+void foo(int x __attribute__ ((unused)))
+{ printf("foo\n"); }
+],[
+    int i = 10;
+    foo(i);
+    return 0;
+    ]),
+    [HAS_ATTR_UNUSED="yes"],[HAS_ATTR_UNUSED="no"])
+AC_MSG_RESULT([$HAS_ATTR_UNUSED])
+
+if test "x$HAS_ATTR_UNUSED" = "xyes" ; then
+    AC_DEFINE(HAVE_ATTR_UNUSED, 1, [C compiler supports the unused attribute])
+fi
+
+AC_MSG_CHECKING([if ${CXX} supports __attribute__ ((deprecated))])
+AC_COMPILE_IFELSE(AC_LANG_PROGRAM([
+class __attribute__ ((deprecated)) Foo
+{
+    public:
+	Foo() __attribute__ ((deprecated)) { }
+};
+],[
+    Foo foo;
+    return 0;
+    ]),
+    [HAS_ATTR_DEPRECAED="yes"],[HAS_ATTR_DEPRECAED="no"])
+AC_MSG_RESULT([$HAS_ATTR_DEPRECAED])
+
+if test "x$HAS_ATTR_DEPRECAED" = "xyes" ; then
+    AC_DEFINE(HAVE_ATTR_DEPRECATED, 1, [C compiler supports the deprecated attribute])
 fi
 
 LHS_CHECK_CXXFLAG([-pedantic])

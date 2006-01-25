@@ -35,7 +35,7 @@
 #define NELEMS(x) (sizeof(x) / sizeof(x[0]))
 
 #ifndef LIBHERDSTAT_DEPRECATED
-# if defined(__GNUC__) || defined(DOXYGEN)
+# if defined(HAVE_ATTR_DEPRECATED) || defined(DOXYGEN)
 #   define LIBHERDSTAT_DEPRECATED __attribute__ ((deprecated))
 # else
 #   define LIBHERDSTAT_DEPRECATED
@@ -43,7 +43,7 @@
 #endif
 
 #ifndef LIBHERDSTAT_UNUSED
-# if defined(__GNUC__) || defined(DOXYGEN)
+# if defined(HAVE_ATTR_UNUSED) || defined(DOXYGEN)
 #   define LIBHERDSTAT_UNUSED __attribute__ ((unused))
 # else
 #   define LIBHERDSTAT_UNUSED

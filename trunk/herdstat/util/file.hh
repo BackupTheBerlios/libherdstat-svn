@@ -39,6 +39,7 @@
 #include <vector>
 #include <cstdlib>
 #include <cerrno>
+#include <cassert>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>

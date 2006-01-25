@@ -24,6 +24,8 @@
 # include "config.h"
 #endif
 
+#include <cassert>
+
 #include <herdstat/fetcher/curlfetcher.hh>
 #include <herdstat/fetcher/wgetfetcher.hh>
 #include <herdstat/fetcher/impmap.hh>

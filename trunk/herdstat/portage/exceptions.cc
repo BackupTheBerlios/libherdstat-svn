@@ -24,6 +24,8 @@
 # include "config.h"
 #endif
 
+#include <cassert>
+
 #include <herdstat/portage/exceptions.hh>
 
 namespace herdstat {

@@ -115,10 +115,9 @@ BinaryIO::operator()(const opts_type& null LIBHERDSTAT_UNUSED) const
         if (not stream)
             throw herdstat::FileException("bar");
 
-        herdstat::io::BinaryIStreamIterator<std::string> strEOF;
-
-        std::vector<std::string> s2(
-                herdstat::io::BinaryIStreamIterator<std::string>(stream), strEOF);
+        std::vector<std::string> s2;
+        s2.assign(herdstat::io::BinaryIStreamIterator<std::string>(stream),
+                  herdstat::io::BinaryIStreamIterator<std::string>());
 
         std::cout << "s2 = '";
         std::copy(s2.begin(), s2.end(),
