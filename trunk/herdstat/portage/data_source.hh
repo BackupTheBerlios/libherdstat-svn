@@ -62,18 +62,16 @@ namespace portage {
              * user name set.
              * @exception Exception
              */
-            virtual void fill_developer(Developer& dev) const
-                throw (Exception) = 0;
+            virtual void fill_developer(Developer& dev) const = 0;
 
         protected:
             /// Default constructor.
-            DataSource() throw() { }
+            DataSource() { }
 
             /** Constructor.
              * @param path Path to XML file.
              */
-            DataSource(const std::string& path) throw()
-                : Parsable(path) { }
+            DataSource(const std::string& path) : Parsable(path) { }
 
             /// Destructor.
             virtual ~DataSource() throw() { }

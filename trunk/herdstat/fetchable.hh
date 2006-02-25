@@ -74,15 +74,14 @@ namespace herdstat {
              * @param path Path to file.
              * @exception FetchException
              */
-            inline void fetch(const std::string& path = "") const
-                throw (FetchException);
+            inline void fetch(const std::string& path = "") const;
 
             /// Have we already fetch()'d?
             bool fetched() const { return _fetched; }
 
         protected:
             /// Default constructor.
-            Fetchable() throw() : _fetch(), _fetched(false) { }
+            Fetchable() : _fetch(), _fetched(false) { }
 
             /// Return fetcher.
             const Fetcher& fetcher() const { return _fetch; }
@@ -91,8 +90,7 @@ namespace herdstat {
              * @param path local path to save.
              * @exception FetchException
              */
-            virtual void do_fetch(const std::string& path = "") const
-                throw (FetchException) = 0;
+            virtual void do_fetch(const std::string& path = "") const = 0;
 
         private:
             mutable Fetcher _fetch;
@@ -100,7 +98,7 @@ namespace herdstat {
     };
 
     inline void
-    Fetchable::fetch(const std::string& path) const throw (FetchException)
+    Fetchable::fetch(const std::string& path) const
     {
         if (_fetched)
             return;

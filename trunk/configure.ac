@@ -2,16 +2,16 @@
 # $Id: configure.ac 246 2005-04-26 12:03:53Z ka0ttic $
 
 AC_PREREQ(2.59)
-AC_INIT(libherdstat, [0.2.0], [ka0ttic@gentoo.org])
+AC_INIT(libherdstat, [0.2.1], [ka0ttic@gentoo.org])
 AC_CONFIG_SRCDIR([herdstat/exceptions.hh])
 AC_CONFIG_AUX_DIR(config)
 
 # release versioning
 VERSION_MAJOR=0
 VERSION_MINOR=2
-VERSION_MICRO=0
-VERSION_SUFFIX=p
-VERSION_SUFFIX_VERSION=1
+VERSION_MICRO=1
+VERSION_SUFFIX=
+VERSION_SUFFIX_VERSION=
 VERSION_FULL="$VERSION_MAJOR.$VERSION_MINOR.$VERSION_MICRO"
 
 if ! test -z "$VERSION_SUFFIX" ; then
@@ -114,12 +114,15 @@ void foo(int x __attribute__ ((unused)))
     foo(i);
     return 0;
     ]),
-    [HAS_ATTR_UNUSED="yes"],[HAS_ATTR_UNUSED="no"])
-AC_MSG_RESULT([$HAS_ATTR_UNUSED])
+    [UNUSED_ATTR="__attribute__ ((unused))"],[UNUSED_ATTR=""])
 
-if test "x$HAS_ATTR_UNUSED" = "xyes" ; then
-    AC_DEFINE(HAVE_ATTR_UNUSED, 1, [C compiler supports the unused attribute])
+if test "x$UNUSED_ATTR" = "x" ; then
+    AC_MSG_RESULT([no])
+else
+    AC_MSG_RESULT([yes])
 fi
+
+AC_SUBST(UNUSED_ATTR)
 
 AC_MSG_CHECKING([if ${CXX} supports __attribute__ ((deprecated))])
 AC_COMPILE_IFELSE(AC_LANG_PROGRAM([
@@ -132,12 +135,16 @@ class __attribute__ ((deprecated)) Foo
     Foo foo;
     return 0;
     ]),
-    [HAS_ATTR_DEPRECAED="yes"],[HAS_ATTR_DEPRECAED="no"])
-AC_MSG_RESULT([$HAS_ATTR_DEPRECAED])
+    [DEPRECATED_ATTR="__attribute__ ((deprecated))"],
+    [DEPRECATED_ATTR=""])
 
-if test "x$HAS_ATTR_DEPRECAED" = "xyes" ; then
-    AC_DEFINE(HAVE_ATTR_DEPRECATED, 1, [C compiler supports the deprecated attribute])
+if test "x$DEPRECATED_ATTR" = "x" ; then
+    AC_MSG_RESULT([no])
+else
+    AC_MSG_RESULT([yes])
 fi
+
+AC_SUBST(DEPRECATED_ATTR)
 
 LHS_CHECK_CXXFLAG([-pedantic])
 LHS_CHECK_CXXFLAG([-ansi])
@@ -234,7 +241,7 @@ AC_OUTPUT(Makefile
 	  examples/version_components/Makefile
 	  examples/progress/Makefile
 	  herdstat/Makefile
-	  herdstat/libherdstat_version.hh
+	  herdstat/defs.hh
 	  herdstat/util/Makefile
 	  herdstat/util/progress/Makefile
 	  herdstat/io/Makefile

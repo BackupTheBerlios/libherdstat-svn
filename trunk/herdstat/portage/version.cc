@@ -105,12 +105,12 @@ namespace portage {
 /****************************************************************************/
 // {{{ VersionComponents
 /****************************************************************************/
-VersionComponents::VersionComponents() throw()
+VersionComponents::VersionComponents()
     : _verstr(), _vmap()
 {
 }
 /****************************************************************************/
-VersionComponents::VersionComponents(const std::string &path) throw()
+VersionComponents::VersionComponents(const std::string &path)
     : _verstr(util::chop_fileext(util::basename(path))), _vmap()
 {
     this->parse();
@@ -121,7 +121,7 @@ VersionComponents::~VersionComponents() throw()
 }
 /****************************************************************************/
 void
-VersionComponents::assign(const std::string& path) throw()
+VersionComponents::assign(const std::string& path)
 {
     _verstr.assign(util::chop_fileext(util::basename(path)));
     _vmap.clear();
@@ -129,7 +129,7 @@ VersionComponents::assign(const std::string& path) throw()
 }
 /****************************************************************************/
 void
-VersionComponents::parse() throw()
+VersionComponents::parse()
 {
     /* append -r0 if necessary */
     std::string::size_type pos = _verstr.rfind("-r0");
@@ -182,19 +182,19 @@ VersionComponents::parse() throw()
 /****************************************************************************/
 // {{{ VersionString::suffix
 /****************************************************************************/
-VersionString::suffix::suffix() throw()
+VersionString::suffix::suffix()
     : _suffix(), _suffix_ver()
 {
 }
 /****************************************************************************/
-VersionString::suffix::suffix(const std::string& pvr) throw()
+VersionString::suffix::suffix(const std::string& pvr)
     : _suffix(), _suffix_ver()
 {
     this->parse(pvr);
 }
 /****************************************************************************/
 void
-VersionString::suffix::parse(const std::string &pvr) const throw()
+VersionString::suffix::parse(const std::string &pvr) const
 {
     _suffix_ver.clear();
     _suffix.assign(pvr);
@@ -227,7 +227,7 @@ VersionString::suffix::parse(const std::string &pvr) const throw()
 }
 /****************************************************************************/
 bool
-VersionString::suffix::operator< (const suffix& that) const throw()
+VersionString::suffix::operator< (const suffix& that) const
 {
     const ValidSuffixes& suffixes(GlobalValidSuffixes());
     ValidSuffixes::const_iterator ti, si;
@@ -266,7 +266,7 @@ VersionString::suffix::operator< (const suffix& that) const throw()
 }
 /****************************************************************************/
 bool
-VersionString::suffix::operator== (const suffix& that) const throw()
+VersionString::suffix::operator== (const suffix& that) const
 {
     const ValidSuffixes& suffixes(GlobalValidSuffixes());
     ValidSuffixes::const_iterator ti, si;
@@ -300,19 +300,19 @@ VersionString::suffix::operator== (const suffix& that) const throw()
 /****************************************************************************/
 // {{{ VersionString::nosuffix
 /****************************************************************************/
-VersionString::nosuffix::nosuffix() throw()
+VersionString::nosuffix::nosuffix()
     : _version(), _extra()
 {
 }
 /****************************************************************************/
-VersionString::nosuffix::nosuffix(const std::string& pv) throw()
+VersionString::nosuffix::nosuffix(const std::string& pv)
     : _version(), _extra()
 {
     this->parse(pv);
 }
 /****************************************************************************/
 void
-VersionString::nosuffix::parse(const std::string& pv) const throw()
+VersionString::nosuffix::parse(const std::string& pv) const
 {
     _extra.clear();
     _version.assign(pv);
@@ -332,7 +332,7 @@ VersionString::nosuffix::parse(const std::string& pv) const throw()
 }
 /****************************************************************************/
 bool
-VersionString::nosuffix::operator< (const nosuffix& that) const throw()
+VersionString::nosuffix::operator< (const nosuffix& that) const
 {
     bool differ = false;
     bool result = false;
@@ -389,7 +389,7 @@ VersionString::nosuffix::operator< (const nosuffix& that) const throw()
 }
 /****************************************************************************/
 bool
-VersionString::nosuffix::operator== (const nosuffix& that) const throw()
+VersionString::nosuffix::operator== (const nosuffix& that) const
 {
     /* std::string comparison should be sufficient for == */
     return ((_version == that._version) and
@@ -399,25 +399,25 @@ VersionString::nosuffix::operator== (const nosuffix& that) const throw()
 /****************************************************************************/
 // {{{ VersionString
 /****************************************************************************/
-VersionString::VersionString() throw()
+VersionString::VersionString()
     : _ebuild(), _v(), _verstr(), _suffix(), _version()
 {
 }
 /****************************************************************************/
-VersionString::VersionString(const std::string& path) throw()
+VersionString::VersionString(const std::string& path)
     : _ebuild(path), _v(path), _verstr(_v.version()),
       _suffix(_v["PVR"]), _version(_v["PV"])
 {
 }
 /****************************************************************************/
-VersionString::VersionString(const VersionString& that) throw()
+VersionString::VersionString(const VersionString& that)
     : _ebuild(), _v(), _verstr(), _suffix(), _version()
 {
     *this = that;
 }
 /****************************************************************************/
 VersionString&
-VersionString::operator=(const VersionString& that) throw()
+VersionString::operator=(const VersionString& that)
 {
     const_cast<std::string&>(_ebuild) = that._ebuild;
     const_cast<VersionComponents&>(_v) = that._v;
@@ -428,7 +428,7 @@ VersionString::operator=(const VersionString& that) throw()
 }
 /****************************************************************************/
 void
-VersionString::assign(const std::string& path) throw()
+VersionString::assign(const std::string& path)
 {
     _ebuild.assign(path);
     _v.assign(path);
@@ -438,7 +438,7 @@ VersionString::assign(const std::string& path) throw()
 }
 /****************************************************************************/
 std::string
-VersionString::str() const throw()
+VersionString::str() const
 {
     /* chop -r0 if necessary */
     std::string::size_type pos = _verstr.rfind("-r0");
@@ -449,7 +449,7 @@ VersionString::str() const throw()
 }
 /****************************************************************************/
 bool
-VersionString::operator< (const VersionString& that) const throw()
+VersionString::operator< (const VersionString& that) const
 {
     if (_version < that._version)
         return true;
@@ -473,18 +473,18 @@ VersionString::operator< (const VersionString& that) const throw()
 /****************************************************************************/
 // {{{ Versions
 /****************************************************************************/
-Versions::Versions() throw()
+Versions::Versions()
     : util::SetBase<VersionString>()
 {
 }
 /****************************************************************************/
-Versions::Versions(const std::string& path) throw()
+Versions::Versions(const std::string& path)
     : util::SetBase<VersionString>()
 {
     this->assign(path);
 }
 /****************************************************************************/
-Versions::Versions(const std::vector<std::string>& paths) throw()
+Versions::Versions(const std::vector<std::string>& paths)
     : util::SetBase<VersionString>()
 {
     std::for_each(paths.begin(), paths.end(),
@@ -496,7 +496,7 @@ Versions::~Versions() throw()
 }
 /****************************************************************************/
 void
-Versions::assign(const std::string& path) throw()
+Versions::assign(const std::string& path)
 {
     this->clear();
 
@@ -509,7 +509,7 @@ Versions::assign(const std::string& path) throw()
 }
 /****************************************************************************/
 void
-Versions::append(const std::string& path) throw()
+Versions::append(const std::string& path)
 {
     const util::Directory pkgdir(path);
     util::copy_if(pkgdir.begin(), pkgdir.end(),

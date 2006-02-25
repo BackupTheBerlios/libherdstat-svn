@@ -33,7 +33,7 @@ namespace portage {
 /*** static members *********************************************************/
 const char * const UserinfoXML::_local_default = LOCALSTATEDIR"/userinfo.xml";
 /****************************************************************************/
-UserinfoXML::UserinfoXML() throw()
+UserinfoXML::UserinfoXML()
     : DataSource(), _devs(), in_user(false), in_firstname(false),
       in_familyname(false), in_pgpkey(false), in_email(false), in_joined(false),
       in_birth(false), in_roles(false), in_status(false), in_location(false),
@@ -42,7 +42,6 @@ UserinfoXML::UserinfoXML() throw()
 }
 /****************************************************************************/
 UserinfoXML::UserinfoXML(const std::string& path)
-    throw (FileException, xml::ParserException)
     : DataSource(path), _devs(), in_user(false),
       in_firstname(false), in_familyname(false), in_pgpkey(false),
       in_email(false), in_joined(false), in_birth(false), in_roles(false),
@@ -57,7 +56,6 @@ UserinfoXML::~UserinfoXML() throw()
 /****************************************************************************/
 void
 UserinfoXML::do_parse(const std::string& path)
-    throw (FileException, xml::ParserException)
 {
     if (not path.empty()) this->set_path(path);
 
@@ -68,7 +66,7 @@ UserinfoXML::do_parse(const std::string& path)
 }
 /****************************************************************************/
 void
-UserinfoXML::fill_developer(Developer& dev) const throw (Exception)
+UserinfoXML::fill_developer(Developer& dev) const
 {
     BacktraceContext c("portage::UserinfoXML::fill_developer()");
 

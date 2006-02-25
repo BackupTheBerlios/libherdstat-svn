@@ -65,7 +65,7 @@ MakeColorMap()
     return m;
 }
 
-ColorMap::ColorMap() throw()
+ColorMap::ColorMap()
     : _cm(MakeColorMap())
 {
 }

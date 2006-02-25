@@ -51,7 +51,7 @@ Package::Package(const std::string& name, const std::string& portdir)
     set_name(name);
 }
 /****************************************************************************/
-Package::~Package()
+Package::~Package() throw()
 {
     if (_kwmap)  delete _kwmap;
     if (_pkgdir) delete _pkgdir;

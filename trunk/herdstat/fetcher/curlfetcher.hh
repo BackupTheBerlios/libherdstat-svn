@@ -54,8 +54,7 @@ namespace herdstat {
              * @returns False if fetching failed.
              */
             virtual bool fetch(const std::string& url,
-                               const std::string& path) const
-                throw (FileException);
+                               const std::string& path) const;
 
         private:
             /// Only FetcherImpMap can instantiate this class.
@@ -64,7 +63,7 @@ namespace herdstat {
             /** Constructor.
              * @param opts const reference to a FetcherOptions object.
              */
-            CurlFetcher(const FetcherOptions& opts) throw();
+            CurlFetcher(const FetcherOptions& opts);
     };
 
 } // namespace herdstat

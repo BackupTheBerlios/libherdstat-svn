@@ -32,13 +32,13 @@
 namespace herdstat {
 namespace util {
 /****************************************************************************/
-Glob::Glob() throw()
+Glob::Glob()
     : _results()
 {
 
 }
 /****************************************************************************/
-Glob::Glob(const std::string& pattern) throw (ErrnoException)
+Glob::Glob(const std::string& pattern)
     : _results()
 {
     this->operator()(pattern);
@@ -49,7 +49,7 @@ Glob::~Glob() throw()
 }
 /****************************************************************************/
 const std::vector<std::string>&
-Glob::operator()(const std::string& pattern) throw (ErrnoException)
+Glob::operator()(const std::string& pattern)
 {
     BacktraceContext c("herdstat::util::Glob::operator()("+pattern+")");
 

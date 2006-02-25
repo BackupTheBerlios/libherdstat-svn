@@ -35,12 +35,12 @@ namespace portage {
 const char * const Atom::_valid_prefix_chars = "><=~!";
 const char * const Atom::_valid_postfix_chars = "*";
 /****************************************************************************/
-Atom::Atom() throw()
+Atom::Atom()
     : _atom(), _pkg()
 {
 }
 /****************************************************************************/
-Atom::Atom(const std::string& atom) throw (InvalidAtom)
+Atom::Atom(const std::string& atom)
     : _atom(atom), _pkg()
 {
     this->_parse();
@@ -51,7 +51,7 @@ Atom::~Atom() throw()
 }
 /****************************************************************************/
 void
-Atom::_parse() throw (InvalidAtom)
+Atom::_parse()
 {
     std::string::size_type pos = _atom.find_first_not_of(_valid_prefix_chars);
     if (pos == std::string::npos)

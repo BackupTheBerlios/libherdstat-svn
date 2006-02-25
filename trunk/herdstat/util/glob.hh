@@ -71,13 +71,13 @@ std::copy(glob.results().begin(), glob.results().end(),
     {
         public:
             /// Default constructor.
-            Glob() throw();
+            Glob();
 
             /** Constructor.
              * @param pattern glob pattern string.
              * @exception ErrnoException
              */
-            Glob(const std::string& pattern) throw (ErrnoException);
+            Glob(const std::string& pattern);
 
             /// Destructor.
             ~Glob() throw();
@@ -96,7 +96,7 @@ std::copy(glob.results().begin(), glob.results().end(),
              * @returns const reference to results.
              */
             const std::vector<std::string>&
-            operator()(const std::string& pattern) throw (ErrnoException);
+            operator()(const std::string& pattern);
 
         private:
             std::vector<std::string> _results;

@@ -55,7 +55,7 @@ namespace portage {
              * @param portdir PORTDIR
              * @exception FileException
              */
-            Archs(const std::string& portdir) throw (FileException);
+            Archs(const std::string& portdir);
 
             /// Destructor.
             virtual ~Archs() throw();

@@ -32,9 +32,10 @@
  * @brief Provides the Progressable class definition.
  */
 
-#include <herdstat/util/progress/meter.hh>
 
 namespace herdstat {
+
+    namespace util { class ProgressMeter; }
 
     /**
      * @class Progressable progressable.hh herdstat/progressable.hh
@@ -49,7 +50,7 @@ namespace herdstat {
             { _meter = meter; }
 
         protected:
-            Progressable(util::ProgressMeter *meter = NULL) throw()
+            Progressable(util::ProgressMeter *meter = NULL)
                 : _meter(meter) { }
             virtual ~Progressable() { }
 

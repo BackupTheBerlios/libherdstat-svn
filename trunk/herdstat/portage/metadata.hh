@@ -59,7 +59,7 @@ namespace portage {
             Metadata(const Metadata& that);
 
             /// Destructor.
-            ~Metadata();
+            ~Metadata() throw();
 
             /// Copy assignment operator.
             Metadata& operator= (const Metadata& that);

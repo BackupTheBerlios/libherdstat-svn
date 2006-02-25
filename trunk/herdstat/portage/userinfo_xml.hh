@@ -56,14 +56,13 @@ namespace portage {
     {
         public:
             /// Default constructor.
-            UserinfoXML() throw();
+            UserinfoXML();
 
             /** Constructor.
              * @param path Path to userinfo.xml.
              * @exception FileException, xml::ParserException
              */
-            UserinfoXML(const std::string& path)
-                throw (FileException, xml::ParserException);
+            UserinfoXML(const std::string& path);
 
             /// Destructor.
             virtual ~UserinfoXML() throw();
@@ -74,8 +73,7 @@ namespace portage {
              * @param dev Reference to a Developer object.
              * @exception Exception
              */
-            virtual void fill_developer(Developer& dev) const
-                throw (Exception);
+            virtual void fill_developer(Developer& dev) const;
 
             /// Get developers.
             inline const Developers& devs() const;
@@ -91,8 +89,7 @@ namespace portage {
              * @param path Path to userinfo.xml (defaults to empty).
              * @exception FileException, xml::ParserException
              */
-            virtual void do_parse(const std::string& path = "")
-                throw (FileException, xml::ParserException);
+            virtual void do_parse(const std::string& path = "");
 
             ///@{
             /// SAX2 Callbacks

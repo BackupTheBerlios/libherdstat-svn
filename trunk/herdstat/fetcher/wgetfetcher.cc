@@ -31,7 +31,7 @@
 
 namespace herdstat {
 /****************************************************************************/
-WgetFetcher::WgetFetcher(const FetcherOptions& opts) throw()
+WgetFetcher::WgetFetcher(const FetcherOptions& opts)
     : FetcherImp(opts)
 {
 }
@@ -42,7 +42,6 @@ WgetFetcher::~WgetFetcher() throw()
 /****************************************************************************/
 bool
 WgetFetcher::fetch(const std::string& url, const std::string& path) const
-    throw (FileException)
 {
     BacktraceContext c("WgetFetcher::fetch("+url+", "+path+")");
 

@@ -58,14 +58,13 @@ namespace portage {
     {
         public:
             /// Default constructor.
-            HerdsXML() throw();
+            HerdsXML();
 
             /** Constructor.
              * @param path Path to herds.xml.
              * @exception FileException, xml::ParserException
              */
-            HerdsXML(const std::string& path)
-                throw (FileException, xml::ParserException);
+            HerdsXML(const std::string& path);
 
             /// Destructor.
             virtual ~HerdsXML() throw();
@@ -76,7 +75,7 @@ namespace portage {
              * @param dev Reference to a Developer object.
              * @exception Exception
              */
-            virtual void fill_developer(Developer& dev) const throw (Exception);
+            virtual void fill_developer(Developer& dev) const;
 
             /** Set Gentoo CVS checkout directory.  herds.xml as well as
              * projectxml files will be looked for relative to this path.
@@ -110,8 +109,7 @@ namespace portage {
              * @param path Path to herds.xml (defaults to empty).
              * @exception FileException, xml::ParserException
              */
-            virtual void do_parse(const std::string& path = "")
-                throw (FileException, xml::ParserException);
+            virtual void do_parse(const std::string& path = "");
 
             ///@{
             /// SAX2 Callbacks

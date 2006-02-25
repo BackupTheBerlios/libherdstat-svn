@@ -71,7 +71,7 @@ namespace herdstat {
              * @param opts const reference to a FetcherOptions instance (which
              * is passed to the implementation constructors).
              */
-            FetcherImpMap(const FetcherOptions& opts) throw();
+            FetcherImpMap(const FetcherOptions& opts);
 
             /// Destructor.
             ~FetcherImpMap() throw();

@@ -62,16 +62,16 @@ std::cout << "Took " << timer.elapsed()
             typedef long size_type;
 
             /// Default constructor.
-            Timer() throw();
+            Timer();
 
             /// Destructor.
-            ~Timer() throw();
+            ~Timer();
 
             /// Start timer.
-            void start() throw();
+            void start();
 
             /// Stop timer.
-	    void stop() throw();
+	    void stop();
 
             /** Is the timer running?
              * @returns A boolean value.

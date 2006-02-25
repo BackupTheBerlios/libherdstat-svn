@@ -86,12 +86,12 @@ namespace portage {
             typedef container_type::mapped_type mapped_type;
 
             /// Default constructor.
-            VersionComponents() throw();
+            VersionComponents();
 
             /** Constructor.
              * @param path Path to ebuild.
              */
-            VersionComponents(const std::string& path) throw();
+            VersionComponents(const std::string& path);
 
             /// Destructor.
             ~VersionComponents() throw();
@@ -99,13 +99,13 @@ namespace portage {
             /** Assign new path.
              * @param path Path to ebuild.
              */
-            void assign(const std::string& path) throw();
+            void assign(const std::string& path);
 
             /** Get value mapped to given version component.
              * @param key version component (P, PN, etc).
              * @returns const reference to value mapped to @a key.
              */
-            inline const mapped_type& operator[](const key_type& key) const throw();
+            inline const mapped_type& operator[](const key_type& key) const;
 
             ///@{
             /// container_type subset
@@ -118,24 +118,24 @@ namespace portage {
             ///@}
 
             /// Get version string.
-            inline const std::string& version() const throw();
+            inline const std::string& version() const;
 
         private:
             /// Parse version string and insert components into map.
-            void parse() throw();
+            void parse();
 
             std::string _verstr;
             mutable container_type _vmap;
     };
 
     inline const VersionComponents::mapped_type&
-    VersionComponents::operator[](const key_type& key) const throw()
+    VersionComponents::operator[](const key_type& key) const
     {
         return _vmap[key];
     }
 
     inline const std::string&
-    VersionComponents::version() const throw()
+    VersionComponents::version() const
     {
         return _verstr;
     }
@@ -176,56 +176,56 @@ std::cout << v1.str() << std::endl;
     {
         public:
             /// Default constructor.
-            VersionString() throw();
+            VersionString();
 
             /** Constructor.
              * @param path Path to ebuild.
              */
-            VersionString(const std::string &path) throw();
+            VersionString(const std::string &path);
 
             /// Copy constructor.
-            VersionString(const VersionString& that) throw();
+            VersionString(const VersionString& that);
 
             /// Copy assignment operator.
-            VersionString& operator=(const VersionString& that) throw();
+            VersionString& operator=(const VersionString& that);
 
             /// Get version string.
-            std::string str() const throw();
+            std::string str() const;
 
             /** Assign a new path.
              * @param path Path to ebuild.
              */
-            void assign(const std::string& path) throw();
+            void assign(const std::string& path);
 
             /// Implicit conversion to std::string.
-            operator std::string() const throw() { return this->str(); }
+            operator std::string() const { return this->str(); }
 
             /** Get version string (minus the suffix).
              * @returns String object.
              */
-            const std::string& version() const throw() { return _version(); }
+            const std::string& version() const { return _version(); }
 
             /** Get path to ebuild for this version.
              * @returns String object.
              */
-            const std::string& ebuild() const throw() { return _ebuild; }
+            const std::string& ebuild() const { return _ebuild; }
 
             /** Get version component map for this version string.
              * @returns Reference to version_map object.
              */
-            const VersionComponents& components() const throw() { return _v; }
+            const VersionComponents& components() const { return _v; }
 
             ///@{
             /// Compare this VersionString against that VersionString.
-            bool operator< (const VersionString& that) const throw();
-            inline bool operator<=(const VersionString& that) const throw()
+            bool operator< (const VersionString& that) const;
+            inline bool operator<=(const VersionString& that) const
             { return not (*this > that); }
-            inline bool operator> (const VersionString& that) const throw()
+            inline bool operator> (const VersionString& that) const
             { return (that < *this); }
-            inline bool operator>=(const VersionString& that) const throw()
+            inline bool operator>=(const VersionString& that) const
             { return not (*this < that); }
-            inline bool operator==(const VersionString& that) const throw();
-            inline bool operator!=(const VersionString& that) const throw()
+            inline bool operator==(const VersionString& that) const;
+            inline bool operator!=(const VersionString& that) const
             { return not (*this == that); }
             ///@}
 
@@ -239,47 +239,47 @@ std::cout << v1.str() << std::endl;
             {
                 public:
                     /// Default constructor.
-                    suffix() throw();
+                    suffix();
 
                     /** Constructor.
                      * @param pvr PVR string object (version+revision).
                      */
-                    suffix(const std::string& pvr) throw();
+                    suffix(const std::string& pvr);
 
                     /** Assign a new suffix.
                      * @param pvr PVR string object (version+revision).
                      */
-                    void assign(const std::string& pvr) throw()
+                    void assign(const std::string& pvr)
                     { this->parse(pvr); }
 
                     /** Get suffix string.
                      * @returns String object.
                      */
-                    const std::string& str() const throw() { return _suffix; }
+                    const std::string& str() const { return _suffix; }
 
                     /** Get suffix version string.
                      * @returns String object.
                      */
-                    const std::string& version() const throw()
+                    const std::string& version() const
                     { return _suffix_ver; }
 
                     ///@{
                     /// Compare this suffix against that suffix.
-                    bool operator< (const suffix& that) const throw();
-                    bool operator<=(const suffix& that) const throw()
+                    bool operator< (const suffix& that) const;
+                    bool operator<=(const suffix& that) const
                     { return not (*this > that); }
-                    bool operator> (const suffix& that) const throw()
+                    bool operator> (const suffix& that) const
                     { return (that < *this); }
-                    bool operator>=(const suffix& that) const throw()
+                    bool operator>=(const suffix& that) const
                     { return not (*this < that); }
-                    bool operator== (const suffix& that) const throw();
-                    bool operator!= (const suffix& that) const throw()
+                    bool operator== (const suffix& that) const;
+                    bool operator!= (const suffix& that) const
                     { return not (*this == that); }
                     ///@}
 
                 private:
                     /// Parse ${PVR}
-                    void parse(const std::string &pvr) const throw();
+                    void parse(const std::string &pvr) const;
 
                     /// Suffix std::string.
                     mutable std::string _suffix;
@@ -295,38 +295,38 @@ std::cout << v1.str() << std::endl;
             class nosuffix
             {
                 public:
-                    nosuffix() throw();
+                    nosuffix();
 
                     /** Constructor.
                      * @param pv PV string object.
                      */
-                    nosuffix(const std::string& pv) throw();
+                    nosuffix(const std::string& pv);
 
                     /** Assign a new $PV.
                      * @param pv PV string object.
                      */
-                    void assign(const std::string& pv) throw()
+                    void assign(const std::string& pv)
                     { this->parse(pv); }
 
                     /** Get version string minus suffix.
                      * @returns String object.
                      */
-                    const std::string& operator() () const throw()
+                    const std::string& operator() () const
                     { return _version; }
 
                     ///@{
                     /// Compare this nosuffix against that nosuffix.
-                    bool operator< (const nosuffix& that) const throw();
-                    bool operator> (const nosuffix& that) const throw()
+                    bool operator< (const nosuffix& that) const;
+                    bool operator> (const nosuffix& that) const
                     { return (that < *this); }
-                    bool operator== (const nosuffix& that) const throw();
-                    bool operator!= (const nosuffix& that) const throw()
+                    bool operator== (const nosuffix& that) const;
+                    bool operator!= (const nosuffix& that) const
                     { return not (*this == that); }
                     ///@}
 
                 private:
                     /// Parse ${PV}.
-                    void parse(const std::string& pv) const throw();
+                    void parse(const std::string& pv) const;
 
                     /// Version string (minus suffix).
                     mutable std::string _version;
@@ -347,7 +347,7 @@ std::cout << v1.str() << std::endl;
     };
 
     inline bool
-    VersionString::operator==(const VersionString& that) const throw()
+    VersionString::operator==(const VersionString& that) const
     {
         return ( (_version == that._version) and
                  (_suffix  == that._suffix)  and
@@ -376,19 +376,19 @@ std::cout << v1.str() << std::endl;
     {
         public:
             /// Default constructor.
-            Versions() throw();
+            Versions();
 
             /** Constructor.  Instantiate VersionString objects for each
              * ebuild existing in the specified package directory.
              * @param path Path to package directory.
              */
-            Versions(const std::string &path) throw();
+            Versions(const std::string &path);
 
             /** Constructor.  Instantiate VersionString objects for each
              * ebuild existing in each element (package directories).
              * @param v Vector of package directory paths.
              */
-            Versions(const std::vector<std::string>& v) throw();
+            Versions(const std::vector<std::string>& v);
 
             /// Destructor.
             virtual ~Versions() throw();
@@ -400,7 +400,7 @@ std::cout << v1.str() << std::endl;
              * @returns const reference to "least" element.
              * @exception Exception.
              */
-            inline const VersionString& front() const throw (Exception);
+            inline const VersionString& front() const;
 
             /** Get "greatest" VersionString (as determined by
              * std::less<VersionString>).
@@ -409,68 +409,68 @@ std::cout << v1.str() << std::endl;
              * @returns const reference to "greatest" element.
              * @exception Exception.
              */
-            inline const VersionString& back() const throw (Exception);
+            inline const VersionString& back() const;
 
             //@{
             /** Find version string using ebuild matching path.
              * @param path Ebuild path.
              * @returns iterator to first match or end() if no match.
              */
-            inline iterator find(const std::string& path) throw();
-            inline const_iterator find(const std::string& path) const throw();
+            inline iterator find(const std::string& path);
+            inline const_iterator find(const std::string& path) const;
             //@}
 
             /** Insert given VersionString.
              * @param v const reference to VersionString.
              * @returns True if insertion was successful.
              */
-            inline bool insert(const VersionString& v) throw();
+            inline bool insert(const VersionString& v);
 
             /** Instantiate and insert a VersionString object with the
              * specified path.
              * @param p Path.
              * @returns True if insertion was successful.
              */
-            inline bool insert(const std::string& p) throw();
+            inline bool insert(const std::string& p);
 
             /** Assign a new package directory clearing any previously
              * contained VersionString instances.
              * @param p Path to package directory.
              */
-            void assign(const std::string& p) throw();
+            void assign(const std::string& p);
 
             /** Append a new package directory.
              * @param p Path to package directory.
              */
-            void append(const std::string& p) throw();
+            void append(const std::string& p);
     };
 
     inline Versions::iterator
-    Versions::find(const std::string& p) throw()
+    Versions::find(const std::string& p)
     {
         return this->find(VersionString(p));
     }
 
     inline Versions::const_iterator
-    Versions::find(const std::string& p) const throw()
+    Versions::find(const std::string& p) const
     {
         return this->find(VersionString(p));
     }
 
     inline bool
-    Versions::insert(const std::string& path) throw()
+    Versions::insert(const std::string& path)
     {
         return util::SetBase<VersionString>::insert(VersionString(path)).second;
     }
 
     inline bool
-    Versions::insert(const VersionString& v) throw()
+    Versions::insert(const VersionString& v)
     {
         return util::SetBase<VersionString>::insert(v).second;
     }
 
     inline const VersionString&
-    Versions::front() const throw (Exception)
+    Versions::front() const
     {
         if (this->empty())
             throw Exception("Versions::front() called on an empty Versions instance.");
@@ -479,7 +479,7 @@ std::cout << v1.str() << std::endl;
     }
 
     inline const VersionString&
-    Versions::back() const throw (Exception)
+    Versions::back() const
     {
         if (this->empty())
             throw Exception("Versions::back() called on an empty Versions instance.");

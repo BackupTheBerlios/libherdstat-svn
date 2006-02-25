@@ -48,12 +48,12 @@ namespace herdstat {
     class Noncopyable
     {
         protected:
-            Noncopyable() throw() { }
+            Noncopyable() { }
             virtual ~Noncopyable() { }
 
         private:
-            Noncopyable(const Noncopyable&) throw();
-            Noncopyable& operator= (const Noncopyable&) throw();
+            Noncopyable(const Noncopyable&);
+            Noncopyable& operator= (const Noncopyable&);
     };
 
 } // namespace herdstat

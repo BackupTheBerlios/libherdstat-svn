@@ -59,7 +59,7 @@ namespace portage {
     {
         public:
             /// Default constructor.
-            MetadataXML() throw();
+            MetadataXML();
 
             /** Constructor.
              * @param path Path to metadata.xml.
@@ -67,8 +67,7 @@ namespace portage {
              * empty).
              * @exception FileException, xml::ParserException
              */
-            MetadataXML(const std::string& path, const std::string& pkg = "")
-                throw (FileException, xml::ParserException);
+            MetadataXML(const std::string& path, const std::string& pkg = "");
 
             /// Destructor.
             virtual ~MetadataXML() throw();
@@ -89,8 +88,7 @@ namespace portage {
              * @param path Path to metadata.xml (defaults to empty).
              * @exception FileException, xml::ParserException
              */
-            virtual void do_parse(const std::string& path = "")
-                throw (FileException, xml::ParserException);
+            virtual void do_parse(const std::string& path = "");
 
             virtual bool start_element(const std::string& name,
                                        const attrs_type& attrs);

@@ -65,7 +65,7 @@ namespace portage {
                     const std::string& portdir = GlobalConfig().portdir());
 
             /// Destructor.
-            ~Package();
+            ~Package() throw();
 
             /// Copy assignment operator.
             Package& operator= (const Package& that);

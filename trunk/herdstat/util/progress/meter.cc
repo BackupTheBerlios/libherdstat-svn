@@ -29,7 +29,7 @@
 namespace herdstat {
 namespace util {
 /****************************************************************************/
-ProgressMeter::ProgressMeter(const std::string& color) throw()
+ProgressMeter::ProgressMeter(const std::string& color)
     : _cur(0), _step(0), _started(false), _outlen(0), _color(color)
 {
 }
@@ -39,7 +39,7 @@ ProgressMeter::~ProgressMeter() throw()
 }
 /****************************************************************************/
 void
-ProgressMeter::start(unsigned total, const std::string& title) throw()
+ProgressMeter::start(unsigned total, const std::string& title)
 {
     if (_started) return;
     _started = true;

@@ -54,10 +54,10 @@ namespace io {
             /** Open stream.
              * @param path path of file to open.
              */
-	    void open(const std::string& path) throw ();
+	    void open(const std::string& path);
 
             /// Close stream.
-	    void close() throw();
+	    void close();
 
             /// Is stream open?
 	    inline bool is_open() const { return _open; }
@@ -82,15 +82,15 @@ namespace io {
 	    template <typename T> friend class BinaryIStreamIterator;
 
             /// Default constructor.
-	    BinaryStream() throw();
+	    BinaryStream();
 
             /** Constructor.
              * @param path Path of file.
              */
-	    BinaryStream(const std::string& path) throw ();
+	    BinaryStream(const std::string& path);
 
             /// Open stream (path already set).
-            void open() throw();
+            void open();
 
             /// For derivatives to define their open mode.
 	    virtual const char * const mode() const = 0;
@@ -116,12 +116,12 @@ namespace io {
     {
 	public:
             /// Default constructor.
-	    BinaryIStream() throw();
+	    BinaryIStream();
 
             /** Constructor.  Opens stream.
              * @param path Path of file to open.
              */
-	    BinaryIStream(const std::string& path) throw ();
+	    BinaryIStream(const std::string& path);
 
             /// Destructor.
 	    virtual ~BinaryIStream() throw();
@@ -186,12 +186,12 @@ namespace io {
     {
 	public:
             /// Default constructor.
-	    BinaryOStream() throw();
+	    BinaryOStream();
 
             /** Constructor.  Opens stream.
              * @param path Path of file to open.
              */
-	    BinaryOStream(const std::string& path) throw ();
+	    BinaryOStream(const std::string& path);
 
             /// Destructor.
 	    virtual ~BinaryOStream() throw();

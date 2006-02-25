@@ -29,13 +29,13 @@
 namespace herdstat {
 namespace portage {
 /****************************************************************************/
-Developer::Developer() throw()
+Developer::Developer()
     : _user(), _email(), _name(), _pgpkey(), _joined(), _birth(),
       _status(), _role(), _location(), _awaymsg(), _away(false), _herds(NULL)
 {
 }
 /****************************************************************************/
-Developer::Developer(const Developer& that) throw()
+Developer::Developer(const Developer& that)
     : _user(), _email(), _name(), _pgpkey(), _joined(), _birth(),
       _status(), _role(), _location(), _awaymsg(), _away(false), _herds(NULL)
 {
@@ -43,7 +43,7 @@ Developer::Developer(const Developer& that) throw()
 }
 /****************************************************************************/
 Developer::Developer(const std::string &user, const std::string &email,
-                     const std::string &name) throw()
+                     const std::string &name)
     : _user(user), _email(email.empty() ? _user : email),
       _name(name), _pgpkey(), _joined(), _birth(), _status(),
       _role(), _location(), _awaymsg(), _away(false), _herds(NULL)
@@ -56,7 +56,7 @@ Developer::Developer(const std::string &user, const std::string &email,
 }
 /****************************************************************************/
 Developer&
-Developer::operator=(const Developer& that) throw()
+Developer::operator=(const Developer& that)
 {
     _user = that._user;
     _email = that._email;
@@ -81,16 +81,16 @@ Developer::~Developer() throw()
     if (_herds) delete _herds;
 }
 /****************************************************************************/
-Developers::Developers() throw()
+Developers::Developers()
 {
 }
 /****************************************************************************/
-Developers::Developers(const container_type& v) throw()
+Developers::Developers(const container_type& v)
 {
     *this = v;
 }
 /****************************************************************************/
-Developers::Developers(const std::vector<std::string>& devs) throw()
+Developers::Developers(const std::vector<std::string>& devs)
 {
     *this = devs;
 }
@@ -100,7 +100,7 @@ Developers::~Developers() throw()
 }
 /****************************************************************************/
 Developers&
-Developers::operator= (const std::vector<std::string>& devs) throw()
+Developers::operator= (const std::vector<std::string>& devs)
 {
     this->clear();
     std::vector<std::string>::const_iterator i;
@@ -110,7 +110,7 @@ Developers::operator= (const std::vector<std::string>& devs) throw()
 }
 /****************************************************************************/
 Developers&
-Developers::operator= (const container_type& v) throw()
+Developers::operator= (const container_type& v)
 {
     this->clear();
     this->insert(v.begin(), v.end());
@@ -118,7 +118,7 @@ Developers::operator= (const container_type& v) throw()
 }
 /****************************************************************************/
 Developers::operator
-std::vector<std::string>() const throw()
+std::vector<std::string>() const
 {
     std::vector<std::string> v;
     std::transform(this->begin(), this->end(),

@@ -49,13 +49,13 @@ namespace portage {
     {
         public:
             /// Default constructor.
-            PackageDirectory() throw();
+            PackageDirectory();
 
             /** Constructor.
              * @param path Path to package directory.
              * @exception FileException
              */
-            PackageDirectory(const std::string& path) throw (FileException);
+            PackageDirectory(const std::string& path);
 
             /// Copy constructor
             PackageDirectory(const PackageDirectory& that);

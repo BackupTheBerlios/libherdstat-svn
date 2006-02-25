@@ -77,7 +77,7 @@ namespace xml {
             /** Constructor.
              * @param h pointer to a saxhandler object.
              */
-            explicit SAXParser(SAXHandler *h) throw();
+            explicit SAXParser(SAXHandler *h);
 
             /// Destructor.
             virtual ~SAXParser() throw();
@@ -86,8 +86,7 @@ namespace xml {
              * @param path Path.
              * @exception ParserException.
              */
-            virtual void parse(const std::string &path)
-                throw (ParserException);
+            virtual void parse(const std::string &path);
 
         protected:
             /// Get pointer to underlying SAXHandler object.

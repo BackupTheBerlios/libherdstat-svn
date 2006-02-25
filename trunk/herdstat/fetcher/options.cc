@@ -29,7 +29,7 @@
 
 namespace herdstat {
 /****************************************************************************/
-FetcherOptions::FetcherOptions() throw()
+FetcherOptions::FetcherOptions()
     : _verbose(false), _debug(false), _imp(DEFAULT_FETCH_METHOD)
 {
     const char * const result = std::getenv("HERDSTAT_FETCH_METHOD");
@@ -37,7 +37,7 @@ FetcherOptions::FetcherOptions() throw()
         _imp.assign(result);
 }
 /****************************************************************************/
-FetcherOptions::FetcherOptions(const std::string& imp) throw()
+FetcherOptions::FetcherOptions(const std::string& imp)
     : _verbose(false), _debug(false), _imp(imp)
 {
 }

@@ -30,12 +30,12 @@
 namespace herdstat {
 namespace io {
 /****************************************************************************/
-BinaryStream::BinaryStream() throw()
+BinaryStream::BinaryStream()
     : _path(), _stream(NULL), _open(false)
 {
 }
 /****************************************************************************/
-BinaryStream::BinaryStream(const std::string& path) throw ()
+BinaryStream::BinaryStream(const std::string& path)
     : _path(path), _stream(NULL), _open(false)
 {
 }
@@ -47,7 +47,7 @@ BinaryStream::~BinaryStream() throw()
 }
 /****************************************************************************/
 void
-BinaryStream::open() throw ()
+BinaryStream::open()
 {
     if (_open)
 	return;
@@ -58,7 +58,7 @@ BinaryStream::open() throw ()
 }
 /****************************************************************************/
 void
-BinaryStream::open(const std::string& path) throw ()
+BinaryStream::open(const std::string& path)
 {
     if (_open)
 	return;
@@ -69,7 +69,7 @@ BinaryStream::open(const std::string& path) throw ()
 }
 /****************************************************************************/
 void
-BinaryStream::close() throw()
+BinaryStream::close()
 {
     if (not _open)
 	return;
@@ -81,12 +81,12 @@ BinaryStream::close() throw()
     _open = false;
 }
 /****************************************************************************/
-BinaryIStream::BinaryIStream() throw()
+BinaryIStream::BinaryIStream()
     : BinaryStream()
 {
 }
 /****************************************************************************/
-BinaryIStream::BinaryIStream(const std::string& path) throw ()
+BinaryIStream::BinaryIStream(const std::string& path)
     : BinaryStream(path)
 {
     this->open();
@@ -102,12 +102,12 @@ BinaryIStream::mode() const
     return "rb";
 }
 /****************************************************************************/
-BinaryOStream::BinaryOStream() throw()
+BinaryOStream::BinaryOStream()
     : BinaryStream()
 {
 }
 /****************************************************************************/
-BinaryOStream::BinaryOStream(const std::string& path) throw ()
+BinaryOStream::BinaryOStream(const std::string& path)
     : BinaryStream(path)
 {
     this->open();

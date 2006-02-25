@@ -106,7 +106,7 @@ namespace util {
     {
         public:
             /// Constructor.
-            ColorMap() throw();
+            ColorMap();
 
             /** Get color string associated with the given color type.
              * @param c Color type (ASCIIColor).

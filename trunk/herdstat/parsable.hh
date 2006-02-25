@@ -71,12 +71,12 @@ namespace herdstat {
             typedef util::Timer timer_type;
 
             /// Default constructor.
-            Parsable() throw() : _parsed(false), _path(), _timer() { }
+            Parsable() : _parsed(false), _path(), _timer() { }
 
             /** Constructor.
              * @param path Path of parsable file.
              */
-            Parsable(const std::string& path) throw()
+            Parsable(const std::string& path)
                 : _parsed(false), _path(path), _timer() { }
             
             /// Destructor.
@@ -86,8 +86,7 @@ namespace herdstat {
              * @param path Path of parsable file (defaults to empty).
              * @exception FileException, xml::ParserException
              */
-            inline void parse(const std::string& path = "")
-                throw (FileException, xml::ParserException);
+            inline void parse(const std::string& path = "");
 
             /// Have we already parsed?
             bool parsed() const { return _parsed; }
@@ -100,8 +99,7 @@ namespace herdstat {
             /** Do the actual parsing.
              * @exception FileException, xml::ParserException
              */
-            virtual void do_parse(const std::string& path = "")
-                throw (FileException, xml::ParserException) = 0;
+            virtual void do_parse(const std::string& path = "") = 0;
 
             /** Set path of parsable file.
              * @param path Path of parsable file.
@@ -119,7 +117,6 @@ namespace herdstat {
 
     inline void
     Parsable::parse(const std::string& path)
-        throw (FileException, xml::ParserException)
     {
         if (_parsed) return;
         do_parse(path);

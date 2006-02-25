@@ -70,30 +70,30 @@ namespace portage {
     {
         public:
             /// Default constructor.
-            Developer() throw();
+            Developer();
 
             /// Copy constructor.
-            Developer(const Developer& that) throw();
+            Developer(const Developer& that);
 
             /** Constructor.
              * @param user user name.
              * @param email email address (defaults to empty).
              * @param name  real name (defaults to empty).
              */
-            Developer(const std::string &user,
-                      const std::string &email = "",
-                      const std::string &name = "") throw();
+            Developer(const std::string& user,
+                      const std::string& email = "",
+                      const std::string& name = "");
 
             /// Destructor.
             ~Developer() throw();
 
             /// Copy assignment operator.
-            Developer& operator=(const Developer& that) throw();
+            Developer& operator=(const Developer& that);
 
             /** Implicit conversion to std::string.
              * @returns Developer user name.
              */
-            inline operator std::string() const throw();
+            inline operator std::string() const;
 
 
             ///@{
@@ -102,12 +102,12 @@ namespace portage {
              * @param dev const reference to another Developer object.
              * @returns A boolean value.
              */
-            inline bool operator== (const Developer& dev) const throw();
-            inline bool operator!= (const Developer& dev) const throw();
-            inline bool operator>  (const Developer& dev) const throw();
-            inline bool operator>= (const Developer& dev) const throw();
-            inline bool operator<  (const Developer& dev) const throw();
-            inline bool operator<= (const Developer& dev) const throw();
+            inline bool operator== (const Developer& dev) const;
+            inline bool operator!= (const Developer& dev) const;
+            inline bool operator>  (const Developer& dev) const;
+            inline bool operator>= (const Developer& dev) const;
+            inline bool operator<  (const Developer& dev) const;
+            inline bool operator<= (const Developer& dev) const;
             ///@}
 
             ///@{
@@ -116,12 +116,12 @@ namespace portage {
              * @param user user name.
              * @returns A boolean value.
              */
-            inline bool operator== (const std::string& user) const throw();
-            inline bool operator!= (const std::string& user) const throw();
-            inline bool operator<  (const std::string& user) const throw();
-            inline bool operator<= (const std::string& user) const throw();
-            inline bool operator>  (const std::string& user) const throw();
-            inline bool operator>= (const std::string& user) const throw();
+            inline bool operator== (const std::string& user) const;
+            inline bool operator!= (const std::string& user) const;
+            inline bool operator<  (const std::string& user) const;
+            inline bool operator<= (const std::string& user) const;
+            inline bool operator>  (const std::string& user) const;
+            inline bool operator>= (const std::string& user) const;
             ///@}
             
             ///@{
@@ -130,61 +130,61 @@ namespace portage {
              * @param re const reference to a util::Regex object.
              * @returns A boolean value.
              */
-            inline bool operator== (const util::Regex& re) const throw();
-            inline bool operator!= (const util::Regex& re) const throw();
+            inline bool operator== (const util::Regex& re) const;
+            inline bool operator!= (const util::Regex& re) const;
             ///@}
 
             /// Get user name.
-            inline const std::string& user() const throw();
+            inline const std::string& user() const;
             /// Get email address.
-            inline const std::string& email() const throw();
+            inline const std::string& email() const;
             /// Get full name.
-            inline const std::string& name() const throw();
+            inline const std::string& name() const;
             /// Get PGP Key Id.
-            inline const std::string& pgpkey() const throw();
+            inline const std::string& pgpkey() const;
             /// Get joined date.
-            inline const std::string& joined() const throw();
+            inline const std::string& joined() const;
             /// Get birth date.
-            inline const std::string& birthday() const throw();
+            inline const std::string& birthday() const;
             /// Get status.
-            inline const std::string& status() const throw();
+            inline const std::string& status() const;
             /// Get roles.
-            inline const std::string& role() const throw();
+            inline const std::string& role() const;
             /// Get location.
-            inline const std::string& location() const throw();
+            inline const std::string& location() const;
             /// Get away message.
-            inline const std::string& awaymsg() const throw();
+            inline const std::string& awaymsg() const;
             /// Get herds.
-            inline const std::vector<std::string>& herds() const throw();
+            inline const std::vector<std::string>& herds() const;
             /// Is this developer away?
-            inline bool is_away() const throw();
+            inline bool is_away() const;
 
             /// Set user name.
-            inline void set_user(const std::string& user) throw();
+            inline void set_user(const std::string& user);
             /// Set email address.
-            inline void set_email(const std::string& email) throw();
+            inline void set_email(const std::string& email);
             /// Set full name.
-            inline void set_name(const std::string& name) throw();
+            inline void set_name(const std::string& name);
             /// Set PGP key ID.
-            inline void set_pgpkey(const std::string& pgpkey) throw();
+            inline void set_pgpkey(const std::string& pgpkey);
             /// Set joined date.
-            inline void set_joined(const std::string& date) throw();
+            inline void set_joined(const std::string& date);
             /// Set birth date.
-            inline void set_birthday(const std::string& date) throw();
+            inline void set_birthday(const std::string& date);
             /// Set status.
-            inline void set_status(const std::string& status) throw();
+            inline void set_status(const std::string& status);
             /// Set roles.
-            inline void set_role(const std::string& role) throw();
+            inline void set_role(const std::string& role);
             /// Set location.
-            inline void set_location(const std::string& location) throw();
+            inline void set_location(const std::string& location);
             /// Set away message.
-            inline void set_awaymsg(const std::string& msg) throw();
+            inline void set_awaymsg(const std::string& msg);
             /// Set herds vector.
-            inline void set_herds(const std::vector<std::string>& herds) throw();
+            inline void set_herds(const std::vector<std::string>& herds);
             /// Append to herds vector.
-            inline void append_herd(const std::string& herd) throw();
+            inline void append_herd(const std::string& herd);
             /// Set as away.
-            inline void set_away(const bool away) throw();
+            inline void set_away(const bool away);
 
         private:
             std::string _user;
@@ -201,84 +201,84 @@ namespace portage {
             mutable std::vector<std::string> *_herds;
     };
 
-    inline Developer::operator std::string() const throw() { return _user; }
-    inline bool Developer::operator== (const std::string& user) const throw()
+    inline Developer::operator std::string() const { return _user; }
+    inline bool Developer::operator== (const std::string& user) const
     { return (_user == user); }
-    inline bool Developer::operator== (const Developer& that) const throw()
+    inline bool Developer::operator== (const Developer& that) const
     { return (_user == that._user); }
-    inline bool Developer::operator== (const util::Regex& re) const throw()
+    inline bool Developer::operator== (const util::Regex& re) const
     { return (_user == re); }
-    inline bool Developer::operator!= (const std::string& user) const throw()
+    inline bool Developer::operator!= (const std::string& user) const
     { return not (*this == user); }
-    inline bool Developer::operator!= (const Developer& that) const throw()
+    inline bool Developer::operator!= (const Developer& that) const
     { return not (*this == that); }
-    inline bool Developer::operator!= (const util::Regex& re) const throw()
+    inline bool Developer::operator!= (const util::Regex& re) const
     { return (_user != re); }
-    inline bool Developer::operator<  (const std::string& user) const throw()
+    inline bool Developer::operator<  (const std::string& user) const
     { return (_user < user); }
-    inline bool Developer::operator<  (const Developer& dev) const throw()
+    inline bool Developer::operator<  (const Developer& dev) const
     { return (_user < dev._user); }
-    inline bool Developer::operator<= (const std::string& user) const throw()
+    inline bool Developer::operator<= (const std::string& user) const
     { return (_user <= user); }
-    inline bool Developer::operator<= (const Developer& dev) const throw()
+    inline bool Developer::operator<= (const Developer& dev) const
     { return (_user <= dev._user); }
-    inline bool Developer::operator>  (const std::string& user) const throw()
+    inline bool Developer::operator>  (const std::string& user) const
     { return (_user > user); }
-    inline bool Developer::operator>  (const Developer& dev) const throw()
+    inline bool Developer::operator>  (const Developer& dev) const
     { return (_user > dev._user); }
-    inline bool Developer::operator>= (const std::string& user) const throw()
+    inline bool Developer::operator>= (const std::string& user) const
     { return (_user >= user); }
-    inline bool Developer::operator>= (const Developer& dev) const throw()
+    inline bool Developer::operator>= (const Developer& dev) const
     { return (_user >= dev._user); }
 
-    inline const std::string& Developer::user() const throw() { return _user; }
-    inline const std::string& Developer::email() const throw() { return _email.str(); }
-    inline const std::string& Developer::name() const throw() { return _name; }
-    inline const std::string& Developer::pgpkey() const throw() { return _pgpkey; }
-    inline const std::string& Developer::joined() const throw() { return _joined; }
-    inline const std::string& Developer::birthday() const throw() { return _birth; }
-    inline const std::string& Developer::status() const throw() { return _status; }
-    inline const std::string& Developer::role() const throw() { return _role; }
-    inline const std::string& Developer::location() const throw() { return _location; }
-    inline const std::string& Developer::awaymsg() const throw() { return _awaymsg; }
-    inline bool Developer::is_away() const throw() { return _away; }
-    inline const std::vector<std::string>& Developer::herds() const throw()
+    inline const std::string& Developer::user() const { return _user; }
+    inline const std::string& Developer::email() const { return _email.str(); }
+    inline const std::string& Developer::name() const { return _name; }
+    inline const std::string& Developer::pgpkey() const { return _pgpkey; }
+    inline const std::string& Developer::joined() const { return _joined; }
+    inline const std::string& Developer::birthday() const { return _birth; }
+    inline const std::string& Developer::status() const { return _status; }
+    inline const std::string& Developer::role() const { return _role; }
+    inline const std::string& Developer::location() const { return _location; }
+    inline const std::string& Developer::awaymsg() const { return _awaymsg; }
+    inline bool Developer::is_away() const { return _away; }
+    inline const std::vector<std::string>& Developer::herds() const
     {
         if (not _herds) _herds = new std::vector<std::string>();
         return *_herds;
     }
 
-    inline void Developer::set_user(const std::string& user) throw()
+    inline void Developer::set_user(const std::string& user)
     { _user.assign(user); }
-    inline void Developer::set_email(const std::string& email) throw()
+    inline void Developer::set_email(const std::string& email)
     { _email.assign(email); }
-    inline void Developer::set_name(const std::string& name) throw()
+    inline void Developer::set_name(const std::string& name)
     { _name.assign(name); }
-    inline void Developer::set_pgpkey(const std::string& pgpkey) throw()
+    inline void Developer::set_pgpkey(const std::string& pgpkey)
     { _pgpkey.assign(pgpkey); }
-    inline void Developer::set_joined(const std::string& date) throw()
+    inline void Developer::set_joined(const std::string& date)
     { _joined.assign(date); }
-    inline void Developer::set_birthday(const std::string& date) throw()
+    inline void Developer::set_birthday(const std::string& date)
     { _birth.assign(date); }
-    inline void Developer::set_status(const std::string& status) throw()
+    inline void Developer::set_status(const std::string& status)
     { _status.assign(status); }
-    inline void Developer::set_role(const std::string& role) throw()
+    inline void Developer::set_role(const std::string& role)
     { _role.assign(role); }
-    inline void Developer::set_location(const std::string& location) throw()
+    inline void Developer::set_location(const std::string& location)
     { _location.assign(location); }
-    inline void Developer::set_awaymsg(const std::string& msg) throw()
+    inline void Developer::set_awaymsg(const std::string& msg)
     { _awaymsg.assign(msg); }
-    inline void Developer::set_herds(const std::vector<std::string>& herds) throw()
+    inline void Developer::set_herds(const std::vector<std::string>& herds)
     {
         if (not _herds) _herds = new std::vector<std::string>(herds);
         else           *_herds = herds;
     }
-    inline void Developer::append_herd(const std::string& herd) throw()
+    inline void Developer::append_herd(const std::string& herd)
     {
         if (not _herds) _herds = new std::vector<std::string>(1, herd);
         else            _herds->push_back(herd);
     }
-    inline void Developer::set_away(const bool away) throw() { _away = away; }
+    inline void Developer::set_away(const bool away) { _away = away; }
 
     ///@{
     /** Comparison operators for when a Developer object is on the right hand
@@ -378,47 +378,47 @@ herdstat::util::transform_if(devs.begin(), devs.end(),
     {
         public:
             /// Default constructor.
-            Developers() throw();
+            Developers();
 
             /** Constructor. Assign a container_type.
              * @param v const reference to a container_type.
              */
-            Developers(const container_type& v) throw();
+            Developers(const container_type& v);
 
             /** Instantiate a Developer for each developer nick in the given
              * vector.
              * @param v vector of developer nicks.
              */
-            Developers(const std::vector<std::string>& v) throw();
+            Developers(const std::vector<std::string>& v);
 
             /// Destructor.
             virtual ~Developers() throw();
 
             /// Implicit conversion to underlying container (std::set<Developer).
-            inline operator const container_type&() const throw();
+            inline operator const container_type&() const;
             /// Implicit conversion to std::vector<std::string>.
-            operator std::vector<std::string>() const throw();
+            operator std::vector<std::string>() const;
 
             /** Assign a new container_type.
              * @param v Reference to container_type.
              * @returns Reference to this.
              */
-            Developers& operator= (const container_type& v) throw();
+            Developers& operator= (const container_type& v);
 
             /** Instantiate a Developer object for each developer
              * user name in the given vector.
              * @param v vector of developer usernames.
              * @returns Reference to this.
              */
-            Developers& operator= (const std::vector<std::string>& v) throw();
+            Developers& operator= (const std::vector<std::string>& v);
 
             ///@{
             /** Get "least" element (as determined by std::less<Developer>).
              * @returns reference to "least" element.
              * @exception Exception
              */
-            inline value_type& front() throw (Exception);
-            inline const value_type& front() const throw (Exception);
+            inline value_type& front();
+            inline const value_type& front() const;
             ///@}
 
             ///@{
@@ -426,40 +426,40 @@ herdstat::util::transform_if(devs.begin(), devs.end(),
              * @returns reference to "greatest" element.
              * @exception Exception.
              */
-            inline value_type& back() throw (Exception);
-            inline const value_type& back() const throw (Exception);
+            inline value_type& back();
+            inline const value_type& back() const;
             ///@}
 
             /** Find developer with the given user name.
              * @param dev user name string.
              * @returns iterator to the first matching or end() if no match.
              */
-            inline iterator find(const std::string& dev) throw();
-            inline const_iterator find(const std::string& dev) const throw();
+            inline iterator find(const std::string& dev);
+            inline const_iterator find(const std::string& dev) const;
 
             /** Find developer whose user name matches the given Regex.
              * @param regex const reference to Regex.
              * @returns iterator to the first matching or end() if no match.
              */
-            inline iterator find(const util::Regex &regex) throw();
-            inline const_iterator find(const util::Regex& regex) const throw();
+            inline iterator find(const util::Regex &regex);
+            inline const_iterator find(const util::Regex& regex) const;
     };
 
     inline Developers::operator
-    const Developers::container_type&() const throw()
+    const Developers::container_type&() const
     {
         return this->container();
     }
 
-    inline Developers::iterator Developers::find(const std::string& dev) throw()
+    inline Developers::iterator Developers::find(const std::string& dev)
     { return util::SetBase<Developer>::find(Developer(dev)); }
 
     inline Developers::const_iterator
-    Developers::find(const std::string& dev) const throw()
+    Developers::find(const std::string& dev) const
     { return util::SetBase<Developer>::find(Developer(dev)); }
 
     inline Developers::iterator
-    Developers::find(const util::Regex& regex) throw()
+    Developers::find(const util::Regex& regex)
     {
         return std::find_if(this->begin(), this->end(),
                 util::compose_f_gx(
@@ -468,7 +468,7 @@ herdstat::util::transform_if(devs.begin(), devs.end(),
     }
 
     inline Developers::const_iterator
-    Developers::find(const util::Regex& regex) const throw()
+    Developers::find(const util::Regex& regex) const
     {
         return std::find_if(this->begin(), this->end(),
                 util::compose_f_gx(
@@ -477,7 +477,7 @@ herdstat::util::transform_if(devs.begin(), devs.end(),
     }
 
     inline Developers::value_type&
-    Developers::front() throw(Exception)
+    Developers::front()
     {
         if (this->empty())
             throw Exception("Developers::front() called on an empty Developers instance.");
@@ -486,7 +486,7 @@ herdstat::util::transform_if(devs.begin(), devs.end(),
     }
     
     inline const Developers::value_type&
-    Developers::front() const throw(Exception)
+    Developers::front() const
     {
         if (this->empty())
             throw Exception("Developers::front() called on an empty Developers instance.");
@@ -495,7 +495,7 @@ herdstat::util::transform_if(devs.begin(), devs.end(),
     }
 
     inline Developers::value_type&
-    Developers::back() throw(Exception)
+    Developers::back()
     {
         if (this->empty())
             throw Exception("Developers::back() called on an empty Developers instance.");
@@ -505,7 +505,7 @@ herdstat::util::transform_if(devs.begin(), devs.end(),
     }
     
     inline const Developers::value_type&
-    Developers::back() const throw(Exception)
+    Developers::back() const
     {
         if (this->empty())
             throw Exception("Developers::back() called on an empty Developers instance.");

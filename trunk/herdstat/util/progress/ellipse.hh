@@ -50,18 +50,18 @@ namespace util {
             /** Constructor.
              * @param color ASCII color sequence (defaults to "").
              */
-            EllipseMeter(const std::string& color = "") throw();
+            EllipseMeter(const std::string& color = "");
 
             /// Destructor.
             virtual ~EllipseMeter() throw();
 
         protected:
             /// Start ellipse meter.
-            virtual void do_start() throw();
+            virtual void do_start();
             /// Stop ellipse meter.
-            virtual void do_stop() throw();
+            virtual void do_stop();
             /// Show next character in animation sequence.
-            virtual void do_increment(int cur) throw();
+            virtual void do_increment(int cur);
 
         private:
             unsigned short _cur;

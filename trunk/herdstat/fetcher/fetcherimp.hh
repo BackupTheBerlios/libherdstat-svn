@@ -56,12 +56,11 @@ namespace herdstat {
              * @returns False if fetching failed.
              */
             virtual bool fetch(const std::string& url,
-                               const std::string& path) const
-                throw (FileException) = 0;
+                               const std::string& path) const = 0;
 
         protected:
             /// Constructor.
-            FetcherImp(const FetcherOptions& opts) throw()
+            FetcherImp(const FetcherOptions& opts)
                 : _opts(opts) { }
 
             /// Get const reference to our FetcherOptions object.

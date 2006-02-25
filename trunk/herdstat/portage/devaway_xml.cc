@@ -35,14 +35,13 @@ namespace portage {
 /*** static members *********************************************************/
 const char * const DevawayXML::_local_default = LOCALSTATEDIR"/devaway.xml";
 /****************************************************************************/
-DevawayXML::DevawayXML() throw()
+DevawayXML::DevawayXML()
     : DataSource(), _devs(), in_devaway(false),
       in_dev(false), in_reason(false), _cur_dev()
 {
 }
 /****************************************************************************/
 DevawayXML::DevawayXML(const std::string &path)
-    throw (FileException, xml::ParserException)
     : DataSource(path), _devs(), in_devaway(false),
       in_dev(false), in_reason(false), _cur_dev()
 {
@@ -55,7 +54,6 @@ DevawayXML::~DevawayXML() throw()
 /****************************************************************************/
 void
 DevawayXML::do_parse(const std::string& path)
-    throw (FileException, xml::ParserException)
 {
     this->timer().start();
 
@@ -75,7 +73,7 @@ DevawayXML::do_parse(const std::string& path)
 }
 /****************************************************************************/
 void
-DevawayXML::fill_developer(Developer& dev) const throw (Exception)
+DevawayXML::fill_developer(Developer& dev) const
 {
     BacktraceContext c("portage::DevawayXML::fill_developer()");
 

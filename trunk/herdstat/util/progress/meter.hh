@@ -63,15 +63,15 @@ namespace util {
              * @param total Total number of items that will be processed.
              * @param title Title to display before the meter (defaults to "").
              */
-            void start(unsigned total, const std::string& title = "") throw();
+            void start(unsigned total, const std::string& title = "");
 
             /// Stop progress meter.
             void stop();
 
             ///@{
             /// Increment progress.
-            inline bool operator++() throw();
-            inline bool operator++(int) throw() { return operator++(); }
+            inline bool operator++();
+            inline bool operator++(int) { return operator++(); }
             ///@}
 
             /// Has this meter been started?
@@ -83,7 +83,7 @@ namespace util {
             /** Constructor.
              * @param color ASCII color sequence (defaults to "").
              */
-            ProgressMeter(const std::string& color = "") throw();
+            ProgressMeter(const std::string& color = "");
 
             /// Append value to _outlen.
             inline void append_outlen(unsigned len) { _outlen += len; }
@@ -91,17 +91,17 @@ namespace util {
             /** Abstract interface for starting the meter, implemented by each
              * ProgressMeter derivative.
              */
-            virtual void do_start() throw() = 0;
+            virtual void do_start() = 0;
 
             /** Abstract interface for stopping the meter.  This has a default
              * implementation.
              */
-            virtual void do_stop() throw() { }
+            virtual void do_stop() { }
 
             /** Abstract interface for incrementing the progress meter,
              * implemented by each ProgressMeter derivative.
              */
-            virtual void do_increment(int cur) throw() = 0;
+            virtual void do_increment(int cur) = 0;
 
         private:
             float _cur;
@@ -112,7 +112,7 @@ namespace util {
     };
 
     inline bool
-    ProgressMeter::operator++() throw()
+    ProgressMeter::operator++()
     {
         if (not _started)
             return false;

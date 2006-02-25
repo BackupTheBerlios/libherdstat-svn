@@ -35,16 +35,16 @@ namespace util {
     class ProgressBar : public ProgressMeter
     {
         public:
-            ProgressBar(const std::string& color = "") throw();
+            ProgressBar(const std::string& color = "");
             virtual ~ProgressBar() throw();
 
         protected:
             /// Start progress bar.
-            virtual void do_start() throw();
+            virtual void do_start();
             /// Stop progress bar.
-            virtual void do_stop() throw();
+            virtual void do_stop();
             /// Increment progress bar.
-            virtual void do_increment(int cur) throw();
+            virtual void do_increment(int cur);
 
         private:
             std::size_t _cols;

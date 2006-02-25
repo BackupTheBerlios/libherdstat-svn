@@ -58,7 +58,7 @@ namespace portage {
     {
         public:
             /// Default constructor.
-            Herd() throw();
+            Herd();
 
             /** Constructor.
              * @param name %Herd name.
@@ -67,18 +67,18 @@ namespace portage {
              */
             Herd(const std::string &name,
                  const std::string &email = "",
-                 const std::string &desc  = "") throw();
+                 const std::string &desc  = "");
 
             /** Constructor.  Assign a container_type.
              * @param v Reference to a container_type.
              */
-            Herd(const container_type& v) throw();
+            Herd(const container_type& v);
 
             /** Constructor.  Instantiate a new Developer object
              * for each developer user name in the given vector.
              * @param v Reference to a vector of developer usernames.
              */
-            Herd(const std::vector<std::string>& v) throw();
+            Herd(const std::vector<std::string>& v);
 
             /// Destructor.
             virtual ~Herd() throw();
@@ -86,22 +86,22 @@ namespace portage {
             /** Copy assignment operator.
              * @param that Reference to another Herd object.
              */
-            Herd& operator= (const Herd& that) throw();
+            Herd& operator= (const Herd& that);
 
             /// Implicit conversion to std::string.
-            inline operator std::string() const throw();
+            inline operator std::string() const;
 
             //@{
             /** Determine equivalence of this herd compared to that herd name.
              * @param name herd name.
              * @returns Boolean value.
              */
-            inline bool operator== (const std::string& name) const throw();
-            inline bool operator!= (const std::string& name) const throw();
-            inline bool operator<  (const std::string& name) const throw();
-            inline bool operator>  (const std::string& name) const throw();
-            inline bool operator<= (const std::string& name) const throw();
-            inline bool operator>= (const std::string& name) const throw();
+            inline bool operator== (const std::string& name) const;
+            inline bool operator!= (const std::string& name) const;
+            inline bool operator<  (const std::string& name) const;
+            inline bool operator>  (const std::string& name) const;
+            inline bool operator<= (const std::string& name) const;
+            inline bool operator>= (const std::string& name) const;
             //@}
 
             //@{
@@ -109,12 +109,12 @@ namespace portage {
              * @param herd const reference to another Herd object.
              * @returns Boolean value.
              */
-            inline bool operator== (const Herd& herd) const throw();
-            inline bool operator!= (const Herd& herd) const throw();
-            inline bool operator<  (const Herd& herd) const throw();
-            inline bool operator>  (const Herd& herd) const throw();
-            inline bool operator<= (const Herd& herd) const throw();
-            inline bool operator>= (const Herd& herd) const throw();
+            inline bool operator== (const Herd& herd) const;
+            inline bool operator!= (const Herd& herd) const;
+            inline bool operator<  (const Herd& herd) const;
+            inline bool operator>  (const Herd& herd) const;
+            inline bool operator<= (const Herd& herd) const;
+            inline bool operator>= (const Herd& herd) const;
             //@}
 
             //@{
@@ -122,22 +122,22 @@ namespace portage {
              * @param re const reference to a Regex object.
              * @returns Boolean value.
              */
-            inline bool operator== (const util::Regex& re) const throw();
-            inline bool operator!= (const util::Regex& re) const throw();
+            inline bool operator== (const util::Regex& re) const;
+            inline bool operator!= (const util::Regex& re) const;
             //@}
 
             /// Get herd name.
-            inline const std::string& name() const throw();
+            inline const std::string& name() const;
             /// Get herd email address.
-            inline const std::string& email() const throw();
+            inline const std::string& email() const;
             /// Get herd description.
-            inline const std::string& desc() const throw();
+            inline const std::string& desc() const;
             /// Set herd name.
-            inline void set_name(const std::string &name) throw();
+            inline void set_name(const std::string &name);
             /// Set herd email address.
-            inline void set_email(const std::string &email) throw();
+            inline void set_email(const std::string &email);
             /// Set herd description.
-            inline void set_desc(const std::string &desc) throw();
+            inline void set_desc(const std::string &desc);
 
         private:
             std::string _name;
@@ -145,41 +145,41 @@ namespace portage {
             std::string _desc;
     };
 
-    inline Herd::operator std::string() const throw() { return _name; }
-    inline bool Herd::operator== (const std::string& name) const throw()
+    inline Herd::operator std::string() const { return _name; }
+    inline bool Herd::operator== (const std::string& name) const
     { return (_name == name); }
-    inline bool Herd::operator== (const Herd& herd) const throw()
+    inline bool Herd::operator== (const Herd& herd) const
     { return (_name == herd._name); }
-    inline bool Herd::operator== (const util::Regex& re) const throw()
+    inline bool Herd::operator== (const util::Regex& re) const
     { return (re == _name); }
-    inline bool Herd::operator!= (const std::string& name) const throw()
+    inline bool Herd::operator!= (const std::string& name) const
     { return (_name != name); }
-    inline bool Herd::operator!= (const Herd& herd) const throw()
+    inline bool Herd::operator!= (const Herd& herd) const
     { return (_name != herd._name); }
-    inline bool Herd::operator!= (const util::Regex& re) const throw()
+    inline bool Herd::operator!= (const util::Regex& re) const
     { return (re != _name); }
-    inline bool Herd::operator< (const std::string& name) const throw()
+    inline bool Herd::operator< (const std::string& name) const
     { return (_name < name); }
-    inline bool Herd::operator< (const Herd& herd) const throw()
+    inline bool Herd::operator< (const Herd& herd) const
     { return (_name < herd._name); }
-    inline bool Herd::operator> (const std::string& name) const throw()
+    inline bool Herd::operator> (const std::string& name) const
     { return (_name > name); }
-    inline bool Herd::operator> (const Herd& herd) const throw()
+    inline bool Herd::operator> (const Herd& herd) const
     { return (_name > herd._name); }
-    inline bool Herd::operator<= (const std::string& name) const throw()
+    inline bool Herd::operator<= (const std::string& name) const
     { return (_name <= name); }
-    inline bool Herd::operator<= (const Herd& herd) const throw()
+    inline bool Herd::operator<= (const Herd& herd) const
     { return (_name <= herd._name); }
-    inline bool Herd::operator>= (const std::string& name) const throw()
+    inline bool Herd::operator>= (const std::string& name) const
     { return (_name >= name); }
-    inline bool Herd::operator>= (const Herd& herd) const throw()
+    inline bool Herd::operator>= (const Herd& herd) const
     { return (_name >= herd._name); }
-    inline const std::string& Herd::name() const throw() { return _name; }
-    inline const std::string& Herd::email() const throw() { return _email.str(); }
-    inline const std::string& Herd::desc() const throw() { return _desc; }
-    inline void Herd::set_name(const std::string& name) throw() { _name.assign(name); }
-    inline void Herd::set_email(const std::string& email) throw() { _email.assign(email); }
-    inline void Herd::set_desc(const std::string& desc) throw() { _desc.assign(desc); }
+    inline const std::string& Herd::name() const { return _name; }
+    inline const std::string& Herd::email() const { return _email.str(); }
+    inline const std::string& Herd::desc() const { return _desc; }
+    inline void Herd::set_name(const std::string& name) { _name.assign(name); }
+    inline void Herd::set_email(const std::string& email) { _email.assign(email); }
+    inline void Herd::set_desc(const std::string& desc) { _desc.assign(desc); }
 
     ///@{
     /** Comparison operators for when a Herd object is on the right hand side.
@@ -280,41 +280,41 @@ std::transform(herds.begin(), herds.end(),
     {
         public:
             /// Default constructor.
-            Herds() throw();
+            Herds();
 
             /** Constructor.  Initialize this herd with a container_type.
              * @param v Reference to a container_type.
              */
-            Herds(const container_type& v) throw();
+            Herds(const container_type& v);
 
             /// Destructor.
             ~Herds() throw();
 
             /// Implicit conversion to underlying container (std::set<Herd>).
-            inline operator const container_type&() const throw();
+            inline operator const container_type&() const;
             /// Implicit conversion to std::vector<std::string>.
-            operator std::vector<std::string>() const throw();
+            operator std::vector<std::string>() const;
 
             /** Assign a new container_type.
              * @param v Reference to a container_type object.
              * @returns Reference to this.
              */
-            Herds& operator= (const container_type& v) throw();
+            Herds& operator= (const container_type& v);
 
             /** Instantiate a Herd for each string in the given vector and
              * insert it into our container.
              * @param v Reference to a std::vector<std::string> of herd names.
              * @returns Reference to this.
              */
-            Herds& operator= (const std::vector<std::string>& v) throw();
+            Herds& operator= (const std::vector<std::string>& v);
 
             ///@{
             /** Get "least" element (as determined by std::less<Herd>).
              * @returns reference to "least" element.
              * @exception Exception.
              */
-            inline value_type& front() throw (Exception);
-            inline const value_type& front() const throw (Exception);
+            inline value_type& front();
+            inline const value_type& front() const;
             ///@}
             
             ///@{
@@ -322,8 +322,8 @@ std::transform(herds.begin(), herds.end(),
              * @returns reference to "greatest" element.
              * @exception Exception.
              */
-            inline value_type& back() throw (Exception);
-            inline const value_type& back() const throw (Exception);
+            inline value_type& back();
+            inline const value_type& back() const;
             ///@}
 
             ///@{
@@ -331,8 +331,8 @@ std::transform(herds.begin(), herds.end(),
              * @param herd Herd name.
              * @returns iterator to first match or end() if no match.
              */
-            inline iterator find(const std::string& herd) throw();
-            inline const_iterator find(const std::string& herd) const throw();
+            inline iterator find(const std::string& herd);
+            inline const_iterator find(const std::string& herd) const;
             ///@}
 
             ///@{
@@ -340,31 +340,31 @@ std::transform(herds.begin(), herds.end(),
              * @param regex Regular expression.
              * @returns iterator to first match or end() if no match.
              */
-            inline iterator find(const util::Regex& regex) throw();
-            inline const_iterator find(const util::Regex& regex) const throw();
+            inline iterator find(const util::Regex& regex);
+            inline const_iterator find(const util::Regex& regex) const;
             ///@}
     };
 
     inline Herds::operator
-    const Herds::container_type&() const throw()
+    const Herds::container_type&() const
     {
         return this->container();
     }
 
     inline Herds::iterator
-    Herds::find(const std::string& h) throw()
+    Herds::find(const std::string& h)
     {
         return util::SetBase<Herd>::find(Herd(h));
     }
 
     inline Herds::const_iterator
-    Herds::find(const std::string& h) const throw()
+    Herds::find(const std::string& h) const
     {
         return util::SetBase<Herd>::find(Herd(h));
     }
     
     inline Herds::iterator
-    Herds::find(const util::Regex& regex) throw()
+    Herds::find(const util::Regex& regex)
     {
         return std::find_if(this->begin(), this->end(),
                 util::compose_f_gx(
@@ -373,7 +373,7 @@ std::transform(herds.begin(), herds.end(),
     }
 
     inline Herds::const_iterator
-    Herds::find(const util::Regex& regex) const throw()
+    Herds::find(const util::Regex& regex) const
     {
         return std::find_if(this->begin(), this->end(),
                 util::compose_f_gx(
@@ -382,7 +382,7 @@ std::transform(herds.begin(), herds.end(),
     }
 
     inline Herds::value_type&
-    Herds::front() throw (Exception)
+    Herds::front()
     {
         if (this->empty())
             throw Exception("Herds::front() called on an empty Herds instance.");
@@ -391,7 +391,7 @@ std::transform(herds.begin(), herds.end(),
     }
     
     inline const Herds::value_type&
-    Herds::front() const throw (Exception)
+    Herds::front() const
     {
         if (this->empty())
             throw Exception("Herds::front() called on an empty Herds instance.");
@@ -400,7 +400,7 @@ std::transform(herds.begin(), herds.end(),
     }
 
     inline Herds::value_type&
-    Herds::back() throw (Exception)
+    Herds::back()
     {
         if (this->empty())
             throw Exception("Herds::back() called on an empty Herds instance.");
@@ -410,7 +410,7 @@ std::transform(herds.begin(), herds.end(),
     }
     
     inline const Herds::value_type&
-    Herds::back() const throw (Exception)
+    Herds::back() const
     {
         if (this->empty())
             throw Exception("Herds::back() called on an empty Herds instance.");

@@ -29,12 +29,12 @@
 
 namespace herdstat {
 /****************************************************************************/
-EmailAddress::EmailAddress() throw()
+EmailAddress::EmailAddress()
     : _email(), _user(), _domain()
 {
 }
 /****************************************************************************/
-EmailAddress::EmailAddress(const std::string& email) throw (MalformedEmail)
+EmailAddress::EmailAddress(const std::string& email)
     : _email(), _user(), _domain()
 {
     if (not this->parse(email))
@@ -42,7 +42,7 @@ EmailAddress::EmailAddress(const std::string& email) throw (MalformedEmail)
 }
 /****************************************************************************/
 EmailAddress::EmailAddress(const std::string& user,
-                           const std::string& domain) throw (MalformedEmail)
+                           const std::string& domain)
     : _email(user+"@"+domain), _user(user), _domain(domain)
 {
     if (domain.empty())
@@ -54,7 +54,7 @@ EmailAddress::~EmailAddress() throw()
 }
 /****************************************************************************/
 bool
-EmailAddress::parse(const std::string& email) throw()
+EmailAddress::parse(const std::string& email)
 {
     std::string::size_type pos = email.find('@');
     if (pos == std::string::npos)

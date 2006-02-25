@@ -29,7 +29,7 @@
 namespace herdstat {
 namespace util {
 /****************************************************************************/
-EllipseMeter::EllipseMeter(const std::string& color) throw()
+EllipseMeter::EllipseMeter(const std::string& color)
     : ProgressMeter(color), _cur(0)
 {
 }
@@ -40,20 +40,20 @@ EllipseMeter::~EllipseMeter() throw()
 }
 /****************************************************************************/
 void
-EllipseMeter::do_start() throw()
+EllipseMeter::do_start()
 {
     std::printf(".");
     _cur = 1;
 }
 /****************************************************************************/
 void
-EllipseMeter::do_stop() throw()
+EllipseMeter::do_stop()
 {
     append_outlen(_cur);
 }
 /****************************************************************************/
 void
-EllipseMeter::do_increment(int cur LIBHERDSTAT_UNUSED) throw()
+EllipseMeter::do_increment(int cur LIBHERDSTAT_UNUSED)
 {
     if (_cur == 3)
     {

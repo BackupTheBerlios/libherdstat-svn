@@ -48,11 +48,11 @@ namespace portage {
     class Atom
     {
         public:
-            Atom() throw();
-            Atom(const std::string& atom) throw (InvalidAtom);
+            Atom();
+            Atom(const std::string& atom);
             ~Atom() throw();
 
-            void assign(const std::string& atom) throw (InvalidAtom);
+            void assign(const std::string& atom);
 
             ///@{
             /// Determine equivelance of this Atom compared to that Atom.
@@ -79,7 +79,7 @@ namespace portage {
 
         private:
             /// Parse atom string.
-            void _parse() throw (InvalidAtom);
+            void _parse();
 
             std::string _atom, _prefix;
             Package _pkg;
@@ -88,7 +88,7 @@ namespace portage {
     };
 
     inline void
-    Atom::assign(const std::string& atom) throw (InvalidAtom)
+    Atom::assign(const std::string& atom)
     {
         _atom.assign(atom);
         this->_parse();

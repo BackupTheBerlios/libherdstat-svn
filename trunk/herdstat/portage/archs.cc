@@ -32,7 +32,7 @@
 namespace herdstat {
 namespace portage {
 /****************************************************************************/
-Archs::Archs(const std::string& portdir) throw (FileException)
+Archs::Archs(const std::string& portdir)
     : util::BaseFile(portdir+ARCH_LIST)
 {
     this->read();

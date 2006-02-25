@@ -40,7 +40,6 @@ std::set<std::string> ProjectXML::_parsed;
 /****************************************************************************/
 ProjectXML::ProjectXML(const std::string& path, const std::string& cvsdir,
                          bool force_fetch)
-    throw (FileException, xml::ParserException)
     : _devs(), _cvsdir(cvsdir), _force_fetch(force_fetch),
       in_sub(false), in_dev(false), in_task(false), _cur_role()
 {
@@ -67,7 +66,7 @@ ProjectXML::~ProjectXML() throw()
 }
 /****************************************************************************/
 void
-ProjectXML::do_fetch(const std::string& p) const throw (FetchException)
+ProjectXML::do_fetch(const std::string& p) const
 {
     BacktraceContext c("portage::ProjectXML::do_fetch("+p+")");
 
@@ -115,7 +114,6 @@ ProjectXML::do_fetch(const std::string& p) const throw (FetchException)
 /****************************************************************************/
 void
 ProjectXML::do_parse(const std::string& path)
-    throw (FileException, xml::ParserException)
 {
     if (not path.empty()) this->set_path(path);
 

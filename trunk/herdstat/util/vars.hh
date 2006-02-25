@@ -58,13 +58,13 @@ namespace util {
     {
         public:
             /// Default constructor.
-            Vars() throw();
+            Vars();
 
             /** Constructor.
              * @param path Path.
              * @exception FileException
              */
-            Vars(const std::string &path) throw (FileException);
+            Vars(const std::string &path);
 
             /// Destructor.
             virtual ~Vars() throw();

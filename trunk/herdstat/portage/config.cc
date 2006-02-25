@@ -31,7 +31,7 @@
 namespace herdstat {
 namespace portage {
 /****************************************************************************/
-Config::Config() throw (FileException)
+Config::Config()
     : _vars(), _portdir(), _overlays(), _cats(NULL), _archs(NULL)
 {
     /* read default config */

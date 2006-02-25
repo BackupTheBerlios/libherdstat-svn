@@ -57,7 +57,7 @@ namespace portage {
             /** Constructor.
              * @param pkglist const reference to a PackageList object.
              */
-            PackageFinder(const PackageList& pkglist) throw();
+            PackageFinder(const PackageList& pkglist);
 
             /// Destructor.
             ~PackageFinder() throw();
@@ -79,8 +79,7 @@ namespace portage {
              */
             template <typename T>
             const std::vector<Package>&
-            find(const T& v, util::ProgressMeter *progress = NULL)
-                throw (NonExistentPkg);
+            find(const T& v, util::ProgressMeter *progress = NULL);
 
             /** Perform search for literal string.  Does some possible
              * optimizations, otherwise just calls find().
@@ -91,20 +90,18 @@ namespace portage {
              */
             const std::vector<Package>&
             operator()(const std::string& v,
-                       util::ProgressMeter *progress = NULL) throw (NonExistentPkg);
+                       util::ProgressMeter *progress = NULL);
 
             /** char * overload that calls the std::string version of
              * operator().
              */
             inline const std::vector<Package>&
             operator()(const char * const v, util::ProgressMeter *progress = NULL)
-                throw (NonExistentPkg)
             { return operator()(std::string(v), progress); }
 
             /// util::Regex overload that simply calls find().
             inline const std::vector<Package>&
             operator()(const util::Regex& v, util::ProgressMeter *progress = NULL)
-                throw (NonExistentPkg)
             { return find(v, progress); }
 
         private:
@@ -133,7 +130,6 @@ namespace portage {
     template <typename T>
     const std::vector<Package>&
     PackageFinder::find(const T& v, util::ProgressMeter *progress)
-        throw (NonExistentPkg)
     {
         _timer.start();
 

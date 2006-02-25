@@ -34,18 +34,17 @@
 
 namespace herdstat {
 /****************************************************************************/
-Fetcher::Fetcher() throw()
+Fetcher::Fetcher()
     : _opts(), _impmap(_opts), _copied_impmap(false)
 {
 }
 /****************************************************************************/
 Fetcher::Fetcher(const FetcherImpMap& impmap, const FetcherOptions& opts)
-    throw()
     : _opts(opts), _impmap(impmap), _copied_impmap(true)
 {
 }
 /****************************************************************************/
-Fetcher::Fetcher(const FetcherOptions& opts) throw()
+Fetcher::Fetcher(const FetcherOptions& opts)
     : _opts(opts), _impmap(opts), _copied_impmap(false)
 {
 }
@@ -53,7 +52,6 @@ Fetcher::Fetcher(const FetcherOptions& opts) throw()
 Fetcher::Fetcher(const std::string& url,
                  const std::string& path,
                  const FetcherOptions& opts)
-    throw (FileException, FetchException, UnimplementedFetchMethod)
     : _opts(opts), _impmap(opts), _copied_impmap(false)
 {
     this->operator()(url, path);
@@ -71,7 +69,6 @@ Fetcher::~Fetcher() throw()
 /****************************************************************************/
 void
 Fetcher::operator()(const std::string& url, const std::string& path) const
-    throw (FileException, FetchException, UnimplementedFetchMethod)
 {
     BacktraceContext c("herdstat::Fetcher::operator()("+url+", "+path+")");
     assert(not _opts.implementation().empty());

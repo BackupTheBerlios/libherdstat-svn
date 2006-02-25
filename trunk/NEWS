@@ -1,9 +1,20 @@
 This file contains a summary of changes in released versions.  Please read the
 ChangeLog file for a more detailed listing of changes/bug fixes.
 
+0.2.1:
+
+    API changes:
+    - Removed throw specifications as it causes more trouble than it's worth.
+      Only destructors have retained their throw specs (throwing nothing).
+
+    Miscellaneous changes:
+    - Added configure checks for unused and deprecated gcc attributes.
+    - Moved version constants defined in herdstat/libherdstat_version.hh to
+      herdstat/defs.hh.
+
 0.2.0:
 
-    API Changes:
+    API changes:
     - xml::GlobalInit() access function now returns a const reference.
     - Added a Package class for representing a portage "package".
     - portage::PackageList is now a vector of portage::Package's.
@@ -43,13 +54,13 @@ ChangeLog file for a more detailed listing of changes/bug fixes.
       (like the portage spinner).
     - herdstat/portage/misc.hh renamed to herdstat/portage/util.hh.
 
-    Implementation Changes:
+    Implementation changes:
     - The following class members are now implemented as pointers and
       instantiatied on-demand (so if it's never used, it's never instantiated):
       Developer::_herds, metadata::_herds, metadata::_devs, config::_archs,
       config::_categories.
 
-    Miscellaneous Changes:
+    Miscellaneous changes:
     - Test framework completely rewritten.  Instead of one executable per test,
       there's now one executable and one main.  All the tests are now implemented
       as classes.  Calling the test's operator() executes the test.

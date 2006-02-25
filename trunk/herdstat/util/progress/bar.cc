@@ -30,7 +30,7 @@
 namespace herdstat {
 namespace util {
 
-ProgressBar::ProgressBar(const std::string& color) throw()
+ProgressBar::ProgressBar(const std::string& color)
     : ProgressMeter(color), _cols(0), _total(0), _cur(0), _step(0)
 {
 }
@@ -40,7 +40,7 @@ ProgressBar::~ProgressBar() throw()
 }
 
 void
-ProgressBar::do_start() throw()
+ProgressBar::do_start()
 {
     _cols = util::getcols();
     _total = (_cols - 2);
@@ -53,13 +53,13 @@ ProgressBar::do_start() throw()
 }
 
 void
-ProgressBar::do_stop() throw()
+ProgressBar::do_stop()
 {
     append_outlen(_cols);
 }
 
 void
-ProgressBar::do_increment(int cur) throw()
+ProgressBar::do_increment(int cur)
 {
     std::size_t inc = static_cast<std::size_t>(_cur += _step);
     if (inc >= 100)

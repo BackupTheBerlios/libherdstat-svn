@@ -46,20 +46,20 @@ namespace portage {
     {
         public:
             /// Default constructor.
-            GentooEmailAddress() throw();
+            GentooEmailAddress();
 
             /** Constructor.
              * @param email email address string.
              * @exception MalformedEmail
              */
-            GentooEmailAddress(const std::string& email) throw (MalformedEmail);
+            GentooEmailAddress(const std::string& email);
 
             /// Destructor.
             virtual ~GentooEmailAddress() throw();
 
         protected:
             /// Parse email address.
-            virtual bool parse(const std::string& email) throw();
+            virtual bool parse(const std::string& email);
     };
 
 } // namespace portage

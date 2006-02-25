@@ -66,12 +66,12 @@ namespace herdstat {
     {
         public:
             /// Default constructor.
-            Fetcher() throw();
+            Fetcher();
 
             /** Constructor.
              * @param opts const reference to a FetcherOptions object.
              */
-            Fetcher(const FetcherOptions& opts) throw();
+            Fetcher(const FetcherOptions& opts);
 
             /** Constructor.
              * @param impmap const reference to a user provided implementation
@@ -80,7 +80,7 @@ namespace herdstat {
              * @param opts const reference to a FetcherOptions object.
              */
             Fetcher(const FetcherImpMap& impmap,
-                    const FetcherOptions& opts = FetcherOptions()) throw();
+                    const FetcherOptions& opts = FetcherOptions());
 
             /** Constructor.  Fetch url and save to path.
              * @param url URL string.
@@ -89,8 +89,7 @@ namespace herdstat {
              * @exception FileException, FetchException, UnimplementedFetchMethod
              */
             Fetcher(const std::string& url, const std::string& path,
-                    const FetcherOptions& opts = FetcherOptions())
-                throw (FileException, FetchException, UnimplementedFetchMethod);
+                    const FetcherOptions& opts = FetcherOptions());
 
             /// Destructor.
             ~Fetcher() throw();
@@ -106,8 +105,7 @@ namespace herdstat {
              * @exception FileException, FetchException, UnimplementedFetchMethod
              */
             void operator()(const std::string& url,
-                            const std::string& path) const
-                throw (FileException, FetchException, UnimplementedFetchMethod);
+                            const std::string& path) const;
 
         private:
             FetcherOptions _opts;

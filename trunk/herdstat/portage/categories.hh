@@ -71,7 +71,7 @@ namespace portage {
              * @exception FileException
              */
             Categories(const std::string& portdir,
-                       bool validate = false) throw (FileException);
+                       bool validate = false);
 
             /// Destructor.
             virtual ~Categories() throw();

@@ -38,7 +38,7 @@ namespace herdstat {
 namespace util {
 /*****************************************************************************/
 std::string
-basename(const std::string& path) throw()
+basename(const std::string& path)
 {
     std::string result(path);
     std::string::size_type pos;
@@ -54,7 +54,7 @@ basename(const std::string& path) throw()
 }
 /*****************************************************************************/
 std::string
-dirname(const std::string& path) throw()
+dirname(const std::string& path)
 {
     std::string result(path);
     std::string::size_type pos;
@@ -72,7 +72,7 @@ dirname(const std::string& path) throw()
 }
 /*****************************************************************************/
 const char *
-chop_fileext(const std::string& path, unsigned short depth) throw()
+chop_fileext(const std::string& path, unsigned short depth)
 {
     std::string result(path);
 
@@ -93,7 +93,7 @@ struct BothSpaces
 };
 
 std::string
-tidy_whitespace(const std::string &s) throw()
+tidy_whitespace(const std::string &s)
 {
     if (s.empty())
 	return s;
@@ -123,7 +123,7 @@ tidy_whitespace(const std::string &s) throw()
 }
 /*****************************************************************************/
 std::string
-sprintf(const char *fmt, ...) throw()
+sprintf(const char *fmt, ...)
 {
     va_list v;
     va_start(v, fmt);
@@ -133,7 +133,7 @@ sprintf(const char *fmt, ...) throw()
 }
 /*****************************************************************************/
 std::string
-sprintf(const char *fmt, va_list v) throw()
+sprintf(const char *fmt, va_list v)
 {
     char *buf;
     vasprintf(&buf, fmt, v);
@@ -143,7 +143,7 @@ sprintf(const char *fmt, va_list v) throw()
 }
 /*****************************************************************************/
 std::string
-sprintf(const std::string& fmt, ...) throw()
+sprintf(const std::string& fmt, ...)
 {
     va_list v;
 #ifdef HAVE_GCC4
@@ -158,13 +158,13 @@ sprintf(const std::string& fmt, ...) throw()
 }
 /*****************************************************************************/
 std::string
-sprintf(const std::string& fmt, va_list v) throw()
+sprintf(const std::string& fmt, va_list v)
 {
     return util::sprintf(fmt.c_str(), v);
 }
 /*****************************************************************************/
 std::string
-strip_colors(const std::string& str) throw()
+strip_colors(const std::string& str)
 {
     std::string result(str);
     std::string::size_type pos, lpos = 0;

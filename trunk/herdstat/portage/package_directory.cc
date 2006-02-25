@@ -29,13 +29,12 @@
 namespace herdstat {
 namespace portage {
 /****************************************************************************/
-PackageDirectory::PackageDirectory() throw()
+PackageDirectory::PackageDirectory()
     : util::Directory(true), _ebuilds(NULL)
 {
 }
 /****************************************************************************/
 PackageDirectory::PackageDirectory(const std::string& path)
-    throw (FileException)
     : util::Directory(path, true), _ebuilds(NULL)
 {
 }

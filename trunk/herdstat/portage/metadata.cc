@@ -60,7 +60,7 @@ Metadata::operator=(const Metadata& that)
     return *this;
 }
 /****************************************************************************/
-Metadata::~Metadata()
+Metadata::~Metadata() throw()
 {
     if (_herds) delete _herds;
     if (_devs) delete _devs;

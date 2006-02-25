@@ -40,7 +40,7 @@ namespace portage {
 /*** static members *********************************************************/
 const char * const HerdsXML::_local_default = LOCALSTATEDIR"/herds.xml";
 /****************************************************************************/
-HerdsXML::HerdsXML() throw()
+HerdsXML::HerdsXML()
     : DataSource(), _herds(), _cvsdir(), _force_fetch(false), _fetch(),
       in_herd(false), in_herd_name(false),
       in_herd_email(false), in_herd_desc(false), in_maintainer(false),
@@ -51,7 +51,6 @@ HerdsXML::HerdsXML() throw()
 }
 /****************************************************************************/
 HerdsXML::HerdsXML(const std::string& path)
-    throw (FileException, xml::ParserException)
     : DataSource(path), _herds(), _cvsdir(), _force_fetch(false), _fetch(),
       in_herd(false), in_herd_name(false), in_herd_email(false),
       in_herd_desc(false), in_maintainer(false), in_maintainer_name(false),
@@ -67,7 +66,6 @@ HerdsXML::~HerdsXML() throw()
 /****************************************************************************/
 void
 HerdsXML::do_parse(const std::string& path)
-        throw (FileException, xml::ParserException)
 {
     this->timer().start();
 
@@ -85,7 +83,7 @@ HerdsXML::do_parse(const std::string& path)
 }
 /****************************************************************************/
 void
-HerdsXML::fill_developer(Developer& dev) const throw (Exception)
+HerdsXML::fill_developer(Developer& dev) const
 {
     BacktraceContext c("portage::HerdsXML::fill_developer()");
 

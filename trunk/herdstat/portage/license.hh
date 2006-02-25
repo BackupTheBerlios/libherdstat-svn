@@ -83,15 +83,14 @@ std::cout << "License(s): " << license.str() << std::endl;
             /** Default constructor.
              * @param validate Bail if an invalid license is found?
              */
-            License(bool validate = false) throw();
+            License(bool validate = false);
 
             /** Constructor.
              * @param str License string as found in an ebuild.
              * @param validate Bail if an invalid license is found?
              * @exception QAException
              */
-            License(const std::string& str, bool validate = false)
-                throw (QAException);
+            License(const std::string& str, bool validate = false);
 
             /// Destructor.
             ~License() throw();
@@ -102,26 +101,26 @@ std::cout << "License(s): " << license.str() << std::endl;
              * @exception QAException
              */
             inline void assign(const std::string& str,
-                               bool validate = false) throw (QAException);
+                               bool validate = false);
 
             /// Get license string.
-            inline const std::string& str() const throw();
+            inline const std::string& str() const;
 
             /// Implicit conversion to std::string.
-            inline operator const std::string&() const throw();
+            inline operator const std::string&() const;
 
         private:
             /** Parse license string.
              * @exception QAException
              */
-            void parse() throw (QAException);
+            void parse();
 
             bool _validate;
             std::string _license;
     };
 
     inline void
-    License::assign(const std::string& str, bool validate) throw (QAException)
+    License::assign(const std::string& str, bool validate)
     {
         _validate = validate;
         _license = str;
@@ -129,13 +128,13 @@ std::cout << "License(s): " << license.str() << std::endl;
     }
 
     inline const std::string&
-    License::str() const throw()
+    License::str() const
     {
         return _license;
     }
 
     inline License::operator
-    const std::string&() const throw()
+    const std::string&() const
     {
         return _license;
     }

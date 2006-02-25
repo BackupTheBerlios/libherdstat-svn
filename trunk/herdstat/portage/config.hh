@@ -95,24 +95,24 @@ const std::string distdir(config["DISTDIR"]);
              * @returns a copy of the value mapped to the specified variable
              * or an empty string if the value doesn't exist.
              */
-            inline std::string operator[] (const std::string& var) const throw();
+            inline std::string operator[] (const std::string& var) const;
 
             /** Get categories.
              * @exception FileException
              */
-            inline const Categories& categories() const throw (FileException);
+            inline const Categories& categories() const;
             
             /** Get arch keywords.
              * @exception FileException
              */
-            inline const Archs& archs() const throw (FileException);
+            inline const Archs& archs() const;
 
         private:
             /// Only GlobalConfig() can instantiate this class.
-            friend const Config& GlobalConfig() throw (FileException);
+            friend const Config& GlobalConfig();
 
             /// Constructor.
-            Config() throw (FileException);
+            Config();
             /// Destructor.
             ~Config() throw();
 
@@ -128,21 +128,21 @@ const std::string distdir(config["DISTDIR"]);
     { return _overlays; }
 
     inline const Categories&
-    Config::categories() const throw (FileException)
+    Config::categories() const
     {
         if (not _cats) _cats = new Categories(_portdir);
         return *_cats;
     }
 
     inline const Archs&
-    Config::archs() const throw (FileException)
+    Config::archs() const
     {
         if (not _archs) _archs = new Archs(_portdir);
         return *_archs;
     }
 
     inline std::string
-    Config::operator[] (const std::string& var) const throw()
+    Config::operator[] (const std::string& var) const
     {
         util::Vars::const_iterator i = _vars.find(var);
         return (i == _vars.end() ? std::string() : i->second);
@@ -156,7 +156,7 @@ const std::string distdir(config["DISTDIR"]);
      */
 
     inline const Config&
-    GlobalConfig() throw (FileException)
+    GlobalConfig()
     {
         static Config c;
         return c;

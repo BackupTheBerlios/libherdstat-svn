@@ -43,7 +43,7 @@ SAXHandler::text(const std::string& str)
     return true;
 }
 /****************************************************************************/
-SAXParser::SAXParser(SAXHandler *handler) throw()
+SAXParser::SAXParser(SAXHandler *handler)
     : _handler(handler)
 {
 }
@@ -53,7 +53,7 @@ SAXParser::~SAXParser() throw()
 }
 /****************************************************************************/
 void
-SAXParser::parse(const std::string &path) throw (ParserException)
+SAXParser::parse(const std::string &path)
 {
     BacktraceContext c("xml::saxparser::parse("+path+")");
 

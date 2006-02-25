@@ -29,7 +29,7 @@
 namespace herdstat {
 namespace portage {
 /****************************************************************************/
-PackageFinder::PackageFinder(const PackageList& pkglist) throw()
+PackageFinder::PackageFinder(const PackageList& pkglist)
     : _pkglist(pkglist), _results(), _timer()
 {
 }
@@ -41,7 +41,6 @@ PackageFinder::~PackageFinder() throw()
 const std::vector<Package>&
 PackageFinder::operator()(const std::string& criteria,
                           util::ProgressMeter *progress)
-    throw (NonExistentPkg)
 {
     /* literal searches allow us to use a little optimization hack - we can
      * simply check if the criteria exists in portdir or any of the overlays */

@@ -39,7 +39,6 @@ namespace herdstat {
 namespace portage {
 /****************************************************************************/
 Categories::Categories(const std::string& portdir, bool validate)
-    throw (FileException)
     : util::BaseFile(), _portdir(portdir),
       _validate(validate)
 {

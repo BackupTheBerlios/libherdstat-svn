@@ -3,8 +3,8 @@
 include $(top_builddir)/Makefile.am.common
 
 SUBDIRS = util io fetcher xml portage
-MAINTAINERCLEANFILES = Makefile.in *~ .loT libherdstat_version.hh
-EXTRA_DIST = libherdstat_version.hh.in doxygen.hh
+MAINTAINERCLEANFILES = Makefile.in *~ .loT defs.hh
+EXTRA_DIST = doxygen.hh defs.hh.in
 
 cc_sources = \
 	exceptions.cc \
@@ -16,8 +16,7 @@ hh_sources = \
 	fetchable.hh \
 	parsable.hh \
 	progressable.hh \
-	email_address.hh \
-	defs.hh
+	email_address.hh
 
 lib_LTLIBRARIES = libherdstat.la
 libherdstat_la_LDFLAGS = -release $(VERSION_MAJOR).$(VERSION_MINOR) -version-info $(LIBRARY_VERSION)
@@ -29,7 +28,7 @@ libherdstat_la_LIBADD = util/libutil.la \
 libherdstat_la_SOURCES = $(hh_sources) $(cc_sources)
 
 library_includedir=$(includedir)/$(PACKAGE)-$(VERSION_MAJOR).$(VERSION_MINOR)/herdstat
-library_include_HEADERS = $(hh_sources) libherdstat_version.hh
+library_include_HEADERS = $(hh_sources) defs.hh
 
 srchtml: $(foreach f, $(libherdstat_la_SOURCES), $(f).html)
 	@for x in $(SUBDIRS) ; do \

@@ -29,7 +29,7 @@
 namespace herdstat {
 namespace portage {
 /****************************************************************************/
-PackageWhich::PackageWhich() throw()
+PackageWhich::PackageWhich()
     : _results()
 {
 }
@@ -41,7 +41,6 @@ PackageWhich::~PackageWhich() throw()
 const std::vector<std::string>&
 PackageWhich::operator()(const std::vector<Package>& finder_results,
                          util::ProgressMeter *progress)
-    throw (NonExistentPkg)
 {
     BacktraceContext c("herdstat::portage::PackageWhich::operator()(std::vector<Package>)");
 

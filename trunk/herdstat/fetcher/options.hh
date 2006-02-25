@@ -62,12 +62,12 @@ namespace herdstat {
              * variable HERDSTAT_FETCH_METHOD (if set).  Otherwise the value of
              * the DEFAULT_FETCH_METHOD define is used.
              */
-            FetcherOptions() throw();
+            FetcherOptions();
 
             /** Constructor.
              * @param imp Fetcher implementation to use.
              */
-            FetcherOptions(const std::string& imp) throw();
+            FetcherOptions(const std::string& imp);
 
             /// Destructor.
             ~FetcherOptions() throw();

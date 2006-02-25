@@ -73,8 +73,7 @@ namespace portage {
              * @exception FileException, xml::ParserException
              */
             ProjectXML(const std::string& path,
-                       const std::string& cvsdir, bool force_fetch)
-                throw (FileException, xml::ParserException);
+                       const std::string& cvsdir, bool force_fetch);
 
             /// Destructor.
             virtual ~ProjectXML() throw();
@@ -87,15 +86,13 @@ namespace portage {
              * @param path Path to projectxml file (defaults to empty).
              * @exception FileException, xml::ParserException
              */
-            virtual void do_parse(const std::string& path = "")
-                throw (FileException, xml::ParserException);
+            virtual void do_parse(const std::string& path = "");
 
             /** Fetch projectxml file.
              * @param path Path to projectxml file (defaults to empty).
              * @exception FetchException
              */
-            virtual void do_fetch(const std::string& path = "") const
-                throw (FetchException);
+            virtual void do_fetch(const std::string& path = "") const;
 
             ///@{
             /// SAX2 Callbacks

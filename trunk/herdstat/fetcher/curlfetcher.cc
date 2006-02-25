@@ -36,7 +36,7 @@
 
 namespace herdstat {
 /****************************************************************************/
-CurlFetcher::CurlFetcher(const FetcherOptions& opts) throw()
+CurlFetcher::CurlFetcher(const FetcherOptions& opts)
     : FetcherImp(opts)
 {
 }
@@ -47,7 +47,6 @@ CurlFetcher::~CurlFetcher() throw()
 /****************************************************************************/
 bool
 CurlFetcher::fetch(const std::string& url, const std::string& path) const
-    throw (FileException)
 {
     BacktraceContext c("CurlFetcher::fetch("+url+", "+path+")");
 

@@ -50,18 +50,18 @@ namespace util {
             /** Constructor.
              * @param color ASCII color sequence (defaults to "").
              */
-            PercentMeter(const std::string& color = "") throw();
+            PercentMeter(const std::string& color = "");
 
             /// Destructor.
             virtual ~PercentMeter() throw();
 
         protected:
             /// Start percent meter.
-            virtual void do_start() throw();
+            virtual void do_start();
             /// Stop percent meter.
-            virtual void do_stop() throw();
+            virtual void do_stop();
             /// Increment percentage.
-            virtual void do_increment(int cur) throw();
+            virtual void do_increment(int cur);
     };
 
 } // namespace util

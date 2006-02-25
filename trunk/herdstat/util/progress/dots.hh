@@ -50,16 +50,16 @@ namespace util {
             /** Constructor.
              * @param color ASCII color sequence (defaults to "").
              */
-            DotsMeter(const std::string& color = "") throw();
+            DotsMeter(const std::string& color = "");
 
             /// Destructor.
             virtual ~DotsMeter() throw();
 
         protected:
             /// Start dot meter.
-            virtual void do_start() throw();
+            virtual void do_start();
             /// Show another dot.
-            virtual void do_increment(int cur) throw();
+            virtual void do_increment(int cur);
     };
 
 } // namespace util

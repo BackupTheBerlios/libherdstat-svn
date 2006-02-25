@@ -32,7 +32,7 @@
 
 namespace herdstat {
 /****************************************************************************/
-FetcherImpMap::FetcherImpMap(const FetcherOptions& opts) throw()
+FetcherImpMap::FetcherImpMap(const FetcherOptions& opts)
     : _map(), _opts(opts)
 {
 #define INSERT_IMP(x, y) \

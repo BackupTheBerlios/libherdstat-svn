@@ -54,15 +54,14 @@ namespace herdstat {
              * @returns False if fetching failed.
              */
             virtual bool fetch(const std::string& url,
-                               const std::string& path) const
-                throw (FileException);
+                               const std::string& path) const;
 
         private:
             /// Only FetcherImpMap can instantiate this class.
             friend class FetcherImpMap;
 
             /// Constructor.
-            WgetFetcher(const FetcherOptions& opts) throw();
+            WgetFetcher(const FetcherOptions& opts);
     };
 
 } // namespace herdstat

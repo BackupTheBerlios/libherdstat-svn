@@ -30,13 +30,12 @@
 namespace herdstat {
 namespace portage {
 /****************************************************************************/
-GentooEmailAddress::GentooEmailAddress() throw()
+GentooEmailAddress::GentooEmailAddress()
     : EmailAddress()
 {
 }
 /****************************************************************************/
 GentooEmailAddress::GentooEmailAddress(const std::string& email)
-    throw(MalformedEmail)
     : EmailAddress()
 {
     this->assign(email);
@@ -47,7 +46,7 @@ GentooEmailAddress::~GentooEmailAddress() throw()
 }
 /****************************************************************************/
 bool
-GentooEmailAddress::parse(const std::string& email) throw()
+GentooEmailAddress::parse(const std::string& email)
 {
     if (not EmailAddress::parse(email))
         this->set_domain("gentoo.org");

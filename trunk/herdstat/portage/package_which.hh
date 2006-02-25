@@ -48,7 +48,7 @@ namespace portage {
     {
         public:
             /// Default constructor.
-            PackageWhich() throw();
+            PackageWhich();
 
             /// Destructor.
             ~PackageWhich() throw();
@@ -67,7 +67,7 @@ namespace portage {
              */
             const std::vector<std::string>&
             operator()(const std::vector<Package>& results,
-                       util::ProgressMeter *progress = NULL) throw (NonExistentPkg);
+                       util::ProgressMeter *progress = NULL);
 
             /** Get the latest ebuild(s) for the given package string/portdir.
              * @param pkg Full category/package string.
@@ -77,8 +77,7 @@ namespace portage {
              */
             inline const std::vector<std::string>&
             operator()(const std::string& pkg, const std::string& portdir,
-                       util::ProgressMeter *progress = NULL)
-                throw (NonExistentPkg);
+                       util::ProgressMeter *progress = NULL);
 
             /** Get the latest ebuild(s) for those packages matching the given
              * type T using the given PackageList.  Uses PackageFinder to get
@@ -91,7 +90,7 @@ namespace portage {
             template <typename T>
             inline const std::vector<std::string>&
             operator()(const T& v, const PackageList& pkglist,
-                       util::ProgressMeter *progress = NULL) throw (NonExistentPkg);
+                       util::ProgressMeter *progress = NULL);
 
         private:
             std::vector<std::string> _results;
@@ -101,7 +100,6 @@ namespace portage {
     PackageWhich::operator()(const std::string& pkg,
                              const std::string& portdir,
                              util::ProgressMeter *progress)
-        throw (NonExistentPkg)
     {
         BacktraceContext c("herdstat::portage::PackageWhich::operator()("+pkg+", "+portdir+")");
 
@@ -121,7 +119,7 @@ namespace portage {
     inline const std::vector<std::string>&
     PackageWhich::operator()(const T& v,
                              const PackageList& pkglist,
-                             util::ProgressMeter *progress) throw (NonExistentPkg)
+                             util::ProgressMeter *progress)
     {
         PackageFinder find(pkglist);
         return operator()(find(v, progress));

@@ -44,23 +44,23 @@ const Regex::Cflags Regex::newline = Regex::Cflags(REG_NEWLINE);
 const Regex::Eflags Regex::notbol = Regex::Eflags(REG_NOTBOL);
 const Regex::Eflags Regex::noteol = Regex::Eflags(REG_NOTEOL);
 /*****************************************************************************/
-Regex::Regex() throw()
+Regex::Regex()
     : _str(), _compiled(false), _cflags(0), _eflags(0), _regex()
 {
 }
 /*****************************************************************************/
-Regex::Regex(const Regex& that) throw (BadRegex)
+Regex::Regex(const Regex& that)
     : _str(), _compiled(false), _cflags(0), _eflags(0), _regex()
 {
     *this = that;
 }
 /*****************************************************************************/
-Regex::Regex(int c, int e) throw()
+Regex::Regex(int c, int e)
     : _str(), _compiled(false), _cflags(c), _eflags(e), _regex()
 {
 }
 /*****************************************************************************/
-Regex::Regex(const std::string &regex, int c, int e) throw (BadRegex)
+Regex::Regex(const std::string &regex, int c, int e)
     : _str(regex), _compiled(false), _cflags(c), _eflags(e), _regex()
 {
     this->compile();
@@ -73,7 +73,7 @@ Regex::~Regex() throw()
 }
 /*****************************************************************************/
 Regex&
-Regex::operator= (const Regex& that) throw (BadRegex)
+Regex::operator= (const Regex& that)
 {
     /* compiler-generated copy constructor/assignment operator won't do
      * since we need to free the old regex_t and compile the new one */
@@ -83,7 +83,7 @@ Regex::operator= (const Regex& that) throw (BadRegex)
 }
 /*****************************************************************************/
 void
-Regex::assign(const std::string& regex) throw (BadRegex)
+Regex::assign(const std::string& regex)
 {
     if (this->_compiled)
         this->cleanup();
@@ -93,7 +93,7 @@ Regex::assign(const std::string& regex) throw (BadRegex)
 }
 /*****************************************************************************/
 void
-Regex::assign(const std::string &regex, int c, int e) throw (BadRegex)
+Regex::assign(const std::string &regex, int c, int e)
 {
     if (this->_compiled)
         this->cleanup();
@@ -106,7 +106,7 @@ Regex::assign(const std::string &regex, int c, int e) throw (BadRegex)
 }
 /*****************************************************************************/
 void
-Regex::compile() throw (BadRegex)
+Regex::compile()
 {
     if (this->_compiled)
         this->cleanup();
@@ -119,7 +119,7 @@ Regex::compile() throw (BadRegex)
 }
 /*****************************************************************************/
 void
-Regex::cleanup() throw()
+Regex::cleanup()
 {
     regfree(&(this->_regex));
     this->_compiled = false;

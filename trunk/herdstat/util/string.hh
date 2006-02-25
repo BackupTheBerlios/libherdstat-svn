@@ -52,7 +52,7 @@ namespace util {
      * @returns basename of @a path.
      */
 
-    std::string basename(const std::string& path) throw();
+    std::string basename(const std::string& path);
     
     /**
      * Return the dirname of the given path.
@@ -60,7 +60,7 @@ namespace util {
      * @returns directory that @a path is located in.
      */
 
-    std::string dirname(const std::string& path) throw();
+    std::string dirname(const std::string& path);
 
     /**
      * Chop file extension from the given path.
@@ -70,7 +70,7 @@ namespace util {
      */
 
     const char *chop_fileext(const std::string& path,
-                             unsigned short depth = 1) throw();
+                             unsigned short depth = 1);
 
     /**
      * Tidy whitespace of the given string.
@@ -78,14 +78,14 @@ namespace util {
      * @returns Resulting std::string object.
      */
 
-    std::string tidy_whitespace(const std::string& s) throw();
+    std::string tidy_whitespace(const std::string& s);
 
     //@{
     /// sprintf() wrappers
-    std::string sprintf(const char *, ...) throw();
-    std::string sprintf(const char *, va_list) throw();
-    std::string sprintf(const std::string&, ...) throw();
-    std::string sprintf(const std::string&, va_list) throw();
+    std::string sprintf(const char *, ...);
+    std::string sprintf(const char *, va_list);
+    std::string sprintf(const std::string&, ...);
+    std::string sprintf(const std::string&, va_list);
     //@}
 
     /** Function template for splitting a string using the given delimiter and
@@ -138,7 +138,7 @@ std::string foo(util::join(foov.begin(), foov.end()));
      * @returns Resulting string object.
      */
 
-    std::string strip_colors(const std::string& s) throw();
+    std::string strip_colors(const std::string& s);
 
     /**
      * Determine if all characters in the given string are whitespace.
@@ -147,7 +147,7 @@ std::string foo(util::join(foov.begin(), foov.end()));
      */
 
     inline bool
-    is_all_whitespace(const std::string& s) throw()
+    is_all_whitespace(const std::string& s)
     {
         const std::string::difference_type size(s.size());
         return (std::count_if(s.begin(), s.end(), ::isspace) == size);
@@ -160,7 +160,7 @@ std::string foo(util::join(foov.begin(), foov.end()));
      */
 
     inline std::string
-    lowercase(const std::string& s) throw()
+    lowercase(const std::string& s)
     {
         std::string result;
         std::transform(s.begin(), s.end(),
@@ -174,7 +174,7 @@ std::string foo(util::join(foov.begin(), foov.end()));
      */
 
     inline void
-    lowercase_inplace(std::string& s) throw()
+    lowercase_inplace(std::string& s)
     {
         std::transform(s.begin(), s.end(), s.begin(), ::tolower);
     }
@@ -185,7 +185,7 @@ std::string foo(util::join(foov.begin(), foov.end()));
      * @exception std::bad_alloc
      */
     inline char *
-    strdup(const char * const s) throw (std::bad_alloc)
+    strdup(const char * const s)
     {
         char *tmp = static_cast<char *>(std::malloc(std::strlen(s) + 1));
         if (not tmp)
@@ -244,7 +244,7 @@ std::string foo(util::join(foov.begin(), foov.end()));
 
     template <typename T>
     T
-    destringify(const std::string& s) throw (BadCast)
+    destringify(const std::string& s)
     {
         std::istringstream is(s.c_str());
 
@@ -260,7 +260,7 @@ std::string foo(util::join(foov.begin(), foov.end()));
     /// destringify specialization for std::vector<std::string>.
     template <>
     inline std::vector<std::string>
-    destringify<std::vector<std::string> >(const std::string& s) throw (BadCast)
+    destringify<std::vector<std::string> >(const std::string& s)
     {
         std::vector<std::string> v;
         split(s, std::back_inserter(v));
@@ -270,7 +270,7 @@ std::string foo(util::join(foov.begin(), foov.end()));
     /// destringify specialization for int
     template <>
     inline int
-    destringify<int>(const std::string& s) throw (BadCast)
+    destringify<int>(const std::string& s)
     {
         char *invalid;
         int result = std::strtol(s.c_str(), &invalid, 10);
@@ -282,7 +282,7 @@ std::string foo(util::join(foov.begin(), foov.end()));
     /// destringify specialization for long
     template <>
     inline long
-    destringify<long>(const std::string& s) throw (BadCast)
+    destringify<long>(const std::string& s)
     {
         char *invalid;
         long result = std::strtol(s.c_str(), &invalid, 10);
@@ -294,7 +294,7 @@ std::string foo(util::join(foov.begin(), foov.end()));
     /// destringify specialization for unsigned long
     template <>
     inline unsigned long
-    destringify<unsigned long>(const std::string& s) throw (BadCast)
+    destringify<unsigned long>(const std::string& s)
     {
         char *invalid;
         unsigned long result = std::strtoul(s.c_str(), &invalid, 10);
@@ -306,7 +306,7 @@ std::string foo(util::join(foov.begin(), foov.end()));
     /// destringify specialization for double
     template <>
     inline double
-    destringify<double>(const std::string& s) throw (BadCast)
+    destringify<double>(const std::string& s)
     {
         char *invalid;
         double result = std::strtod(s.c_str(), &invalid);
@@ -318,7 +318,7 @@ std::string foo(util::join(foov.begin(), foov.end()));
     /// destringify specialization for float
     template <>
     inline float
-    destringify<float>(const std::string& s) throw (BadCast)
+    destringify<float>(const std::string& s)
     {
         char *invalid;
         float result = std::strtod(s.c_str(), &invalid);
@@ -330,7 +330,7 @@ std::string foo(util::join(foov.begin(), foov.end()));
     /// destringify specialization for bool
     template <>
     inline bool
-    destringify<bool>(const std::string& s) throw (BadCast)
+    destringify<bool>(const std::string& s)
     {
         if (s == "true" or s == "yes" or s == "on")  return true;
         if (s == "false" or s == "no" or s == "off") return false;
