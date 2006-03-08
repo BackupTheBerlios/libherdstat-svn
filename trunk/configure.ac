@@ -175,6 +175,7 @@ AC_CHECK_HEADERS(libebt/libebt.hh,,
     AC_MSG_ERROR([libebt/libebt.hh is required]))
 
 dnl Required functions
+AC_CHECK_FUNCS([symlink mkdir])
 AC_CHECK_FUNCS(gettimeofday,,
     [AC_MSG_ERROR([gettimeofday is required])])
 AC_CHECK_FUNCS(regcomp,,

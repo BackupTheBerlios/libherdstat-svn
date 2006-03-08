@@ -79,7 +79,7 @@ namespace util {
      */
 
     inline bool
-    is_dir(const std::string &p)
+    is_dir(const std::string& p)
     {
         struct stat s;
         return ((stat(p.c_str(), &s) == 0) ? S_ISDIR(s.st_mode) : false);
@@ -92,7 +92,7 @@ namespace util {
      */
 
     inline bool
-    is_dir(const struct stat &s)
+    is_dir(const struct stat& s)
     {
         return S_ISDIR(s.st_mode);
     }
@@ -104,7 +104,7 @@ namespace util {
      */
 
     inline bool
-    is_file(const std::string &p)
+    is_file(const std::string& p)
     {
         struct stat s;
         return ((stat(p.c_str(), &s) == 0) ? S_ISREG(s.st_mode) : false);
@@ -117,7 +117,7 @@ namespace util {
      */
 
     inline bool
-    is_file(const struct stat &s)
+    is_file(const struct stat& s)
     {
         return S_ISREG(s.st_mode);
     }
@@ -129,7 +129,7 @@ namespace util {
      * @exception FileException
      */
 
-    void copy_file(const std::string &to, const std::string &from);
+    void copy_file(const std::string& to, const std::string& from);
 
     /**
      * Move file 'from' to file 'to'.
@@ -138,7 +138,50 @@ namespace util {
      * @exception FileException
      */
 
-    void move_file(const std::string &to, const std::string &from);
+    void move_file(const std::string& to, const std::string& from);
+
+    /**
+     * Create a directory.
+     * @param path name of directory to create.
+     * @param mode permissions of new directory.
+     */
+
+    inline void mkdir(const std::string& path, mode_t mode = S_IRWXU);
+
+    inline void mkdir(const std::string& path, mode_t mode)
+    {
+        if (::mkdir(path.c_str(), mode) != 0)
+            throw ErrnoException(std::string("mkdir: ")+path);
+    }
+
+    /**
+     * Create a symbolic link.
+     * @param oldpath Path of existing file we are linking to.
+     * @param newpath Path of link to create.
+     */
+
+    inline void symlink(const std::string& oldpath, const std::string& newpath)
+    {
+        if (::symlink(oldpath.c_str(), newpath.c_str()) != 0)
+            throw ErrnoException(std::string("symlink: ")+newpath);
+    }
+
+    /**
+     * Get the path a symbolic link points to.
+     * @param path Path of symbolic link.
+     * @returns Path link points to.
+     */
+
+    inline std::string
+    readlink(const std::string& path)
+    {
+        char buf[PATH_MAX + 1];
+        int r = ::readlink(path.c_str(), buf, sizeof(buf) - 1);
+        if (r == -1)
+            throw ErrnoException("readlink");
+        buf[r] = '\0';
+        return std::string(buf);
+    }
 
     /**
      * @enum ftype

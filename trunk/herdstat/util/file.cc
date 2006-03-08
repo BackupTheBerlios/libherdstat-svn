@@ -444,7 +444,7 @@ move_file(const std::string& from, const std::string& to)
     if (unlink(from.c_str()) != 0)
 	throw FileException(from);
 }
-/*****************************************************************************/
+/****************************************************************************/
 } // namespace util
 } // namespace herdstat
 
