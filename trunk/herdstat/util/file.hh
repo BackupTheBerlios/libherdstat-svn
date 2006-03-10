@@ -123,6 +123,31 @@ namespace util {
     }
 
     /**
+     * Is the given path a symlink?
+     * @param path Path.
+     * @returns A boolean value.
+     */
+
+    inline bool
+    is_symlink(const std::string& path)
+    {
+        struct stat s;
+        return ((stat(path.c_str(), &s) == 0) ? S_ISLNK(s.st_mode) : false);
+    }
+
+    /**
+     * Is the file associated with the given stat structure a symlink?
+     * @param s Reference to a struct stat.
+     * @returns A boolean value.
+     */
+
+    inline bool
+    is_symlink(const struct stat& s)
+    {
+        return S_ISLNK(s.st_mode);
+    }
+
+    /**
      * Copy file 'from' to file 'to'.
      * @param from Source location.
      * @param to Destination location.
